@@ -13,27 +13,35 @@ class ClientController extends Controller
     }
     public function shop()
     {
-        return view('client.pages.shop');
+        return view('client.pages.shopping.shop');
     }
 
     public function shopDetail()
     {
-        return view('client.pages.shop-detail');
+        return view('client.pages.shopping.shop-detail');
     }
     public function cart()
     {
-        return view('client.pages.cart');
+        return view('client.pages.shopping.cart');
     }
     public function chackout()
     {
-        return view('client.pages.chackout');
+        return view('client.pages.shopping.chackout');
     }
     public function errPage()
     {
-        return view('client.pages.404page');
+        return view('client.pages.contact.404page');
     }
     public function contact()
     {
-        return view('client.pages.contact');
+        return view('client.pages.contact.contact');
+    }
+    public function register()
+    {
+        return view('client.pages.user.register');
+    }
+    public function login()
+    {
+        return view('client.pages.user.login');
     }
 }

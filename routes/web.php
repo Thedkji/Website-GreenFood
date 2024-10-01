@@ -21,3 +21,5 @@ Route::get('/cart', [ClientController::class, 'cart']);
 Route::get('/chackout', [ClientController::class, 'chackout']);
 Route::get('/404page', [ClientController::class, 'errPage']);
 Route::get('/contact', [ClientController::class, 'contact']);
+Route::get('/register', [ClientController::class, 'register']);
+Route::get('/login', [ClientController::class, 'login']);
