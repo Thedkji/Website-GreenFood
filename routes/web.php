@@ -25,6 +25,7 @@ Route::get('/', function () {
     $g =123123;
     $c =1231;
     $j  = 112312;
+    $i = 123123;
     return view('welcome');
 });
 
