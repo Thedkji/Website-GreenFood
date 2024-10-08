@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $a = "1230";
     $b = "đâsdas";
+    $c = 123;
     return view('welcome');
 });
 
