@@ -18,6 +18,7 @@ Route::get('/', function () {
     $b = "đâsdas";
     $c = 123;
     $b = 123;
+    $d = "đâsd";
     return view('welcome');
 });
 
