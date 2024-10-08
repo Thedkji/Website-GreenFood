@@ -13,13 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::resource('user', function() {
-    echo 123;
-});
+require_once base_path("routes/clients/product.php");
