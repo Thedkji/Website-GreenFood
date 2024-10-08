@@ -20,6 +20,7 @@ Route::get('/', function () {
     $b = 123;
     $d = "đâsd";
     $e = 123123;
+    $f = 123123;
     return view('welcome');
 });
 
