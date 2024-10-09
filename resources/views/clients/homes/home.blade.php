@@ -2,8 +2,8 @@
 
 @section('title', 'Fruitables - Vegetable Website Template')
 
-@section('content')
 
+@section('content')
     <!-- Modal Search Start -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -23,10 +23,8 @@
         </div>
     </div>
     <!-- Modal Search End -->
-
-
+    
     <!-- Hero Start -->
-    <div class="container-fluid py-5 mb-5 hero-header">
         <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <div class="col-md-12 col-lg-7">
@@ -1183,6 +1181,5 @@
                 </div>
             </div>
         </div>
-    </div>
     <!-- Tastimonial End -->
 @endsection
