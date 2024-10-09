@@ -6,11 +6,22 @@
 </head>
 
 <body>
-    @include("clients.layouts.components.nav")
+
+    <!-- Navbar start -->
+    @include('clients.layouts.components.nav')
+    <!-- Navbar End -->
+
+    <!-- Spinner Start -->
+    @include('clients.layouts.components.spinner')
+    <!-- Spinner End -->
+
+    <!-- Modal Search Start -->
+    @include('clients.layouts.components.modal-search')
+    <!-- Modal Search End -->
 
     @yield('content')
 
-    @include("clients.layouts.components.footer")
+    @include('clients.layouts.components.footer')
 </body>
 
 @include('clients.layouts.components.script')
