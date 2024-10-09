@@ -5,12 +5,9 @@ namespace App\Http\Controllers\clients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ShopController extends Controller
 {
-
-    public function home()
-    {
-        return view("clients.homes.home");
+    public function shop(){
+        return view("clients.shops.shop");
     }
-
 }
