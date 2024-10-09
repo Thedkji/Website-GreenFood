@@ -6,11 +6,11 @@
 </head>
 
 <body>
-    @include("clients.layouts.components.nav")
+    @include('clients.layouts.components.nav')
 
     @yield('content')
 
-    @include("clients.layouts.components.footer")
+    @include('clients.layouts.components.footer')
 </body>
 
 @include('clients.layouts.components.script')

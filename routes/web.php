@@ -13,4 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require_once base_path("routes/clients/product.php");
+Route::get('/', function () {
+    return redirect()->route("client.home");
+});
+
+/* require các file route khác ở đây để chạy route */
+Route::prefix('client')
+    ->name('client.')
+    ->group(function () {
+        require_once base_path("routes/clients/product.php");
+        require_once base_path("routes/clients/account.php");
+    });

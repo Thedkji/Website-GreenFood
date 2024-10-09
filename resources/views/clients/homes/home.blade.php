@@ -1,4 +1,4 @@
-@extends("clients.layouts.master")
+@extends('clients.layouts.master')
 
 @section('title', 'Fruitables - Vegetable Website Template')
 @section('content')
@@ -80,7 +80,6 @@
     </div>
 </div>
 <!-- Featurs Section End -->
-
 
 <!-- Tastimonial Start -->
 <div class="container-fluid testimonial py-5">
