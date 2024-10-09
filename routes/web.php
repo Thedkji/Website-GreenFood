@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,6 +12,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/',function() {
+   return redirect()->route("client.home");
+});
 
 /* require các file route khác ở đây để chạy route */
-require_once base_path("routes/clients/product.php");
+Route::prefix('client')
+    ->name('client.')
+    ->group(function () {
+        require_once base_path("routes/clients/product.php");
+        require_once base_path("routes/clients/account.php");
+    });
