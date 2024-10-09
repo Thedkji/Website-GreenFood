@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/',function() {
+   return redirect()->route("client.home");
+});
 
 /* require các file route khác ở đây để chạy route */
-
 Route::prefix('client')
     ->name('client.')
     ->group(function () {

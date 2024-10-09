@@ -10,6 +10,4 @@ Route::controller(AccountController::class)
     ->group(function () {
         Route::get('register')->name('register');
         Route::get('login')->name('login');
-
     });
-
