@@ -6,11 +6,20 @@
 </head>
 
 <body>
+
+    <!-- Navbar start -->
     @include('clients.layouts.components.nav')
-    
-    <div class="container-fluid py-5 mb-5 hero-header">
-        @yield('content')
-    </div>
+    <!-- Navbar End -->
+
+    <!-- Spinner Start -->
+    @include('clients.layouts.components.spinner')
+    <!-- Spinner End -->
+
+    <!-- Modal Search Start -->
+    @include('clients.layouts.components.modal-search')
+    <!-- Modal Search End -->
+
+    @yield('content')
 
     @include('clients.layouts.components.footer')
 </body>
