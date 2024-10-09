@@ -12,4 +12,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* require các file route khác ở đây để chạy route */
 require_once base_path("routes/clients/product.php");
