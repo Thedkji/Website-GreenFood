@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +22,5 @@ Route::prefix('client')
     ->group(function () {
         require_once base_path("routes/clients/product.php");
         require_once base_path("routes/clients/account.php");
+        require_once base_path("routes/clients/shop.php");
     });
