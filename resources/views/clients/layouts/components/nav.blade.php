@@ -17,12 +17,7 @@
     <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl d-flex align-items-center">
             <a href="{{ route('client.home') }}" class="navbar-brand">
-                {{-- <h1 class="text-primary display-6">Fruitables</h1> --}}
-
-                <div class="" style="width: 400px; height: 350px;position: relative; bottom: 30px">
-                    <img src="{{ env('VIEW_CLIENT') }}/img/logo-green-food-removebg-preview.png" alt=""
-                        width="100%" height="100%">
-                </div>
+                <h1 class="text-primary display-6">GreenFood</h1>
             </a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -36,13 +31,22 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                            <a href="cart.html" class="dropdown-item">Cart</a>
+                            <a href="{{ route('client.cart')}}" class="dropdown-item">Cart</a>
                             <a href="chackout.html" class="dropdown-item">Chackout</a>
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                             <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Công Cụ</a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <a href="{{route('client.bmi')}}" class="dropdown-item">Tính BMI</a>
+                            <a href="{{route('client.bmr')}}" class="dropdown-item">Tính BMR và TDEE</a>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('client.contact') }}" class="nav-item nav-link">Liên Hệ</a>
                 </div>
                 <div class="d-flex m-3 me-0">
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"

@@ -11,7 +11,7 @@
     }
 
     function n(e) {
-        const PATH_ROOT = "http://datn-fall2024.test/GreenFood/public/admins"
+        const PATH_ROOT = "http://website-greenfood.test/admins"
         document.getElementById("header-lang-img") && ("en" == e ? document.getElementById("header-lang-img").src = `${PATH_ROOT}/images/flags/us.svg` : "sp" == e ? document.getElementById("header-lang-img").src = "/images/flags/spain.svg" : "gr" == e ? document.getElementById("header-lang-img").src = "/images/flags/germany.svg" : "it" == e ? document.getElementById("header-lang-img").src = "/images/flags/italy.svg" : "ru" == e ? document.getElementById("header-lang-img").src = "/images/flags/russia.svg" : "ch" == e ? document.getElementById("header-lang-img").src = "/images/flags/china.svg" : "fr" == e ? document.getElementById("header-lang-img").src = "/images/flags/french.svg" : "ar" == e && (document.getElementById("header-lang-img").src = "/images/flags/ae.svg"), localStorage.setItem("language", e), null == (a = localStorage.getItem("language")) && n(t), (e = new XMLHttpRequest).open("GET", `${PATH_ROOT}//lang/` + a + ".json"), e.onreadystatechange = function () {
             var a;
             4 === this.readyState && 200 === this.status && (a = JSON.parse(this.responseText), Object.keys(a).forEach(function (t) {
@@ -409,7 +409,7 @@
     }
 
     function H() {
-        const PATH_ROOT = "http://datn-fall2024.test/GreenFood/public/admins"
+        const PATH_ROOT = "http://website-greenfood.test/admins"
         Array.from(document.querySelectorAll("#notificationItemsTabContent .tab-pane")).forEach(function (e) {
             0 < e.querySelectorAll(".notification-item").length ? e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "block") :
                 (e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "none"),
