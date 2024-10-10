@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ProductdetailController extends Controller
 {
-    public function productdetail(){
+    public function productDetail(){
         return view("clients.product-detail.product-detail");
     }
 }

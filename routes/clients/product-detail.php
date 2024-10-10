@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(ProductdetailController::class)
     ->group(function () {
-        Route::get('/productdetail', 'productdetail')->name('product-detail');
+        Route::get('/product-detail', 'productDetail')->name('product-detail');
     });
