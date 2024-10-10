@@ -17,6 +17,15 @@ Route::get('/', function () {
 });
 
 /* require các file route khác ở đây để chạy route */
+
+// Admin
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        require_once base_path("routes/admins/dashboard.php");
+    });
+
+// Client
 Route::prefix('client')
     ->name('client.')
     ->group(function () {

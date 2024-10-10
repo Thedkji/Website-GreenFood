@@ -15,9 +15,14 @@
         </div>
     </div>
     <div class="container px-0">
-        <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <a href="index.html" class="navbar-brand">
-                <h1 class="text-primary display-6">Fruitables</h1>
+        <nav class="navbar navbar-light bg-white navbar-expand-xl d-flex align-items-center">
+            <a href="{{ route('client.home') }}" class="navbar-brand">
+                {{-- <h1 class="text-primary display-6">Fruitables</h1> --}}
+
+                <div class="" style="width: 400px; height: 350px;position: relative; bottom: 30px">
+                    <img src="{{ env('VIEW_CLIENT') }}/img/logo-green-food-removebg-preview.png" alt=""
+                        width="100%" height="100%">
+                </div>
             </a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -25,8 +30,8 @@
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="{{ route('client.shop') }}" class="nav-item nav-link">Shop</a>
+                    <a href="{{ route('client.home') }}" class="nav-item nav-link active">Trang chủ</a>
+                    <a href="{{ route('client.shop') }}" class="nav-item nav-link">Sản phẩm</a>
                     <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -50,9 +55,16 @@
                             class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                             style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                     </a>
-                    <a href="#" class="my-auto">
-                        <i class="fas fa-user fa-2x"></i>
-                    </a>
+
+                    <div class="nav-item dropdown">
+                        <a href="{{ route("client.login") }}" class="nav-link">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <a href="{{ route("client.login") }}" class="dropdown-item">Đăng Nhập</a>
+                            <a href="{{ route("client.register") }}" class="dropdown-item">Đăng Ký</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
