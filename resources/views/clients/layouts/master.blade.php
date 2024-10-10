@@ -19,6 +19,10 @@
     @include('clients.layouts.components.modal-search')
     <!-- Modal Search End -->
 
+    <!-- Offcanvas Cart Start -->
+    @include('clients.layouts.components.offcanvas-cart')
+    <!-- Offcanvas Cart End -->
+
     @yield('content')
 
     @include('clients.layouts.components.footer')

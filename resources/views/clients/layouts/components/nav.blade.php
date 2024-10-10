@@ -26,7 +26,7 @@
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
                     <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="shop.html" class="nav-item nav-link">Shop</a>
+                    <a href="{{ route('client.shop') }}" class="nav-item nav-link">Shop</a>
                     <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -43,7 +43,8 @@
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
-                    <a href="#" class="position-relative me-4 my-auto">
+                    <a href="#" class="position-relative me-4 my-auto" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa fa-shopping-bag fa-2x"></i>
                         <span
                             class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
