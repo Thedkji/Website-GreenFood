@@ -416,7 +416,7 @@
                         </div>
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="img/vegetable-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
+                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
                             <div class="p-4 pb-0 rounded-bottom">
