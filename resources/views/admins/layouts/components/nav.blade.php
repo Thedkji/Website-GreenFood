@@ -1,4 +1,4 @@
-<div class="app-menu navbar-menu">
+<div class="app-menu navbar-menu" style="background-color: #252323">
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
@@ -16,7 +16,9 @@
                 <img src="{{ env('VIEW_ADMIN') }}/images/logo-sm.png" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ env('VIEW_ADMIN') }}/images/logo-light.png" alt="" height="17">
+                <a href="{{ route('client.home') }}" class="navbar-brand" >
+                    <h1 class="text-primary display-7" style="color:#81C408 !important">GreenFood</h1>
+                </a>
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"

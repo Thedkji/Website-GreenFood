@@ -17,12 +17,7 @@
     <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl d-flex align-items-center">
             <a href="{{ route('client.home') }}" class="navbar-brand">
-                {{-- <h1 class="text-primary display-6">Fruitables</h1> --}}
-
-                <div class="" style="width: 400px; height: 350px;position: relative; bottom: 30px">
-                    <img src="{{ env('VIEW_CLIENT') }}/img/logo-green-food-removebg-preview.png" alt=""
-                        width="100%" height="100%">
-                </div>
+                <h1 class="text-primary display-6">GreenFood</h1>
             </a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
