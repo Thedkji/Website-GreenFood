@@ -23,4 +23,4 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
-<script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script>
+{{-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> --}}

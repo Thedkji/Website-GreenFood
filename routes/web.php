@@ -30,6 +30,8 @@ Route::prefix('client')
     ->name('client.')
     ->group(function () {
         require_once base_path("routes/clients/product.php");
-        require_once base_path("routes/clients/account.php");
         require_once base_path("routes/clients/shop.php");
+        require_once base_path("routes/clients/account.php");
+        require_once base_path("routes/clients/contact.php");
+        require_once base_path("routes/clients/tool.php");
     });
