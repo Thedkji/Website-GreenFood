@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
+        require_once base_path("routes/admins/product.php");
     });
 
 // Client
