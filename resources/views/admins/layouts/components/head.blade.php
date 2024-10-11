@@ -20,5 +20,6 @@
 <link href="{{ env('VIEW_ADMIN') }}/css/icons.min.css" rel="stylesheet" type="text/css" />
 <!-- App Css-->
 <link href="{{ env('VIEW_ADMIN') }}/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="{{ env('VIEW_ADMIN') }}/css/app.css" rel="stylesheet" type="text/css" />
 <!-- custom Css-->
 <link href="{{ env('VIEW_ADMIN') }}/css/custom.min.css" rel="stylesheet" type="text/css" />

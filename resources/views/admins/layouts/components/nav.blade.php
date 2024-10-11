@@ -16,7 +16,7 @@
                 <img src="{{ env('VIEW_ADMIN') }}/images/logo-sm.png" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <a href="{{ route('client.home') }}" class="navbar-brand" >
+                <a href="{{ route('client.home') }}" class="navbar-brand">
                     <h1 class="text-primary display-7" style="color:#81C408 !important">GreenFood</h1>
                 </a>
             </span>
@@ -711,11 +711,11 @@
                     <div class="collapse menu-dropdown" id="sidebarPages">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.index') }}" class="nav-link" data-key="t-starter">
+                                <a href="{{ route('admin.products.products.index') }}" class="nav-link" data-key="t-starter">
                                     Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.create') }}" class="nav-link" data-key="t-team"> Thêm mới sản phẩm</a>
+                                <a href="{{ route('admin.products.products.create') }}" class="nav-link" data-key="t-team"> Thêm mới sản phẩm</a>
                             </li>
                         </ul>
                     </div>

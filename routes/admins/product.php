@@ -9,5 +9,5 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('products')
     ->name('products.')
     ->group(function () {
-        Route::resource('/', ProductController::class);
+        Route::resource('products', ProductController::class);
     });

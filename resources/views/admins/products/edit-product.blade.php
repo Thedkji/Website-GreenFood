@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'Product | Thêm mới sản phẩm')
+@section('title', 'Product | Thay đổi sản phẩm')
 
-@section('start-page-title' , 'Thêm mới sản phẩm')
+@section('start-page-title' , 'Thay đổi sản phẩm')
 
 @section('content')
 <form class="needs-validation" novalidate>
