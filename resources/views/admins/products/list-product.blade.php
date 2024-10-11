@@ -80,7 +80,7 @@
             <td>Nov 22, 2021</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="javascript:void(0);" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
+                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                     <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </td>
@@ -107,7 +107,7 @@
             <td>Nov 22, 2021</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="javascript:void(0);" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
+                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                     <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </td>
@@ -134,7 +134,7 @@
             <td>Nov 22, 2021</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="javascript:void(0);" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
+                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                     <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </td>
