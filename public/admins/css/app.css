@@ -1865,6 +1865,7 @@ File: Main Css File
   [data-layout=semibox][data-sidebar-visibility=hidden][data-sidebar-size=sm] .logo span.logo-sm, [data-layout=semibox][data-sidebar-visibility=hidden][data-sidebar-size=sm-hover] .logo span.logo-sm {
     display: none;
   }
+
 }
 [data-layout=semibox][data-sidebar-visibility=hidden]:is([data-sidebar=dark], [data-sidebar=gradient], [data-sidebar=gradient-2], [data-sidebar=gradient-3], [data-sidebar=gradient-4]) .logo-dark {
   display: none;
@@ -1903,10 +1904,10 @@ File: Main Css File
 
 /*!
  * Waves v0.7.6
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2018 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2018 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE */
 .waves-effect {
   position: relative;
@@ -3899,7 +3900,7 @@ code {
   --vz-vertical-menu-border: #405189;
   --vz-vertical-menu-item-color: #abb9e8;
   --vz-vertical-menu-item-bg: rgba(255, 255, 255, 0.15);
-  --vz-vertical-menu-item-hover-color: #fff;
+  --vz-vertical-menu-item-hover-color: #000000;
   --vz-vertical-menu-item-active-color: #fff;
   --vz-vertical-menu-item-active-bg: rgba(255, 255, 255, 0.15);
   --vz-vertical-menu-sub-item-color: #abb9e8;
