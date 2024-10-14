@@ -16,6 +16,7 @@ class GallerySeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             Gallery::create([
                 "id" => $i,
+                "product_id" => mt_rand(1, 20),
                 "path" => "https://via.placeholder.com/300x200",
             ]);
         }

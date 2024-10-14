@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('maximum_spend')->comment('Giá trị cao nhất có thể giảm giá');
             $table->text('description')->nullable();
             $table->integer('quantity')->comment('Số lượng mã giảm giá');
-            $table->dateTime('expiration_date')->comment('Ngày hết hạn mã giảm giá');
             $table->dateTime('start_date')->comment('Ngày bắt đầu giảm giá');
+            $table->dateTime('expiration_date')->comment('Ngày hết hạn mã giảm giá');
             $table->integer('type')
                 ->default(0)
                 ->comment(

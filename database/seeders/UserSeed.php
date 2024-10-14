@@ -73,19 +73,39 @@ class UserSeed extends Seeder
         ];
 
         $vietnam_phone_prefixes = [
-            '032', '033', '034', '035', '036', '037', '038', '039', // Viettel
-            '070', '079', '077', '076', '078',                     // Mobifone
-            '083', '084', '085', '081', '082',                     // Vinaphone
-            '056', '058',                                           // Vietnamobile
-            '059'                                                  // Gmobile
+            '032',
+            '033',
+            '034',
+            '035',
+            '036',
+            '037',
+            '038',
+            '039', // Viettel
+            '070',
+            '079',
+            '077',
+            '076',
+            '078', // Mobifone
+            '083',
+            '084',
+            '085',
+            '081',
+            '082', // Vinaphone
+            '056',
+            '058', // Vietnamobile
+            '059' // Gmobile
         ];
-        $random_numbers = '';
-
-        for ($i=1; $i < 7; $i++) { 
-            $random_numbers .= mt_rand(0, 9); 
-        }
 
         for ($i = 1; $i <= 10; $i++) {
+            $random_numbers = '';
+            for ($j = 1; $j <= 7; $j++) {
+                $random_numbers .= mt_rand(0, 9);
+            }
+
+            // Lấy giá trị ngẫu nhiên từ district và ward
+            $random_district = Arr::random($district);
+            $random_ward = Arr::random($ward);
+
             User::create([
                 "id" => $i,
                 "name" => Arr::random($last_names) . " " . Arr::random($middle_names) . " " . Arr::random($first_names),
@@ -95,9 +115,10 @@ class UserSeed extends Seeder
                 "email" => "email$i@gmail.com",
                 "phone" => Arr::random($vietnam_phone_prefixes) . $random_numbers,
                 "province" => "Hà Nội",
-                "district" => Arr::random($district),
-                "ward" => Arr::random($ward),
-                "address" => fake()->address(),
+                "district" => $random_district,
+                "ward" => $random_ward,
+                // Gán địa chỉ từ giá trị random của district và ward
+                "address" => "Hà Nội, " . $random_district . ", " . $random_ward,
                 "role" => mt_rand(0, 1),
             ]);
         }

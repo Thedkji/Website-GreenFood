@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cart;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CartSeeder extends Seeder
+class CategoryProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,8 @@ class CartSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i <= 10; $i++) {
-            Cart::create([
-                "id" => $i,
-                "product_id" => mt_rand(1, 20),
-                "user_id" => mt_rand(1, 10),
-                "quantity" => $i * 2000
-            ]);
+            $cate = Category::find($i);
+            $cate->products()->attach(mt_rand(1, 20));
         }
     }
 }

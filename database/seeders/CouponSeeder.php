@@ -14,6 +14,9 @@ class CouponSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i <= 10; $i++) {
+            $startDate = fake()->dateTimeBetween('-1 month', 'now'); // Ngày bắt đầu trong quá khứ hoặc hiện tại
+            $expirationDate = fake()->dateTimeBetween($startDate, '+1 month'); // Ngày hết hạn sau ngày bắt đầu
+
             Coupon::create([
                 "id" => $i,
                 "name" => "GIAM $i",
@@ -22,8 +25,8 @@ class CouponSeeder extends Seeder
                 "maximum_spend" => mt_rand(5, 10),
                 "description" => null,
                 "quantity" => $i,
-                "expiration_date" => fake()->dateTime(),
-                "start_date" => fake()->dateTime(),
+                "expiration_date" => $expirationDate, // Ngày hết hạn sau start_date
+                "start_date" => $startDate, // Ngày bắt đầu
                 "type" => mt_rand(0, 1),
                 "status" => mt_rand(0, 3),
             ]);

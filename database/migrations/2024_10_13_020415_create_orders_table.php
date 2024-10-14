@@ -15,10 +15,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('address');
             $table->string('province', 50);
             $table->string('district', 50);
             $table->string('ward', 50);
+            $table->string('address');
             $table->string('email');
             $table->string('phone', 10);
             $table->string('total')->comment('Tổng toàn bộ hóa đơn');
