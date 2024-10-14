@@ -48,11 +48,13 @@
             </div>
             <div class="mb-3">
                 <label for="select">Biến thể cha</label>
-                <select class="form-select" id="select" name="variant_id" value="{{old( 'variant_id')}}" required>
-                    <option selected disabled value="">Vui lòng chọn biến thể</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                <select class="form-select" name="variant_id" required>
+                    <option selected disabled>Vui lòng chọn biến thể</option>
+                    @foreach ($variants as $variant)
+                    <option value="{{ $variant->id }}">
+                        {{ $variant->name }}
+                    </option>
+                    @endforeach
                 </select>
                 <div class="invalid-feedback">
                     Please select a valid state.

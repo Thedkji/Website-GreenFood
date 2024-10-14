@@ -27,7 +27,7 @@
         </div>
     </div>
 </div>
-<table class="table table-striped table-dark align-middle  mb-0">
+<table class="table table-striped align-middle  mb-0">
     <thead>
         <tr>
             <th scope="col">Id</th>

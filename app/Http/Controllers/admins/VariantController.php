@@ -53,7 +53,8 @@ class VariantController extends Controller
     // Variant con
     public function addChildVariant()
     {
-        return view('admins.variants.add-variant-child');
+        $variants = Variant::all();
+        return view('admins.variants.add-variant-child', compact('variants'));
     }
     public function createChildVariant(VariantDetailRequest $request)
     {

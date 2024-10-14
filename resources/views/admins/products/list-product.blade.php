@@ -16,7 +16,7 @@
         </div>
     </div>
 </div>
-<table class="table table-striped table-dark align-middle  mb-0">
+<table class="table table-striped align-middle  mb-0">
     <thead>
         <tr>
             <th scope="col">Id</th>
@@ -36,7 +36,7 @@
             <th scope="row">{{$product->id}}</th>
             <td>{{$product->name}}</td>
             <td>
-                <img src="{{$product->img}}" alt="" class="avatar-md">
+                <img src="{{ env('VIEW_IMG').'/'.$product->img}}" alt="Ảnh sản phẩm" style="width:150px">
             </td>
             <td>{{$product->price_regular}} đ</td>
             <td>{{$product->price_sale}} đ</td>
@@ -48,7 +48,7 @@
                 text-overflow: ellipsis;
                 max-height: 4.5em;
                 line-height: 1.5;">
-                    {{$product->description}}
+                    {!! $product->description !!}
                 </p>
             </td>
             <td>{{$product->slug}}</td>
