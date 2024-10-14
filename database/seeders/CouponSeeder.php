@@ -19,7 +19,7 @@ class CouponSeeder extends Seeder
 
             Coupon::create([
                 "id" => $i,
-                "name" => "GIAM $i",
+                "name" => "GIAM$i%",
                 "coupon_amount" => "$i",
                 "minimum_spend" => mt_rand(1, 5),
                 "maximum_spend" => mt_rand(5, 10),
