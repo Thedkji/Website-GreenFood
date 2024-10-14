@@ -31,7 +31,7 @@ class VariantController extends Controller
             return redirect()->back()->with('error', 'Thêm mới thất bại');
         };
     }
-    public function show($id)
+    public function edit($id)
     {
         $variant = Variant::findOrFail($id);
         return view('admins.variants.edit-variant', compact('variant'));
