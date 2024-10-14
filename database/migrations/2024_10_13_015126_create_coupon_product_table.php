@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Category;
 use App\Models\Coupon;
+use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_coupons', function (Blueprint $table) {
-            $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+        Schema::create('coupon_product', function (Blueprint $table) {
             $table->foreignIdFor(Coupon::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
 
             $table->primary([
-                'category_id',
-                'coupon_id'
+                'coupon_id',
+                'product_id',
             ]);
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_coupon');
+        Schema::dropIfExists('coupon_product');
     }
 };

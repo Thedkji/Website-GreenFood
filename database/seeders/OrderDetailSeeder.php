@@ -13,10 +13,10 @@ class OrderDetailSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             OrderDetail::create([
                 "id" => $i,
-                "order_id" => mt_rand(1, 5),
+                "order_id" => mt_rand(1, 10),
                 "product_name" => "Sản phẩm $i",
                 "product_img" => "https://via.placeholder.com/300x200",
                 "product_price" => $i * 300000,

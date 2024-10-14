@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->string('path')->nullable();
             $table->timestamps();
             $table->softDeletes();

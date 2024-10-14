@@ -13,11 +13,11 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             Category::create([
                 "id" => $i,
                 "name" => "Danh mục $i",
-                "parent_id" => mt_rand(1, 5),
+                "parent_id" => mt_rand(1, 10),
             ]);
         }
     }
