@@ -27,58 +27,24 @@
         </tr>
     </thead>
     <tbody>
+        @foreach ($variant_details as $detail)
         <tr>
-            <th scope="row">1</th>
-            <td>Basic Plan</td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
+            <th scope="row">{{$detail->id}}</th>
+            <td>{{$detail->value}}</td>
+            <td>{{$detail->price}}</td>
+            <td>{{$detail->variant->name}}</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.variants.edit_child_variant', ['id' => 123]) }}"
+                    <a href="{{ route('admin.variants.list_child_variant', ['id' => $detail->id]) }}"
                         class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                     <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </td>
         </tr>
-        <tr>
-            <th scope="row">1</th>
-            <td>Basic Plan</td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.variants.edit_child_variant', ['id' => 123]) }}"
-                        class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">1</th>
-            <td>Basic Plan</td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.variants.edit_child_variant', ['id' => 123]) }}"
-                        class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">1</th>
-            <td>Basic Plan</td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.variants.edit_child_variant', ['id' => 123]) }}"
-                        class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
+        @endforeach
     </tbody>
 </table>
+<div class="d-flex justify-content-end mt-3">
+    {{$variant_details->links('pagination::bootstrap-4')}}
+</div>
 @endsection

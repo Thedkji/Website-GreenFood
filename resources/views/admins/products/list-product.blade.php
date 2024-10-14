@@ -30,14 +30,16 @@
         </tr>
     </thead>
     <tbody>
+        @foreach ($products as $product)
+
         <tr>
-            <th scope="row">1</th>
-            <td>Basic Plan</td>
+            <th scope="row">{{$product->id}}</th>
+            <td>{{$product->name}}</td>
             <td>
-                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg" alt="" class="avatar-md">
+                <img src="{{$product->img}}" alt="" class="avatar-md">
             </td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
+            <td>{{$product->price_regular}} đ</td>
+            <td>{{$product->price_sale}} đ</td>
             <td>
                 <p style="width: 200px;display: -webkit-box;
                 -webkit-box-orient: vertical;
@@ -45,100 +47,23 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 max-height: 4.5em;
-                line-height: 1.5;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
+                line-height: 1.5;">
+                    {{$product->description}}
+                </p>
             </td>
-            <td>Nov 22, 2021</td>
+            <td>{{$product->slug}}</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}"
+                    <a href="{{ route('admin.products.products.show', ['product' => $product->id]) }}"
                         class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                     <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </td>
         </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Premium Plan</td>
-            <td>
-                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg" alt="" class="avatar-md">
-            </td>
-            <td>860 đ</td>
-            <td>Nov 10, 2021</td>
-            <td>
-                <p style="width: 200px;display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-height: 4.5em;
-                line-height: 1.5;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            </td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Basic Plan</td>
-            <td>
-                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg" alt="" class="avatar-md">
-            </td>
-            <td>860 đ</td>
-            <td>Nov 19, 2021</td>
-            <td>
-                <p style="width: 200px;display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-height: 4.5em;
-                line-height: 1.5;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            </td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">4</th>
-            <td>Corporate Plan</td>
-            <td>
-                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg" alt="" class="avatar-md">
-            </td>
-            <td>860 đ</td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <p style="width: 200px;display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-height: 4.5em;
-                line-height: 1.5;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            </td>
-            <td>Nov 22, 2021</td>
-            <td>
-                <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => 123]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </td>
-        </tr>
+        @endforeach
     </tbody>
 </table>
+<div class="d-flex justify-content-end mt-3">
+    {{$products->links('pagination::bootstrap-4')}}
+</div>
 @endsection

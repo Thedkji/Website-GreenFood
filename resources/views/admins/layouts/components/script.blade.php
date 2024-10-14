@@ -48,7 +48,7 @@
             reader.onload = function(e) {
                 var imgElement = document.createElement('img');
                 imgElement.src = e.target.result;
-                imgElement.style.maxWidth = '300px';
+                imgElement.style.maxWidth = '150px';
                 imgElement.style.marginRight = '10px';
                 imgElement.style.marginBottom = '10px';
                 container.appendChild(imgElement);

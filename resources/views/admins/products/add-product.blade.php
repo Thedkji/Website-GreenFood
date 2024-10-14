@@ -14,6 +14,9 @@
                 <div class="valid-feedback">
                     Looks good!
                 </div>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="mb-3 col-lg-6 ">
@@ -34,8 +37,8 @@
             <div class="mb-3">
                 <label for="validationCustom03" class="form-label">Slug</label>
                 <input type="text" class="form-control" id="validationCustom03" required>
-                <div class="valid-feedback">
-                    Looks good!
+                <div class="invalid-feedback">
+                    Please select a valid state.
                 </div>
             </div>
             <div class="mb-3">
@@ -57,7 +60,7 @@
                 <div class="invalid-feedback">Example invalid form file feedback</div>
             </div>
             <div class="form-group mb-3">
-                <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện" style="max-width: 300px; display: none;">
+                <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện" style="max-width: 150px; display: none;">
             </div>
 
             <!-- Ảnh Slide -->
@@ -72,26 +75,28 @@
             <!-- Biến thể -->
             <div class="mb-3">
                 <label>Biến thể</label>
-                <div class="mb-3 mx-5">
-                    <p>Khối lượng</p>
-                    <div class="form-check form-switch form-check-inline" dir="ltr">
-                        <input type="checkbox" class="form-check-input" id="inlineswitch">
-                        <label class="form-check-label" for="inlineswitch">1</label>
+                <div class="form-check">
+                    <div class="mb-3 mx-5">
+                        <p>Khối lượng</p>
+                        <div class="form-check form-switch form-check-inline" dir="ltr">
+                            <input type="checkbox" class="form-check-input" id="inlineswitch" required>
+                            <label class="form-check-label" for="inlineswitch">1</label>
+                        </div>
+                        <div class="form-check form-switch form-check-inline" dir="ltr">
+                            <input type="checkbox" class="form-check-input" id="inlineswitch1" required>
+                            <label class="form-check-label" for="inlineswitch1">2</label>
+                        </div>
                     </div>
-                    <div class="form-check form-switch form-check-inline" dir="ltr">
-                        <input type="checkbox" class="form-check-input" id="inlineswitch1">
-                        <label class="form-check-label" for="inlineswitch1">2</label>
-                    </div>
-                </div>
-                <div class="mb-3 mx-5">
-                    <p>Màu sắc</p>
-                    <div class="form-check form-switch form-check-inline" dir="ltr">
-                        <input type="checkbox" class="form-check-input" id="inlineswitch">
-                        <label class="form-check-label" for="inlineswitch">1</label>
-                    </div>
-                    <div class="form-check form-switch form-check-inline" dir="ltr">
-                        <input type="checkbox" class="form-check-input" id="inlineswitch1">
-                        <label class="form-check-label" for="inlineswitch1">2</label>
+                    <div class="mb-3 mx-5">
+                        <p>Màu sắc</p>
+                        <div class="form-check form-switch form-check-inline" dir="ltr">
+                            <input type="checkbox" class="form-check-input" id="inlineswitch" required>
+                            <label class="form-check-label" for="inlineswitch">1</label>
+                        </div>
+                        <div class="form-check form-switch form-check-inline" dir="ltr">
+                            <input type="checkbox" class="form-check-input" id="inlineswitch1" required>
+                            <label class="form-check-label" for="inlineswitch1">2</label>
+                        </div>
                     </div>
                 </div>
             </div>
