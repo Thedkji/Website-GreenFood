@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coupon_users', function (Blueprint $table) {
+        Schema::create('coupon_user', function (Blueprint $table) {
             $table->foreignIdFor(Coupon::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->primary([

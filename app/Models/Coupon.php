@@ -17,15 +17,15 @@ class Coupon extends Model
         "maximum_spend",
         "description",
         "quantity",
-        "expiration_date",
         "start_date",
+        "expiration_date",
         "type",
         "status",
     ];
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'coupon_category');
     }
 
     public function products()
