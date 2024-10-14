@@ -5,6 +5,17 @@
 @section('start-page-title' , 'Thay đổi biến thể')
 
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 <form class="needs-validation" method="post" action="{{ route('admin.variants.variants.update', ['variant' => $variant->id]) }}" novalidate>
     @csrf
     @method('PUT')

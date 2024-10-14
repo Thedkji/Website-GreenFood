@@ -5,6 +5,17 @@
 @section('start-page-title' , 'Danh sách biến thể con')
 
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 <div class="row g-4 mb-3">
     <div class="col-sm">
         <div class="d-flex justify-content-sm-end">
@@ -32,12 +43,25 @@
             <th scope="row">{{$detail->id}}</th>
             <td>{{$detail->value}}</td>
             <td>{{$detail->price}}</td>
-            <td>{{$detail->variant->name}}</td>
+            <td>
+                @if (isset($detail->variant->name))
+                {{$detail->variant->name}}
+                @else
+                <p class="text-danger">Biến thể không tồn tại</p>
+                @endif
+            </td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.variants.list_child_variant', ['id' => $detail->id]) }}"
-                        class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
+                    <a href="{{ route('admin.variants.edit_child_variant', ['id' => $detail->id]) }}" style="background-color: transparent;" class="link-success fs-15">
+                        <i class="ri-edit-2-line"></i>
+                    </a>
+                    <form action="{{ route('admin.variants.delete_child_variant', ['id' => $detail->id]) }}" method="post">
+                        @csrf
+                        @method('POST')
+                        <button type="submit" style="background-color: transparent; border: none; color: inherit;" onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </form>
                 </div>
             </td>
         </tr>
