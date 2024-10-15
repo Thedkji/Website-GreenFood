@@ -23,11 +23,15 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'img' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // validate ảnh
+            'img' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'price_regular' => 'required|numeric|min:0',
-            'price_sale' => 'nullable|numeric|lt:price_regular|min:0', // giá sale phải nhỏ hơn giá regular
-            'description' => 'nullable|string|max:1000',
-            'slug' => 'required|string|max:255|unique:products,slug', // slug phải là duy nhất
+            'price_sale' => 'required|numeric|lt:price_regular|min:0',
+            'description' => 'required|string',
+            'slug' => 'required|string|max:255|unique:products,slug',
+            'slides.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'variants' => 'required|array',
+            'variants.*' => 'exists:variants,id',
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 
@@ -38,9 +42,13 @@ class ProductRequest extends FormRequest
             'img.image' => 'Tệp tải lên phải là một hình ảnh.',
             'img.mimes' => 'Ảnh phải có định dạng jpg, jpeg, hoặc png.',
             'price_regular.required' => 'Giá thông thường là bắt buộc.',
+            'description.required' => 'Mô tả là bắt buộc.',
             'price_sale.lt' => 'Giá giảm phải nhỏ hơn giá thông thường.',
             'slug.required' => 'Slug là bắt buộc.',
             'slug.unique' => 'Slug này đã tồn tại, vui lòng chọn slug khác.',
+            'slides.required' => 'Ảnh slide là bắt buộc.',
+            'variants.required' => 'Biến thể là bắt buộc.',
+            'category_id.required' => 'Danh mục là bắt buộc.',
         ];
     }
 }

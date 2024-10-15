@@ -34,6 +34,8 @@
             imagePreview.src = reader.result;
             imagePreview.style.display = 'block';
         };
+        var imageAvatar = document.getElementById('imageAvatar');
+        imageAvatar.style.display = 'none';
         reader.readAsDataURL(input.files[0]);
     }
     // Hàm xem trước nhiều ảnh (Ảnh Slide)
@@ -53,6 +55,8 @@
                 imgElement.style.marginBottom = '10px';
                 container.appendChild(imgElement);
             };
+            var imageSlide = document.getElementById('imageSlideContainer');
+            imageSlide.style.display = 'none';
             reader.readAsDataURL(file);
         }
     }
@@ -66,4 +70,4 @@
 <script src="{{ env('VIEW_ADMIN') }}/js/pages/form-validation.init.js"></script>
 
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
-<script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script>
+<!-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> -->

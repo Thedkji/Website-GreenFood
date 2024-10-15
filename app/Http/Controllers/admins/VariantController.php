@@ -91,4 +91,27 @@ class VariantController extends Controller
         $variant_detail->delete();
         return redirect()->back()->with('success', 'Xóa thành công');
     }
+    public function add_test()
+    {
+        return view('admins.variants.addTest');
+    }
+    public function create_test(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'tag' => 'required|string|max:100',
+        ]);
+        if ($validatedData) {
+            //     session()->flash('success', 'Thêm mới thành công');
+            //     $allSessionData = session()->all();
+            //     dd($allSessionData);
+            return redirect()->back()->with('success', 'OK');
+        } else {
+            return redirect()->back()->with('error', 'Fail');
+            //     session()->flash('error', 'Thêm mới thất bại');
+            //     $allSessionData = session()->all();
+            //     dd($allSessionData);
+        }
+    }
 }

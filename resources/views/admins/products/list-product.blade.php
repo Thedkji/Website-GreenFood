@@ -25,6 +25,7 @@
             <th scope="col">Giá thường</th>
             <th scope="col">Giá được giảm</th>
             <th scope="col">Mô tả</th>
+            <th scope="col">Danh mục</th>
             <th scope="col">Slug</th>
             <th scope="col">Thao tác</th>
         </tr>
@@ -48,15 +49,21 @@
                 text-overflow: ellipsis;
                 max-height: 4.5em;
                 line-height: 1.5;">
-                    {!! $product->description !!}
+                    {{ $product->description }}
                 </p>
             </td>
             <td>{{$product->slug}}</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => $product->id]) }}"
+                    <a href="{{ route('admin.products.products.show', ['product' => $product->id]) }}" style="background-color: transparent;"
                         class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <a href="javascript:void(0);" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
+                    <form action="{{ route('admin.products.products.destroy', ['product' => $product->id]) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" style="background-color: transparent; border: none; color: inherit;" onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </form>
                 </div>
             </td>
         </tr>

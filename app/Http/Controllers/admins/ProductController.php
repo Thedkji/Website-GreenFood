@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -28,31 +30,44 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $data = $request->validated();
-        if ($request->hasFile('img')) {
-            $avatar = $request->file('img');
-            $avatarName = time() . '_' . $avatar->getClientOriginalName();
-            $avatarPath = $avatar->storeAs('products/avatars', $avatarName, 'public');
-            $data['img'] = $avatarPath;
-        }
-        $product = Product::create($data);
-        if ($request->hasFile('slides')) {
-            foreach ($request->file('slides') as $slide) {
-                $slideName = time() . '_' . $slide->getClientOriginalName();
-                $slidePath = $slide->storeAs('products/slides', $slideName, 'public');
-                $product->galleries()->create([
-                    'path' => $slidePath,
-                ]);
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+            if ($request->hasFile('img')) {
+                $avatar = $request->file('img');
+                $avatarName = time() . '_' . $avatar->getClientOriginalName();
+                $avatarPath = $avatar->storeAs('products/avatars', $avatarName, 'public');
+                $data['img'] = $avatarPath;
             }
+            $product = Product::create($data);
+            if ($request->hasFile('slides')) {
+                foreach ($request->file('slides') as $slide) {
+                    $slideName = time() . '_' . $slide->getClientOriginalName();
+                    $slidePath = $slide->storeAs('products/slides', $slideName, 'public');
+                    $product->galleries()->create(['path' => $slidePath]);
+                }
+            }
+            if ($request->has('variants')) {
+                $product->variantDetails()->attach($request->input('variants'));
+            }
+            if ($request->has('category_id')) {
+                $product->categories()->attach($request->input('category_id'));
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Sản phẩm đã được thêm mới thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.');
         }
-        if ($request->has('variants')) {
-            $product->variantDetails()->attach($request->input('variants'));
-        }
-        return redirect()->route('admin.products.products.index')->with('success', 'Sản phẩm đã được thêm mới thành công.');
     }
+
 
     public function show($id)
     {
-        return view('admins.products.edit-product');
+        $product = Product::with('variantDetails', 'categories', 'galleries')->findOrFail($id);
+        $variants = VariantDetail::with('variant')->get()->groupBy('variant_id');
+        $categories = Category::get();
+        return view('admins.products.edit-product', compact('product', 'variants', 'categories'));
+        // dd($product->categories);
     }
 }
