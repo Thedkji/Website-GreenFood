@@ -1,4 +1,4 @@
-<div class="app-menu navbar-menu">
+<div class="app-menu navbar-menu" style="background-color: #252323">
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
@@ -16,7 +16,9 @@
                 <img src="{{ env('VIEW_ADMIN') }}/images/logo-sm.png" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ env('VIEW_ADMIN') }}/images/logo-light.png" alt="" height="17">
+                <a href="{{ route('client.home') }}" class="navbar-brand">
+                    <h1 class="text-primary display-7" style="color:#81C408 !important">GreenFood</h1>
+                </a>
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -704,75 +706,17 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
-                        <i class="ri-pages-line"></i> <span data-key="t-pages">Pages</span>
+                        <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">Sản phẩm</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPages">
+
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="pages-starter.html" class="nav-link" data-key="t-starter">
-                                    Starter </a>
+                                <a href="{{ route('admin.products.products.index') }}" class="nav-link" data-key="t-starter">
+                                    Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarProfile" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarProfile" data-key="t-profile">
-                                    Profile
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarProfile">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">
-                                                Simple Page </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages-profile-settings.html" class="nav-link"
-                                                data-key="t-settings"> Settings </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-team.html" class="nav-link" data-key="t-team"> Team </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-timeline.html" class="nav-link" data-key="t-timeline">
-                                    Timeline </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-faqs.html" class="nav-link" data-key="t-faqs"> FAQs </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-pricing.html" class="nav-link" data-key="t-pricing">
-                                    Pricing </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-gallery.html" class="nav-link" data-key="t-gallery">
-                                    Gallery </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-maintenance.html" class="nav-link" data-key="t-maintenance">
-                                    Maintenance
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-coming-soon.html" class="nav-link" data-key="t-coming-soon">
-                                    Coming Soon
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-sitemap.html" class="nav-link" data-key="t-sitemap">
-                                    Sitemap </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-search-results.html" class="nav-link" data-key="t-search-results">
-                                    Search Results </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-privacy-policy.html" class="nav-link"
-                                    data-key="t-privacy-policy">Privacy Policy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages-term-conditions.html" class="nav-link"
-                                    data-key="t-term-conditions">Term & Conditions</a>
+                                <a href="{{ route('admin.products.products.create') }}" class="nav-link" data-key="t-team"> Thêm mới sản phẩm</a>
                             </li>
                         </ul>
                     </div>
@@ -781,21 +725,40 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLanding">
-                        <i class="ri-rocket-line"></i> <span data-key="t-landing">Landing</span>
+                        <i class="ri-rocket-line"></i> <span data-key="t-landing">Biến thể</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarLanding">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="landing.html" class="nav-link" data-key="t-one-page"> One Page
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="nft-landing.html" class="nav-link" data-key="t-nft-landing"> NFT
-                                    Landing </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="job-landing.html" class="nav-link" data-key="t-job">Job</a>
-                            </li>
+                            <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
+                                Biến thể cha
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarCalendar">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.variants.variants.index') }}" class="nav-link" data-key="t-starter">
+                                            Danh sách biến thể cha</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.variants.variants.create') }}" class="nav-link" data-key="t-team"> Thêm mới biến thể cha</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="#sidebarCalendar1" class="nav-link" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
+                                Biến thể con
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarCalendar1">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.variants.list_child_variant') }}" class="nav-link" data-key="t-starter">
+                                            Danh sách biến thể con</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.variants.add_child_variant') }}" class="nav-link" data-key="t-team"> Thêm mới biến thể con</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
                 </li>

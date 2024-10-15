@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,8 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
+        require_once base_path("routes/admins/product.php");
+        require_once base_path("routes/admins/variant.php");
     });
 
 // Client
@@ -31,7 +34,10 @@ Route::prefix('client')
     ->group(function () {
         require_once base_path("routes/clients/product.php");
         require_once base_path("routes/clients/shop.php");
+        require_once base_path("routes/clients/product-detail.php");
         require_once base_path("routes/clients/account.php");
         require_once base_path("routes/clients/contact.php");
         require_once base_path("routes/clients/tool.php");
+        require_once base_path("routes/clients/cart.php");
+        require_once base_path("routes/clients/checkout.php");
     });
