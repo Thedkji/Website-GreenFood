@@ -5,7 +5,7 @@
 <script src="{{ env('VIEW_ADMIN') }}/js/pages/plugins/lord-icon-2.1.0.js"></script>
 
 <!-- Nếu javascript ko chạy đúng cách thì có thể mở thằng này ra -->
-{{-- <script src="{{ env("VIEW_ADMIN") }}/js/plugins.js?time={{ time() }}"></script> --}}
+<script src="{{ env("VIEW_ADMIN") }}/js/plugins.js?time={{ time() }}"></script>
 
 <!-- apexcharts -->
 <script src="{{ env('VIEW_ADMIN') }}/libs/apexcharts/apexcharts.min.js"></script>
