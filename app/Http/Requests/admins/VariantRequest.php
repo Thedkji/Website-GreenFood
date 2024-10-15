@@ -11,7 +11,7 @@ class VariantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class VariantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Tên biến thể là bắt buộc.',
+            'name.string' => 'Tên biến thể phải là chuỗi ký tự.',
+            'name.max' => 'Tên biến thể không được vượt quá 255 ký tự.',
         ];
     }
 }
