@@ -20,7 +20,7 @@
 
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="{{ env('VIEW_CLIENT') }}/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ env('VIEW_CLIENT') }}/css/bootstrap.min.css?time={{ time() }}" rel="stylesheet">
 
 <!-- Template Stylesheet -->
 <link href="{{ env('VIEW_CLIENT') }}/css/style.css" rel="stylesheet">

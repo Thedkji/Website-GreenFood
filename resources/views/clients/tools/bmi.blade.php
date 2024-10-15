@@ -6,61 +6,105 @@
     @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
-                <!-- Contact Start -->
-                <div class="container-fluid contact py-5">
-                    <div class="container py-5">
-                        
-                        <div class="p-5 bg-light rounded">
-                            <div class="row g-4">
-                                <div class="col-12">
-                                    <div class="text-center mx-auto" style="max-width: 700px;">
-                                        <h1 class="text-primary">Công Cụ Tính Chỉ Số BMI</h1>
-                                        {{-- <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p> --}}
-                                    </div>
-                                </div>
-                                {{-- <div class="col-lg-12">
-                                    <div class="h-100 rounded">
-                                        <iframe class="rounded w-100"
-                                        style="height: 400px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.33750346623!2d-73.97968099999999!3d40.6974881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1694259649153!5m2!1sen!2sbd"
-                                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    </div> --}}
-                                </div>
-                                <div class="col-lg-7 ">
-                                    <form action="" class="align-items-center">
-                                        <input type="text" class="w-100 form-control border-0 py-3 mb-4" placeholder="Your Name">
-                                        <input type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email">
-                                        <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
-                                        <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary " type="submit">Submit</button>
-                                    </form>
-                                </div>
-                                {{-- <div class="col-lg-5">
-                                    <div class="d-flex p-4 rounded mb-4 bg-white">
-                                        <i class="fas fa-map-marker-alt fa-2x text-primary me-4"></i>
-                                        <div>
-                                            <h4>Address</h4>
-                                            <p class="mb-2">123 Street New York.USA</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex p-4 rounded mb-4 bg-white">
-                                        <i class="fas fa-envelope fa-2x text-primary me-4"></i>
-                                        <div>
-                                            <h4>Mail Us</h4>
-                                            <p class="mb-2">info@example.com</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex p-4 rounded bg-white">
-                                        <i class="fa fa-phone-alt fa-2x text-primary me-4"></i>
-                                        <div>
-                                            <h4>Telephone</h4>
-                                            <p class="mb-2">(+012) 3456 7890</p>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                            </div>
-                        </div>
+        <!-- Contact Start -->
+        <div class="container-fluid contact py-5">
+            <div class="container py-3  w-75">
+                <div class="col-12">
+                    <div class="text-center mx-auto mb-5" style="max-width: 700px;">
+                        <h1 class="text-primary fw-bold">Công cụ tính chỉ số BMI</h1>
+                        {{-- <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p> --}}
                     </div>
                 </div>
-                <!-- Contact End -->
+
+                <form action="" class="row bg-light p-3 rounded gap-3">
+                    <div class="col-md-6 row justify-content-between align-items-center w-100">
+                        <div class="col-md-3">
+                            <label for="" class="form-lable fw-bold ">Chiều cao</label>
+                        </div>
+                        <div class="col-md-9 ">
+                            <input type="text" placeholder="Nhập chiều cao tính bằng cm" class="form-control p-2">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row justify-content-between align-items-center w-100">
+                        <div class="col-md-3">
+                            <label for="" class="form-lable fw-bold">Cân nặng</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" placeholder="Nhập cân nặng tính bằng kg" class="form-control p-2">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row justify-content-between align-items-center w-100">
+                        <div class="col-md-3">
+                            <label for="" class="form-lable fw-bold">Kết quả</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row justify-content-between align-items-center w-100">
+                        <div class="col-md-3">
+                            {{-- <label for="" class="form-lable">Chiều cao</label> --}}
+                        </div>
+                        <div class="col-md-9 ">
+                            <input type="text" placeholder="Kết quả" class="form-control p-2 w-25 bg-white" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row justify-content-between align-items-center w-100">
+                        <div class="col-md-3">
+                            {{-- <label for="" class="form-lable">Cân nặng</label> --}}
+                        </div>
+                        <div class="col-md-9 w-100 text-end  ">
+                            <button class="w-25 btn  border-secondary py-2 bg-white text-primary " type="submit">Thực hiện tính</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="container text-center py-2 mb-3">
+                    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2024/02/avatar-anh-meo-cute-5.jpg" width="250" class="" alt="Mô tả hình ảnh" />
+                </div>
+
+                <div class="container mt-5 ">
+                    <p class="text-body">
+                        BMI hay còn gọi là chỉ số khối cơ thể, là một trong những chỉ số quan trọng để đánh giá
+                        tình trạng sức khỏe của con người. BMI là tỉ lệ giữa cân nặng và chiều cao của một người.
+                        Cách tính BMI thường mà mọi người thường sử dụng là: chia cân nặng (kg) cho bình phương chiều cao
+                        (m).
+                    </p>
+                    <p class="text-body">
+                        Cách tính BMI rất dễ dàng và nhanh chóng, không yêu cầu kiến thức chuyên môn cao, tuy nhiên việc
+                        hiểu và áp dụng đúng cách tính BMI là một câu chuyện khác . Trong bài viết này, chúng ta sẽ tìm hiểu
+                        chi tiết về cách tính BMI và cách áp dụng nó vào đánh giá sức khỏe
+                    </p>
+                </div>
+
+
+                <div class="container mt-5 ">
+                    <h2 class="text-success">Cách tính BMI</h2>
+                    <p class="text-body">
+                        Công thức và cách tính BMI khá đơn giản, bạn chỉ cần chia cân nặng (kg) cho bình phương chiều cao
+                        (m):
+                    </p>
+                    <p class="fw-bold">BMI = cân nặng (kg) / (chiều cao (m))<sup>2</sup></p>
+
+                    <p class="text-body">
+                        Ví dụ: Nếu bạn cao 1,7m và nặng 65kg, thì BMI của bạn sẽ được tính như sau:
+                    </p>
+                    <p class="fw-bold">BMI = 65 / (1.7)<sup>2</sup> = 22.5</p>
+
+                    <p class="text-body">
+                        Nếu bạn vẫn chưa rõ cách tính BMI, bạn có thể
+                        <a href="#" class="text-primary">tính BMI tại GreenFood</a>
+                        để có được một kết quả nhanh chóng và chính xác nhất. Ngoài ra còn có lời khuyên từ các chuyên gia
+                        dinh dưỡng phù hợp với từng chỉ số BMI của bạn.
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
 
     </div>
 @endsection
