@@ -27,12 +27,18 @@
                 <div class="valid-feedback">
                     Looks good!
                 </div>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
             </div>
             <div class="mb-3">
                 <label for="validationCustom01" class="form-label">Giá trị biến thể</label>
                 <input type="text" class="form-control" name="price" id="validationCustom01" value="{{$variant_detail->price}}" required>
                 <div class="valid-feedback">
                     Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please select a valid state.
                 </div>
             </div>
             <div class="mb-3">
@@ -45,6 +51,9 @@
                     </option>
                     @endforeach
                 </select>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
                 <div class="invalid-feedback">
                     Please select a valid state.
                 </div>

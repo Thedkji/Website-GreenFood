@@ -12,6 +12,8 @@ Route::middleware(['web'])
     ->group(function () {
         Route::resource('variants', VariantController::class);
         Route::prefix('child')->group(function () {
+            Route::get('/add_test', [VariantController::class, 'add_test'])->name('add_test');
+            Route::post('/create_test', [VariantController::class, 'create_test'])->name('create_test');
             Route::get('/add', [VariantController::class, 'addChildVariant'])->name('add_child_variant');
             Route::post('/create', [VariantController::class, 'createChildVariant'])->name('create_child_variant');
             Route::get('/list', [VariantController::class, 'listChildVariant'])->name('list_child_variant');

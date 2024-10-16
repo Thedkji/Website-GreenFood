@@ -3,8 +3,9 @@
 namespace App\Http\Requests\admins;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProductRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +22,22 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $productId = $this->route('product');
+
         return [
             'name' => 'required|string|max:255',
-            'img' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'img' => 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
             'price_regular' => 'required|numeric|min:0',
             'price_sale' => 'required|numeric|lt:price_regular|min:0',
             'description' => 'required|string',
-            'slug' => 'required|string|max:255|unique:products,slug',
-            'slides.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'variants' => 'required|array',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('products', 'slug')->ignore($productId),
+            ],
+            'slides.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'variants' => 'sometimes|array',
             'variants.*' => 'exists:variants,id',
             'category_id' => 'required|exists:categories,id',
         ];
