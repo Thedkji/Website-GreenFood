@@ -41,4 +41,5 @@ Route::prefix('client')
         require_once base_path("routes/clients/cart.php");
         require_once base_path("routes/clients/checkout.php");
         require_once base_path("routes/clients/error.php");
+        require_once base_path("routes/clients/message.php");
     });
