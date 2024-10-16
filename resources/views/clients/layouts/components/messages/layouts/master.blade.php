@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <style>
         body,
         html {
@@ -24,22 +26,25 @@
             position: relative;
         }
 
-        .error-container {
-            max-width: 600px;
+        .message-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
             z-index: 10;
         }
 
-        .error-icon {
+        .message-icon {
             font-size: 100px;
-            color: #99cc00;
         }
 
-        .btn-primary {
+        .btn-success {
             background-color: #99cc00;
             border-color: #99cc00;
         }
 
-        .btn-primary:hover {
+        .btn-success:hover {
             background-color: #88b200;
             border-color: #88b200;
         }
@@ -97,32 +102,32 @@
 
 <body>
     <div class="bg">
-        <div class="error-container">
-            <div class="error-icon">
-                <i class="bi bi-exclamation-triangle-fill"></i>
+        <div class="message-container">
+            <div class="message-icon">
+                <i class="@yield('icon')" style="color: #28a745;"></i> <!-- Icon xác nhận màu xanh -->
             </div>
-            <h1 class="display-1" style="font-size:100px">@yield('status-err')</h1>
-            <h1>@yield('title-err')</h1>
-            <p class="lead">@yield('content-err')</p>
-            <a href="{{ route('client.home') }}" class="btn btn-primary"><i class="bi bi-house"></i> Về trang chủ</a>
+            <h1 style="@yield('color-title')">@yield('title-message')</h1>
+            <p class="lead" style="font-size: 15px ; width: 500px; margin: auto">@yield('content-message')</p>
+
+            @yield('link')
         </div>
         <div class="floating-item item1">
-            <img src="https://img.icons8.com/fluency/48/000000/leaf.png" alt="Lá cây">
+            <img src="https://img.icons8.com/fluency/48/4caf50/leaf.png" alt="Lá cây"> <!-- Màu xanh -->
         </div>
         <div class="floating-item item2">
-            <img src="https://img.icons8.com/fluency/48/000000/deciduous-tree.png" alt="Cây xanh">
+            <img src="https://img.icons8.com/fluency/48/f57c00/deciduous-tree.png" alt="Cây xanh"> <!-- Màu cam -->
         </div>
         <div class="floating-item item3">
-            <img src="https://img.icons8.com/fluency/48/000000/palm-tree.png" alt="Cây cọ">
+            <img src="https://img.icons8.com/fluency/48/9c27b0/palm-tree.png" alt="Cây cọ"> <!-- Màu tím -->
         </div>
         <div class="floating-item item4">
-            <img src="https://img.icons8.com/fluency/48/000000/natural-food.png" alt="Thực phẩm tự nhiên">
+            <img src="https://img.icons8.com/fluency/48/00bcd4/natural-food.png" alt="Thực phẩm tự nhiên">
+            <!-- Màu xanh dương -->
         </div>
         <div class="floating-item item5">
-            <img src="https://img.icons8.com/fluency/48/000000/wheat.png" alt="Lúa mì">
+            <img src="https://img.icons8.com/fluency/48/ffc107/wheat.png" alt="Lúa mì"> <!-- Màu vàng -->
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.js"></script>
 </body>
 
 </html>
