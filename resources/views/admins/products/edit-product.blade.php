@@ -17,7 +17,7 @@
 @endif
 <form class="needs-validation" novalidate action="{{ route('admin.products.products.update', ['product' => $product->id]) }}" method="post" enctype="multipart/form-data">
     @csrf
-    @method('POST')
+    @method('PUT')
     <div class="row">
         <div class="col-lg-8">
             <div class="mb-3">
@@ -56,7 +56,7 @@
             <!-- Ảnh đại diện -->
             <div class="mb-3">
                 <label for="inputFileAvatar">Ảnh đại diện</label>
-                <input type="file" class="form-control" name="img" id="inputFileAvatar" required onchange="previewImage(event, 'imagePreviewAvatar')">
+                <input type="file" class="form-control" name="img" id="inputFileAvatar" onchange="previewImage(event, 'imagePreviewAvatar')">
                 <x-feedback name="img" />
             </div>
             <div class="form-group mb-3">
@@ -70,7 +70,7 @@
             <!-- Ảnh Slide -->
             <div class="mb-3">
                 <label for="inputFileSlide">Ảnh Slide</label>
-                <input type="file" class="form-control" name="slides[]" id="inputFileSlide" multiple required onchange="previewMultipleImages(event)">
+                <input type="file" class="form-control" name="slides[]" id="inputFileSlide" multiple onchange="previewMultipleImages(event)">
                 <x-feedback name="slides" />
             </div>
             <div class="form-group mb-3 grid gap-3" id="imagePreviewSlideContainer"></div>
@@ -114,4 +114,41 @@
         </div>
     </div>
 </form>
+<script>
+    // Hàm xem trước 1 ảnh (Ảnh đại diện)
+    function previewImage(event, previewId) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var imagePreview = document.getElementById(previewId);
+            imagePreview.src = reader.result;
+            imagePreview.style.display = 'block';
+        };
+        var imageAvatar = document.getElementById('imageAvatar');
+        imageAvatar.style.display = 'none';
+        reader.readAsDataURL(input.files[0]);
+    }
+    // Hàm xem trước nhiều ảnh (Ảnh Slide)
+    function previewMultipleImages(event) {
+        var input = event.target;
+        var files = input.files;
+        var container = document.getElementById('imagePreviewSlideContainer');
+        container.innerHTML = ''; // Xóa các ảnh preview trước đó
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.style.maxWidth = '150px';
+                imgElement.style.marginRight = '10px';
+                imgElement.style.marginBottom = '10px';
+                container.appendChild(imgElement);
+            };
+            var imageSlide = document.getElementById('imageSlideContainer');
+            imageSlide.style.display = 'none';
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

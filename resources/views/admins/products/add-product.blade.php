@@ -104,4 +104,37 @@
         </div>
     </div>
 </form>
+<script>
+    // Hàm xem trước 1 ảnh (Ảnh đại diện)
+    function previewImage(event, previewId) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var imagePreview = document.getElementById(previewId);
+            imagePreview.src = reader.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+    // Hàm xem trước nhiều ảnh (Ảnh Slide)
+    function previewMultipleImages(event) {
+        var input = event.target;
+        var files = input.files;
+        var container = document.getElementById('imagePreviewSlideContainer');
+        container.innerHTML = ''; // Xóa các ảnh preview trước đó
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.style.maxWidth = '150px';
+                imgElement.style.marginRight = '10px';
+                imgElement.style.marginBottom = '10px';
+                container.appendChild(imgElement);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

@@ -5,6 +5,16 @@
 @section('start-page-title' , 'Danh sách sản phẩm')
 
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 <div class="row g-4 mb-3">
     <div class="col-sm">
         <div class="d-flex justify-content-sm-end">
@@ -26,13 +36,14 @@
             <th scope="col">Giá được giảm</th>
             <th scope="col">Mô tả</th>
             <th scope="col">Danh mục</th>
+            <th scope="col">Biến thể</th>
             <th scope="col">Slug</th>
             <th scope="col">Thao tác</th>
         </tr>
     </thead>
     <tbody>
+        @if(isset($products))
         @foreach ($products as $product)
-
         <tr>
             <th scope="row">{{$product->id}}</th>
             <td>{{$product->name}}</td>
@@ -43,14 +54,20 @@
             <td>{{$product->price_sale}} đ</td>
             <td>
                 <p style="width: 200px;display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-height: 4.5em;
-                line-height: 1.5;">
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 3;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-height: 4.5em;
+                            line-height: 1.5;">
                     {{ $product->description }}
                 </p>
+            </td>
+            <td>{{$product->categories[0]->name}}</td>
+            <td>
+                @foreach ( $product->variantDetails as $variants)
+                <p>{{$variants->value}}</p>
+                @endforeach
             </td>
             <td>{{$product->slug}}</td>
             <td>
@@ -68,6 +85,10 @@
             </td>
         </tr>
         @endforeach
+
+        @elseif(!isset($products) && $products == null)
+        <p>Chưa có sản phẩm nào</p>
+        @endif
     </tbody>
 </table>
 <div class="d-flex justify-content-end mt-3">
