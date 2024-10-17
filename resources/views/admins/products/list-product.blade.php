@@ -63,7 +63,7 @@
                     {{ $product->description }}
                 </p>
             </td>
-            <td>{{$product->categories[0]->name}}</td>
+            {{-- <td>{{$product->categories[0]->name}}</td> --}}
             <td>
                 @foreach ( $product->variantDetails as $variants)
                 <p>{{$variants->value}}</p>
