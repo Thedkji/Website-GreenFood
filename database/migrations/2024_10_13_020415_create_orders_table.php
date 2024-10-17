@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('cancel_reson')
                 ->nullable()
                 ->comment('Lý do hủy đơn , lý do giao hàng không thành công');
-            $table->string('status')
+            $table->integer('status')
                 ->comment(
                     '
                                 0: Chờ xác nhận ,
