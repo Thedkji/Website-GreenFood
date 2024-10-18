@@ -718,6 +718,32 @@
                     </div>
                 </li>
 
+                {{-- danh mục sản phẩm --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarCategories" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarCategories">
+                        <i class="ri-file-list-3-line"></i>
+                        <span data-key="t-landing">Danh mục sản phẩm</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarCategories">
+                        <ul class="nav nav-sm flex-column">
+                            <a href="{{ route('admin.categories.index') }}" class="nav-link" role="button"
+                                aria-controls="sidebarCategories" data-key="t-calender">
+                                Danh sách danh mục sản phẩm
+                            </a>
+                        </ul>
+
+                        <ul class="nav nav-sm flex-column">
+                            <a href="{{ route('admin.categories.create') }}" class="nav-link" role="button"
+                                aria-controls="sidebarCategories" data-key="t-calender">
+                                Thêm danh mục sản phẩm
+                            </a>
+                        </ul>
+
+                    </div>
+                </li>
+
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
@@ -738,6 +764,7 @@
                         </ul>
                     </div>
                 </li>
+
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
@@ -798,6 +825,7 @@
                             </a>
                         </ul>
                     </div>
+                </li>
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span>
                 </li>
