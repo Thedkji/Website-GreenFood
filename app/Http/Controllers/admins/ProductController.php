@@ -124,6 +124,7 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($oldSlide->path);
             }
             $product->galleries()->delete();
+            $product->variantDetails()->delete();
             $product->delete();
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được xóa thành công.');

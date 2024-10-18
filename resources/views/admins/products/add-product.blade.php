@@ -15,36 +15,36 @@
     {{ session('error') }}
 </div>
 @endif
-<form class="needs-validation" novalidate action="{{ route('admin.products.products.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('admin.products.products.store') }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('POST')
     <div class="row">
         <div class="col-lg-8">
             <div class="mb-3">
                 <label for="validationCustom01" class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" id="validationCustom01" name="name" value="{{ old('name') }}" required>
+                <input type="text" class="form-control" id="validationCustom01" name="name" value="{{ old('name') }}">
                 <x-feedback name="name" />
             </div>
             <div class="row mb-3">
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá thông thường - VNĐ</label>
-                    <input type="number" class="form-control" name="price_regular" value="{{ old('price_regular') }}" required>
+                    <input type="number" class="form-control" name="price_regular" value="{{ old('price_regular') }}">
                     <x-feedback name="price_regular" />
                 </div>
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá được giảm - VNĐ</label>
-                    <input type="number" class="form-control" name="price_sale" value="{{ old('price_sale') }}" required>
+                    <input type="number" class="form-control" name="price_sale" value="{{ old('price_sale') }}">
                     <x-feedback name="price_sale" />
                 </div>
             </div>
             <div class="mb-3">
                 <label for="validationCustom03" class="form-label">Slug</label>
-                <input type="text" class="form-control" name="slug" value="{{ old('slug') }}" required>
+                <input type="text" class="form-control" name="slug" value="{{ old('slug') }}">
                 <x-feedback name="slug" />
             </div>
             <div class="mb-3">
                 <label for="ckeditor">Mô tả</label>
-                <textarea name="description" id="ckeditor" class="form-control" required>{{ old('description') }}</textarea>
+                <textarea name="description" id="ckeditor" class="form-control">{{ old('description') }}</textarea>
                 <x-feedback name="description" />
             </div>
             <div class="col-12 mb-3">
@@ -56,7 +56,7 @@
             <!-- Ảnh đại diện -->
             <div class="mb-3">
                 <label for="inputFileAvatar">Ảnh đại diện</label>
-                <input type="file" class="form-control" name="img" id="inputFileAvatar" required onchange="previewImage(event, 'imagePreviewAvatar')">
+                <input type="file" class="form-control" name="img" id="inputFileAvatar" onchange="previewImage(event, 'imagePreviewAvatar')">
                 <x-feedback name="img" />
             </div>
             <div class="form-group mb-3">
@@ -66,7 +66,7 @@
             <!-- Ảnh Slide -->
             <div class="mb-3">
                 <label for="inputFileSlide">Ảnh Slide</label>
-                <input type="file" class="form-control" name="slides[]" id="inputFileSlide" multiple required onchange="previewMultipleImages(event)">
+                <input type="file" class="form-control" name="slides[]" id="inputFileSlide" multiple onchange="previewMultipleImages(event)">
                 <x-feedback name="slides" />
             </div>
             <div class="form-group mb-3 grid gap-3" id="imagePreviewSlideContainer"></div>
@@ -93,10 +93,10 @@
             <!-- Danh mục -->
             <div class="mb-3">
                 <label for="select">Danh mục</label>
-                <select class="form-select" name="category_id" required>
+                <select class="form-select" name="category_id">
                     <option selected disabled>Vui lòng chọn danh mục</option>
                     @foreach ($categories as $category)
-                    <option required value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
                 </select>
                 <x-feedback name="category_id" />
