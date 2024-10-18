@@ -746,37 +746,35 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarLanding">
                         <ul class="nav nav-sm flex-column">
-                            <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
+                            {{-- <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                 Biến thể cha
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarCalendar">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.variants.index') }}" class="nav-link"
-                                            data-key="t-starter">
-                                            Danh sách biến thể cha</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.variants.create') }}" class="nav-link"
-                                            data-key="t-team"> Thêm mới biến thể cha</a>
-                                    </li>
-                                </ul>
+                            </a> --}}
+                            <div class="">
+                                <a href="{{ route('admin.variants.variants.index') }}" class="nav-link" role="button" aria-expanded="false"
+                                    aria-controls="sidebarCalendar" data-key="t-calender">
+                                    Danh sách biến thể
+                                </a>
+
+                                <a href="{{ route('admin.variants.variants.create') }}" class="nav-link" role="button" aria-expanded="false"
+                                    aria-controls="sidebarCalendar" data-key="t-calender">
+                                    Thêm mới biến thể
+                                </a>
                             </div>
                             <a href="#sidebarCalendar1" class="nav-link" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                Biến thể con
+                                Chi tiết biến thể
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarCalendar1">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
                                         <a href="{{ route('admin.variants.list_child_variant') }}" class="nav-link"
                                             data-key="t-starter">
-                                            Danh sách biến thể con</a>
+                                            Danh sách chi tiết biến thể</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('admin.variants.add_child_variant') }}" class="nav-link"
-                                            data-key="t-team"> Thêm mới biến thể con</a>
+                                            data-key="t-team"> Thêm mới chi tiết biến thể</a>
                                     </li>
                                 </ul>
                             </div>
