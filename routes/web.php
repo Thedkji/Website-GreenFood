@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\admins\CommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +27,7 @@ Route::prefix('admin')
         require_once base_path("routes/admins/product.php");
         require_once base_path("routes/admins/variant.php");
         require_once base_path("routes/admins/order.php");
+        require_once base_path("routes/admins/comments.php");
     });
 
 // Client
@@ -44,3 +45,9 @@ Route::prefix('client')
         require_once base_path("routes/clients/error.php");
         require_once base_path("routes/clients/message.php");
     });
+    // Route::prefix('admin')->name('admin.')->group(function () {
+    //     Route::get('comments', [CommentController::class, 'showComment'])->name('comments.comment');
+    //     Route::get('comments/create', [CommentController::class, 'create'])->name('comments.create');
+    //     Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
+    //     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    // });

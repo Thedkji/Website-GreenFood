@@ -799,6 +799,20 @@
                         </ul>
                     </div>
 
+                    <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Bình luận</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarForms">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.comments.comment')}}" class="nav-link" data-key="t-basic-elements">Danh sách bình luận</a>
+                            </li>    
+                         </ul>
+                    </div>
+                </li>
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span>
                 </li>
 
