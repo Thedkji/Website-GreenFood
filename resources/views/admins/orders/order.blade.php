@@ -64,7 +64,7 @@
                         <td scope="col">{{ $order->email }}</td>
                         <td scope="col">{{ $order->phone }}</td>
                         <td scope="col">
-                            {{ app('formatPrice')($order->total) }} VNĐ
+                            <span class="text-success">{{ app('formatPrice')($order->total) }} VNĐ</span>
                         </td>
                         <td scope="col">{{ $order->note }}</td>
                         <td scope="col">{{ $order->cancel_reson }}</td>
