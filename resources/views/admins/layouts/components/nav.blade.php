@@ -753,12 +753,12 @@
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.products.index') }}" class="nav-link"
+                                <a href="{{ route('admin.products.index') }}" class="nav-link"
                                     data-key="t-starter">
                                     Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.products.create') }}" class="nav-link"
+                                <a href="{{ route('admin.products.create') }}" class="nav-link"
                                     data-key="t-team"> Thêm mới sản phẩm</a>
                             </li>
                         </ul>
@@ -825,7 +825,7 @@
                     </div>
                 </li>
 
-                    <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarForms">
                         <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Bình luận</span>
@@ -834,8 +834,8 @@
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="{{route('admin.comments.comment')}}" class="nav-link" data-key="t-basic-elements">Danh sách bình luận</a>
-                            </li>    
-                         </ul>
+                            </li>
+                        </ul>
                     </div>
                 </li>
 

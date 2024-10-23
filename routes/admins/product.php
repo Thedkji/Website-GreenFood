@@ -6,8 +6,4 @@ use Illuminate\Support\Facades\Route;
 
 /* Viết route ở đây */
 
-Route::prefix('products')
-    ->name('products.')
-    ->group(function () {
-        Route::resource('products', ProductController::class);
-    });
+Route::resource('products', ProductController::class);

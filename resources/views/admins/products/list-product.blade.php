@@ -63,7 +63,11 @@
                     {{ $product->description }}
                 </p>
             </td>
-            <td>{{$product->categories[0]->name}}</td>
+            <td>
+                @foreach ( $product->categories as $category)
+                <p>{{$category->name}}</p>
+                @endforeach
+            </td>
             <td>
                 @foreach ( $product->variantDetails as $variants)
                 <p>{{$variants->value}}</p>
@@ -72,9 +76,9 @@
             <td>{{$product->slug}}</td>
             <td>
                 <div class="hstack gap-3 flex-wrap">
-                    <a href="{{ route('admin.products.products.show', ['product' => $product->id]) }}" style="background-color: transparent;"
+                    <a href="{{ route('admin.products.show', ['product' => $product->id]) }}" style="background-color: transparent;"
                         class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                    <form action="{{ route('admin.products.products.destroy', ['product' => $product->id]) }}" method="post">
+                    <form action="{{ route('admin.products.destroy', ['product' => $product->id]) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button type="submit" style="background-color: transparent; border: none; color: inherit;" onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">

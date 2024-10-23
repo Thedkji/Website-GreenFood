@@ -15,7 +15,7 @@
     {{ session('error') }}
 </div>
 @endif
-<form action="{{ route('admin.products.products.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('POST')
     <div class="row">
@@ -93,13 +93,15 @@
             <!-- Danh mục -->
             <div class="mb-3">
                 <label for="select">Danh mục</label>
-                <select class="form-select" name="category_id">
-                    <option selected disabled>Vui lòng chọn danh mục</option>
+                <div class="form-check mb-3 mx-5">
                     @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    <div class="form-check form-switch form-check-inline" dir="ltr">
+                        <input type="checkbox" name="category_ids[]" value="{{ $category->id }}" class="form-check-input" id="inlineswitch{{$category->id}}" {{ in_array($category->id, old('category_id', [])) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="inlineswitch{{$category->id}}">{{$category->name}}</label>
+                    </div>
                     @endforeach
-                </select>
-                <x-feedback name="category_id" />
+                </div>
+                <x-feedback name="category_ids" />
             </div>
         </div>
     </div>

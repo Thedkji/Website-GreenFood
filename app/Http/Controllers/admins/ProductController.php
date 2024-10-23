@@ -52,8 +52,8 @@ class ProductController extends Controller
             if ($request->has('variants')) {
                 $product->variantDetails()->attach($request->input('variants'));
             }
-            if ($request->has('category_id')) {
-                $product->categories()->attach($request->input('category_id'));
+            if ($request->has('category_ids')) {
+                $product->categories()->attach($request->input('category_ids'));
             }
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được thêm mới thành công.');
@@ -103,8 +103,8 @@ class ProductController extends Controller
             if ($request->has('variants')) {
                 $product->variantDetails()->sync($request->input('variants'));
             }
-            if ($request->has('category_id')) {
-                $product->categories()->sync($request->input('category_id'));
+            if ($request->has('category_ids')) {
+                $product->categories()->sync($request->input('category_ids'));
             }
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được cập nhật thành công.');
@@ -129,9 +129,10 @@ class ProductController extends Controller
             }
             $product->galleries()->delete();
             $product->variantDetails()->detach();
+            $product->categories()->detach();
             $product->delete();
             DB::commit();
-            return redirect()->route('admin.products.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
+            return redirect()->back()->with('success', 'Sản phẩm đã được xóa thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
