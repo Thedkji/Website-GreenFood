@@ -10,5 +10,5 @@
     </ul>
 </div>
 @elseif (old($name) !== null && old($name) !== '')
-<div class="text-success">Đủ điều kiện</div>
+<p class="text-success">Đủ điều kiện</p>
 @endif
