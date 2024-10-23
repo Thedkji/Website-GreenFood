@@ -727,8 +727,10 @@
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.users.users.index') }}" class="nav-link" data-key="t-starter">
+                                <a href="{{ route('admin.users.index') }}" class="nav-link" data-key="t-starter">
                                     Danh sách người dùng</a>
+                                <a href="{{ route('admin.users.create') }}" class="nav-link" data-key="t-starter">
+                                    Thêm mới người dùng</a>
                             </li>
                             <li class="nav-item">
                                 {{-- <a href="{{ route('admin.products.products.create') }}" class="nav-link" data-key="t-team"> Thêm mới người dùng</a> --}}
