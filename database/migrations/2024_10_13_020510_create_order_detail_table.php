@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('coupon_price')
                 ->comment('Số tiền của mã giảm giá');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
