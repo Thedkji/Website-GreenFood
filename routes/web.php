@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\admins\CommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +27,7 @@ Route::prefix('admin')
         require_once base_path("routes/admins/product.php");
         require_once base_path("routes/admins/variant.php");
         require_once base_path("routes/admins/order.php");
+        require_once base_path("routes/admins/comment.php");
         require_once base_path("routes/admins/category.php");
         require_once base_path("routes/admins/supplier.php");
     });
@@ -46,3 +47,4 @@ Route::prefix('client')
         require_once base_path("routes/clients/error.php");
         require_once base_path("routes/clients/message.php");
     });
+ 

@@ -8,50 +8,72 @@
 @section('content')
     <div class="row g-4 mb-3">
         <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
+            <form action="{{ route('admin.categories.index') }}" method="get">
+                @csrf
+                <div class="d-flex justify-content-sm-end">
+                    <div class="search-box ms-2 w-25">
+                        <input type="text" class="form-control search" name="search" placeholder="Tìm kiếm">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-            </div>
+            </form>
         </div>
+    </div>
+
+    <div>
+        @session('success')
+            <p class="alert alert-success">
+                {{ session('success') }}
+            </p>
+        @endsession
     </div>
 
     <div class="">
         <div class="table-responsive mt-4 mt-xl-0">
-            <table class="table table-striped table-nowrap align-middle mb-0">
+            <table class="table table-striped table-nowrap align-middle mb-0 text-center">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Invoice</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Tên danh mục</th>
+                        <th scope="col">ID danh mục cha</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Ngày cập nhật</th>
+                        <th scope="col">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="fw-medium">01</td>
-                        <td>Basic Plan</td>
-                        <td>$860</td>
-                        <td>Nov 22, 2021</td>
-                        <td><i class="ri-checkbox-circle-line align-middle text-success"></i> Subscribed</td>
-                        <td>
-                            <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.categories.edit', 1) }}" class="link-success fs-15"><i
-                                        class="ri-edit-2-line"></i></a>
-                                <a href="javascript:void(0);" class="link-danger fs-15"><i
-                                        class="ri-delete-bin-line"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($categories as $category)
+                        <tr>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->parent_id }}</td>
+                            <td>{{ $category->created_at }}</td>
+                            <td>{{ $category->updated_at }}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-wrap">
+                                    <a href="{{ route('admin.categories.edit', $category->id) }}"
+                                        class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
+
+                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            style="background-color: transparent; border: none; color: inherit;"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa?');"
+                                            class="link-danger fs-15">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    {{-- <div class="mt-3">
-        {{ $orders->links() }}
-    </div> --}}
+    <div class="mt-3">
+        {{ $categories->links() }}
+    </div>
 @endsection

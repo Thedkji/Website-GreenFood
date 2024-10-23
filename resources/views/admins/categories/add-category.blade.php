@@ -7,26 +7,44 @@
 @endsection
 @section('content')
 
+    <div>
+        @session('success')
+            <p class="alert alert-success">
+                {{ session('success') }}
+            </p>
+        @endsession
+    </div>
+
     <div class="w-50">
-        <div>
-            <label for="" class="form-label">Tên danh mục</label>
-            <input class="form-control" id="choices-text-remove-button" data-choices="" data-choices-limit="3"
-                data-choices-removeitem="" type="text" value="" placeholder="Nhập tên danh mục">
-        </div>
-
-        <div class="my-3">
-            <label for="" class="form-label">Chọn danh mục cha</label>
-            <div class="">
-                <select class="form-select mb-3" aria-label="Default select example">
-                    <option selected="">Select your Status </option>
-                    <option value="1">Declined Payment</option>
-                    <option value="2">Delivery Error</option>
-                    <option value="3">Wrong Amount</option>
-                </select>
+        <form action="{{ route('admin.categories.store') }}" method="post">
+            @csrf
+            <div>
+                <label for="" class="form-label">Tên danh mục</label>
+                <input class="form-control" id="choices-text-remove-button" data-choices="" data-choices-limit="3"
+                    data-choices-removeitem="" type="text" value="{{ old('name') }}" placeholder="Nhập tên danh mục"
+                    name="name">
             </div>
-        </div>
 
-        <button class="btn btn-primary">Thêm mới</button>
+            <div class="my-3">
+                @error('name')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="my-3">
+                <label for="" class="form-label">Chọn danh mục cha</label>
+                <div class="">
+                    <select class="form-select mb-3" aria-label="Default select example" name="parent_id">
+                        <option selected="" value="">Chọn danh mục cha</option>
+                        @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Thêm mới</button>
+        </form>
     </div>
 
 
