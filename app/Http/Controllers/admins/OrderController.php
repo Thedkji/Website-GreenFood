@@ -12,8 +12,7 @@ class OrderController extends Controller
     //
     public function showOder()
     {
-        $orders = Order::orderBy('id')->paginate(8);
-
+        $orders = Order::sortable()->paginate(8);
         return view("admins.orders.order", compact('orders'));
     }
 
@@ -29,9 +28,7 @@ class OrderController extends Controller
     public function editOrder($id)
     {
         $order = Order::find($id);
-
         $statuses = Order::groupBy('status')->pluck('status');
-
         return view("admins.orders.edit-order-detail", compact('statuses', 'order'));
     }
 

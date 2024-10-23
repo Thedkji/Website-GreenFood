@@ -12,14 +12,13 @@ use App\Models\VariantDetail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    //
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::with('variantDetails', 'categories')->paginate(5);
-        // dd($products);
         return view('admins.products.list-product', compact('products'));
     }
 
