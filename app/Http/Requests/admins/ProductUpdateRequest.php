@@ -39,7 +39,8 @@ class ProductUpdateRequest extends FormRequest
             'slides.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             'variants' => 'sometimes|array',
             'variants.*' => 'exists:variants,id',
-            'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:categories,id',
         ];
     }
 
@@ -56,7 +57,7 @@ class ProductUpdateRequest extends FormRequest
             'slug.unique' => 'Slug này đã tồn tại, vui lòng chọn slug khác.',
             'slides.required' => 'Ảnh slide là bắt buộc.',
             'variants.required' => 'Biến thể là bắt buộc.',
-            'category_id.required' => 'Danh mục là bắt buộc.',
+            'category_ids.required' => 'Danh mục là bắt buộc.',
         ];
     }
 }

@@ -15,7 +15,7 @@
     {{ session('error') }}
 </div>
 @endif
-<form class="needs-validation" novalidate action="{{ route('admin.products.products.update', ['product' => $product->id]) }}" method="post" enctype="multipart/form-data">
+<form class="needs-validation" novalidate action="{{ route('admin.products.update', ['product' => $product->id]) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="row">
@@ -28,12 +28,12 @@
             <div class="row mb-3">
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá thông thường - VNĐ</label>
-                    <input type="number" class="form-control" name="price_regular" value="{{ $product->price_regular}}" required>
+                    <input type="number" class="form-control" name="price_regular" value="{{ app('formatPrice')($product->price_regular) }} VNĐ" required>
                     <x-feedback name="price_regular" />
                 </div>
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá được giảm - VNĐ</label>
-                    <input type="number" class="form-control" name="price_sale" value="{{$product->price_sale}}" required>
+                    <input type="number" class="form-control" name="price_sale" value="{{ app('formatPrice')($product->price_sale) }} VNĐ" required>
                     <x-feedback name="price_sale" />
                 </div>
             </div>
@@ -104,15 +104,15 @@
             <!-- Danh mục -->
             <div class="mb-3">
                 <label for="select">Danh mục</label>
-                <select class="form-select" name="category_id" required>
-                    <option selected disabled>Vui lòng chọn danh mục</option>
+                <div class="form-check mb-3 mx-5">
                     @foreach ($categories as $category)
-                    <option required value="{{  $category->id }}" {{ isset($product->categories) && $product->categories->contains('pivot.category_id', $category->id) ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
+                    <div class="form-check form-switch form-check-inline" dir="ltr">
+                        <input type="checkbox" name="category_ids[]" value="{{ $category->id }}" class="form-check-input" id="inlineswitch{{$category->id}}" {{ isset($product->categories) && $product->categories->contains('pivot.category_id', $category->id) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="inlineswitch{{$category->id}}">{{$category->name}}</label>
+                    </div>
                     @endforeach
-                </select>
-                <x-feedback name="category_id" />
+                </div>
+                <x-feedback name="category_ids" />
             </div>
         </div>
     </div>

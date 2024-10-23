@@ -52,8 +52,8 @@ class ProductController extends Controller
             if ($request->has('variants')) {
                 $product->variantDetails()->attach($request->input('variants'));
             }
-            if ($request->has('category_id')) {
-                $product->categories()->attach($request->input('category_id'));
+            if ($request->has('category_ids')) {
+                $product->categories()->attach($request->input('category_ids'));
             }
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được thêm mới thành công.');
@@ -103,8 +103,8 @@ class ProductController extends Controller
             if ($request->has('variants')) {
                 $product->variantDetails()->sync($request->input('variants'));
             }
-            if ($request->has('category_id')) {
-                $product->categories()->sync($request->input('category_id'));
+            if ($request->has('category_ids')) {
+                $product->categories()->sync($request->input('category_ids'));
             }
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được cập nhật thành công.');
@@ -118,12 +118,18 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $product = Product::findOrFail($id);
-            Storage::disk('public')->delete($product->img);
+            if ($product->img && Storage::disk('public')->exists($product->img)) {
+                Storage::disk('public')->delete($product->img);
+            }
             $oldSlides = $product->galleries()->get();
             foreach ($oldSlides as $oldSlide) {
-                Storage::disk('public')->delete($oldSlide->path);
+                if ($oldSlide->path && Storage::disk('public')->exists($oldSlide->path)) {
+                    Storage::disk('public')->delete($oldSlide->path);
+                }
             }
             $product->galleries()->delete();
+            $product->variantDetails()->detach();
+            $product->categories()->detach();
             $product->delete();
             DB::commit();
             return redirect()->back()->with('success', 'Sản phẩm đã được xóa thành công.');

@@ -4,7 +4,7 @@ namespace App\Http\Requests\admins;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SupplierRequest extends FormRequest
+class SupplierUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +21,10 @@ class SupplierRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('supplier')->id;
         return [
             "name" => "required",
-            "email" => "nullable|email|unique:suppliers",
+            "email" => "nullable|email|unique:suppliers,email,$id",
             "phone" => "required|digits:10",
             "address" => "required"
         ];
