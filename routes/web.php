@@ -28,6 +28,7 @@ Route::prefix('admin')
         require_once base_path("routes/admins/variant.php");
         require_once base_path("routes/admins/order.php");
         require_once base_path("routes/admins/category.php");
+        require_once base_path("routes/admins/supplier.php");
     });
 
 // Client

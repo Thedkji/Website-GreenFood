@@ -720,7 +720,7 @@
 
                 {{-- danh mục sản phẩm --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarCategories" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarCategories">
                         <i class="ri-file-list-3-line"></i>
                         <span data-key="t-landing">Danh mục sản phẩm</span>
@@ -822,6 +822,30 @@
                                 Danh sách đơn hàng
                             </a>
                         </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarSuppliers">
+                        <i class="ri-file-list-3-line"></i>
+                        <span data-key="t-landing">Nhà cung cấp</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarSuppliers">
+                        <ul class="nav nav-sm flex-column">
+                            <a href="{{ route('admin.suppliers.index') }}" class="nav-link" role="button"
+                                aria-controls="sidebarSuppliers" data-key="t-calender">
+                                Danh sách nhà cung cấp
+                            </a>
+                        </ul>
+
+                        <ul class="nav nav-sm flex-column">
+                            <a href="{{ route('admin.suppliers.create') }}" class="nav-link" role="button"
+                                aria-controls="sidebarSuppliers" data-key="t-calender">
+                                Thêm nhà cung cấp
+                            </a>
+                        </ul>
+
                     </div>
                 </li>
 
