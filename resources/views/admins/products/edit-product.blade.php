@@ -28,12 +28,12 @@
             <div class="row mb-3">
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá thông thường - VNĐ</label>
-                    <input type="number" class="form-control" name="price_regular" value="{{ $product->price_regular}}" required>
+                    <input type="number" class="form-control" name="price_regular" value="{{ app('formatPrice')($product->price_regular) }} VNĐ" required>
                     <x-feedback name="price_regular" />
                 </div>
                 <div class="col-lg-6 mb-3">
                     <label class="form-label">Giá được giảm - VNĐ</label>
-                    <input type="number" class="form-control" name="price_sale" value="{{$product->price_sale}}" required>
+                    <input type="number" class="form-control" name="price_sale" value="{{ app('formatPrice')($product->price_sale) }} VNĐ" required>
                     <x-feedback name="price_sale" />
                 </div>
             </div>

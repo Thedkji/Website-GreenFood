@@ -118,16 +118,20 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $product = Product::findOrFail($id);
-            Storage::disk('public')->delete($product->img);
+            if ($product->img && Storage::disk('public')->exists($product->img)) {
+                Storage::disk('public')->delete($product->img);
+            }
             $oldSlides = $product->galleries()->get();
             foreach ($oldSlides as $oldSlide) {
-                Storage::disk('public')->delete($oldSlide->path);
+                if ($oldSlide->path && Storage::disk('public')->exists($oldSlide->path)) {
+                    Storage::disk('public')->delete($oldSlide->path);
+                }
             }
             $product->galleries()->delete();
-            $product->variantDetails()->delete();
+            $product->variantDetails()->detach();
             $product->delete();
             DB::commit();
-            return redirect()->back()->with('success', 'Sản phẩm đã được xóa thành công.');
+            return redirect()->route('admin.products.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');

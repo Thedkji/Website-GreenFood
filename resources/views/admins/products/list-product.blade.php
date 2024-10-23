@@ -50,8 +50,8 @@
             <td>
                 <img src="{{ env('VIEW_IMG').'/'.$product->img}}" alt="Ảnh sản phẩm" style="width:150px">
             </td>
-            <td>{{$product->price_regular}} đ</td>
-            <td>{{$product->price_sale}} đ</td>
+            <td>{{ app('formatPrice')($product->price_regular)}} VNĐ</td>
+            <td>{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
             <td>
                 <p style="width: 200px;display: -webkit-box;
                             -webkit-box-orient: vertical;
