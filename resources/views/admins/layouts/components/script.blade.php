@@ -35,7 +35,5 @@
 <script src="{{ env('VIEW_ADMIN') }}/libs/prismjs/prism.js"></script>
 
 <script src="{{ env('VIEW_ADMIN') }}/js/pages/form-validation.init.js"></script>
-
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
 {{-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> --}}
-

@@ -10,11 +10,31 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //
-    public function showOder()
+    public function showOder(Request $request)
     {
-        $orders = Order::sortable()->paginate(8);
-        return view("admins.orders.order", compact('orders'));
+        $query = Order::query();
+
+        if ($request->has('search') && $request->input('search') !== null) {
+            $search = $request->input('search');
+            $query->where('email', 'LIKE', "%{$search}%")
+                ->orWhere('phone', 'LIKE', "%{$search}%")
+                ->orWhere('total', 'LIKE', "%{$search}%")
+                ->orWhereHas('orderDetails', function ($q) use ($search) {
+                    $q->where('product_name', 'like', '%' . $search . '%');
+                });
+        }
+
+        $statusFilter = $request->input('statusFilter');
+        $orders = $query->sortable()
+            ->when($statusFilter !== null, function ($query) use ($statusFilter) {
+                $query->where('status', $statusFilter);
+            })
+            ->paginate(8);
+
+        return view("admins.orders.order", compact('orders', 'statusFilter'));
     }
+
+
 
     public function showOrderDetail($id)
     {
