@@ -21,11 +21,15 @@
             <div class="d-flex justify-content-sm-end">
 
                 <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
+                    <form action="{{ route('admin.users.index') }}" method="GET">
+                        <input type="text" name="search" class="form-control search" placeholder="Tìm kiếm...">
+                        <i class="ri-search-line search-icon"></i>
+                        {{-- <button class="btn btn-primary" type="submit">Tìm kiếm</button> --}}
+                    </form>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+
             </div>
+
             <div class=""><a href="{{ route('admin.users.create') }}" class="btn btn-success">Thêm Mới</a></div>
         </div>
     </div>
@@ -91,3 +95,4 @@
         {{ $users->links('pagination::bootstrap-4') }}
     </div>
 @endsection
+

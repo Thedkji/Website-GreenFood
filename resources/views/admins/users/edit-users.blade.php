@@ -25,7 +25,7 @@
         </div>
         <div class="mt-3">
             <label for="avatar">Ảnh</label>
-            <input type="file" class="form-control" name="avatar" id="avatar" required onchange="previewImage(event, 'avatar_user')">
+            <input type="file" class="form-control" name="avatar" id="avatar" value="{{ $user->avatar }}" onchange="previewImage(event, 'avatar_user')">
             <x-feedback name="avatar" />
         </div>
         <div class="form-group mb-3" style="padding-top:20px">
@@ -59,19 +59,28 @@
         </div>
         <div class="mt-3">
             <label for="province">Thành phố/Tỉnh</label>
-            <input type="text" name="province" id="province" class="form-control" value="{{ $user->province }}" required>
+            <select name="province" id="province" class="form-control" value="{{ $user->province }}" required>
+                <option value=""> Chọn Thành phố/Tỉnh </option>
+                @foreach ($provinces as $province)
+                    <option value="{{ $province->code }}">{{ $province->name }}</option>
+                @endforeach
+            </select>
             <x-feedback name="province" />
 
         </div>
         <div class="mt-3">
             <label for="district">Quận/Huyện</label>
-            <input type="text" name="district" id="district" class="form-control" value="{{ $user->district }}" required>
+            <select name="district" id="district" class="form-control" value="{{ $user->district }}" required>
+                <option value=""> Chọn Quận/Huyện </option>
+            </select>
             <x-feedback name="district" />
 
         </div>
         <div class="mt-3">
             <label for="ward">Phường/Xã</label>
-            <input type="text" name="ward" id="ward" class="form-control" value="{{ $user->ward }}" required>
+            <select name="ward" id="ward" class="form-control" value="{{ $user->ward }}" required>
+                <option value=""> Chọn Phường/Xã </option>
+            </select>
             <x-feedback name="ward" />
 
         </div>
@@ -99,3 +108,27 @@
         </div>
     </form>
 @endsection
+@push('scripts')
+<script>
+    const provincesData = @json($provinces);
+    const districtsData = @json($districts);
+    const wardsData = @json($wards);
+
+    const provinceSelect = document.getElementById('province');
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
+    const addressInput = document.getElementById('address');
+
+    function updateAddress() {
+        const ward = wardSelect.options[wardSelect.selectedIndex].text;
+        const district = districtSelect.options[districtSelect.selectedIndex].text;
+        const province = provinceSelect.options[provinceSelect.selectedIndex].text;
+
+        addressInput.value = `${ward !== 'Chọn Phường/Xã' ? ward + ', ' : ''}${district !== 'Chọn Quận/Huyện' ? district + ', ' : ''}${province !== 'Chọn Thành phố/Tỉnh' ? province : ''}`;
+    }
+
+    provinceSelect.addEventListener('change', updateAddress);
+    districtSelect.addEventListener('change', updateAddress);
+    wardSelect.addEventListener('change', updateAddress);
+</script>
+@endpush

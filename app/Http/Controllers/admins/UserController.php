@@ -14,26 +14,34 @@ use App\Http\Requests\admins\UserUpdateRequest;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(5);
+        $search = $request->input('search'); // Lấy giá trị tìm kiếm từ query
+
+        // Truy vấn người dùng theo tên nếu có từ khóa tìm kiếm
+        $users = User::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->paginate(10); // Sử dụng phân trang nếu có nhiều kết quả
         return view('admins.users.list-users', compact('users'));
     }
     public function create()
     {
-        return view('admins.users.add-users');
+        $provinces = DB::table('provinces')->get();
+        $districts = DB::table('districts')->get();
+        $wards = DB::table('wards')->get();
+
+        return view('admins.users.add-users', compact('provinces', 'districts', 'wards'));
     }
+
 
     public function store(UserRequest $request)
     {
         try {
             $data = $request->all();
-            // dd($data);
-            // Mã hóa mật khẩu
-            // $data['password'] = Hash::make($data['password']);
             $data['password'] = bcrypt($data['password']);
 
-            // Xử lý avatar nếu có
             if ($request->hasFile('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
@@ -41,23 +49,23 @@ class UserController extends Controller
                 $data['avatar'] = $avatarPath;
             }
 
-            // Tạo user mới
             $user = User::create($data);
-
-            DB::commit();
 
             return redirect()->back()->with('success', 'Người dùng đã được thêm mới thành công.');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm người dùng. Vui lòng thử lại.');
         }
     }
 
 
+
     public function show($id)
     {
+        $provinces = DB::table('provinces')->get();
+        $districts = DB::table('districts')->get();
+        $wards = DB::table('wards')->get();
         $user = User::findOrFail($id);
-        return view('admins.users.edit-users', compact('user'));
+        return view('admins.users.edit-users', compact('user','provinces','districts','wards'));
     }
 
     public function update($id, UserUpdateRequest $request)
@@ -69,6 +77,7 @@ class UserController extends Controller
             $data = $request->validated(); // Sử dụng validated()
 
             if ($request->hasFile('avatar')) {
+                // Xóa ảnh cũ nếu có
                 if ($user->avatar) {
                     Storage::disk('public')->delete($user->avatar);
                 }

@@ -19,7 +19,7 @@
         @csrf
         <div class="mt-3">
             <label for="name">Tên người dùng</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old("name") }}">
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
         </div>
 
         <div class="my-3">
@@ -31,7 +31,7 @@
         <div class="mt-3">
             <label for="avatar">Ảnh</label>
             <input type="file" class="form-control" name="avatar" id="avatar" required
-                onchange="previewImage(event, 'image_user')" >
+                onchange="previewImage(event, 'image_user')">
         </div>
 
         <div class="mt-3">
@@ -47,7 +47,7 @@
 
         <div class="mt-3">
             <label for="user_name">Tên đăng nhập</label>
-            <input type="text" name="user_name" id="user_name" class="form-control" value="{{ old("user_name") }}">
+            <input type="text" name="user_name" id="user_name" class="form-control" value="{{ old('user_name') }}">
         </div>
 
         <div class="my-3">
@@ -58,7 +58,7 @@
 
         <div class="mt-3">
             <label for="password">Mật khẩu</label>
-            <input type="password" name="password" id="password" class="form-control" value="{{ old("password") }}">
+            <input type="password" name="password" id="password" class="form-control" value="{{ old('password') }}">
         </div>
 
         <div class="my-3">
@@ -69,7 +69,8 @@
 
         <div class="mt-3">
             <label for="password_confirmation">Nhập lại mật khẩu</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" value="{{ old("password_confirmation") }}">
+            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+                value="{{ old('password_confirmation') }}">
         </div>
 
         <div class="my-3">
@@ -80,7 +81,7 @@
 
         <div class="mt-3">
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ old("email") }}">
+            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
         </div>
 
         <div class="my-3">
@@ -91,7 +92,7 @@
 
         <div class="mt-3">
             <label for="phone">Số điện thoại</label>
-            <input type="numble" name="phone" id="phone" class="form-control" value="{{ old("phone") }}">
+            <input type="numble" name="phone" id="phone" class="form-control" value="{{ old('phone') }}">
         </div>
 
         <div class="my-3">
@@ -102,7 +103,13 @@
 
         <div class="mt-3">
             <label for="province">Thành phố/Tỉnh</label>
-            <input type="text" name="province" id="province" class="form-control" value="{{ old("province") }}">
+            {{-- <input type="text" name="province" id="province" class="form-control" value="{{ old("province") }}"> --}}
+            <select name="province" id="province" class="form-control" value="{{ old('province') }}">
+                <option value=""> Chọn Thành phố/Tỉnh </option>
+                @foreach ($provinces as $province)
+                    <option value="{{ $province->code }}">{{ $province->name }}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="my-3">
@@ -113,7 +120,9 @@
 
         <div class="mt-3">
             <label for="district">Quận/Huyện</label>
-            <input type="text" name="district" id="district" class="form-control" value="{{ old("district") }}">
+            <select name="district" id="district" class="form-control" value="{{ old('address') }}">
+                <option value=""> Chọn Quận/Huyện </option>
+            </select>
         </div>
 
         <div class="my-3">
@@ -124,8 +133,10 @@
 
         <div class="mt-3">
             <label for="ward">Phường/Xã</label>
-            <input type="text" name="ward" id="ward" class="form-control" value="{{ old("ward") }}">
-
+            <select name="ward" id="ward" class="form-control" value="{{ old('ward') }}">
+                <option value=""> Chọn Phường/Xã </option>
+            </select>
+        </div>
         </div>
 
         <div class="my-3">
@@ -136,7 +147,7 @@
 
         <div class="mt-3">
             <label for="address">Địa chỉ</label>
-            <input type="text" name="address" id="address" class="form-control" value="{{ old("address") }}">
+            <input type="text" name="address" id="address" class="form-control" value="{{ old('address') }}">
         </div>
 
         <div class="my-3">
@@ -169,3 +180,27 @@
 
 
 @endsection
+@push('scripts')
+<script>
+    const provincesData = @json($provinces);
+    const districtsData = @json($districts);
+    const wardsData = @json($wards);
+
+    const provinceSelect = document.getElementById('province');
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
+    const addressInput = document.getElementById('address');
+
+    function updateAddress() {
+        const ward = wardSelect.options[wardSelect.selectedIndex].text;
+        const district = districtSelect.options[districtSelect.selectedIndex].text;
+        const province = provinceSelect.options[provinceSelect.selectedIndex].text;
+
+        addressInput.value = `${ward !== 'Chọn Phường/Xã' ? ward + ', ' : ''}${district !== 'Chọn Quận/Huyện' ? district + ', ' : ''}${province !== 'Chọn Thành phố/Tỉnh' ? province : ''}`;
+    }
+
+    provinceSelect.addEventListener('change', updateAddress);
+    districtSelect.addEventListener('change', updateAddress);
+    wardSelect.addEventListener('change', updateAddress);
+</script>
+@endpush
