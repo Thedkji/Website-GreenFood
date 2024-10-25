@@ -13,7 +13,7 @@
             <div class="search-box">
                 <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                 <i class="ri-search-line search-icon"></i>
-            </div>
+            </div>      
 
         </div>
     </div>
