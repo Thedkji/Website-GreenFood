@@ -3,6 +3,7 @@
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\VariantDetail;
+use App\Models\VariantGroup;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Supplier::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(VariantDetail::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(VariantGroup::class, 'variant_group_id')->constrained('variant_group')->cascadeOnDelete();
 
             $table->integer('stock')->comment('Số lượng tồn kho của sản phẩm');
             $table->dateTime('expiration_date')->comment('Ngày hết hạn');

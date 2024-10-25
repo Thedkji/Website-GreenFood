@@ -18,7 +18,7 @@ class CartSeeder extends Seeder
                 "id" => $i,
                 "product_id" => mt_rand(1, 20),
                 "user_id" => mt_rand(1, 10),
-                "quantity" => $i * 2000
+                "quantity" => mt_rand(1, 20)
             ]);
         }
     }
