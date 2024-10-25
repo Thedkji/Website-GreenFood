@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('variant_details', function (Blueprint $table) {
+        Schema::create('variant_group', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Variant::class)->constrained()->cascadeOnDelete();
-            $table->integer('price')->nullable();
-            $table->string('value', 150)
-                ->comment('Giá trị của biến thể VD: 5kg , đỏ ,...')
-                ->nullable();
+            $table->string('sku', 30)->comment('Mã đơn hàng')->unique();
+            $table->string('img')->nullable()->comment('Ảnh biến thể');
+            $table->integer('price_regular')->default(0);
+            $table->integer('price_sale')->default(0);
+            $table->integer('quantity')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('variant_details');
+        Schema::dropIfExists('variant_group');
     }
 };

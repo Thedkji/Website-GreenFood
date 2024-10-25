@@ -12,10 +12,12 @@ class Variant extends Model
 
     protected $fillable = [
         "name",
+        "parent_id",
     ];
 
-    public function variantDetails()
+    public function products()
     {
-        return $this->hasMany(VariantDetail::class);
+        return $this->belongsToMany(Product::class)
+            ->withPivot('variant_group_id');;
     }
 }
