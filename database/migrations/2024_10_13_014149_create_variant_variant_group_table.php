@@ -14,15 +14,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variant', function (Blueprint $table) {
-            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
+        Schema::create('variant_variant_group', function (Blueprint $table) {
             $table->foreignIdFor(Variant::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(VariantGroup::class, 'variant_group_id')->constrained('variant_group')->cascadeOnDelete();
+            $table->foreignIdFor(VariantGroup::class,)->constrained('variant_group')->cascadeOnDelete();
 
             $table->primary([
-                'product_id',
                 'variant_id',
-                'variant_group_id',
+                'variant_group_id'
             ]);
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variant');
+        Schema::dropIfExists('variant_variant_group');
     }
 };

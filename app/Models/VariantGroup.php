@@ -13,6 +13,7 @@ class VariantGroup extends Model
     protected $table = 'variant_group';
 
     protected $fillable = [
+        "product_id",
         "sku",
         "img",
         "price_regular",
@@ -20,14 +21,18 @@ class VariantGroup extends Model
         "quantity",
     ];
 
-    public function products()
+    public function product()
     {
-        return $this->belongsToMany(Product::class)
-            ->withPivot('variant_group_id');
+        return $this->belongsTo(Product::class);
     }
 
     public function depots()
     {
         return $this->hasMany(Depot::class);
+    }
+
+    public function variants()
+    {
+        return $this->belongsToMany(Variant::class);
     }
 }
