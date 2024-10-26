@@ -6,19 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Depot extends Model
+class VariantGroup extends Model
 {
-    use HasFactory;
-
     use HasFactory, SoftDeletes;
 
+    protected $table = 'variant_group';
+
     protected $fillable = [
-        "supplier_id",
         "product_id",
-        "variant_detail_id",
-        "stock",
-        "expiration_date",
-        "status",
+        "sku",
+        "img",
+        "price_regular",
+        "price_sale",
+        "quantity",
     ];
 
     public function product()
@@ -26,13 +26,13 @@ class Depot extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function supplier()
+    public function depots()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->hasMany(Depot::class);
     }
 
-    public function varianGroup()
+    public function variants()
     {
-        return $this->belongsTo(VariantGroup::class);
+        return $this->belongsToMany(Variant::class);
     }
 }

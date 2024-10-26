@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
             VariantSeeder::class,
-            VariantDetailSeed::class,
+            VariantGroupSeed::class,
             GallerySeeder::class,
             SupplierSeeder::class,
             DepotSeeder::class,
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             CouponUserSeeder::class,
 
             CouponProductSeeder::class,
-            ProductVariantDetailSeeder::class,
+            VariantVariantGroupSeed::class,
         ]);
     }
 }

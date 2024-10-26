@@ -33,8 +33,6 @@ class OrderController extends Controller
         return view("admins.orders.order", compact('orders', 'statusFilter'));
     }
 
-
-
     public function showOrderDetail($id)
     {
         $orders = Order::find($id);
