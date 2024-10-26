@@ -33,17 +33,9 @@ class Product extends Model
         return $this->hasMany(Depot::class);
     }
 
-    public function variants()
-    {
-        return $this->belongsToMany(Variant::class)
-            ->withPivot('variant_group_id');
-    }
-
     public function variantGroups()
     {
-        return $this->belongsToMany(VariantGroup::class)
-            ->withPivot('variant_group_id')
-        ;
+        return $this->hasMany(VariantGroup::class);
     }
 
     public function galleries()

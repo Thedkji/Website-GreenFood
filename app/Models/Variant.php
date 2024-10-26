@@ -15,9 +15,8 @@ class Variant extends Model
         "parent_id",
     ];
 
-    public function products()
+    public function VariantGroups()
     {
-        return $this->belongsToMany(Product::class)
-            ->withPivot('variant_group_id');;
+        return $this->belongsToMany(VariantGroup::class);
     }
 }

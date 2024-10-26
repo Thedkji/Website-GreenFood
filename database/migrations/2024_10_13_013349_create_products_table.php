@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('sku', 30)->comment('Mã đơn hàng')->unique()->nullable();
             $table->string('name')->unique();
-            $table->string('slug')->unique()->nullable();
+            $table->string('slug')->unique();
             $table->string('img')->nullable();
             $table->integer('price_regular')->default(0)->nullable();
             $table->integer('price_sale')->default(0)->nullable();
