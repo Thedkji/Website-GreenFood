@@ -21,8 +21,10 @@ class VariantGroupSeed extends Seeder
             while (VariantGroup::where('sku', $sku)->exists()) {
                 $sku = "SP" . mt_rand(0, 1000); // Tạo lại SKU nếu đã tồn tại
             }
+            
             VariantGroup::create([
                 "id" => $i,
+                "product_id" => mt_rand(1, 20),
                 "sku" => $sku,
                 "img" => "https://via.placeholder.com/300x200",
                 "price_regular" => mt_rand(100000, 500000),

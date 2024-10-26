@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 "id" => $i,
                 "sku" => $status == 0 ? $sku : null,
                 "name" => $name,
-                "slug" => $status == 0 ? Str::slug($name) : null,
+                "slug" => Str::slug($name),
                 "img" => $status == 0 ? "https://via.placeholder.com/300x200" : null,
                 "price_regular" => $status == 0 ? $i * 300000 : null,
                 "price_sale" => $status == 0 ? $i * 250000 : null,
