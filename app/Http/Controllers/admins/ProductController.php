@@ -93,7 +93,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::with('variantDetails', 'categories', 'galleries')->findOrFail($id);
-        $variants = VariantDetail::with('variant')->get()->groupBy('variant_id');
+        $variants = VariantGroup::with('variant')->get()->groupBy('variant_id');
         $categories = Category::get();
         return view('admins.products.edit-product', compact('product', 'variants', 'categories'));
         // dd($product->categories);
