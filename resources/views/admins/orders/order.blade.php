@@ -2,8 +2,8 @@
 @section('title', 'Dashboard | Velzon - Admin - Danh sách đơn hàng')
 @section('start-page-title', 'Danh sách đơn hàng')
 @section('link')
-<li class="breadcrumb-item"><a href="{{ route('admin.orders.showOder') }}">Đơn hàng</a></li>
-<li class="breadcrumb-item active">Danh sách đơn hàng</li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.orders.showOder') }}">Đơn hàng</a></li>
+    <li class="breadcrumb-item active">Danh sách đơn hàng</li>
 @endsection
 @section('content')
 
@@ -120,6 +120,7 @@
 </div>
 
 
+
 @endsection
 
 <script>
@@ -131,4 +132,3 @@
             document.getElementById("search-form").submit();
         }, 600);
     }
-</script>
