@@ -26,49 +26,91 @@
         @endif
     </div>
 </div>
-<div class="mb-3 border p-2 border-success rounded bg-white ">
+<div class="mb-3 border p-2 border-success rounded bg-white">
     <h5 class="fs-1 text-uppercase">Chỉnh sửa trạng thái</h5>
-    @if ($orders->status <= 1)
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Hủy đơn hàng
-        </button>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Lý do hủy đơn</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <textarea class="form-control" id="cancel_reson" name="cancel_reson" rows="4"></textarea>
+    <div class="d-flex">
+        @if ($orders->status <= 1)
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+            Hủy đơn hàng
+            </button>
+            <form style="margin-right:10px ;" action="{{route('admin.orders.updateOrder', $orders->id)}}" id="updateStatusForm" method="post">
+                @csrf
+                @method('PUT')
+                <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="cancelOrderModalLabel">Lý do hủy đơn</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <input type="hidden" name="status" value="5">
+                            <div class="modal-body">
+                                <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="4" placeholder="Nhập lý do hủy..."></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" name="status" class="btn btn-danger">Hủy đơn</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-danger">Hủy đơn</button>
-                    </div>
                 </div>
-            </div>
-        </div>
-        @endif
-        @if( $orders->status >= 2)
-        @switch($orders->status)
-        @case(2)
-        <button class="btn btn-primary">Đã giao thành công</button>
-        <button class="btn btn-danger">Giao không thành công</button>
-        @break
-        @case(3)
-        <button class="btn btn-primary">Hoàn thành đơn hàng và đánh giá</button>
-        @break
-        @case(4)
-        <button class="btn btn-primary">Hoàn trả hàng</button>
-        @break
-        @default
-        <span class="badge bg-secondary p-2">Không thể thay đổi trạng thái</span>
-        @endswitch
-        @endif
+            </form>
+            @endif
+            @switch($orders->status)
+            @case(0)
+            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm0">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="1">
+                <button type="submit" class="btn btn-primary">Xác nhận đơn hàng</button>
+            </form>
+            @break
+
+            @case(1)
+            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm1">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="2">
+                <button type="submit" class="btn btn-primary">Giao cho đơn vị vận chuyển</button>
+            </form>
+            @break
+
+            @case(2)
+            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="4">
+                <button type="submit" class="btn btn-danger">Giao không thành công</button>
+            </form>
+            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="3">
+                <button type="submit" class="btn btn-primary">Đã giao thành công</button>
+            </form>
+            @break
+
+            @case(3)
+            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm3">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="6">
+                <button type="submit" class="btn btn-primary">Hoàn thành đơn hàng và đánh giá</button>
+            </form>
+            @break
+
+            @case(4)
+            <span class="badge bg-danger p-2">Hoàn trả hàng</span>
+            @break
+
+            @default
+            <span class="badge bg-secondary p-2">Không thể thay đổi trạng thái</span>
+            @endswitch
+
+    </div>
+
 </div>
+
 <div class="mb-3 border p-2 border-success rounded bg-white ">
     <h5 class="fs-1 text-uppercase">Thông tin người nhận</h5>
     <div class="mt-5 row">

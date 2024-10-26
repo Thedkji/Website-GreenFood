@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\OrderRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -42,24 +43,17 @@ class OrderController extends Controller
         return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
     }
 
-    public function editOrder($id)
-    {
-        $order = Order::find($id);
-        $statuses = Order::groupBy('status')->pluck('status');
-        return view("admins.orders.edit-order-detail", compact('statuses', 'order'));
-    }
-
     public function updateOrder(OrderRequest $request, $id)
     {
-        $data = $request->all();
-
-        $order = Order::find($id);
-
-        $updateOrder = $order->update($data);
-
-        if ($updateOrder) {
-            return redirect()->route('admin.orders.showOder')->with('success', 'Sửa thành công đơn hàng');
+        $orders = Order::find($id);
+        if ($request->has('status') && $request->has('status') !== 5) {
+            $orders->update(['status' => $request->input('status')]);
+        } elseif ($request->has('status') && $request->has('status') == 5) {
+            $orders->update([
+                'status' => $request->input('status'),
+                'cancel_reson' => $request->input('cancel_reson')
+            ]);
         }
+        return redirect()->back();
     }
-    public function destroyOrder() {}
 }
