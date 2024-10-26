@@ -6,24 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class VariantDetail extends Model
+class VariantGroup extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'variant_group';
+
     protected $fillable = [
-        "variant_id",
-        "price",
-        "value",
+        "sku",
+        "img",
+        "price_regular",
+        "price_sale",
+        "quantity",
     ];
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
-    }
-
-    public function variant()
-    {
-        return $this->belongsTo(Variant::class);
+        return $this->belongsToMany(Product::class)
+            ->withPivot('variant_group_id');
     }
 
     public function depots()

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
-            $table->string('name',150)->unique();
+            $table->string('name', 150)->unique();
+            $table->integer('parent_id')->default(null);
             $table->timestamps();
             $table->softDeletes();
         });

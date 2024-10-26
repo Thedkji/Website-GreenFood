@@ -17,6 +17,7 @@ class VariantSeeder extends Seeder
             Variant::create([
                 "id" => $i,
                 "name" => "Biến thể $i",
+                "parent_id" => mt_rand(1, 10),
             ]);
         }
     }
