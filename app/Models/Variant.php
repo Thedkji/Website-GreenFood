@@ -15,8 +15,14 @@ class Variant extends Model
         "parent_id",
     ];
 
-    public function VariantGroups()
+    public function variantGroups()
     {
-        return $this->belongsToMany(VariantGroup::class);
+        return $this->belongsToMany(VariantGroup::class, 'variant_group_variant');
+    }
+
+    // Lấy ra tên của parent_id
+    public function parent()
+    {
+        return $this->belongsTo(Variant::class, 'parent_id');
     }
 }
