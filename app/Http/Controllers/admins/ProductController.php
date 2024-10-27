@@ -19,36 +19,30 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::paginate(8);
-
+        // Lấy giá trị bộ lọc từ query string
         $status = request()->input('statusProduct');
 
+        // Kiểm tra trạng thái sản phẩm và áp dụng bộ lọc
         if (request()->has('statusProduct')) {
             switch ($status) {
                 case 'allPro':
-                    $products = Product::paginate(8);
+                    $products = Product::orderByDesc('id')->paginate(8)->appends(['statusProduct' => 'allPro']);
                     break;
                 case '0':
-                    $products = Product::where('status', 0)->paginate(8);
+                    $products = Product::where('status', 0)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '0']);
                     break;
                 case '1':
-                    $products = Product::where('status', 1)->paginate(8);
+                    $products = Product::where('status', 1)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '1']);
                     break;
                 default:
                     echo "Không tìm thấy trạng thái sản phẩm";
                     break;
             }
+        } else {
+            $products = Product::orderByDesc('id')->paginate(8);
         }
 
-        $variantGroups = [];
-
-        if (request()->has('showProVariant')) {
-            $product = Product::find(request()->input('showProVariant'));
-
-            $variantGroups = $product->load('variantGroups');
-        }
-
-        return view('admins.products.list-product', compact('products', 'variantGroups'));
+        return view('admins.products.list-product', compact('products'));
     }
 
     public function create()
@@ -62,11 +56,31 @@ class ProductController extends Controller
     public function show(Product $product)
     {
 
-        $product = Product::findOrFail($product->id);
+        if (request('showVariantproduct') == true) {
+            $product = Product::findOrFail($product->id);
 
-        $product->load('categories', 'galleries');
+            $variantGroups = $product->variantGroups()->orderByDesc('id')->paginate(8);
 
-        return view('admins.products.detai-product', compact('product'));
+            return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
+        } else {
+            $product = Product::with('categories', 'galleries')->orderByDesc('id')->findOrFail($product->id);
+
+            $variantGroups = VariantGroup::where('sku', request('sku'))->first();
+
+            $variant = [];
+            $parentName = '';
+
+            if ($product->status == 1) {
+
+                $variant = $variantGroups->variants()->first();
+
+                $parentName = $variant->parent->name;
+
+            }
+
+
+            return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
+        }
     }
 
     public function update($id, ProductUpdateRequest $request) {}

@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             CouponUserSeeder::class,
 
             CouponProductSeeder::class,
-            VariantVariantGroupSeed::class,
+            VariantGroupVariantSeed::class,
         ]);
     }
 }
