@@ -767,6 +767,26 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
+                        <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">QL Thùng Rác</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarPages">
+
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.trashs.index') }}" class="nav-link" data-key="t-starter">
+                                    Danh sách dữ liệu</a>
+
+                            </li>
+                            <li class="nav-item">
+                                {{-- <a href="{{ route('admin.products.products.create') }}" class="nav-link" data-key="t-team"> Thêm mới người dùng</a> --}}
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
                         <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">Sản phẩm</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPages">
