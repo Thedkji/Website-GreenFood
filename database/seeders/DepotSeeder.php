@@ -18,7 +18,7 @@ class DepotSeeder extends Seeder
                 "id" => $i,
                 "supplier_id" => mt_rand(1, 10),
                 "product_id" => mt_rand(1, 20),
-                "variant_detail_id" => mt_rand(1, 10),
+                "variant_group_id" => mt_rand(1, 10),
                 "stock" => $i * 2,
                 "expiration_date" => fake()->dateTime(),
                 "status" => mt_rand(0, 1),
