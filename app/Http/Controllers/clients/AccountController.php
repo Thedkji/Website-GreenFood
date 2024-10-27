@@ -16,4 +16,9 @@ class AccountController extends Controller
     {
         return view("clients.accounts.login");
     }
+
+    function forgotPass()
+    {
+        return view("clients.accounts.forgot-password");
+    }
 }
