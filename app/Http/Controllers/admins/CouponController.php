@@ -2,24 +2,38 @@
 
 namespace App\Http\Controllers\admins;
 
+use App\Http\Requests\admins\CouponRequest;
+
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class CouponController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $coupons = Coupon::with(['categories', 'products', 'users'])->paginate(5);
-        return view('admins.coupons.list-coupon', compact('coupons'));
+    public function index(Request $request)
+{
+    // Lấy từ khóa tìm kiếm từ request
+    $search = $request->input('search');
+
+    if ($search) {
+        $coupons = Coupon::with(['categories', 'products', 'users']) 
+            ->where('name', 'like', '%' . $search . '%')
+            ->orWhere('id', 'like', '%' . $search . '%') 
+            ->paginate(7); 
+    } else {
+        $coupons = Coupon::with(['categories', 'products', 'users'])->paginate(7);
     }
+
+    return view('admins.coupons.list-coupon', compact('coupons'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,24 +49,9 @@ class CouponController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'coupon_amount' => 'required|numeric',
-            'minimum_spend' => 'required|numeric',
-            'maximum_spend' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'start_date' => 'required|date',
-            'expiration_date' => 'required|date',
-            'type' => 'required|in:0,1',
-            'status' => 'required|integer',
-            'description' => 'nullable|string',
-            'coupon_category' => 'required|exists:categories,id',
-            'coupon_product' => 'required|exists:products,id',
-            'coupon_user' => 'required|exists:users,id',
-        ]);
-
+        $coupon = $request->validated();
         $coupon = Coupon::create([
             'name' => $request->name,
             'coupon_amount' => $request->coupon_amount,
@@ -88,45 +87,36 @@ class CouponController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CouponRequest $request, $id)
     {
-        // Xác thực dữ liệu
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'coupon_amount' => 'required|numeric',
-            'minimum_spend' => 'required|numeric',
-            'maximum_spend' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'start_date' => 'required|date',
-            'expiration_date' => 'required|date',
-            'type' => 'required|in:0,1',
-            'status' => 'required|integer',
-            'description' => 'nullable|string',
-            'coupon_category' => 'required|exists:categories,id',
-            'coupon_product' => 'required|exists:products,id',
-            'coupon_user' => 'required|exists:users,id',
-        ]);
 
+
+
+        // Tìm mã giảm giá theo ID
         $coupon = Coupon::findOrFail($id);
-        $coupon->update([
-            'name' => $request->name,
-            'coupon_amount' => $request->coupon_amount,
-            'minimum_spend' => $request->minimum_spend,
-            'maximum_spend' => $request->maximum_spend,
-            'quantity' => $request->quantity,
-            'start_date' => Carbon::parse($request->start_date), // Cập nhật đúng tại đây
-            'expiration_date' => Carbon::parse($request->expiration_date), // Cập nhật đúng tại đây
-            'type' => $request->type,
-            'status' => $request->status,
-            'description' => $request->description,
-        ]);
+        // Cập nhật các trường dữ liệu
+        $coupon->update($request->only([
+            'name',
+            'coupon_amount',
+            'minimum_spend',
+            'maximum_spend',
+            'quantity',
+            'start_date',
+            'expiration_date',
+            'type',
+            'status',
+            'description',
+        ]));
 
-        $coupon->categories()->sync([$request->coupon_category]);
-        $coupon->products()->sync([$request->coupon_product]);
-        $coupon->users()->sync([$request->coupon_user]);
+        // Cập nhật mối quan hệ
+        $coupon->categories()->sync($request->coupon_category);
+        $coupon->products()->sync($request->coupon_product);
+        $coupon->users()->sync($request->coupon_user);
 
-        return redirect()->route('admin.coupons.showCoupon')->with('success', 'Cập nhật mã giảm giá thành công!');
+        // Chuyển hướng và thông báo thành công
+        return redirect()->route('admin.coupons.showCoupon')->with('success', 'Cập nhật mã giảm giá thành công.');
     }
+
 
 
     /**
@@ -141,5 +131,14 @@ class CouponController extends Controller
         $coupon->delete();
 
         return redirect()->route('admin.coupons.showCoupon')->with('success', 'Xóa mã giảm giá thành công!');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $coupon = Coupon::with(['categories', 'products', 'users'])->findOrFail($id);
+        return view('admins.coupons.detail-coupon', compact('coupon'));
     }
 }
