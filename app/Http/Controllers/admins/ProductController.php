@@ -18,36 +18,30 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::paginate(8);
-
+        // Lấy giá trị bộ lọc từ query string
         $status = request()->input('statusProduct');
 
+        // Kiểm tra trạng thái sản phẩm và áp dụng bộ lọc
         if (request()->has('statusProduct')) {
             switch ($status) {
                 case 'allPro':
-                    $products = Product::paginate(8);
+                    $products = Product::orderByDesc('id')->paginate(8)->appends(['statusProduct' => 'allPro']);
                     break;
                 case '0':
-                    $products = Product::where('status', 0)->paginate(8);
+                    $products = Product::where('status', 0)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '0']);
                     break;
                 case '1':
-                    $products = Product::where('status', 1)->paginate(8);
+                    $products = Product::where('status', 1)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '1']);
                     break;
                 default:
                     echo "Không tìm thấy trạng thái sản phẩm";
                     break;
             }
+        } else {
+            $products = Product::orderByDesc('id')->paginate(8);
         }
 
-        $variantGroups = [];
-
-        if (request()->has('showProVariant')) {
-            $product = Product::find(request()->input('showProVariant'));
-
-            $variantGroups = $product->load('variantGroups');
-        }
-
-        return view('admins.products.list-product', compact('products', 'variantGroups'));
+        return view('admins.products.list-product', compact('products'));
     }
 
     public function create()
@@ -57,46 +51,35 @@ class ProductController extends Controller
         return view('admins.products.add-product', compact('variants', 'categories'));
     }
 
-    public function store(ProductRequest $request)
-    {
-        DB::beginTransaction();
-        try {
-            $data = $request->validated();
-            if ($request->hasFile('img')) {
-                $avatar = $request->file('img');
-                $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('products/avatars', $avatarName, 'public');
-                $data['img'] = $avatarPath;
-            }
-            $product = Product::create($data);
-            if ($request->hasFile('slides')) {
-                foreach ($request->file('slides') as $slide) {
-                    $slideName = time() . '_' . $slide->getClientOriginalName();
-                    $slidePath = $slide->storeAs('products/slides', $slideName, 'public');
-                    $product->galleries()->create(['path' => $slidePath]);
-                }
-            }
-            if ($request->has('variants')) {
-                $product->variantDetails()->attach($request->input('variants'));
-            }
-            if ($request->has('category_ids')) {
-                $product->categories()->attach($request->input('category_ids'));
-            }
-            DB::commit();
-            return redirect()->back()->with('success', 'Sản phẩm đã được thêm mới thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.');
-        }
-    }
+    public function store(ProductRequest $request) {}
 
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::with('variantDetails', 'categories', 'galleries')->findOrFail($id);
-        $variants = VariantGroup::with('variant')->get()->groupBy('variant_id');
-        $categories = Category::get();
-        return view('admins.products.edit-product', compact('product', 'variants', 'categories'));
-        // dd($product->categories);
+
+        if (request('showVariantproduct') == true) {
+            $product = Product::findOrFail($product->id);
+
+            $variantGroups = $product->variantGroups()->orderByDesc('id')->paginate(8);
+
+            return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
+        } else {
+            $product = Product::with('categories', 'galleries')->orderByDesc('id')->findOrFail($product->id);
+
+            $variantGroups = VariantGroup::where('sku', request('sku'))->first();
+
+            $variant = [];
+            $parentName = '';
+
+            if ($product->status == 1) {
+
+                $variant = $variantGroups->variants()->first();
+
+                $parentName = $variant->parent->name;
+            }
+
+
+            return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
+        }
     }
 
     public function update($id, ProductUpdateRequest $request) {}

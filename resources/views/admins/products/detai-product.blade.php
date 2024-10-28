@@ -38,6 +38,8 @@
                 <th scope="col" class="w-25">Mô tả</th>
                 <th scope="col">Thư viện ảnh</th>
                 <th scope="col">Danh mục</th>
+                <th scope="col">Tên biến thể</th>
+                <th scope="col">Giá trị biến thể</th>
             </tr>
         </thead>
         <tbody>
@@ -46,7 +48,8 @@
                 <td>{{ $product->description }}</td>
 
                 <td>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#galleryModal-{{ $product->id }}">Xem ảnh</a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#galleryModal-{{ $product->id }}">Xem
+                        ảnh</a>
 
                     <!-- Modal Thư viện ảnh -->
                     <div class="modal fade" id="galleryModal-{{ $product->id }}" tabindex="-1"
@@ -79,7 +82,8 @@
                 </td>
 
                 <td>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#categoryModal-{{ $product->id }}">Xem danh
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#categoryModal-{{ $product->id }}">Xem
+                        danh
                         mục</a>
 
                     <!-- Modal Danh mục sản phẩm -->
@@ -113,9 +117,30 @@
                     </div>
                 </td>
 
+                <td>
+
+                    @if (!isset($variant->name))
+                        <p class="text-danger">Sản phẩm chưa có giá trị nào</p>
+                    @else
+                        {{ $variant->name }}
+                    @endif
+                </td>
+
+                <td>
+
+                    @isset($parentName)
+                        @if ($parentName)
+                            {{ $parentName }}
+                        @else
+                            <p class="text-danger">Sản phẩm chưa có giá trị nào</p>
+                        @endif
+                    @endisset
+
+                </td>
             </tr>
         </tbody>
     </table>
+
 
 
 @endsection
