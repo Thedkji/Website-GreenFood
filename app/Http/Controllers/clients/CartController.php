@@ -9,20 +9,9 @@ use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        // Chia sẻ dữ liệu giỏ hàng với tất cả các view
-        $cartItems = Cart::getContent();
-        $cartTotal = Cart::getSubTotal();
-        $cartQuantity = Cart::getTotalQuantity();
-        view()->share('cartItems', $cartItems);
-        view()->share('cartTotal', $cartTotal);
-        view()->share('cartQuantity', $cartQuantity);
-    }
     public function cart()
     {
-        $cartItems = Cart::getContent();
-        return view("clients.carts.cart", compact('cartItems'));
+        return view("clients.carts.cart");
     }
     public function addToCart(Request $request)
     {
@@ -34,11 +23,6 @@ class CartController extends Controller
 
         ]);
         return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công');
-    }
-    public function clearCart()
-    {
-        Cart::clear();
-        return redirect()->route('client.home');
     }
     public function deleteCart()
     {
