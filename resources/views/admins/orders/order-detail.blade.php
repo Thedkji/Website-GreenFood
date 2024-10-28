@@ -9,12 +9,12 @@
 @section('content')
 <div class="mb-3">
     <div class="progress progress-step-arrow">
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 0 ? '' : 'display:none' }} " aria-valuenow="0" aria-valuemin="0" aria-valuemax="6">Chờ xác nhận</p>
+        <p class="progress-bar bg-danger" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 0 ? '' : 'display:none' }} " aria-valuenow="0" aria-valuemin="0" aria-valuemax="6">Chờ xác nhận</p>
         @if ($orders->status != 5)
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 1 ? '' : 'display:none' }}" aria-valuenow="1" aria-valuemin="0" aria-valuemax="6">Đã xác nhận và đang xử lý</p>
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 2 ? '' : 'display:none' }}" aria-valuenow="2" aria-valuemin="0" aria-valuemax="6">Đang giao hàng</p>
+        <p class="progress-bar bg-warning" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 1 ? '' : 'display:none' }}" aria-valuenow="1" aria-valuemin="0" aria-valuemax="6">Đã xác nhận và đang xử lý</p>
+        <p class="progress-bar bg-primary" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 2 ? '' : 'display:none' }}" aria-valuenow="2" aria-valuemin="0" aria-valuemax="6">Đang giao hàng</p>
         @if ($orders->status != 4)
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 3 ? '' : 'display:none' }}" aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">Giao hàng thành công</p>
+        <p class="progress-bar bg-success" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 3 ? '' : 'display:none' }}" aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">Giao hàng thành công</p>
         @endif
         @if ($orders->status != 6)
         <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 4 ? '' : 'display:none' }}" aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">Giao hàng không thành công</p>
@@ -22,7 +22,7 @@
         <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 6 ? '' : 'display:none' }}" aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">Đánh giá</p>
         @endif
         @if ($orders->status != 6)
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 5 ?  '' : 'display:none' }}" aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">Hủy đơn</p>
+        <p class="progress-bar bg-danger" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 5 ?  '' : 'display:none' }}" aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">Hủy đơn</p>
         @endif
     </div>
 </div>
