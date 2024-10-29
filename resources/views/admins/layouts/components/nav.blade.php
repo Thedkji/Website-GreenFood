@@ -788,6 +788,27 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebar" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebar">
+                        <i class=" ri-price-tag-3-line"></i> <span data-key="t-landing">Mã giảm giá</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebar">
+                
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.coupons.showCoupon') }}" class="nav-link"
+                                    data-key="t-starter">
+                                    Danh sách mã giảm giá</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.coupons.addCoupon') }}" class="nav-link"
+                                    data-key="t-team"> Thêm mới mã giảm giá</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarOrders">
                         <i class="ri-shopping-cart-line"></i>
