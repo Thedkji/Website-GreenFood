@@ -773,34 +773,15 @@
                     <div class="collapse menu-dropdown" id="sidebarLanding">
                         <ul class="nav nav-sm flex-column">
                             <div class="">
-                                <a href="{{ route('admin.variants.variants.index') }}" class="nav-link"
-                                    role="button" aria-expanded="false" aria-controls="sidebarCalendar"
-                                    data-key="t-calender">
+                                <a href="{{ route('admin.variants.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                     Danh sách biến thể
                                 </a>
 
-                                <a href="{{ route('admin.variants.variants.create') }}" class="nav-link"
-                                    role="button" aria-expanded="false" aria-controls="sidebarCalendar"
-                                    data-key="t-calender">
+                                <a href="{{ route('admin.variants.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                     Thêm mới biến thể
                                 </a>
-                            </div>
-                            <a href="#sidebarCalendar1" class="nav-link" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                Chi tiết biến thể
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarCalendar1">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.list_child_variant') }}" class="nav-link"
-                                            data-key="t-starter">
-                                            Danh sách chi tiết biến thể</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.add_child_variant') }}" class="nav-link"
-                                            data-key="t-team"> Thêm mới chi tiết biến thể</a>
-                                    </li>
-                                </ul>
                             </div>
                         </ul>
                     </div>
@@ -1002,13 +983,11 @@
                                 <a href="advance-ui-tour.html" class="nav-link" data-key="t-tour">Tour</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-swiper.html" class="nav-link"
-                                    data-key="t-swiper-slider">Swiper
+                                <a href="advance-ui-swiper.html" class="nav-link" data-key="t-swiper-slider">Swiper
                                     Slider</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-ratings.html" class="nav-link"
-                                    data-key="t-ratings">Ratings</a>
+                                <a href="advance-ui-ratings.html" class="nav-link" data-key="t-ratings">Ratings</a>
                             </li>
                             <li class="nav-item">
                                 <a href="advance-ui-highlight.html" class="nav-link"
