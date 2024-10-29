@@ -33,15 +33,12 @@ class CouponRequest extends FormRequest
         'status' => 'required|integer',
         'description' => 'nullable|string',
         'coupon_category' => 'required|array', 
-        'coupon_category.*' => 'exists:categories,id', 
         'coupon_product' => 'required|array', 
-        'coupon_product.*' => 'exists:products,id', 
         'coupon_user' => 'required|array', 
-        'coupon_user.*' => 'exists:users,id', 
     ];
 }
 
-public function message()
+public function messages()
 {
     return [
         'name.required' => 'Tên mã giảm giá là bắt buộc.',
@@ -58,11 +55,8 @@ public function message()
         'type.required' => 'Kiểu mã giảm giá là bắt buộc.',
         'status.required' => 'Trạng thái là bắt buộc.',
         'coupon_category.required' => 'Danh mục mã giảm giá là bắt buộc.',
-        'coupon_category.array' => 'Danh mục mã giảm giá phải là một mảng.',
         'coupon_product.required' => 'Sản phẩm mã giảm giá là bắt buộc.',
-        'coupon_product.array' => 'Sản phẩm mã giảm giá phải là một mảng.',
         'coupon_user.required' => 'Người dùng mã giảm giá là bắt buộc.',
-        'coupon_user.array' => 'Người dùng mã giảm giá phải là một mảng.',
     ];
 }
 

@@ -811,11 +811,11 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarPages">
-                        <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">Mã giảm giá</span>
+                    <a class="nav-link menu-link" href="#sidebar" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebar">
+                        <i class=" ri-price-tag-3-line"></i> <span data-key="t-landing">Mã giảm giá</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarPages">
+                    <div class="collapse menu-dropdown" id="sidebar">
                 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">

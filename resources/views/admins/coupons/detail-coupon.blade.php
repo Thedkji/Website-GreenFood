@@ -14,11 +14,11 @@
                             <td>{{ number_format($coupon->coupon_amount, 0, ',', '.') }} đ</td>
                         </tr>
                         <tr>
-                            <th>Chi tiêu tối thiểu</th>
+                            <th>Giảm giá tối thiểu</th>
                             <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} đ</td>
                         </tr>
                         <tr>
-                            <th>Chi tiêu tối đa</th>
+                            <th>Giảm giá tối đa</th>
                             <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} đ</td>
                         </tr>
                         <tr>

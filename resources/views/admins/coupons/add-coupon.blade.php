@@ -36,7 +36,7 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="minimum_spend" class="form-label">Giá trị giảm thấp nhất</label>
+                    <label for="minimum_spend" class="form-label">Giá trị giảm tối thiểu</label>
                     <input class="form-control @error('minimum_spend') is-invalid @enderror" id="minimum_spend"
                         type="text" name="minimum_spend" value="{{ old('minimum_spend') }}"
                         placeholder="Nhập giá trị giảm thấp nhất">
@@ -45,7 +45,7 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="maximum_spend" class="form-label">Giá trị giảm cao nhất</label>
+                    <label for="maximum_spend" class="form-label">Giá trị giảm tối đa</label>
                     <input class="form-control @error('maximum_spend') is-invalid @enderror" id="maximum_spend"
                         type="text" name="maximum_spend" value="{{ old('maximum_spend') }}"
                         placeholder="Nhập giá trị giảm cao nhất">
@@ -89,7 +89,7 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="status" class="form-label">Trạng Thái</label>
+                    <label for="status" class="form-label">Trạng thái</label>
                     <select class="form-select @error('status') is-invalid @enderror" id="coupon_status" name="status">
                         <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Phát hành</option>
                         <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Chưa phát hành</option>
@@ -110,7 +110,7 @@
             </div>
             <div class="col-lg-5">
                 <div class="mb-3">
-                    <label for="coupon-category" class="form-label">Coupon-Category</label>
+                    <label for="coupon-category" class="form-label">Danh mục</label>
                     <select class="form-select mb-3 @error('coupon_category') is-invalid @enderror" id="coupon_category"
                         name="coupon_category[]" multiple>
                         @foreach ($categories as $category)
@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="coupon-product" class="form-label">Coupon-Product</label>
+                    <label for="coupon-product" class="form-label">Sản phẩm</label>
                     <select class="form-select mb-3 @error('coupon_product') is-invalid @enderror" id="coupon_product"
                         name="coupon_product[]" multiple>
                         @foreach ($products as $product)
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="coupon-user" class="form-label">Coupon-User</label>
+                    <label for="coupon-user" class="form-label">Người dùng</label>
                     <select class="form-select mb-3 @error('coupon_user') is-invalid @enderror" id="coupon_user"
                         name="coupon_user[]" multiple>
                         @foreach ($users as $user)
