@@ -11,10 +11,7 @@
         <div class="form-check text-start my-3">
             <form action="{{route('client.removeCart',['id'=>$item->id])}}" method="post">
                 @csrf
-                <input type="checkbox" class="form-check-input bg-primary border-0" id="{{$item->id}}"
-                    name="Delivery" value="Delivery">
                 <label class="form-check-label d-flex justify-content-between" for="{{$item->id}}">
-
                     <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid rounded" style="width:30%;height:30%" alt="">
                     <div class="px-4">
                         <h4>{{$item->name}}</h4>

@@ -56,9 +56,12 @@
                             <p class="mb-0 mt-4">{{number_format(($item->price)*($item->quantity))}} VNĐ</p>
                         </td>
                         <td>
-                            <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                <i class="fa fa-times text-danger"></i>
-                            </button>
+                            <form action="{{route('client.removeCart',['id'=>$item->id])}}" method="post">
+                                @csrf
+                                <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa')" class="btn btn-md rounded-circle bg-light border mt-4">
+                                    <i class="fa fa-times text-danger"></i>
+                                </button>
+                            </form>
                         </td>
 
                     </tr>
