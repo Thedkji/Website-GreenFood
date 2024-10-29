@@ -118,16 +118,6 @@
                 </td>
 
                 <td>
-
-                    @if (!isset($variant->name))
-                        <p class="text-danger">Sản phẩm chưa có giá trị nào</p>
-                    @else
-                        {{ $variant->name }}
-                    @endif
-                </td>
-
-                <td>
-
                     @isset($parentName)
                         @if ($parentName)
                             {{ $parentName }}
@@ -135,8 +125,16 @@
                             <p class="text-danger">Sản phẩm chưa có giá trị nào</p>
                         @endif
                     @endisset
-
                 </td>
+
+                <td>
+                    @if (!isset($variant->name))
+                        <p class="text-danger">Sản phẩm chưa có giá trị nào</p>
+                    @else
+                        {{ $variant->name }}
+                    @endif
+                </td>
+
             </tr>
         </tbody>
     </table>

@@ -62,19 +62,18 @@ class ProductController extends Controller
             return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
         } else {
             $product = Product::with('categories', 'galleries')->orderByDesc('id')->findOrFail($product->id);
+            $variantGroup = VariantGroup::with('variants.parent')->where('sku', request('sku'))->first();
 
-            $variantGroups = VariantGroup::where('sku', request('sku'))->first();
+            $variant = null;
+            $parentName = ''; // Mặc định nếu không có giá trị
+            if ($product->status == 1 && $variantGroup) {
+                // Lấy biến thể duy nhất của SKU sản phẩm
+                $variant = $variantGroup->variants->first(); // Chỉ lấy một giá trị đầu tiên
 
-            $variant = [];
-            $parentName = '';
-
-            if ($product->status == 1) {
-
-                $variant = $variantGroups->variants()->first();
-
-                $parentName = $variant->parent->name;
+                if ($variant && $variant->parent) {
+                    $parentName = $variant->parent->name ?? 'Không có giá trị';
+                }
             }
-
 
             return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
         }
