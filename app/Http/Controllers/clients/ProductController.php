@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Darryldecode\Cart\Facades\CartFacade as Cart;
+use App\Models\VariantGroup;
 
 class ProductController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
-        $products = Product::with('categories', 'variantGroups')->paginate(8);
-        $categories = Category::get();
+        $products = Product::with(['categories', 'variantGroups.variants.parent'])->paginate(8);
+        $categories = Category::all();
         return view("clients.homes.home", compact('products', 'categories'));
     }
 }

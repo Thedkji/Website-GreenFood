@@ -46,9 +46,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $variants = VariantGroup::with('variant')->get()->groupBy('variant_id');
-        $categories = Category::get();
-        return view('admins.products.add-product', compact('variants', 'categories'));
+        return view('admins.products.add-product');
     }
 
     public function store(ProductRequest $request) {}

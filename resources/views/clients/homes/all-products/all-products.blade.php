@@ -32,45 +32,51 @@
                             <div class="row g-4">
                                 @foreach ($products as $product)
                                 <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <form action="{{route('client.addToCart')}}" method="post">
+                                    <form action="{{ route('client.addToCart') }}" method="post">
                                         @csrf
                                         @method('POST')
                                         <div class="rounded position-relative fruite-item">
                                             <div class="fruite-img">
-                                                <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top"
-                                                    alt="">
+                                                <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
                                             </div>
 
-                                            <div class="text-white bg-success px-3 py-1 rounded position-absolute"
-                                                style="top: 10px; left: 10px;">@foreach($product->categories as $category)
+                                            <div class="text-white bg-success px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+                                                @foreach($product->categories as $category)
                                                 {{ $category->name }}
                                                 @endforeach
                                             </div>
-                                            <input type="hidden" name="id_product" value="{{$product->id}}">
-                                            <input type="hidden" name="price" value="{{$product->price_regular}}">
-                                            <input type="hidden" name="name" value="{{$product->name}}">
+
+                                            <input type="hidden" name="id_product" value="{{ $product->id }}">
+                                            <input type="hidden" name="name" value="{{ $product->name }}">
+
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
-                                                <h4 name="name">{{$product->name}}</h4>
-                                                <p>{{$product->description_short}}</p>
-                                                @if (isset($product->variantGroups))
-                                                @foreach ($product->variantGroups as $variant)
-                                                <button type="button">{{$variant->sku}}</button>
-                                                @endforeach
+                                                <h4>{{ $product->name }}</h4>
+                                                <p>{{ $product->description_short }}</p>
+                                                @if (isset($product->variantGroups) && $product->variantGroups->isNotEmpty())
+                                                <div class="variant-group mb-3">
+                                                    <p>
+                                                        Giá: {{ app('formatPrice')($product->variantGroups[0]->price_regular) }}
+                                                    </p>
+                                                </div>
+                                                <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_regular }}">
                                                 @else
-                                                <p>Không có biến thể</p>
+                                                <p>
+                                                    Giá: {{ app('formatPrice')($product->price_regular) }}
+                                                </p>
+                                                <input type="hidden" name="price" value="{{ $product->price_regular }}">
                                                 @endif
                                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0" name="price">{{ app('formatPrice')($product->price_regular) }}VNĐ</p>
-                                                    <button type="submit"
-                                                        class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                            class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart</button>
+                                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                                    </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </form>
                                 </div>
                                 @endforeach
+
                             </div>
                         </div>
                     </div>

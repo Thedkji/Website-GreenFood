@@ -21,7 +21,7 @@ class OrderController extends Controller
                 ->orWhere('total', 'LIKE', "%{$search}%")
                 ->orWhereHas('orderDetails', function ($q) use ($search) {
                     $q->where('product_name', 'like', '%' . $search . '%');
-                    $q->where('sku', 'like', '%' . $search . '%');
+                    $q->where('product_sku', 'like', '%' . $search . '%');
                 });
         }
         $statusFilter = $request->input('statusFilter');

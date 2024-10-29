@@ -17,7 +17,7 @@ class Variant extends Model
 
     public function variantGroups()
     {
-        return $this->belongsToMany(VariantGroup::class, 'variant_group_variant');
+        return $this->belongsToMany(VariantGroup::class, 'variant_variant_group');
     }
 
     // Lấy ra tên của parent_id

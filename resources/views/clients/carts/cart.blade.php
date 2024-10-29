@@ -34,19 +34,23 @@
                             <p class="mb-0 mt-4">{{number_format($item->price)}} VNĐ</p>
                         </td>
                         <td>
-                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
+                            <form action="{{route('client.updateCart',['id'=>$item->id])}}" method="post">
+                                @csrf
+                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" name="quantity" class="form-control form-control-sm text-center border-0" value="{{$item->quantity}}">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="{{$item->quantity}}">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+                                <button class="btn btn-primary" type="submit">Cập nhật</button>
+                            </form>
                         </td>
                         <td>
                             <p class="mb-0 mt-4">{{number_format(($item->price)*($item->quantity))}} VNĐ</p>

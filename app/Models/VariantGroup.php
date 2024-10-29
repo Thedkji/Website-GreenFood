@@ -33,6 +33,6 @@ class VariantGroup extends Model
 
     public function variants()
     {
-        return $this->belongsToMany(Variant::class,'variant_group_variant');
+        return $this->belongsToMany(Variant::class, 'variant_variant_group');
     }
 }
