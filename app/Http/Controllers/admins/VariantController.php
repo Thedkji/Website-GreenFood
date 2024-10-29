@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admins;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\admins\UpdateVariantRequest;
+use App\Http\Requests\admins\VariantRequest;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -23,15 +25,30 @@ class VariantController extends Controller
      */
     public function create()
     {
-        //
+        $variants = Variant::where('parent_id', '=', null)->get();
+
+        return view('admins.variants.add-variant', compact('variants'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VariantRequest $request)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'parent_id' => Null,
+        ];
+
+        if ($request->selectVariant == 0) {
+            Variant::create($data);
+        } else {
+            $data['parent_id'] = $request->parent_id;
+
+            Variant::create($data);
+        }
+
+        return back()->with('success', 'Thêm biến thể thành công');
     }
 
     /**
@@ -45,18 +62,35 @@ class VariantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Variant $variant)
     {
-        //
+        $childrenName = $variant->children;
+
+        return view('admins.variants.edit-variant', compact('variant', 'childrenName'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateVariantRequest $request, Variant $variant)
     {
-        //
+        // Cập nhật tên của biến thể gốc
+        $variant->update(['name' => $request->name]);
+
+        // Lặp qua mỗi `parent_id` và `name` tương ứng để cập nhật các biến thể con
+        foreach ($request->parent_id as $id => $name) {
+            // Tìm biến thể con theo ID
+            $childVariant = Variant::find($id);
+
+            // Nếu tìm thấy biến thể con, cập nhật `name` cho biến thể đó
+            if ($childVariant) {
+                $childVariant->update(['name' => $name]);
+            }
+        }
+
+        return redirect()->route('admin.variants.edit', $variant->id)->with('success', 'Cập nhật thành công!');
     }
+
 
     /**
      * Remove the specified resource from storage.

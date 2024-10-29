@@ -5,7 +5,7 @@
 @section('start-page-title', 'Thêm mới biến thể')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.variants.variants.index') }}">Biến thể</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.variants.index') }}">Biến thể</a></li>
     <li class="breadcrumb-item active">Thêm mới biến thể</li>
 @endsection
 
@@ -21,31 +21,55 @@
             {{ session('error') }}
         </div>
     @endif
-    <form class="needs-validation" novalidate method="post" action="{{ route('admin.variants.variants.store') }}">
+    <form method="post" action="{{ route('admin.variants.store') }}">
         @csrf
         @method('POST')
-        <div class="row">
+        <div class="row w-50">
             <div class="col-lg-8">
                 <div class="mb-3">
-                    <label for="validationCustom01" class="form-label">Tên biến thể</label>
-                    <input type="text" class="form-control" id="validationCustom01" name="name"
-                        value="{{ old('name') }}" required>
-                    @error('name')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="valid-feedback">
-                        Hợp lệ!
-                    </div>
-                    <div class="invalid-feedback">
-                        Vui lòng không để trống
-                    </div>
+                    <label for="" class="form-label">Tên biến thể</label>
+                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                 </div>
-                <div class="col-12 mb-3">
-                    <button class="btn btn-secondary" type="submit">Thêm mới</button>
+
+                @error('name')
+                    <div class="text-danger my-3">{{ $message }}</div>
+                @enderror
+
+                <div>
+                    <select name="selectVariant" class="form-select" onchange="variantChange()">
+                        <option value="0">Biến thể không có giá trị</option>
+                        <option value="1">Giá trị của biến thể</option>
+                    </select>
+                </div>
+
+                <!-- Sửa tên và ẩn select này -->
+                <div id="valueSelectContainer" class="d-none my-3">
+                    <select name="parent_id" class="form-select">
+                        @foreach ($variants as $variant)
+                            <option value="{{ old('parent_id', $variant->id) }}">{{ $variant->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary" type="submit">Thêm mới</button>
                 </div>
             </div>
         </div>
     </form>
 @endsection
+
+<script>
+    function variantChange() {
+        let selectVariant = document.querySelector('select[name="selectVariant"]');
+        let valueSelectContainer = document.getElementById('valueSelectContainer'); // Lấy thẻ div chứa select mới
+        let value = selectVariant.value;
+
+        // Hiển thị hoặc ẩn select mới dựa trên giá trị
+        if (value == 1) {
+            valueSelectContainer.classList.remove('d-none');
+        } else {
+            valueSelectContainer.classList.add('d-none');
+        }
+    }
+</script>
