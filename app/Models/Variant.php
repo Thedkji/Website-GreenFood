@@ -25,4 +25,9 @@ class Variant extends Model
     {
         return $this->belongsTo(Variant::class, 'parent_id');
     }
+
+    public function children()
+    {
+        return $this->hasMany(Variant::class, 'parent_id');
+    }
 }

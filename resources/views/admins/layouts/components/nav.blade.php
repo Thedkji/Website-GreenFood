@@ -772,10 +772,6 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarLanding">
                         <ul class="nav nav-sm flex-column">
-                            {{-- <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                Biến thể cha
-                            </a> --}}
                             <div class="">
                                 <a href="{{ route('admin.variants.variants.index') }}" class="nav-link"
                                     role="button" aria-expanded="false" aria-controls="sidebarCalendar"
