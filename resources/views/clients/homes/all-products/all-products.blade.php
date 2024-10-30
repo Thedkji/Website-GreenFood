@@ -72,8 +72,7 @@
                                                 @endphp
 
                                                 <div class="variant-group-item mb-2">
-                                                    <button type="button" class="btn btn-outline-primary variant-button"
-                                                        onclick="selectVariant('{{ $sku }}', '{{ app('formatPrice')($price_regular) }}')">
+                                                    <button type="button" class="btn btn-outline-primary variant-button">
                                                         @foreach ($variantGroup as $group)
                                                         @foreach ($group->variants as $variant)
                                                         {{ $variant->name }}
@@ -116,9 +115,3 @@
 <div class="d-flex justify-content-center" style="display: flex; list-style: none; flex-direction: row;">
     {{ $products->links('pagination::bootstrap-4') }}
 </div>
-<script>
-    function selectVariant(sku, price) {
-        document.getElementById('current-price').innerText = price;
-        document.getElementById('selected_sku').value = sku;
-    }
-</script>
