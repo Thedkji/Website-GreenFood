@@ -745,11 +745,11 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarPages">
+                    <a class="nav-link menu-link" href="#UserPages" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="UserPages">
                         <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">QL Người Dùng</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarPages">
+                    <div class="collapse menu-dropdown" id="UserPages">
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
@@ -765,11 +765,11 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarPages">
+                    <a class="nav-link menu-link" href="#123Pages" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="123Pages">
                         <i class=" ri-keyboard-box-line"></i> <span data-key="t-pages">QL Thùng Rác</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarPages">
+                    <div class="collapse menu-dropdown" id="123Pages">
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
