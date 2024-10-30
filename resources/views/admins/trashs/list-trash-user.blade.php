@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'User | Danh sách người dùng')
+@section('title', 'User | Danh sách xóa mềm người dùng')
 
-@section('start-page-title', 'Danh sách người dùng')
+@section('start-page-title', 'Danh sách xóa mềm người dùng')
 
 @section('content')
     @if (session('success'))
@@ -48,7 +48,7 @@
             @if (isset($users))
                 @foreach ($users as $value)
                     <tr>
-                        <th scope="row">{{ $value->id + 1 }}</th>
+                        <th scope="row">{{ $value->id }}</th>
                         <th scope="row">{{ $value->name }}</th>
                         <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
                                 style="width:150px"></th>
@@ -60,10 +60,10 @@
 
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.users.show', ['user' => $value->id]) }}"
+                                <a href="{{ route('admin.trashs.restoreUser', $value->id) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.trashs.destroy', $value->id) }}" method="post">
+                                <form action="{{ route('admin.trashs.destroyUser', $value->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

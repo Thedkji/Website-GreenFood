@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'User | Danh sách người dùng')
+@section('title', 'Orders | Danh sách xóa mềm đơn hàng')
 
-@section('start-page-title', 'Danh sách người dùng')
+@section('start-page-title', 'Danh sách xóa mềm đơn hàng')
 
 @section('content')
     @if (session('success'))
@@ -52,9 +52,9 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.orders.editOrder', $order->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreOrder', $order->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
-                            <a href="{{ route('admin.orders.destroyOrder', $order->id) }}" class="link-danger fs-15"
+                            <a href="{{ route('admin.trashs.destroyOrder', $order->id) }}" class="link-danger fs-15"
                                 onclick="return confirm('Đơn hàng sẽ bị xóa và chuyển vào thùng rác , vẫn chấp nhận xóa ??? ')">
                                 <i class="ri-delete-bin-line"></i>
                             </a>

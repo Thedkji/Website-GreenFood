@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'User | Danh sách người dùng')
+@section('title', 'Product | Danh sách xóa mềm sản phẩm ')
 
-@section('start-page-title', 'Danh sách người dùng')
+@section('start-page-title', 'Danh sách xóa mềm sản phẩm ')
 
 @section('content')
     @if (session('success'))

@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'User | Danh sách người dùng')
+@section('title', 'Category | Danh sách xóa mềm danh mục')
 
-@section('start-page-title', 'Danh sách người dùng')
+@section('start-page-title', 'Danh sách xóa mềm danh mục')
 
 @section('content')
     @if (session('success'))
@@ -52,10 +52,10 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreCategory', $value->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
 
-                            <form action="{{ route('admin.categories.destroy', $category) }}" method="post">
+                            <form action="{{ route('admin.trashs.destroyCategory', $category) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="background-color: transparent; border: none; color: inherit;"

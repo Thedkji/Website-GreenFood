@@ -60,10 +60,10 @@
 
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.trashs.restore', $value->id) }}"
+                                <a href="{{ route('admin.trashs.restoreUser', $value->id) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.trashs.destroy', $value->id) }}" method="post">
+                                <form action="{{ route('admin.trashs.destroyUser', $value->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -104,10 +104,10 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreCategory', $value->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
 
-                            <form action="{{ route('admin.categories.destroy', $category) }}" method="post">
+                            <form action="{{ route('admin.trashs.destroyCategory', $category) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="background-color: transparent; border: none; color: inherit;"
@@ -146,10 +146,10 @@
 
                         <td>
                             <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.products.show', ['product' => $product->id]) }}"
+                                <a href="{{ route('admin.trashs.restoreProduct', ['product' => $product->id]) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.products.destroy', ['product' => $product->id]) }}"
+                                <form action="{{ route('admin.trashs.destroyProduct', ['product' => $product->id]) }}"
                                     method="post">
                                     @csrf
                                     @method('DELETE')
@@ -250,9 +250,9 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.orders.editOrder', $order->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreOrder', $order->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
-                            <a href="{{ route('admin.orders.destroyOrder', $order->id) }}" class="link-danger fs-15"
+                            <a href="{{ route('admin.trashs.destroyOrder', $order->id) }}" class="link-danger fs-15"
                                 onclick="return confirm('Đơn hàng sẽ bị xóa và chuyển vào thùng rác , vẫn chấp nhận xóa ??? ')">
                                 <i class="ri-delete-bin-line"></i>
                             </a>
