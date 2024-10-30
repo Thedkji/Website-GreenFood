@@ -108,15 +108,12 @@
                                 style="background-color: transparent;" class="link-success fs-15">
                                 <i class="ri-edit-2-line"></i>
                             </a>
-                            <form action="{{ route('admin.variants.destroy', ['variant' => $variant->id]) }}"
-                                method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="background-color: transparent; border: none; color: inherit;"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
-                                    <i class="ri-delete-bin-line"></i>
-                                </button>
-                            </form>
+
+                            <button type="button" style="background-color: transparent; border: none; color: inherit;"
+                                onclick="return confirm('Việc này có thể xóa biến thể cùng với toàn bộ giá trị của biến thể , vẫn chấp nhận xóa ?');"
+                                class="link-danger fs-15">
+                                <i class="ri-delete-bin-line"></i>
+
                         </div>
                     </td>
                 </tr>
