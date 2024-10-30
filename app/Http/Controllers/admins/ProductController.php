@@ -8,7 +8,6 @@ use App\Http\Requests\admins\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variant;
-use App\Models\VariantDetail;
 use App\Models\VariantGroup;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,6 @@ class ProductController extends Controller
 
     public function create()
     {
-
         return view('admins.products.add-product');
     }
 
@@ -68,7 +66,6 @@ class ProductController extends Controller
 
             $variant = null;
             $parentName = ''; // Mặc định nếu không có giá trị
-
             if ($product->status == 1 && $variantGroup) {
                 // Lấy biến thể duy nhất của SKU sản phẩm
                 $variant = $variantGroup->variants->first(); // Chỉ lấy một giá trị đầu tiên
