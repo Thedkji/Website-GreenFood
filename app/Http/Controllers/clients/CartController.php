@@ -18,61 +18,90 @@ class CartController extends Controller
     // Hàm này dùng để thêm cart nhanh ở trang chính
     public function addToCart(Request $request)
     {
-        $price = $request->input('price');
-        CartSession::add([
-            'id' => $request->id_product,
-            'name' => $request->name,
-            'price' => $price,
-            'quantity' => 1,
-            'attributes' => [
-                'added_order' => CartSession::getContent()->count() + 1,
-            ],
-
-        ]);
-        return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công');
+        $cartItems = CartSession::getContent();
+        $existingItem = $cartItems->firstWhere(function ($item) use ($request) {
+            return $item->id === $request->id_product && $item->attributes->sku === $request->sku;
+        });
+        if ($existingItem) {
+            CartSession::update($existingItem->id, [
+                'quantity' => $existingItem->quantity + 1,
+            ]);
+        } else {
+            CartSession::add([
+                'id' => $request->id_product,
+                'name' => $request->name,
+                'price' => $request->input('price'),
+                'quantity' => 1,
+                'attributes' => [
+                    'added_order' => $cartItems->count() + 1,
+                    'sku' => $request->sku,
+                ],
+            ]);
+        }
+        if (auth()->check()) {
+            $this->saveCartData(auth()->id());
+        }
+        return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công');
     }
+    // Hàm lưu dữ liệu giỏ hàng vào cơ sở dữ liệu
     private function saveCartData($user_id)
     {
-        $cartData = CartSession::getContent()->toArray();
-        Cart::updateOrCreate([
-            'user_id' => $user_id,
-            'product_id' => $cartData['id'],
-            'quantity' => $cartData['quantity']
-        ]);
+        $cartData = CartSession::getContent();
+        foreach ($cartData as $item) {
+            Cart::updateOrCreate(
+                [
+                    'user_id' => $user_id,
+                    'product_id' => $item->id,
+                ],
+                [
+                    'quantity' => $item->quantity,
+                    'attributes' => json_encode($item->attributes),
+                ]
+            );
+        }
     }
     public function deleteCart()
     {
         CartSession::clear();
+        if (auth()->check()) {
+            Cart::where('user_id', auth()->id())->delete();
+        }
         return redirect()->route('client.home');
     }
-
     public function updateCart($id, Request $request)
     {
-        // Kiểm tra xem người dùng đã nhập số lượng hợp lệ chưa
         $quantity = (int) $request->input('quantity');
-
         if ($quantity <= 0) {
             return redirect()->back()->with('error', 'Số lượng phải lớn hơn 0');
         }
-
-        // Cập nhật số lượng sản phẩm trong giỏ hàng
         CartSession::update($id, [
             'quantity' => [
                 'relative' => false,
                 'value' => $quantity
             ],
         ]);
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $cartItem = Cart::where('user_id', $userId)
+                ->where('product_id', $id)
+                ->where('attributes->sku', CartSession::get($id)->attributes->sku)
+                ->first();
 
+            if ($cartItem) {
+                $cartItem->quantity = $quantity;
+                $cartItem->save();
+            }
+        }
         return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công');
     }
 
     public function removeCart($id)
     {
         $delete = CartSession::remove($id);
-        if ($delete) {
-            return redirect()->back()->with('success', 'Xóa sản phẩm thành công');
-        } else {
-            return redirect()->back()->with('error', 'Xóa sản phẩm thất bại');
+        if (auth()->check()) {
+            $userId = auth()->id();
+            Cart::where('user_id', $userId)->where('product_id', $id)->delete();
         }
+        return redirect()->back()->with('success', 'Xóa sản phẩm thành công');
     }
 }

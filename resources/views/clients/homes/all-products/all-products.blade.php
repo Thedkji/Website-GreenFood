@@ -56,40 +56,33 @@
                                                 @if (isset($product->variantGroups) && $product->variantGroups->isNotEmpty())
                                                 <div class="variant-group mb-3">
                                                     <p>
-                                                        Giá: <span id="current-price">{{ app('formatPrice')($product->variantGroups[0]->price_regular) }}</span>
+                                                        Giá: <span id="current-price">{{ app('formatPrice')($product->variantGroups[0]->price_sale) }}</span>
                                                     </p>
                                                 </div>
 
-                                                @php
+                                                <!-- @php
                                                 // Nhóm các biến thể theo SKU
                                                 $variantGroups = $product->variantGroups->groupBy('sku');
-                                                @endphp
+                                                @endphp -->
 
                                                 @foreach ($variantGroups as $sku => $variantGroup)
                                                 @php
                                                 // Lấy giá của nhóm biến thể
-                                                $price_regular = $variantGroup->first()->price_regular;
+                                                $price_sale = $variantGroup->first()->price_sale;
                                                 @endphp
 
                                                 <div class="variant-group-item mb-2">
-                                                    <button type="button" class="btn btn-outline-primary variant-button">
-                                                        @foreach ($variantGroup as $group)
-                                                        @foreach ($group->variants as $variant)
-                                                        {{ $variant->name }}
-                                                        @endforeach
-                                                        @endforeach
-                                                    </button>
-                                                    <p style="display:none">Giá: <span class="variant-price">{{ app('formatPrice')($price_regular) }}</span></p>
+                                                    <p style="display:none">Giá: <span class="variant-price">{{ app('formatPrice')($price_sale) }}</span></p>
                                                 </div>
                                                 @endforeach
-
-                                                <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_regular }}">
-                                                <input type="hidden" name="selected_sku" id="selected_sku" value="">
+                                                <input type="hidden" name="sku" value="{{ $product->variantGroups[0]->sku }}">
+                                                <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_sale }}">
                                                 @else
                                                 <p>
-                                                    Giá: {{ app('formatPrice')($product->price_regular) }}
+                                                    Giá: {{ app('formatPrice')($product->price_sale) }}
                                                 </p>
-                                                <input type="hidden" name="price" value="{{ $product->price_regular }}">
+                                                <input type="hidden" name="sku" value="{{ $product->sku }}">
+                                                <input type="hidden" name="price" value="{{ $product->price_sale }}">
                                                 @endif
 
                                                 <div class="d-flex justify-content-between flex-lg-wrap">
