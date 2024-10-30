@@ -24,13 +24,18 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
+        require_once base_path("routes/admins/user.php");
         require_once base_path("routes/admins/product.php");
         require_once base_path("routes/admins/variant.php");
         require_once base_path("routes/admins/order.php");
         require_once base_path("routes/admins/comment.php");
         require_once base_path("routes/admins/category.php");
         require_once base_path("routes/admins/supplier.php");
+
+        require_once base_path("routes/admins/trash.php");
+
         require_once base_path("routes/admins/coupon.php");
+
 
     });
 
@@ -49,4 +54,3 @@ Route::prefix('client')
         require_once base_path("routes/clients/error.php");
         require_once base_path("routes/clients/message.php");
     });
- 

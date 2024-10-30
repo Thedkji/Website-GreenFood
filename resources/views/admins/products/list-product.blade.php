@@ -89,13 +89,13 @@
                         <a href="{{ route('admin.products.show', [
                             'product' => $product->id,
                             'showVariantproduct' => $product->status !== 0 ? 'true' : null
-                        ]) }}" 
+                        ]) }}"
                         name="variantGroups">
                         <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
                             {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
                         </span>
                     </a>
-                    
+
 
 
                     </td>
