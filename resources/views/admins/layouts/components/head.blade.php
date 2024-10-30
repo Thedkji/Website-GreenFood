@@ -15,6 +15,8 @@
 
 <!-- Layout config Js -->
 <script src="{{ env('VIEW_ADMIN') }}/js/layout.js"></script>
+{{-- Address  --}}
+<script src="{{ env('VIEW_ADMIN') }}/js/address.js"></script>
 <!-- Bootstrap Css -->
 <link href="{{ env('VIEW_ADMIN') }}/css/bootstrap.min.css?t={{ time() }}" rel="stylesheet" type="text/css" />
 <!-- Icons Css -->
