@@ -50,9 +50,14 @@
                         <div class="d-flex align-items-center">
                             <input type="text" class="form-control me-2" name="parent_id[{{ $child->id }}]"
                                 value="{{ old('parent_id.' . $child->id, $child->name) }}">
-                            <button type="button" class="btn btn-danger btn-sm ms-2">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <form action="{{ route('admin.categories.destroy', $child->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm ms-2"
+                                    onclick='return confirm("Xóa giá trị này ?")'>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </div>
 
                         @error("parent_id.$child->id")
@@ -60,6 +65,13 @@
                         @enderror
                     </div>
                 @endforeach
+
+                <div>
+                    <button class="btn btn-success" type="button">
+                        <a href="{{ route('admin.variants.create') }}" class="text-white">Thêm giá trị mới</a>
+                    </button>
+                </div>
+
 
 
             </div>
