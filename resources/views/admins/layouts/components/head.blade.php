@@ -17,11 +17,12 @@
 {{-- Address  --}}
 <script src="{{ env('VIEW_ADMIN') }}/js/address.js"></script>
 <!-- Bootstrap Css -->
-<link href="{{ env('VIEW_ADMIN') }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="{{ env('VIEW_ADMIN') }}/css/bootstrap.min.css?t={{ time() }}" rel="stylesheet" type="text/css" />
 <!-- Icons Css -->
 <link href="{{ env('VIEW_ADMIN') }}/css/icons.min.css" rel="stylesheet" type="text/css" />
 <!-- App Css-->
-<link href="{{ env('VIEW_ADMIN') }}/css/app.min.css" rel="stylesheet" type="text/css" />
-<link href="{{ env('VIEW_ADMIN') }}/css/app.css" rel="stylesheet" type="text/css" />
+<link href="{{ env('VIEW_ADMIN') }}/css/app.min.css?t={{ time() }}" rel="stylesheet" type="text/css" />
+<link href="{{ env('VIEW_ADMIN') }}/css/app.css?t={{ time() }}" rel="stylesheet" type="text/css" />
 <!-- custom Css-->
 <link href="{{ env('VIEW_ADMIN') }}/css/custom.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

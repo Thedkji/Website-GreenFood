@@ -9,133 +9,79 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantDetail;
+use App\Models\VariantGroup;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    //
     public function index()
     {
-        $products = Product::with('variantDetails', 'categories')->paginate(5);
-        // dd($products);
+        // Lấy giá trị bộ lọc từ query string
+        $status = request()->input('statusProduct');
+
+        // Kiểm tra trạng thái sản phẩm và áp dụng bộ lọc
+        if (request()->has('statusProduct')) {
+            switch ($status) {
+                case 'allPro':
+                    $products = Product::orderByDesc('id')->paginate(8)->appends(['statusProduct' => 'allPro']);
+                    break;
+                case '0':
+                    $products = Product::where('status', 0)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '0']);
+                    break;
+                case '1':
+                    $products = Product::where('status', 1)->orderByDesc('id')->paginate(8)->appends(['statusProduct' => '1']);
+                    break;
+                default:
+                    echo "Không tìm thấy trạng thái sản phẩm";
+                    break;
+            }
+        } else {
+            $products = Product::orderByDesc('id')->paginate(8);
+        }
+
         return view('admins.products.list-product', compact('products'));
     }
 
     public function create()
     {
-        $variants = VariantDetail::with('variant')->get()->groupBy('variant_id');
-        $categories = Category::get();
-        return view('admins.products.add-product', compact('variants', 'categories'));
+
+        return view('admins.products.add-product');
     }
 
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request) {}
+
+    public function show(Product $product)
     {
-        DB::beginTransaction();
-        try {
-            $data = $request->validated();
-            if ($request->hasFile('img')) {
-                $avatar = $request->file('img');
-                $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('products/avatars', $avatarName, 'public');
-                $data['img'] = $avatarPath;
-            }
-            $product = Product::create($data);
-            if ($request->hasFile('slides')) {
-                foreach ($request->file('slides') as $slide) {
-                    $slideName = time() . '_' . $slide->getClientOriginalName();
-                    $slidePath = $slide->storeAs('products/slides', $slideName, 'public');
-                    $product->galleries()->create(['path' => $slidePath]);
+
+        if (request('showVariantproduct') == true) {
+            $product = Product::findOrFail($product->id);
+
+            $variantGroups = $product->variantGroups()->orderByDesc('id')->paginate(8);
+
+            return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
+        } else {
+            $product = Product::with('categories', 'galleries')->orderByDesc('id')->findOrFail($product->id);
+            $variantGroup = VariantGroup::with('variants.parent')->where('sku', request('sku'))->first();
+
+            $variant = null;
+            $parentName = ''; // Mặc định nếu không có giá trị
+
+            if ($product->status == 1 && $variantGroup) {
+                // Lấy biến thể duy nhất của SKU sản phẩm
+                $variant = $variantGroup->variants->first(); // Chỉ lấy một giá trị đầu tiên
+
+                if ($variant && $variant->parent) {
+                    $parentName = $variant->parent->name ?? 'Không có giá trị';
                 }
             }
-            if ($request->has('variants')) {
-                $product->variantDetails()->attach($request->input('variants'));
-            }
-            if ($request->has('category_ids')) {
-                $product->categories()->attach($request->input('category_ids'));
-            }
-            DB::commit();
-            return redirect()->back()->with('success', 'Sản phẩm đã được thêm mới thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.');
+
+            return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
         }
     }
 
-    public function show($id)
-    {
-        $product = Product::with('variantDetails', 'categories', 'galleries')->findOrFail($id);
-        $variants = VariantDetail::with('variant')->get()->groupBy('variant_id');
-        $categories = Category::get();
-        return view('admins.products.edit-product', compact('product', 'variants', 'categories'));
-        // dd($product->categories);
-    }
-
-    public function update($id, ProductUpdateRequest $request)
-    {
-        DB::beginTransaction();
-        try {
-            $product = Product::findOrFail($id);
-            $data = $request->validated();
-            if ($request->hasFile('img')) {
-                if ($product->img) {
-                    Storage::disk('public')->delete($product->img);
-                }
-                $avatar = $request->file('img');
-                $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('products/avatars', $avatarName, 'public');
-                $data['img'] = $avatarPath;
-            }
-            $product->update($data);
-            if ($request->hasFile('slides')) {
-                $oldSlides = $product->galleries()->get();
-                foreach ($oldSlides as $oldSlide) {
-                    Storage::disk('public')->delete($oldSlide->path);
-                }
-                $product->galleries()->delete();
-                foreach ($request->file('slides') as $slide) {
-                    $slideName = time() . '_' . $slide->getClientOriginalName();
-                    $slidePath = $slide->storeAs('products/slides', $slideName, 'public');
-                    $product->galleries()->create(['path' => $slidePath]);
-                }
-            }
-            if ($request->has('variants')) {
-                $product->variantDetails()->sync($request->input('variants'));
-            }
-            if ($request->has('category_ids')) {
-                $product->categories()->sync($request->input('category_ids'));
-            }
-            DB::commit();
-            return redirect()->back()->with('success', 'Sản phẩm đã được cập nhật thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.');
-        }
-    }
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-        try {
-            $product = Product::findOrFail($id);
-            if ($product->img && Storage::disk('public')->exists($product->img)) {
-                Storage::disk('public')->delete($product->img);
-            }
-            $oldSlides = $product->galleries()->get();
-            foreach ($oldSlides as $oldSlide) {
-                if ($oldSlide->path && Storage::disk('public')->exists($oldSlide->path)) {
-                    Storage::disk('public')->delete($oldSlide->path);
-                }
-            }
-            $product->galleries()->delete();
-            $product->variantDetails()->detach();
-            $product->categories()->detach();
-            $product->delete();
-            DB::commit();
-            return redirect()->back()->with('success', 'Sản phẩm đã được xóa thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
-        }
-    }
+    public function update($id, ProductUpdateRequest $request) {}
+    public function destroy($id) {}
 }

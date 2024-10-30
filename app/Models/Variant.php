@@ -12,10 +12,22 @@ class Variant extends Model
 
     protected $fillable = [
         "name",
+        "parent_id",
     ];
 
-    public function variantDetails()
+    public function variantGroups()
     {
-        return $this->hasMany(VariantDetail::class);
+        return $this->belongsToMany(VariantGroup::class, 'variant_group_variant');
+    }
+
+    // Lấy ra tên của parent_id
+    public function parent()
+    {
+        return $this->belongsTo(Variant::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Variant::class, 'parent_id');
     }
 }

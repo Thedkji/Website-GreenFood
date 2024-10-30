@@ -720,7 +720,7 @@
 
                 {{-- danh mục sản phẩm --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link" href="#sidebarCategories" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarCategories">
                         <i class="ri-file-list-3-line"></i>
                         <span data-key="t-landing">Danh mục sản phẩm</span>
@@ -793,13 +793,12 @@
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.index') }}" class="nav-link"
-                                    data-key="t-starter">
+                                <a href="{{ route('admin.products.index') }}" class="nav-link" data-key="t-starter">
                                     Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.create') }}" class="nav-link"
-                                    data-key="t-team"> Thêm mới sản phẩm</a>
+                                <a href="{{ route('admin.products.create') }}" class="nav-link" data-key="t-team">
+                                    Thêm mới sản phẩm</a>
                             </li>
                         </ul>
                     </div>
@@ -813,42 +812,42 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarLanding">
                         <ul class="nav nav-sm flex-column">
-                            {{-- <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                Biến thể cha
-                            </a> --}}
                             <div class="">
-                                <a href="{{ route('admin.variants.variants.index') }}" class="nav-link" role="button" aria-expanded="false"
-                                    aria-controls="sidebarCalendar" data-key="t-calender">
+                                <a href="{{ route('admin.variants.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                     Danh sách biến thể
                                 </a>
 
-                                <a href="{{ route('admin.variants.variants.create') }}" class="nav-link" role="button" aria-expanded="false"
-                                    aria-controls="sidebarCalendar" data-key="t-calender">
+                                <a href="{{ route('admin.variants.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
                                     Thêm mới biến thể
                                 </a>
-                            </div>
-                            <a href="#sidebarCalendar1" class="nav-link" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                Chi tiết biến thể
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarCalendar1">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.list_child_variant') }}" class="nav-link"
-                                            data-key="t-starter">
-                                            Danh sách chi tiết biến thể</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.variants.add_child_variant') }}" class="nav-link"
-                                            data-key="t-team"> Thêm mới chi tiết biến thể</a>
-                                    </li>
-                                </ul>
                             </div>
                         </ul>
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebar" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebar">
+                        <i class=" ri-price-tag-3-line"></i> <span data-key="t-landing">Mã giảm giá</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebar">
+                
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.coupons.showCoupon') }}" class="nav-link"
+                                    data-key="t-starter">
+                                    Danh sách mã giảm giá</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.coupons.addCoupon') }}" class="nav-link"
+                                    data-key="t-team"> Thêm mới mã giảm giá</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarOrders">
@@ -866,7 +865,6 @@
                 </li>
 
                 <li class="nav-item">
-
                     <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarSuppliers">
                         <i class="ri-file-list-3-line"></i>
@@ -887,20 +885,24 @@
                             </a>
                         </ul>
 
-
-                    <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarForms">
-                        <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Bình luận</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarForms">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{route('admin.comments.comment')}}" class="nav-link" data-key="t-basic-elements">Danh sách bình luận</a>
-                            </li>
-                        </ul>
-
                     </div>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarComment" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarComment">
+                        <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Bình luận</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarComment">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.comments.comment') }}" class="nav-link"
+                                    data-key="t-basic-elements">Danh sách bình luận</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span>
                 </li>

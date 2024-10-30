@@ -2,11 +2,11 @@
 
 @section('title', 'Dashboard | Velzon - Admin - Danh sách sản phẩm')
 
-@section('start-page-title', 'Danh sách sản phẩm')
+@section('start-page-title', 'Danh sách sản phẩm có biến thể')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
-    <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Danh sách sản phẩm</a></li>
+    <li class="breadcrumb-item active">Danh sách sản phẩm có biến thể</li>
 @endsection
 
 @section('content')
@@ -25,27 +25,6 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.products.index') }}" id="search-form" method="GET"
-        class="row mb-3 d-flex flex-row-reverse">
-        <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
-                <div class="search-box">
-                    <input name="search" type="text" class="form-control search"
-                        value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
-                    <i class="ri-search-line search-icon"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <select id="statusProduct" name="statusProduct" class="form-select w-50" onchange="this.form.submit()">
-                <option value="allPro" {{ request('statusProduct') == 'allPro' ? 'selected' : '' }}>Tất cả sản phẩm</option>
-                <option value="0" {{ request('statusProduct') == 0 ? 'selected' : '' }}>Sản phẩm không có biến thể
-                </option>
-                <option value="1" {{ request('statusProduct') == 1 ? 'selected' : '' }}>Sản phẩm có biến thể</option>
-            </select>
-        </div>
-    </form>
-
     <table class="table table-striped align-middle mb-0 text-center fs-6">
         <thead>
             <tr>
@@ -55,71 +34,49 @@
                 <th scope="col">ID</th>
                 <th scope="col">Mã sản phẩm</th>
                 <th scope="col">Tên</th>
-                <th scope="col">Slug</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Giá thường</th>
                 <th scope="col">Giá giảm</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Trạng thái</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Ngày cập nhật</th>
                 <th scope="col" colspan="3">Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
+            @foreach ($variantGroups as $productVariant)
                 <tr>
                     <td>
                         <input type="checkbox" class="product-checkbox" onclick="toggleDeleteButton()"
                             value="{{ $product->id }}">
                     </td>
-                    <td>{{ $product->id }}</td>
-                    <td>{{ $product->sku }}</td>
+                    <td>{{ $productVariant->id }}</td>
+                    <td>{{ $productVariant->sku }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->slug }}</td>
                     <td>
-                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                        <img src="{{ env('VIEW_IMG') }}/{{ $productVariant->img }}" alt=""
                             style="width: 100px; height: 100px; object-fit: cover;">
                     </td>
-                    <td>{{ app('formatPrice')($product->price_regular) }} VNĐ</td>
-                    <td class="text-success">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
-                    <td>{{ $product->quantity }}</td>
-                    <td>
-
-                        <a href="{{ route('admin.products.show', [
-                            'product' => $product->id,
-                            'showVariantproduct' => $product->status !== 0 ? 'true' : null
-                        ]) }}"
-                        name="variantGroups">
-                        <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
-                            {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
-                        </span>
-                    </a>
+                    <td>{{ app('formatPrice')($productVariant->price_regular) }} VNĐ</td>
+                    <td class="text-success">{{ app('formatPrice')($productVariant->price_sale) }} VNĐ</td>
+                    <td>{{ $productVariant->quantity }}</td>
 
 
-
-                    </td>
-
-                    <td>{{ $product->created_at }}</td>
-                    <td>{{ $product->updated_at }}</td>
+                    <td>{{ $productVariant->created_at }}</td>
+                    <td>{{ $productVariant->updated_at }}</td>
 
                     <td class="">
-                        <a
-                            href="{{ route('admin.products.show', [
-                                'product' => $product->id,
-                                'showVariantproduct' => $product->status !== 0 ? 'true' : null,
-                            ]) }}">
+                        <a href="{{ route('admin.products.show', [$product->id, 'sku' => $productVariant->sku]) }}">
                             <i class="fa-regular fa-eye"></i>
                         </a>
 
 
 
-
-                        <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15"><i
+                        <a href="{{ route('admin.products.edit', $productVariant->id) }}" class="link-success fs-15"><i
                                 class="ri-edit-2-line"></i></a>
 
 
-                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                        <form action="{{ route('admin.products.destroy', $productVariant->id) }}" method="POST"
                             style="display:inline;">
                             @csrf
                             @method('DELETE')
@@ -140,23 +97,13 @@
         </div>
         <div class="col-sm">
             <div class="mt-3 d-flex justify-content-sm-end">
-                {{ $products->links() }}
+                {{ $variantGroups->links() }}
             </div>
         </div>
     </div>
-
 @endsection
 
 <script>
-    let debounceTimeout;
-
-    function debounceSearch() {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => {
-            document.getElementById("search-form").submit();
-        }, 600);
-    }
-
     function toggleSelectAll(source) {
         const checkboxes = document.querySelectorAll('.product-checkbox');
         checkboxes.forEach(checkbox => checkbox.checked = source.checked);
