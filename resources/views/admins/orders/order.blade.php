@@ -9,9 +9,12 @@
 
 <form action="{{ route('admin.orders.showOder') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
     <div class="col-sm">
-        <div class="search-box">
-            <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
-            <i class="ri-search-line search-icon"></i>
+        <div class="d-flex justify-content-sm-end">
+            <div class="search-box">
+                <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
+                <i class="ri-search-line search-icon"></i>
+            </div>      
+
         </div>
     </div>
     <div class="col-sm">
