@@ -30,6 +30,8 @@ Route::prefix('admin')
         require_once base_path("routes/admins/comment.php");
         require_once base_path("routes/admins/category.php");
         require_once base_path("routes/admins/supplier.php");
+        require_once base_path("routes/admins/coupon.php");
+
     });
 
 // Client

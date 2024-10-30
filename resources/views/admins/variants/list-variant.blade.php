@@ -5,7 +5,7 @@
 @section('start-page-title', 'Danh sách biến thể')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.variants.variants.index') }}">Biến thể</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.variants.index') }}">Biến thể</a></li>
     <li class="breadcrumb-item active">Danh sách biến thể</li>
 @endsection
 
@@ -73,7 +73,7 @@
                                         <table class="table table-striped text-center">
                                             <thead>
                                                 <tr>
-                                                    <th>Giá trị</th>
+                                                    <th>Tên Biến Thể</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -83,14 +83,16 @@
                                                             <td>
                                                                 <a href="">{{ $child->name }}</a>
                                                             </td>
+
                                                         </tr>
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="2">Không có giá trị nào</td>
+                                                        <td colspan="2" class="text-danger">Không có giá trị nào</td>
                                                     </tr>
                                                 @endif
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>
@@ -102,11 +104,11 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.variants.variants.edit', ['variant' => $variant->id]) }}"
+                            <a href="{{ route('admin.variants.edit', ['variant' => $variant->id]) }}"
                                 style="background-color: transparent;" class="link-success fs-15">
                                 <i class="ri-edit-2-line"></i>
                             </a>
-                            <form action="{{ route('admin.variants.variants.destroy', ['variant' => $variant->id]) }}"
+                            <form action="{{ route('admin.variants.destroy', ['variant' => $variant->id]) }}"
                                 method="post">
                                 @csrf
                                 @method('DELETE')
