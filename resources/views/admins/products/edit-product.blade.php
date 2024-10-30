@@ -63,8 +63,11 @@
                 <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện" style="max-width: 150px; display: none;">
             </div>
             <div class="form-group mb-3">
-                <img id="imageAvatar" src="{{ env('VIEW_IMG').'/'.$product->img}}" alt="Ảnh đại diện" style="max-width: 150px;">
-
+                <!-- Kiểm tra xem có avatar hay không và hiển thị -->
+                <img id="avatar_user"
+                     src="{{ $user->avatar ? asset('storage/' . $user->avatar) : '#' }}"
+                     alt="Preview ảnh đại diện"
+                     style="max-width: 150px; {{ $user->avatar ? '' : 'display: none;' }}">
             </div>
 
             <!-- Ảnh Slide -->
