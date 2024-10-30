@@ -4,7 +4,7 @@ namespace App\Http\Requests\admins;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VariantRequest extends FormRequest
+class UpdateVariantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +21,19 @@ class VariantRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route("variant")->id;
+
+
         return [
-            'name' => ['required', 'unique:variants'],
+            'name' => 'unique:variants,name,' . $id,
+            'parent_id' => 'nullable',
         ];
     }
+
+
     public function messages(): array
     {
         return [
-            'name.required' => 'Bạn cần nhập tên biến thể',
             'name.unique' => 'Tên biến thể đã tồn tại',
         ];
     }

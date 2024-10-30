@@ -31,6 +31,11 @@ class VariantGroup extends Model
         return $this->hasMany(Depot::class);
     }
 
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     public function variants()
     {
         return $this->belongsToMany(Variant::class, 'variant_variant_group');

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cart extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         "product_id",
@@ -24,5 +24,9 @@ class Cart extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function variantGroups()
+    {
+        return $this->belongsTo(VariantGroup::class);
     }
 }
