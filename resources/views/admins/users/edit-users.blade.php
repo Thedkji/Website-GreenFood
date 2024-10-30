@@ -53,7 +53,7 @@
         </div>
         <div class="mt-3">
             <label for="phone">Số điện thoại</label>
-            <input type="text" name="phone" id="phone" class="form-control" value="{{ $user->phone }}" required>
+            <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}" max="10" required>
             <x-feedback name="phone" />
 
         </div>

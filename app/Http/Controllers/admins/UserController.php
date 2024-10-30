@@ -50,10 +50,10 @@ class UserController extends Controller
             }
 
             $user = User::create($data);
-
-            return redirect()->back()->with('success', 'Người dùng đã được thêm mới thành công.');
+            return redirect()->route('admin.users.index')->with('success', 'Người dùng đã được thêm mới thành công.');
+            // return redirect()->back()->with('success', 'Người dùng đã được thêm mới thành công.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm người dùng. Vui lòng thử lại.');
+            return redirect()->route('admin.users.index')->with('error', 'Có lỗi xảy ra khi thêm người dùng. Vui lòng thử lại.');
         }
     }
 
@@ -89,7 +89,7 @@ class UserController extends Controller
 
             $user->update($data);
             DB::commit();
-            return redirect()->route('admin.users.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
+            return redirect()->route('admin.users.index')->with('success', 'Người dùng đã được cập nhật thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('admin.users.index')->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());

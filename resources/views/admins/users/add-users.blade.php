@@ -92,7 +92,7 @@
 
         <div class="mt-3">
             <label for="phone">Số điện thoại</label>
-            <input type="numble" name="phone" id="phone" class="form-control" value="{{ old('phone') }}">
+            <input type="number" name="phone" id="phone" class="form-control" max="10" value="{{ old('phone') }}">
         </div>
 
         <div class="my-3">
