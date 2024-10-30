@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\VariantGroup;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->string('sku', 30)->comment('Mã đơn hàng')->unique();
             $table->integer('quantity')->comment('Số lượng sản phẩm đang có trong giỏ hàng');
             $table->timestamps();
         });

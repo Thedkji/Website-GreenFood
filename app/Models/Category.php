@@ -24,4 +24,12 @@ class Category extends Model
     {
         return $this->belongsToMany(Coupon::class,'coupon_category');
     }
+
+    // Lấy ra danh mục cha
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
 }
+
+

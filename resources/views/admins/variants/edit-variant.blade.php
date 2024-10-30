@@ -1,13 +1,12 @@
 @extends('admins.layouts.master')
 
-@section('title', 'Variant | Thay đổi biến thể')
+@section('title', 'Cập nhật biến thể')
 
-@section('start-page-title', 'Thay đổi biến thể')
+@section('start-page-title', 'Cập nhật biến thể')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.variants.variants.index') }}">Biến thể</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.variants.variants.index') }}">Danh sách biến thể</a></li>
-    <li class="breadcrumb-item active">Thay đổi biến thể</li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.variants.index') }}">Biến thể</a></li>
+    <li class="breadcrumb-item active">Cập nhật biến thể</li>
 @endsection
 
 @section('content')
@@ -22,27 +21,61 @@
             {{ session('error') }}
         </div>
     @endif
-    <form class="needs-validation" method="post"
-        action="{{ route('admin.variants.variants.update', ['variant' => $variant->id]) }}" novalidate>
+
+    <form method="post" action="{{ route('admin.variants.update', $variant->id) }}">
         @csrf
-        @method('PUT')
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="mb-3">
-                    <label for="validationCustom01" class="form-label">Tên biến thể</label>
-                    <input type="text" class="form-control" id="validationCustom01" name="name"
-                        value="{{ $variant->name }}" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="col-12 mb-3">
-                    <button class="btn btn-secondary" type="submit">Thay đổi</button>
+        @method('PUT') <!-- Sử dụng PUT cho cập nhật -->
+
+        <div class="d-flex justify-content-between w-75 gap-5">
+            <!-- Phần đổi tên biến thể -->
+            <div class="mb-3 me-3" style="flex: 1;">
+                <label for="name" class="form-label">Tên biến thể</label>
+                <input type="text" class="form-control" name="name" value="{{ old('name', $variant->name) }}">
+
+                @error('name')
+                    <div class="text-danger my-3">{{ $message }}</div>
+                @enderror
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary" type="submit">Cập nhật</button>
                 </div>
             </div>
+
+            <!-- Phần đổi giá trị biến thể -->
+            <div class="mb-3" style="flex:1;">
+                <label for="value" class="form-label">Giá trị biến thể</label>
+
+                @foreach ($childrenName as $key => $child)
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <input type="text" class="form-control me-2" name="parent_id[{{ $child->id }}]"
+                                value="{{ old('parent_id.' . $child->id, $child->name) }}">
+                            <form action="{{ route('admin.categories.destroy', $child->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm ms-2"
+                                    onclick='return confirm("Xóa giá trị này ?")'>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        @error("parent_id.$child->id")
+                            <div class="text-danger my-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                @endforeach
+
+                <div>
+                    <button class="btn btn-success" type="button">
+                        <a href="{{ route('admin.variants.create') }}" class="text-white">Thêm giá trị mới</a>
+                    </button>
+                </div>
+
+
+
+            </div>
         </div>
+
     </form>
-
-
-
 @endsection

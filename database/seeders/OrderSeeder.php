@@ -90,7 +90,7 @@ class OrderSeeder extends Seeder
                 "address" => "Hà Nội, " . $random_district . ", " . $random_ward,
                 "email" => "email$i@gmail.com",
                 "phone" => Arr::random($vietnam_phone_prefixes) . $random_numbers,
-                "total" => $i * 1000000,
+                "total" => mt_rand(10000, 100000),
                 "note" => Arr::random($notes),
                 "cancel_reson" => Arr::random($cancel_reasons),
                 "status" => mt_rand(0, 5),

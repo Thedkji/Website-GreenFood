@@ -11,9 +11,10 @@ class OrderDetail extends Model
     use HasFactory;
 
     use HasFactory, SoftDeletes;
-
+    protected $table = "order_detail";
     protected $fillable = [
         "order_id",
+        "product_sku",
         "product_name",
         "product_img",
         "product_price",

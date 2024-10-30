@@ -31,8 +31,8 @@ class Depot extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function variantDetail()
+    public function varianGroup()
     {
-        return $this->belongsTo(VariantDetail::class);
+        return $this->belongsTo(VariantGroup::class);
     }
 }

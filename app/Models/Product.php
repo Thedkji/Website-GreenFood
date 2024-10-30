@@ -11,12 +11,16 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        "sku",
         "name",
+        "slug",
         "img",
         "price_regular",
         "price_sale",
         "description",
-        "slug",
+        "description_short",
+        "quantity",
+        "status",
     ];
 
     public function categories()
@@ -29,9 +33,9 @@ class Product extends Model
         return $this->hasMany(Depot::class);
     }
 
-    public function variantDetails()
+    public function variantGroups()
     {
-        return $this->belongsToMany(VariantDetail::class);
+        return $this->hasMany(VariantGroup::class);
     }
 
     public function galleries()

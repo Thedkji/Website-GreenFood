@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->integer('parent_user_id')->nullable()->default(null);
             $table->string('content');
             $table->string('img')->nullable();
             $table->timestamps();
