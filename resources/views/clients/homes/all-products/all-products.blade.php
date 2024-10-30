@@ -52,26 +52,53 @@
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
                                                 <h4>{{ $product->name }}</h4>
                                                 <p>{{ $product->description_short }}</p>
+
                                                 @if (isset($product->variantGroups) && $product->variantGroups->isNotEmpty())
                                                 <div class="variant-group mb-3">
                                                     <p>
-                                                        Giá: {{ app('formatPrice')($product->variantGroups[0]->price_regular) }}
+                                                        Giá: <span id="current-price">{{ app('formatPrice')($product->variantGroups[0]->price_regular) }}</span>
                                                     </p>
                                                 </div>
+
+                                                @php
+                                                // Nhóm các biến thể theo SKU
+                                                $variantGroups = $product->variantGroups->groupBy('sku');
+                                                @endphp
+
+                                                @foreach ($variantGroups as $sku => $variantGroup)
+                                                @php
+                                                // Lấy giá của nhóm biến thể
+                                                $price_regular = $variantGroup->first()->price_regular;
+                                                @endphp
+
+                                                <div class="variant-group-item mb-2">
+                                                    <button type="button" class="btn btn-outline-primary variant-button"
+                                                        onclick="selectVariant('{{ $sku }}', '{{ app('formatPrice')($price_regular) }}')">
+                                                        @foreach ($variantGroup as $group)
+                                                        @foreach ($group->variants as $variant)
+                                                        {{ $variant->name }}
+                                                        @endforeach
+                                                        @endforeach
+                                                    </button>
+                                                    <p style="display:none">Giá: <span class="variant-price">{{ app('formatPrice')($price_regular) }}</span></p>
+                                                </div>
+                                                @endforeach
+
                                                 <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_regular }}">
+                                                <input type="hidden" name="selected_sku" id="selected_sku" value="">
                                                 @else
                                                 <p>
                                                     Giá: {{ app('formatPrice')($product->price_regular) }}
                                                 </p>
                                                 <input type="hidden" name="price" value="{{ $product->price_regular }}">
                                                 @endif
+
                                                 <div class="d-flex justify-content-between flex-lg-wrap">
                                                     <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
                                                         <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                                     </button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </form>
                                 </div>
@@ -89,3 +116,9 @@
 <div class="d-flex justify-content-center" style="display: flex; list-style: none; flex-direction: row;">
     {{ $products->links('pagination::bootstrap-4') }}
 </div>
+<script>
+    function selectVariant(sku, price) {
+        document.getElementById('current-price').innerText = price;
+        document.getElementById('selected_sku').value = sku;
+    }
+</script>

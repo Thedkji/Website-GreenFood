@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Models\Product;
 use App\Models\VariantGroup;
 
 class ProductController extends Controller

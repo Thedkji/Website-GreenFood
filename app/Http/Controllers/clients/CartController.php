@@ -31,6 +31,15 @@ class CartController extends Controller
         ]);
         return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công');
     }
+    private function saveCartData($user_id)
+    {
+        $cartData = CartSession::getContent()->toArray();
+        Cart::updateOrCreate([
+            'user_id' => $user_id,
+            'product_id' => $cartData['id'],
+            'quantity' => $cartData['quantity']
+        ]);
+    }
     public function deleteCart()
     {
         CartSession::clear();
@@ -56,7 +65,6 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công');
     }
-
 
     public function removeCart($id)
     {
