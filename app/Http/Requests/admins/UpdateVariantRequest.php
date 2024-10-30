@@ -22,7 +22,7 @@ class UpdateVariantRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route("variant")->id;
-
+        
 
         return [
             'name' => 'unique:variants,name,' . $id,

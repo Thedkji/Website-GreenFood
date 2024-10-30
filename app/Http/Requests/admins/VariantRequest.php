@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\admins;
 
+use App\Models\Variant;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VariantRequest extends FormRequest
 {
@@ -21,10 +23,20 @@ class VariantRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'unique:variants'],
+        $rules = [
+            'name' => ['required'],
         ];
+
+        // Kiểm tra tính duy nhất của name chỉ khi parent_id là null
+        $rules['name'][] = Rule::unique('variants')
+            ->where(function ($query) {
+                return $query->whereNull('parent_id');
+            })
+            ->ignore($this->route('variant')); // Bỏ qua giá trị hiện tại nếu đang cập nhật
+
+        return $rules;
     }
+
     public function messages(): array
     {
         return [

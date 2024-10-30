@@ -15,6 +15,7 @@ class VariantController extends Controller
      */
     public function index()
     {
+
         $variants = Variant::where('parent_id', '=', Null)->with('children')->paginate(8);
         // dd($variants);
         return view('admins.variants.list-variant', compact('variants'));
@@ -77,14 +78,16 @@ class VariantController extends Controller
         // Cập nhật tên của biến thể gốc
         $variant->update(['name' => $request->name]);
 
-        // Lặp qua mỗi `parent_id` và `name` tương ứng để cập nhật các biến thể con
-        foreach ($request->parent_id as $id => $name) {
-            // Tìm biến thể con theo ID
-            $childVariant = Variant::find($id);
+        if ($request->parent_id) {
+            // Lặp qua mỗi `parent_id` và `name` tương ứng để cập nhật các biến thể con
+            foreach ($request->parent_id as $id => $name) {
+                // Tìm biến thể con theo ID
+                $childVariant = Variant::find($id);
 
-            // Nếu tìm thấy biến thể con, cập nhật `name` cho biến thể đó
-            if ($childVariant) {
-                $childVariant->update(['name' => $name]);
+                // Nếu tìm thấy biến thể con, cập nhật `name` cho biến thể đó
+                if ($childVariant) {
+                    $childVariant->update(['name' => $name]);
+                }
             }
         }
 
@@ -95,8 +98,21 @@ class VariantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Variant $variant)
     {
-        //
+        // Lấy tất cả các biến thể con có parent_id bằng với id của biến thể hiện tại
+        $children = Variant::where('parent_id', $variant->id)->get();
+
+        // Nếu có các biến thể con, xóa chúng trước
+        if (!$children->isEmpty()) {
+            foreach ($children as $child) {
+                $child->delete();
+            }
+        }
+
+        // Xóa biến thể hiện tại
+        $variant->delete();
+
+        return back()->with('success', 'Xóa biến thể thành công');
     }
 }
