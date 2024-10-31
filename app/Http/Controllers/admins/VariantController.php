@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admins;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\UpdateVariantRequest;
 use App\Http\Requests\admins\VariantRequest;
+use App\Models\Category;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -13,10 +14,20 @@ class VariantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
+        // Lấy từ khóa tìm kiếm từ request
+        $search = $request->input('search');
         $variants = Variant::where('parent_id', '=', Null)->with('children')->paginate(8);
+
+        // Kiểm tra nếu có từ khóa tìm kiếm thì thực hiện truy vấn tìm kiếm
+        if ($search) {
+            $variants = Variant::where('parent_id', '=', Null)
+                ->with('children')
+                ->where('name', 'like', '%' . $search . '%')
+                ->orWhere('id', 'like', '%' . $search . '%')
+                ->paginate(8);
+        }
         // dd($variants);
         return view('admins.variants.list-variant', compact('variants'));
     }
@@ -79,14 +90,26 @@ class VariantController extends Controller
         $variant->update(['name' => $request->name]);
 
         if ($request->parent_id) {
-            // Lặp qua mỗi `parent_id` và `name` tương ứng để cập nhật các biến thể con
             foreach ($request->parent_id as $id => $name) {
-                // Tìm biến thể con theo ID
-                $childVariant = Variant::find($id);
+                // Kiểm tra nếu ID là 'new' (được tạo từ input mới)
+                if ($id === 'new') {
+                    if ($name == '') {
+                        return redirect()->route('admin.variants.edit', $variant->id)->with('error', 'Bạn cần nhập giá trị biến thể');
+                    } else {
+                        // Nếu ID là 'new', nghĩa là người dùng muốn thêm mới
+                        Variant::create([
+                            'name' => $name,
+                            'parent_id' => $variant->id, // Đặt parent_id là ID của biến thể chính
+                        ]);
+                    }
+                } else {
+                    // Nếu ID không rỗng, tìm biến thể con theo ID
+                    $childVariant = Variant::find($id);
 
-                // Nếu tìm thấy biến thể con, cập nhật `name` cho biến thể đó
-                if ($childVariant) {
-                    $childVariant->update(['name' => $name]);
+                    // Nếu tìm thấy biến thể con, cập nhật `name` cho biến thể đó
+                    if ($childVariant) {
+                        $childVariant->update(['name' => $name]);
+                    }
                 }
             }
         }
@@ -95,23 +118,34 @@ class VariantController extends Controller
     }
 
 
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Variant $variant)
+    public function destroy(Variant $variant, Request $request)
     {
-        // Lấy tất cả các biến thể con có parent_id bằng với id của biến thể hiện tại
-        $children = Variant::where('parent_id', $variant->id)->get();
+        if ($request->has('delete-children') && $request->query('delete-children') == 'true') {
+            $variant->delete();
+        } else {
+            // Lấy tất cả các biến thể con có parent_id bằng với id của biến thể hiện tại
+            $children = Variant::where('parent_id', $variant->id)->get();
 
-        // Nếu có các biến thể con, xóa chúng trước
-        if (!$children->isEmpty()) {
-            foreach ($children as $child) {
-                $child->delete();
+            // Nếu có các biến thể con, xóa chúng trước
+            if (!$children->isEmpty()) {
+                foreach ($children as $child) {
+                    $child->delete();
+                }
             }
+
+            // Xóa biến thể hiện tại
+            $variant->delete();
         }
 
-        // Xóa biến thể hiện tại
-        $variant->delete();
+
+
 
         return back()->with('success', 'Xóa biến thể thành công');
     }
