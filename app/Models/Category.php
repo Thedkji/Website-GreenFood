@@ -22,7 +22,7 @@ class Category extends Model
 
     public function coupons()
     {
-        return $this->belongsToMany(Coupon::class,'coupon_category');
+        return $this->belongsToMany(Coupon::class, 'coupon_category');
     }
 
     // Lấy ra danh mục cha
@@ -30,6 +30,11 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    // Lấy ra tên của parent_id
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
 }
-
-
