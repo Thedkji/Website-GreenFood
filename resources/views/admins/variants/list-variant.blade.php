@@ -24,11 +24,13 @@
     <div class="row g-4 mb-3">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
-                </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                <form action="" method="get" id="search-form">
+                    <div class="search-box">
+                        <input name="search" type="text" class="form-control search"
+                            value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -38,6 +40,8 @@
                 <th scope="col">Id</th>
                 <th scope="col">Tên biến thể</th>
                 <th scope="col">Giá trị</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col">Ngày cập nhật</th>
                 <th scope="col">Thao tác</th>
             </tr>
         </thead>
@@ -55,52 +59,17 @@
                     </td>
 
                     <td>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#variantModal-{{ $variant->id }}">Xem biến
-                            thể</a>
-
-                        <!-- Modal biến thể sản phẩm -->
-                        <div class="modal fade" id="variantModal-{{ $variant->id }}" tabindex="-1"
-                            aria-labelledby="variantModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="variantModalLabel">Giá trị của biến thể
-                                            {{ $variant->name }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body" style="display: flex; overflow-x: auto;">
-                                        <table class="table table-striped text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tên Biến Thể</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if ($variant->children->isNotEmpty())
-                                                    @foreach ($variant->children as $child)
-                                                        <tr>
-                                                            <td>
-                                                                <a href="">{{ $child->name }}</a>
-                                                            </td>
-
-                                                        </tr>
-                                                    @endforeach
-                                                @else
-                                                    <tr>
-                                                        <td colspan="2" class="text-danger">Không có giá trị nào</td>
-                                                    </tr>
-                                                @endif
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        @if ($variant->children->isNotEmpty())
+                            @foreach ($variant->children as $child)
+                                <a href="">{{ $child->name }}</a> <br>
+                            @endforeach
+                        @else
+                            <span colspan="2" class="text-danger">Không có giá trị nào</span>
+                        @endif
                     </td>
+
+                    <td>{{ $variant->created_at }}</td>
+                    <td>{{ $variant->updated_at }}</td>
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
@@ -109,11 +78,16 @@
                                 <i class="ri-edit-2-line"></i>
                             </a>
 
-                            <button type="button" style="background-color: transparent; border: none; color: inherit;"
-                                onclick="return confirm('Việc này có thể xóa biến thể cùng với toàn bộ giá trị của biến thể , vẫn chấp nhận xóa ?');"
-                                class="link-danger fs-15">
-                                <i class="ri-delete-bin-line"></i>
+                            <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
 
+                                <button type="" style="background-color: transparent; border: none; color: inherit;"
+                                    onclick="return confirm('Việc này có thể xóa biến thể cùng với toàn bộ giá trị của biến thể , vẫn chấp nhận xóa ?');"
+                                    class="link-danger fs-15">
+                                    <i class="ri-delete-bin-line"></i>
+
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -121,7 +95,15 @@
 
         </tbody>
     </table>
-    <div class="mt-3">
 
-    </div>
+    <script>
+        let debounceTimeout;
+
+        function debounceSearch() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                document.getElementById("search-form").submit();
+            }, 600);
+        }
+    </script>
 @endsection
