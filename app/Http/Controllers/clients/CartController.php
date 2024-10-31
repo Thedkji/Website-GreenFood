@@ -61,31 +61,26 @@ class CartController extends Controller
         return redirect()->route('client.home');
     }
 
-    public function updateCart($id, Request $request)
+    public function updateCart(Request $request)
     {
-        $quantity = (int) $request->input('quantity');
-        if ($quantity <= 0) {
-            return redirect()->back()->with('error', 'Số lượng phải lớn hơn 0');
-        }
-
-        CartSession::update($id, [
-            'quantity' => [
-                'relative' => false,
-                'value' => $quantity
-            ],
-        ]);
-
-        if (auth()->check()) {
-            $userId = auth()->id();
-            $sku = CartSession::get($id)->attributes->sku; // Lấy SKU từ giỏ hàng
-            $cartItem = Cart::where('user_id', $userId)
-                ->where('product_id', $id)
-                ->where('attributes->sku', $sku) // Kiểm tra SKU
-                ->first();
-
-            if ($cartItem) {
-                $cartItem->quantity = $quantity;
-                $cartItem->save();
+        $quantities = $request->input('quantities', []);
+        foreach ($quantities as $id => $quantity) {
+            $quantity = max(1, (int)$quantity);
+            CartSession::update($id, [
+                'quantity' => [
+                    'relative' => false,
+                    'value' => $quantity
+                ],
+            ]);
+            if (auth()->check()) {
+                $userId = auth()->id();
+                $cartItem = Cart::where('user_id', $userId)
+                    ->where('product_id', $id)
+                    ->first();
+                if ($cartItem) {
+                    $cartItem->quantity = $quantity;
+                    $cartItem->save();
+                }
             }
         }
 
