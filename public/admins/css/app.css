@@ -14,8 +14,41 @@ File: Main Css File
     /* Thêm dấu "..." */
     white-space: nowrap;
     /* Giữ nội dung trên 1 dòng, không xuống dòng */
-    max-width: 150px;
+    max-width: 130px;
     /* Điều chỉnh độ rộng tối đa */
+}
+/* Tùy chỉnh Select2 cho lựa chọn nhiều */
+.select2-container--default .select2-selection--multiple {
+    background-color: #f8f9fa; /* Màu nền cho khung chọn (màu sáng) */
+    border: 1px solid #ced4da; /* Viền khung chọn (màu xám nhạt) */
+    border-radius: 0.25rem; /* Bo tròn góc khung chọn */
+    padding: 0.5rem; /* Padding xung quanh để tạo khoảng cách giữa viền và nội dung */
+    cursor: pointer; /* Hiển thị con trỏ chuột dạng bàn tay khi hover vào khung chọn */
+}
+
+/* Tùy chỉnh màu sắc cho mỗi lựa chọn đã chọn */
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
+    background-color: #007bff !important; /* Màu nền cho mỗi lựa chọn đã chọn (màu xanh dương) */
+    color: white; /* Màu chữ cho các lựa chọn đã chọn (màu trắng) */
+    border-radius: 0.2rem; /* Bo tròn góc cho từng lựa chọn */
+    padding: 5px !important; /* Padding cho từng lựa chọn để tạo khoảng cách giữa viền và nội dung */
+    /* margin: 2px; Khoảng cách giữa các lựa chọn đã chọn */
+    /* font-size: 0.875rem; Kích thước chữ cho các lựa chọn đã chọn */
+    white-space: normal !important; /* Cho phép xuống dòng */
+    overflow: hidden !important; /* Ẩn nội dung thừa */
+    text-overflow: ellipsis !important; /* Thêm dấu "..." nếu nội dung dài */
+}
+
+/* Tùy chỉnh màu sắc cho nút xóa mỗi lựa chọn đã chọn */
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice__remove {
+    color: #e4dfdf !important; /* Màu chữ cho nút xóa (màu trắng) */
+    /* margin-right: 5px; Khoảng cách bên phải của nút xóa */
+}
+.select2-results__option {
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");

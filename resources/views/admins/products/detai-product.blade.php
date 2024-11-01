@@ -66,13 +66,18 @@
                                     @if ($product->galleries->isEmpty())
                                         <p class="text-danger">Sản phẩm không có thư viện ảnh nào</p>
                                     @else
-                                        @foreach ($product->galleries as $image)
-                                            @if ($image->path != null)
-                                                <img src="{{ env('VIEW_IMG') }}/{{ $image->path }}"
-                                                    alt="{{ $product->name }}"
-                                                    style="width: 200px; height: 200px; object-fit: cover; margin-right: 10px;">
-                                            @endif
-                                        @endforeach
+                                        <div class="gallery-container" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                            @foreach ($product->galleries as $image)
+                                                @if ($image->path != null)
+                                                    <div class="gallery-item" style="flex: 0 0 calc(33.33% - 10px);">
+                                                        <!-- Để mỗi hàng có 3 ảnh -->
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $image->path }}"
+                                                            alt="{{ $product->name }}"
+                                                            style="width: 100%; height: 200px; object-fit: cover;">
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
                                     @endif
                                 </div>
 

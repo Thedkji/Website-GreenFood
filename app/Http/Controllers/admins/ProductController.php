@@ -9,10 +9,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantGroup;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+
 
 class ProductController extends Controller
 {
@@ -46,10 +48,60 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('admins.products.add-product');
+        $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
+        $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
+
+
+        return view('admins.products.add-product', compact('categories', 'variants'));
     }
 
-    public function store(ProductRequest $request) {}
+    public function store(ProductRequest $request)
+    {
+        DB::transaction(function () use ($request) {
+            $data = $request->all();
+            $slug = Str::slug($request->name);
+
+            // Tạo SKU
+            $currentYear = date('y'); // Lấy năm hiện tại (2 ký tự)
+            $randomNumber = mt_rand(1000, 9999); // Tạo chuỗi ngẫu nhiên 6 số
+            $sku = "SP{$currentYear}{$randomNumber}"; // Kết hợp lại thành SKU
+
+            $data['slug'] = $slug;
+            $data['sku'] = $sku;
+
+            if ($request->hasFile('img')) {
+                $img = $request->file('img');
+                $imgName = "products/" . time() . '_' . $img->getClientOriginalName();
+                $img->storeAs('imgs', $imgName);
+                $data['img'] = $imgName;
+            }
+
+            $product = Product::create($data);
+
+            if ($request->hasFile('galleries')) {
+                $galleries = $request->file('galleries');
+
+                foreach ($galleries as $gallery) {
+                    // Tạo tên mới cho ảnh
+                    $galleryName = "products/" . time() . '_' . $gallery->getClientOriginalName();
+                    // Di chuyển ảnh vào thư mục
+                    $gallery->storeAs('imgs', $galleryName);
+
+                    // Tạo dữ liệu để lưu vào bảng galleries
+                    $data = [
+                        'product_id' => $product->id,
+                        'path' => $galleryName,
+                    ];
+
+                    // Lưu từng ảnh vào bảng galleries
+                    $product->galleries()->create($data);
+                }
+            }
+
+            $product->categories()->attach($request->categories);
+        });
+        return back()->with('success', 'Thêm sản phẩm thành công');
+    }
 
     public function show(Product $product)
     {

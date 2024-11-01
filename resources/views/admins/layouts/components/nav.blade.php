@@ -793,7 +793,8 @@
 
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.products.index') }}" class="nav-link" data-key="t-starter">
+                                <a href="{{ route('admin.products.index', ['statusProduct' => 'allPro']) }}"
+                                    class="nav-link" data-key="t-starter">
                                     Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
@@ -833,7 +834,7 @@
                         <i class=" ri-price-tag-3-line"></i> <span data-key="t-landing">Mã giảm giá</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebar">
-                
+
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="{{ route('admin.coupons.showCoupon') }}" class="nav-link"
@@ -841,13 +842,13 @@
                                     Danh sách mã giảm giá</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.coupons.addCoupon') }}" class="nav-link"
-                                    data-key="t-team"> Thêm mới mã giảm giá</a>
+                                <a href="{{ route('admin.coupons.addCoupon') }}" class="nav-link" data-key="t-team">
+                                    Thêm mới mã giảm giá</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarOrders">
@@ -1003,7 +1004,8 @@
                                         <a href="ui-general.html" class="nav-link" data-key="t-general">General</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="ui-ribbons.html" class="nav-link" data-key="t-ribbons">Ribbons</a>
+                                        <a href="ui-ribbons.html" class="nav-link"
+                                            data-key="t-ribbons">Ribbons</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="ui-utilities.html" class="nav-link"
@@ -1016,8 +1018,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarAdvanceUI">
+                    <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarAdvanceUI">
                         <i class="ri-stack-line"></i> <span data-key="t-advance-ui">Advance UI</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarAdvanceUI">
@@ -1044,11 +1046,13 @@
                                 <a href="advance-ui-tour.html" class="nav-link" data-key="t-tour">Tour</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-swiper.html" class="nav-link" data-key="t-swiper-slider">Swiper
+                                <a href="advance-ui-swiper.html" class="nav-link"
+                                    data-key="t-swiper-slider">Swiper
                                     Slider</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-ratings.html" class="nav-link" data-key="t-ratings">Ratings</a>
+                                <a href="advance-ui-ratings.html" class="nav-link"
+                                    data-key="t-ratings">Ratings</a>
                             </li>
                             <li class="nav-item">
                                 <a href="advance-ui-highlight.html" class="nav-link"
