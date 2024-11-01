@@ -34,6 +34,13 @@
             </div>
         </div>
     </div>
+
+    <div class="my-3">
+        <button class="btn btn-success">
+            <a href="{{ route('admin.variants.create') }}" class="text-white">Thêm</a>
+        </button>
+    </div>
+
     <table class="table table-striped align-middle mb-0">
         <thead>
             <tr>

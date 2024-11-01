@@ -38,13 +38,20 @@
         </div>
         <div class="col-sm">
             <select id="statusProduct" name="statusProduct" class="form-select w-50" onchange="this.form.submit()">
-                <option value="allPro" {{ request('statusProduct') == 'allPro' ? 'selected' : '' }}>Tất cả sản phẩm</option>
+                <option value="allPro" {{ request('statusProduct') == 'allPro' ? 'selected' : '' }}>Tất cả sản phẩm
+                </option>
                 <option value="0" {{ request('statusProduct') == 0 ? 'selected' : '' }}>Sản phẩm không có biến thể
                 </option>
                 <option value="1" {{ request('statusProduct') == 1 ? 'selected' : '' }}>Sản phẩm có biến thể</option>
             </select>
         </div>
     </form>
+
+    <div class="my-3">
+        <button class="btn btn-success">
+            <a href="{{ route('admin.products.create') }}" class="text-white">Thêm</a>
+        </button>
+    </div>
 
     <table class="table table-striped align-middle mb-0 text-center fs-6">
         <thead>
@@ -77,24 +84,27 @@
                     <td>{{ $product->sku }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->slug }}</td>
+                    
                     <td>
                         <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
                             style="width: 100px; height: 100px; object-fit: cover;">
                     </td>
+
                     <td>{{ app('formatPrice')($product->price_regular) }} VNĐ</td>
                     <td class="text-success">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
                     <td>{{ $product->quantity }}</td>
+
                     <td>
 
                         <a href="{{ route('admin.products.show', [
                             'product' => $product->id,
-                            'showVariantproduct' => $product->status !== 0 ? 'true' : null
+                            'showVariantproduct' => $product->status !== 0 ? 'true' : null,
                         ]) }}"
-                        name="variantGroups">
-                        <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
-                            {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
-                        </span>
-                    </a>
+                            name="variantGroups">
+                            <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
+                                {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
+                            </span>
+                        </a>
 
 
 
