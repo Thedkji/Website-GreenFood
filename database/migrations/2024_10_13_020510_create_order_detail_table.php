@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('product_img');
             $table->integer('product_price');
             $table->integer('product_quantity');
-            $table->string('coupon_name');
-            $table->integer('coupon_quantity');
-            $table->integer('coupon_price')
+            $table->string('coupon_name')->nullable();
+            $table->integer('coupon_quantity')->nullable();
+            $table->integer('coupon_price')->nullable()
                 ->comment('Số tiền của mã giảm giá');
             $table->timestamps();
             $table->softDeletes();
