@@ -83,7 +83,7 @@
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" style="background-color: transparent; border: none; color: inherit;"
+                                <button type="submit" style="background-color: transparent; border: none; color: inherit;"
                                     onclick="return confirm('Việc này có thể xóa biến thể cùng với toàn bộ giá trị của biến thể, vẫn chấp nhận xóa?');"
                                     class="link-danger fs-15">
                                     <i class="ri-delete-bin-line"></i>
