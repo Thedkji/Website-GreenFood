@@ -37,3 +37,7 @@
 <script src="{{ env('VIEW_ADMIN') }}/js/pages/form-validation.init.js"></script>
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
 {{-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> --}}
+
+
+{{-- Bổ sung ajax --}}
+<script src="{{ env('VIEW_ADMIN') }}/ajax/jquery-3.7.1.min.js"></script>

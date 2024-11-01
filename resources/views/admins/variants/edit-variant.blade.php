@@ -30,8 +30,8 @@
             <!-- Phần đổi tên biến thể -->
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control border-success" id="name" name="name" placeholder="Tên biến thể"
-                        value="{{ old('name', $variant->name) }}">
+                    <input type="text" class="form-control border-success" id="name" name="name"
+                        placeholder="Tên biến thể" value="{{ old('name', $variant->name) }}">
                     <label for="name">Tên biến thể</label>
                     @error('name')
                         <div class="text-danger my-3">{{ $message }}</div>
@@ -44,10 +44,10 @@
                 <label for="value" class="form-label">Giá trị biến thể</label>
 
                 <div class="variant-value-container">
-                    @foreach ($childrenName as $key => $child)
+                    @foreach ($childrenName as $child)
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" name="parent_id[{{ $child->id }}]"
-                                value="{{ old('parent_id.' . $child->id, $child->name) }}">
+                                value="{{ old('parent_id.' . $child->id, $child->name) }}" placeholder="Giá trị biến thể">
                             <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $child->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -72,6 +72,7 @@
     </form>
 
     <script>
+        // Tạo form khi nhấn nút xóa bằng js
         function confirmDelete(childId) {
             if (confirm("Xóa giá trị này ?")) {
                 // Tạo form mới
@@ -111,7 +112,9 @@
             var input = document.createElement('input');
             input.type = 'text';
             input.className = 'form-control';
-            input.name = 'parent_id[new]'; // Đặt tên cho input mới
+            // Sử dụng timestamp hoặc số tăng dần để tạo tên duy nhất cho input mới
+            var index = Date.now(); // Sử dụng timestamp làm tên duy nhất
+            input.name = 'parent_id[new_' + index + ']'; // Sử dụng giá trị 'new_' để đánh dấu là biến thể mới
             input.placeholder = 'Giá trị biến thể';
 
             // Tạo icon xóa
