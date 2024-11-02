@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\ProductRequest;
 use App\Http\Requests\admins\ProductUpdateRequest;
 use App\Models\Category;
+use App\Models\Gallery;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantGroup;
@@ -58,48 +59,83 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         DB::transaction(function () use ($request) {
+            // Xử lý sản phẩm không có biến thể
             $data = $request->all();
-            $slug = Str::slug($request->name);
-
-            // Tạo SKU
-            $currentYear = date('y'); // Lấy năm hiện tại (2 ký tự)
-            $randomNumber = mt_rand(1000, 9999); // Tạo chuỗi ngẫu nhiên 6 số
-            $sku = "SP{$currentYear}{$randomNumber}"; // Kết hợp lại thành SKU
-
-            $data['slug'] = $slug;
-            $data['sku'] = $sku;
-
+            $data['slug'] = Str::slug($data['name']);
+            $data['sku'] = "SP" . mt_rand('100000', '999999');
+            // dd($request->variants);
             if ($request->hasFile('img')) {
                 $img = $request->file('img');
-                $imgName = "products/" . time() . '_' . $img->getClientOriginalName();
-                $img->storeAs('imgs', $imgName);
-                $data['img'] = $imgName;
+                $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension(); // Thay đổi này để sử dụng getClientOriginalExtension()
+                $data['img'] = $img->storeAs('products', $filename);
             }
 
-            $product = Product::create($data);
+            if ($request->product_type == "has_variant") {
+                $dataPro = [
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name),
+                    'status' => 1,
+                ];
+                if ($request->hasFile('img')) {
+                    $dataPro['img'] = $data['img'];
+                }
+                $product = Product::create($dataPro);
+
+                if ($request->variants && is_array($request->variants)) {
+                    foreach ($request->variants_child as $key => $variant) {
+                        // Kiểm tra nếu biến thể con thiếu dữ liệu cần thiết
+                        if (empty($variant['id']) || empty($variant['price_regular']) || empty($variant['price_sale'])) {
+                            continue; // Bỏ qua biến thể con này
+                        }
+
+                        // Khởi tạo lại $dataVariantGroups trong mỗi lần lặp
+                        $dataVariantGroups = [
+                            'product_id' => $product->id,
+                            'sku' => "SPBT" . mt_rand('100000', '999999'),
+                            'price_regular' => $variant['price_regular'],
+                            'price_sale' => $variant['price_sale'],
+                            'quantity' => $variant['quantity'] ?? 0,
+                        ];
+
+                        // Xử lý ảnh cho biến thể nếu có
+                        if ($request->hasFile("variants_child.{$key}.img")) {
+                            $img = $request->file("variants_child.{$key}.img");
+                            $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                            $dataVariantGroups['img'] = $img->storeAs('products', $filename);
+                        }
+
+                        // Tạo VariantGroup
+                        $variantGroup = VariantGroup::create($dataVariantGroups);
+
+                        // Gắn kết với biến thể
+                        $variantGroup->variants()->attach($variant['id']);
+                    }
+                }
+            } else {
+                $product = Product::create($data);
+            }
 
             if ($request->hasFile('galleries')) {
-                $galleries = $request->file('galleries');
+                foreach ($request->file('galleries') as $gallery) { // Đảm bảo sử dụng file 'galleries'
+                    if ($gallery) { // Kiểm tra xem $gallery có khác null không
+                        $filename = time() . '_' . uniqid() . '.' . $gallery->getClientOriginalExtension(); // Thay đổi này để sử dụng getClientOriginalExtension()
+                        $galleryPath = $gallery->storeAs('products', $filename);
 
-                foreach ($galleries as $gallery) {
-                    // Tạo tên mới cho ảnh
-                    $galleryName = "products/" . time() . '_' . $gallery->getClientOriginalName();
-                    // Di chuyển ảnh vào thư mục
-                    $gallery->storeAs('imgs', $galleryName);
-
-                    // Tạo dữ liệu để lưu vào bảng galleries
-                    $data = [
-                        'product_id' => $product->id,
-                        'path' => $galleryName,
-                    ];
-
-                    // Lưu từng ảnh vào bảng galleries
-                    $product->galleries()->create($data);
+                        $dataGallery = [
+                            'product_id' => $product->id,
+                            'path' => $galleryPath, // Sử dụng đường dẫn của ảnh đã lưu
+                        ];
+                        // Lưu vào bảng galleries
+                        $product->galleries()->create($dataGallery);
+                    }
                 }
             }
 
-            $product->categories()->attach($request->categories);
+            if ($request->categories) {
+                $product->categories()->attach($request->categories);
+            }
         });
+
         return back()->with('success', 'Thêm sản phẩm thành công');
     }
 
