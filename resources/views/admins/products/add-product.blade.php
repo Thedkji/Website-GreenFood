@@ -137,7 +137,7 @@
                 <!-- Biến thể -->
                 <div class="mb-3 selectVariant d-none">
                     <label for="variant">Biến thể</label>
-                    <select name="variants[]" id="variant" multiple="multiple">
+                    <select name="variants[][id]" id="variant" multiple="multiple">
                         @foreach ($variants as $variant)
                             <option value="{{ $variant->id }}" data-children="{{ json_encode($variant->children) }}">
                                 {{ $variant->name }}</option>
@@ -148,11 +148,25 @@
                     @enderror
                 </div>
 
-                <!-- Biến thể con (ẩn mặc định) -->
+                <!-- Giá trị biến thể (ẩn mặc định) -->
                 <div id="childVariantContainer" class="mb-3" style="display: none;">
-                    <label for="childVariants">Biến thể con</label>
-                    <select name="variants[]" id="childVariant" multiple="multiple">
+                    <label for="childVariants">Giá trị biến thể</label>
+                    <select name="variants_child[][id]" id="childVariant" multiple="multiple">
                     </select>
+                </div>
+
+                <!-- Bảng hiển thị giá trị của giá trị biến thể -->
+                <div id="selectedVariantValuesContainer" class="mb-3" style="display: none;">
+                    <label for="variantValuesTable">Giá trị đã chọn</label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Giá trị biến thể</th>
+                                <th>Thiết lập</th>
+                            </tr>
+                        </thead>
+                        <tbody id="variantValuesTableBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -164,46 +178,49 @@
                 placeholder: "Chọn",
                 allowClear: true
             });
+            $('#variant').select2({
+                placeholder: "Chọn",
+                allowClear: true
+            });
 
             $('#product_type').on('change', function() {
                 if ($(this).val() === 'has_variant') {
                     $('.selectVariant').removeClass('d-none'); // Hiện ô chọn biến thể
+                    $('#variant').select2({
+                        placeholder: "Chọn",
+                        allowClear: true
+                    });
                 } else {
                     $('.selectVariant').addClass('d-none'); // Ẩn ô chọn biến thể
                     $('#variant').val(null).trigger('change'); // Reset lựa chọn biến thể
-                    $('#childVariantContainer').hide(); // Ẩn biến thể con
+                    $('#childVariantContainer').hide(); // Ẩn giá trị biến thể
                 }
             });
 
             $('#category').on('change', function() {
                 updateChildSelect($(this), $('#childCategory'));
                 $('#childCategoryContainer').toggle($(this).val().length >
-                0); // Hiện danh mục con nếu có lựa chọn
+                    0); // Hiện danh mục con nếu có lựa chọn
             });
 
             $('#variant').on('change', function() {
                 updateChildSelect($(this), $('#childVariant'));
                 $('#childVariantContainer').toggle($(this).val().length >
-                0); // Hiện biến thể con nếu có lựa chọn
+                    0); // Hiện giá trị biến thể nếu có lựa chọn
             });
 
-            // Xử lý sự kiện khi xóa lựa chọn
             $('#category, #variant').on('select2:unselect', function(e) {
                 const childSelect = $(this).is('#category') ? $('#childCategory') : $('#childVariant');
-
-                // Thiết lập lại giá trị của childSelect và xóa tất cả tùy chọn
                 childSelect.val(null).trigger('change');
                 if ($(this).is('#category')) {
                     $('#childCategoryContainer').hide(); // Ẩn danh mục con
                 } else {
-                    $('#childVariantContainer').hide(); // Ẩn biến thể con
+                    $('#childVariantContainer').hide(); // Ẩn giá trị biến thể
                 }
             });
 
             function updateChildSelect(parentSelect, childSelect) {
                 const selectedOptions = parentSelect.val();
-
-                // Xóa tất cả các tùy chọn trước khi thêm mới
                 childSelect.empty(); // Xóa tất cả tùy chọn trong select con
 
                 if (selectedOptions) {
@@ -214,7 +231,7 @@
                         if (children && children.length > 0) {
                             children.forEach(child => {
                                 const childOption = new Option(child.name, child.id, false, false);
-                                childSelect.append(childOption); // Thêm biến thể con vào select
+                                childSelect.append(childOption); // Thêm giá trị biến thể vào select
                             });
                         }
                     });
@@ -222,32 +239,163 @@
                 childSelect.trigger('change'); // Cập nhật select con
             }
 
+            // Hàm preview ảnh
             function previewImage(event, previewElementId) {
+                const input = event.target;
                 const reader = new FileReader();
                 reader.onload = function() {
                     const output = document.getElementById(previewElementId);
                     output.src = reader.result;
                     output.style.display = 'block';
                 }
-                reader.readAsDataURL(event.target.files[0]);
+                if (input.files && input.files[0]) {
+                    reader.readAsDataURL(input.files[0]);
+                }
             }
 
-            function previewMultipleImages(event) {
-                const container = document.getElementById('imagePreviewSlideContainer');
-                container.innerHTML = ''; // Xóa tất cả preview cũ
+            $('#childVariant').on('change', function() {
+                $('#variantValuesTableBody').empty();
 
-                Array.from(event.target.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.maxWidth = '100px'; // Đặt kích thước tối đa cho ảnh
-                        img.style.margin = '5px';
-                        container.appendChild(img); // Thêm ảnh vào container
-                    }
-                    reader.readAsDataURL(file);
+                if ($('#childVariant').val().length > 0) {
+                    $('#selectedVariantValuesContainer').show();
+                } else {
+                    $('#selectedVariantValuesContainer').hide();
+                }
+
+                $('#childVariant option:selected').each(function(index) {
+                    const valueId = $(this).val();
+                    const valueName = $(this).text();
+
+                    // Tạo hàng chính hiển thị tên và nút "Thiết lập"
+                    const row = `
+                <tr>
+                    <td class="text-success"><b>${valueName}</b></td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="toggleVariantSettings(${index})">Thiết lập</button>
+                    </td>
+                </tr>
+                <tr id="variantSettingsRow-${index}" style="display: none;">
+                    <td colspan="2">
+                        <div id="variantSettings-${index}" class="variant-settings-dropdown">
+                            <div class="mb-3">
+                                <label for="price-${index}" class="form-label">Giá gốc</label>
+                                <input type="number" id="price-${index}" name="variants_child[${index}][price_regular]" class="form-control" placeholder="Nhập giá gốc" value="">
+                            </div>
+                            <div class="my-3">
+                                <label for="salePrice-${index}" class="form-label">Giá bán</label>
+                                <input type="number" id="salePrice-${index}" name="variants_child[${index}][price_sale]" class="form-control" placeholder="Nhập giá bán" value="">
+                            </div>
+                            <div class="my-3">
+                                <label for="quantity-${index}" class="form-label">Số lượng</label>
+                                <input type="number" id="quantity-${index}" name="variants_child[${index}][quantity]" class="form-control" placeholder="Nhập số lượng" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="image-${index}" class="form-label">Ảnh</label>
+                                <input type="file" id="image-${index}" name="variants_child[${index}][img]" class="form-control" onchange="previewImage(event, 'preview-${index}')">
+                                <img id="preview-${index}" src="#" alt="Preview ảnh" class="mt-2" style="max-width: 150px; display: none;">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                `;
+
+                    $('#variantValuesTableBody').append(row);
                 });
-            }
+
+                // Hàm toggle hiển thị form thiết lập
+                window.toggleVariantSettings = function(index) {
+                    const settingsRow = $(`#variantSettingsRow-${index}`);
+                    settingsRow.toggle();
+                }
+            });
         });
     </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo đối tượng để lưu trữ dữ liệu biến thể
+            let variantData = {};
+
+            // Event delegation để lắng nghe sự kiện trên các input trong bảng biến thể
+            $('#variantValuesTableBody').on('input change', 'input', function() {
+                const variantId = $(this).closest('tr[data-variant-id]').data('variant-id');
+                if (variantId) {
+                    // Cập nhật dữ liệu cho biến thể cụ thể
+                    variantData[variantId] = {
+                        price_regular: $(`#price-${variantId}`).val(),
+                        price_sale: $(`#salePrice-${variantId}`).val(),
+                        quantity: $(`#quantity-${variantId}`).val(),
+                        // Lưu thêm các dữ liệu khác nếu cần
+                    };
+                }
+            });
+
+            // Sự kiện khi thay đổi giá trị biến thể
+            $('#childVariant').on('change', function() {
+                updateVariantTable();
+            });
+
+            // Hàm cập nhật bảng biến thể
+            function updateVariantTable() {
+                const selectedVariants = $('#childVariant').select2('data');
+                const container = $('#variantValuesTableBody');
+
+                // Xóa bảng
+                container.empty();
+
+                // Tạo lại bảng với dữ liệu đã lưu
+                selectedVariants.forEach((variant) => {
+                    const variantId = variant.id;
+                    const variantName = variant.text;
+
+                    // Lấy dữ liệu đã lưu nếu có
+                    const existingData = variantData[variantId] || {};
+
+                    const row = `
+                    <tr data-variant-id="${variantId}">
+                        <td class="text-success"><b>${variantName}</b></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="toggleVariantSettings('${variantId}')">Thiết lập</button>
+                        </td>
+                    </tr>
+                    <tr id="variantSettingsRow-${variantId}" style="display: none;" data-variant-id="${variantId}">
+                        <td colspan="2">
+                            <div id="variantSettings-${variantId}" class="variant-settings-dropdown">
+                                <input type="hidden" name="variants_child[${variantId}][id]" value="${variantId}">
+                                <div class="mb-3">
+                                    <label for="price-${variantId}" class="form-label">Giá gốc</label>
+                                    <input type="number" id="price-${variantId}" name="variants_child[${variantId}][price_regular]" class="form-control" placeholder="Nhập giá gốc" value="${existingData.price_regular || ''}">
+                                </div>
+                                <div class="my-3">
+                                    <label for="salePrice-${variantId}" class="form-label">Giá bán</label>
+                                    <input type="number" id="salePrice-${variantId}" name="variants_child[${variantId}][price_sale]" class="form-control" placeholder="Nhập giá bán" value="${existingData.price_sale || ''}">
+                                </div>
+                                <div class="my-3">
+                                    <label for="quantity-${variantId}" class="form-label">Số lượng</label>
+                                    <input type="number" id="quantity-${variantId}" name="variants_child[${variantId}][quantity]" class="form-control" placeholder="Nhập số lượng" value="${existingData.quantity || ''}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image-${variantId}" class="form-label">Ảnh</label>
+                                    <input type="file" id="image-${variantId}" name="variants_child[${variantId}][img]" class="form-control" onchange="previewImage(event, 'preview-${variantId}')">
+                                    <img id="preview-${variantId}" src="#" alt="Preview ảnh" class="mt-2" style="max-width: 150px; display: none;">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                    container.append(row);
+                });
+            }
+
+            // Hàm toggle hiển thị thiết lập biến thể
+            window.toggleVariantSettings = function(variantId) {
+                $(`#variantSettingsRow-${variantId}`).toggle();
+            };
+
+            // Khởi tạo bảng lần đầu nếu cần
+            updateVariantTable();
+        });
+    </script>
+
 @endsection
