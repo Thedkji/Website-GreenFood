@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 
         Route::resource('users', UserController::class);
-       
+       Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+            Route::get('detail/{id}', [UserController::class, 'detail'])->name('detail');
+        });
 
 
 

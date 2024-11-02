@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthenController;
 use App\Http\Controllers\admins\CommentController;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 // Admin
 Route::prefix('admin')
     ->name('admin.')
+    ->middleware('checkAdmin')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
         require_once base_path("routes/admins/user.php");
@@ -53,4 +55,22 @@ Route::prefix('client')
         require_once base_path("routes/clients/checkout.php");
         require_once base_path("routes/clients/error.php");
         require_once base_path("routes/clients/message.php");
+    });
+
+
+    Route::group(['prefix' => 'authens', 'as' => 'authens.'], function () {
+        Route::get('/login', [AuthenController::class, 'login'])->name('login');
+        Route::post('/login', [AuthenController::class, 'postLogin'])->name('postLogin');
+
+        Route::get('/register', [AuthenController::class, 'register'])->name('register');
+        Route::post('/register', [AuthenController::class, 'postRegister'])->name('postRegister');
+
+        Route::get('/logout', [AuthenController::class, 'logout'])->name('logout');
+
+        // Route::get('/forgotpassword', [AuthenController::class, 'forgotpassword'])->name('forgotpassword');
+        // Route::post('/forgotpassword', [AuthenController::class, 'authSendEmail'])->name('authSendEmail');
+
+
+        // Route::get('/PasswordChange', [AuthenController::class, 'PasswordChange'])->name('PasswordChange');
+        // Route::get('/notificationDone', [AuthenController::class, 'notificationDone'])->name('notificationDone');
     });

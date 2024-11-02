@@ -15,20 +15,19 @@
             {{ session('error') }}
         </div>
     @endif
-    <form novalidate action="{{ route('admin.users.update',$user->id) }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+    <form novalidate  action="" method="post" enctype="multipart/form-data">
         <div class="mt-3">
             <label for="name">Tên người dùng</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required  >
+            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required  disabled>
             <x-feedback name="name" />
         </div>
-        <div class="mt-3">
+        {{-- <div class="mt-3">
             <label for="avatar">Ảnh</label>
             <input type="file" class="form-control" name="avatar" id="avatar" value="{{ $user->avatar }}" onchange="previewImage(event, 'avatar_user')">
             <x-feedback name="avatar" />
-        </div>
+        </div> --}}
         <div class="form-group mb-3" style="padding-top:20px">
+            <label for="avatar">Ảnh</label><br>
             <img src="{{ Storage::url($user->avatar) }}"  alt="Ảnh khách hàng" style="width:250px ">
         </div>
         <div class="mt-3">
@@ -47,19 +46,20 @@
         </div> --}}
         <div class="mt-3">
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
+            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required disabled>
             <x-feedback name="email" />
 
         </div>
         <div class="mt-3">
             <label for="phone">Số điện thoại</label>
-            <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}" max="10" required>
+            <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}" max="10" required disabled>
             <x-feedback name="phone" />
 
         </div>
         <div class="mt-3">
             <label for="province">Thành phố/Tỉnh</label>
-            <select name="province" id="province" class="form-control" value="{{ $user->province }}" required>
+            <select name="province" id="province" class="form-control" value="{{ $user->province }}" required disabled>
+                {{-- <option value="{{ $provinces->name }}">  </option> --}}
                 @foreach ($provinces as $province)
                 <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
                     {{ $province->name }}
@@ -71,7 +71,7 @@
         </div>
         <div class="mt-3">
             <label for="district">Quận/Huyện</label>
-            <select name="district" id="district" class="form-control" value="{{ $user->district }}" required>
+            <select name="district" id="district" class="form-control" required disabled>
                 @foreach ($districts as $district)
                     <option value="{{ $district->code }}" {{ $district->code == $user->district ? 'selected' : '' }}>
                         {{ $district->name }}
@@ -79,11 +79,11 @@
                 @endforeach
             </select>
             <x-feedback name="district" />
-
         </div>
+
         <div class="mt-3">
             <label for="ward">Phường/Xã</label>
-            <select name="ward" id="ward" class="form-control" value="{{ $user->ward }}" required>
+            <select name="ward" id="ward" class="form-control" required disabled>
                 @foreach ($wards as $ward)
                     <option value="{{ $ward->code }}" {{ $ward->code == $user->ward ? 'selected' : '' }}>
                         {{ $ward->name }}
@@ -91,17 +91,17 @@
                 @endforeach
             </select>
             <x-feedback name="ward" />
-
         </div>
+
         <div class="mt-3">
             <label for="address">Địa chỉ</label>
-            <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" required>
+            <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" required disabled>
             <x-feedback name="address" />
-
         </div>
+
         <div class="mt-3">
             <label for="role">Vai trò</label>
-            <select name="role" id="role" class="form-control" required>
+            <select name="role" id="role" class="form-control" required disabled>
                 <option selected disabled>Vui lòng chọn vai trò</option>
                 <option value="0" {{ $user->role == 0 ? 'selected' : '' }}>Admin</option>
                 <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>User</option>
@@ -113,7 +113,7 @@
 
         <div class="d-flex justify-content-center">
             <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay lại</button></a>
-            <button class="btn btn-success mt-3" type="submit">Chỉnh sửa</button>
+            {{-- <button class="btn btn-success mt-3" type="submit">Chỉnh sửa</button> --}}
         </div>
     </form>
 @endsection
