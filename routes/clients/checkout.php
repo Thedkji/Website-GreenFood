@@ -9,5 +9,5 @@ use Illuminate\Support\Facades\Route;
 Route::controller(CheckoutController::class)
     ->group(function () {
         Route::get('thanh-toan', 'checkout')->name('checkout');
-        // Route::post('thanh-toan', 'getCheckOut')->name('getCheckOut');
+        Route::post('thanh-toan-don-hang', 'getCheckOut')->name('getCheckOut');
     });
