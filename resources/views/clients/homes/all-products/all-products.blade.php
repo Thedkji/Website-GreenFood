@@ -48,7 +48,7 @@
 
                                             <input type="hidden" name="id_product" value="{{ $product->id }}">
                                             <input type="hidden" name="name" value="{{ $product->name }}">
-
+                                            <input type="hidden" name="status" value="{{ $product->status }}">
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
                                                 <h4>{{ $product->name }}</h4>
                                                 <p>{{ $product->description_short }}</p>

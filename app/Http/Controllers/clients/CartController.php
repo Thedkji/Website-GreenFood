@@ -26,11 +26,14 @@ class CartController extends Controller
             'attributes' => [
                 'added_order' => CartSession::getContent()->count() + 1,
                 'sku' => $request->sku,
+                'status' => $request->status,
             ],
         ]);
         if (auth()->check()) {
             $this->saveCartData(auth()->id());
         }
+        // $cartData = CartSession::getContent();
+        // Log::info($cartData);
         return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công');
     }
 
