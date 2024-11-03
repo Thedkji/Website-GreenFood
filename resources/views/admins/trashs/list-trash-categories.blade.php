@@ -37,7 +37,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Tên danh mục</th>
                 <th scope="col">ID danh mục cha</th>
-                <th scope="col">Ngày tạo</th>
+                {{-- <th scope="col">Ngày tạo</th> --}}
                 <th scope="col">Ngày xóa</th>
                 <th scope="col">Thao tác</th>
             </tr>
@@ -52,7 +52,7 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.trashs.restoreCategory', $value->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreCategory', $category->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
 
                             <form action="{{ route('admin.trashs.destroyCategory', $category) }}" method="post">

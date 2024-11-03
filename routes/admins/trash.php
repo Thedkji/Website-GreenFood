@@ -19,12 +19,12 @@ use Illuminate\Support\Facades\Route;
             Route::get('/restoreComment/{id}', [TrashController::class, 'restoreComment'])->name('restoreComment');
 
 
-            Route::get('/destroyUser/{id}', [TrashController::class, 'destroyUser'])->name('destroyUser');
-            Route::get('/destroyProduct/{id}', [TrashController::class, 'destroyProduct'])->name('destroyProduct');
-            Route::get('/destroyCategory/{id}', [TrashController::class, 'destroyCategory'])->name('destroyCategory');
-            Route::get('/destroyOrder/{id}', [TrashController::class, 'destroyOrder'])->name('destroyOrder');
-            Route::get('/destroyVariant/{id}', [TrashController::class, 'destroyVarian'])->name('destroyVarian');
-            Route::get('/destroyComment/{id}', [TrashController::class, 'destroyComment'])->name('destroyComment');
+            Route::delete('/destroyUser/{id}', [TrashController::class, 'destroyUser'])->name('destroyUser');
+            Route::delete('/destroyProduct/{id}', [TrashController::class, 'destroyProduct'])->name('destroyProduct');
+            Route::delete('/destroyCategory/{id}', [TrashController::class, 'destroyCategory'])->name('destroyCategory');
+            Route::delete('/destroyOrder/{id}', [TrashController::class, 'destroyOrder'])->name('destroyOrder');
+            Route::delete('/destroyVariant/{id}', [TrashController::class, 'destroyVarian'])->name('destroyVarian');
+            Route::delete('/destroyComment/{id}', [TrashController::class, 'destroyComment'])->name('destroyComment');
         });
 
 

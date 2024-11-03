@@ -57,7 +57,8 @@
                     <tr>
                         <th scope="row">{{ $value->id }}</th>
                         <th scope="row">{{ $value->name }}</th>
-                        <th scope="row"><img src="{{ Storage::url($value->avatar) }}"  alt="Ảnh khách hàng" style="width:150px"></th>
+                        <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
+                                style="width:150px"></th>
                         <th scope="row">{{ $value->user_name }}</th>
                         {{-- <th scope="row">{{ $value->password }}</th> --}}
                         <th scope="row">{{ $value->email }}</th>
@@ -69,6 +70,9 @@
                         <th scope="row">{{ $value->role }}</th>
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
+                                <a href="{{ route('admin.users.detail', $value->id) }}">
+                                    <i class="fa-regular fa-eye"></i>
+                                </a>
                                 <a href="{{ route('admin.users.show', $value->id) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
@@ -95,4 +99,3 @@
         {{ $users->links('pagination::bootstrap-4') }}
     </div>
 @endsection
-
