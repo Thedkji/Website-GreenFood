@@ -67,7 +67,7 @@
                     @endif
                 </tbody>
             </table>
-            <button type="submit" formaction="{{ route('client.updateCart') }}" class="btn btn-primary">Cập nhật số lượng</button>
+            <button type="submit" formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">Cập nhật số lượng</button>
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
