@@ -92,6 +92,17 @@ class ProductRequest extends FormRequest
                     $rules["variants_child.{$childVariantId}.img"] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
                 }
             }
+
+            $rules['variants'] = [
+                'required',
+                'array',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    if (empty($value)) {
+                        $fail('Vui lòng chọn ít nhất một biến thể.');
+                    }
+                }
+            ];
         }
 
         return $rules;
@@ -153,6 +164,10 @@ class ProductRequest extends FormRequest
                 $messages["variants_child.{$variantId}.img.mimes"] = 'Ảnh của biến thể phải có định dạng jpg, jpeg, png hoặc gif.';
                 $messages["variants_child.{$variantId}.img.max"] = 'Ảnh của biến thể phải có kích thước tối đa là 2MB.';
             }
+
+            $messages['variants.required'] = 'Vui lòng chọn ít nhất một biến thể.';
+            $messages['variants.array'] = 'Dữ liệu biến thể không hợp lệ.';
+            $messages['variants.min'] = 'Vui lòng chọn ít nhất một biến thể.';
         }
 
         return $messages;

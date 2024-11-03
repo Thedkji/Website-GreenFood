@@ -75,6 +75,8 @@ class ProductController extends Controller
                     $dataPro = [
                         'name' => $request->name,
                         'slug' => Str::slug($request->name),
+                        'description_short' => $request->description_short,
+                        'description' => $request->description,
                         'status' => 1,
                     ];
                     if ($request->hasFile('img')) {

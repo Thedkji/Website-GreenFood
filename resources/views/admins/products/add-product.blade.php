@@ -506,4 +506,34 @@
         var validationErrors = @json($errors->getMessages());
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // Update the Select2 initialization for variant
+            $('#variant').select2({
+                placeholder: "Chọn biến thể",
+                allowClear: true,
+                language: {
+                    noResults: function() {
+                        return "Không tìm thấy kết quả";
+                    }
+                }
+            });
+
+            // Modify the product type change handler
+            $('#product_type').on('change', function() {
+                var isVariant = $(this).val() === 'has_variant';
+                $('.selectVariant').toggleClass('d-none', !isVariant);
+                $('.price_no_variant, .quantity_no_variant').toggleClass('d-none', isVariant);
+
+                if (!isVariant) {
+                    // Reset variant selections
+                    $('#variant').val(null).trigger('change');
+                    $('#childVariantContainer').hide();
+                }
+            });
+
+            // ...rest of your existing code...
+        });
+    </script>
+
 @endsection
