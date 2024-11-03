@@ -11,6 +11,7 @@
             {{ session('success') }}
         </div>
     @endif
+    
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -25,30 +26,11 @@
                 <!-- Các trường nhập liệu sản phẩm -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Tên sản phẩm</label>
-                    <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}">
+                    <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}"
+                        placeholder="Nhập tên sản phẩm">
                     @error('name')
                         <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-lg-6 mb-3">
-                        <label for="price_regular" class="form-label">Giá gốc - VNĐ</label>
-                        <input type="number" class="form-control" name="price_regular" id="price_regular"
-                            value="{{ old('price_regular', 0) }}">
-                        @error('price_regular')
-                            <div class="text-danger my-3">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-6 mb-3">
-                        <label for="price_sale" class="form-label">Giá bán - VNĐ</label>
-                        <input type="number" class="form-control" name="price_sale" id="price_sale"
-                            value="{{ old('price_sale', 0) }}">
-                        @error('price_sale')
-                            <div class="text-danger my-3">{{ $message }}</div>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -134,12 +116,44 @@
                     </select>
                 </div>
 
+                <div class="row price_no_variant">
+                    <div class="col-lg-6 mb-3">
+                        <label for="price_regular" class="form-label">Giá gốc - VNĐ</label>
+                        <input type="number" class="form-control" name="price_regular" id="price_regular"
+                            value="{{ old('price_regular') }}">
+                        @error('price_regular')
+                            <div class="text-danger my-3">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        <label for="price_sale" class="form-label">Giá bán - VNĐ</label>
+                        <input type="number" class="form-control" name="price_sale" id="price_sale"
+                            value="{{ old('price_sale') }}">
+                        @error('price_sale')
+                            <div class="text-danger mt-3">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Các trường nhập liệu sản phẩm -->
+                <div class="mb-3 quantity_no_variant">
+                    <label for="name" class="form-label">Số lượng</label>
+                    <input type="number" class="form-control" name="quantity" id="name"
+                        value="{{ old('quantity') }}">
+                    @error('quantity')
+                        <div class="text-danger my-3">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Biến thể -->
                 <div class="mb-3 selectVariant d-none">
                     <label for="variant">Biến thể</label>
-                    <select name="variants[][id]" id="variant" multiple="multiple">
+                    <select name="variants[]" id="variant" multiple="multiple">
                         @foreach ($variants as $variant)
-                            <option value="{{ $variant->id }}" data-children="{{ json_encode($variant->children) }}">
+                            <option value="{{ $variant->id }}"
+                                {{ in_array($variant->id, old('variants', [])) ? 'selected' : '' }}
+                                data-children="{{ json_encode($variant->children) }}">
                                 {{ $variant->name }}</option>
                         @endforeach
                     </select>
@@ -151,7 +165,8 @@
                 <!-- Giá trị biến thể (ẩn mặc định) -->
                 <div id="childVariantContainer" class="mb-3" style="display: none;">
                     <label for="childVariants">Giá trị biến thể</label>
-                    <select name="variants_child[][id]" id="childVariant" multiple="multiple">
+                    <p style="font-size: 12px">(Giá trị đầu tiên sẽ là giá trị mặc định của sản phẩm)</p>
+                    <select name="variants_child[]" id="childVariant" multiple="multiple">
                     </select>
                 </div>
 
@@ -182,18 +197,20 @@
                 placeholder: "Chọn",
                 allowClear: true
             });
+            $('#childVariant').select2({
+                placeholder: "Chọn",
+                allowClear: true
+            });
 
             $('#product_type').on('change', function() {
-                if ($(this).val() === 'has_variant') {
-                    $('.selectVariant').removeClass('d-none'); // Hiện ô chọn biến thể
-                    $('#variant').select2({
-                        placeholder: "Chọn",
-                        allowClear: true
-                    });
-                } else {
-                    $('.selectVariant').addClass('d-none'); // Ẩn ô chọn biến thể
-                    $('#variant').val(null).trigger('change'); // Reset lựa chọn biến thể
-                    $('#childVariantContainer').hide(); // Ẩn giá trị biến thể
+                var isVariant = $(this).val() === 'has_variant';
+                $('.selectVariant').toggleClass('d-none', !isVariant);
+                $('.price_no_variant, .quantity_no_variant').toggleClass('d-none', isVariant);
+
+                if (!isVariant) {
+                    // Reset variant selections
+                    $('#variant').val(null).trigger('change');
+                    $('#childVariantContainer').hide();
                 }
             });
 
@@ -221,22 +238,24 @@
 
             function updateChildSelect(parentSelect, childSelect) {
                 const selectedOptions = parentSelect.val();
-                childSelect.empty(); // Xóa tất cả tùy chọn trong select con
+                childSelect.empty(); // Clear existing options
 
                 if (selectedOptions) {
+                    const allChildren = [];
+
                     selectedOptions.forEach(id => {
                         const option = parentSelect.find(`option[value="${id}"]`);
-                        const children = JSON.parse(option.attr('data-children'));
+                        const children = JSON.parse(option.attr('data-children') || '[]');
+                        allChildren.push(...children);
+                    });
 
-                        if (children && children.length > 0) {
-                            children.forEach(child => {
-                                const childOption = new Option(child.name, child.id, false, false);
-                                childSelect.append(childOption); // Thêm giá trị biến thể vào select
-                            });
-                        }
+                    allChildren.forEach(child => {
+                        const childOption = new Option(child.name, child.id, false, false);
+                        childSelect.append(childOption);
                     });
                 }
-                childSelect.trigger('change'); // Cập nhật select con
+
+                childSelect.trigger('change');
             }
 
             // Hàm preview ảnh
@@ -281,6 +300,7 @@
                                 <label for="price-${index}" class="form-label">Giá gốc</label>
                                 <input type="number" id="price-${index}" name="variants_child[${index}][price_regular]" class="form-control" placeholder="Nhập giá gốc" value="">
                             </div>
+
                             <div class="my-3">
                                 <label for="salePrice-${index}" class="form-label">Giá bán</label>
                                 <input type="number" id="salePrice-${index}" name="variants_child[${index}][price_sale]" class="form-control" placeholder="Nhập giá bán" value="">
@@ -302,20 +322,84 @@
                     $('#variantValuesTableBody').append(row);
                 });
 
+                // Thêm input hidden để lưu ID của variant được chọn
+                const selectedVariants = $(this).val();
+                selectedVariants.forEach(variantId => {
+                    if ($(`input[name="variants_child[${variantId}][id]"]`).length === 0) {
+                        $('#variantValuesTableBody').append(`
+                            <input type="hidden" name="variants_child[${variantId}][id]" value="${variantId}">
+                        `);
+                    }
+                });
+
                 // Hàm toggle hiển thị form thiết lập
                 window.toggleVariantSettings = function(index) {
                     const settingsRow = $(`#variantSettingsRow-${index}`);
                     settingsRow.toggle();
                 }
             });
+
+            // Initialize product type
+            var oldProductType = '{{ old('product_type') }}';
+            if (oldProductType) {
+                $('#product_type').val(oldProductType).trigger('change');
+            }
+
+            // Initialize selected variants
+            var oldVariants = @json(old('variants', []));
+            if (oldVariants.length > 0) {
+                $('#variant').val(oldVariants).trigger('change');
+            }
+
+            // Initialize selected variant children
+            var oldVariantChildren = [];
+            for (var key in oldVariantSettings) {
+                oldVariantChildren.push(key);
+            }
+
+            if (oldVariantChildren.length > 0) {
+                // Delay to ensure options are populated
+                setTimeout(function() {
+                    // Populate childVariant options based on selected variants
+                    updateChildSelect($('#variant'), $('#childVariant'));
+
+                    $('#childVariant').val(oldVariantChildren).trigger('change');
+
+                    // Recreate the variant settings
+                    updateVariantTable(); // Ensures the variant settings rows are created
+
+                    // Set the old values for the settings
+                    oldVariantChildren.forEach(function(variantId) {
+                        var variantData = oldVariantSettings[variantId];
+
+                        // Open the settings row
+                        toggleVariantSettings(variantId);
+
+                        // Set the values
+                        $('#price-' + variantId).val(variantData['price_regular']);
+                        $('#salePrice-' + variantId).val(variantData['price_sale']);
+                        $('#quantity-' + variantId).val(variantData['quantity']);
+
+                        // If image preview is needed
+                        // Note: Browsers don't allow setting file input values for security reasons.
+                        // You can handle image previews if you save the image paths temporarily.
+
+                        // Close the settings row (if desired)
+                        // toggleVariantSettings(variantId);
+                    });
+                }, 500);
+            }
+
+            // Existing code...
         });
     </script>
-
 
     <script>
         $(document).ready(function() {
             // Khởi tạo đối tượng để lưu trữ dữ liệu biến thể
-            let variantData = {};
+            let variantData = {
+                ...oldVariantSettings
+            };
 
             // Event delegation để lắng nghe sự kiện trên các input trong bảng biến thể
             $('#variantValuesTableBody').on('input change', 'input', function() {
@@ -341,17 +425,27 @@
                 const selectedVariants = $('#childVariant').select2('data');
                 const container = $('#variantValuesTableBody');
 
-                // Xóa bảng
+                // Clear the table
                 container.empty();
 
-                // Tạo lại bảng với dữ liệu đã lưu
                 selectedVariants.forEach((variant) => {
                     const variantId = variant.id;
                     const variantName = variant.text;
 
-                    // Lấy dữ liệu đã lưu nếu có
-                    const existingData = variantData[variantId] || {};
+                    // Get existing data if available
+                    const existingData = variantData[variantId] || oldVariantSettings[variantId] || {};
 
+                    // Check for validation errors for this variant
+                    const variantErrorKey = `variants_child.${variantId}`;
+                    const priceRegularErrors = validationErrors?.[`${variantErrorKey}.price_regular`] || [];
+                    const priceSaleErrors = validationErrors?.[`${variantErrorKey}.price_sale`] || [];
+                    const quantityErrors = validationErrors?.[`${variantErrorKey}.quantity`] || [];
+                    const imageErrors = validationErrors?.[`${variantErrorKey}.img`] || [];
+
+                    const hasErrors = priceRegularErrors.length > 0 || priceSaleErrors.length > 0 ||
+                        quantityErrors.length > 0 || imageErrors.length > 0;
+
+                    // Create the row
                     const row = `
                     <tr data-variant-id="${variantId}">
                         <td class="text-success"><b>${variantName}</b></td>
@@ -359,31 +453,34 @@
                             <button type="button" class="btn btn-primary" onclick="toggleVariantSettings('${variantId}')">Thiết lập</button>
                         </td>
                     </tr>
-                    <tr id="variantSettingsRow-${variantId}" style="display: none;" data-variant-id="${variantId}">
+                    <tr id="variantSettingsRow-${variantId}" style="display: ${hasErrors ? 'table-row' : 'none'};" data-variant-id="${variantId}">
                         <td colspan="2">
                             <div id="variantSettings-${variantId}" class="variant-settings-dropdown">
-                                <input type="hidden" name="variants_child[${variantId}][id]" value="${variantId}">
                                 <div class="mb-3">
                                     <label for="price-${variantId}" class="form-label">Giá gốc</label>
                                     <input type="number" id="price-${variantId}" name="variants_child[${variantId}][price_regular]" class="form-control" placeholder="Nhập giá gốc" value="${existingData.price_regular || ''}">
+                                    ${priceRegularErrors.map(error => `<div class="text-danger">${error}</div>`).join('')}
                                 </div>
                                 <div class="my-3">
                                     <label for="salePrice-${variantId}" class="form-label">Giá bán</label>
                                     <input type="number" id="salePrice-${variantId}" name="variants_child[${variantId}][price_sale]" class="form-control" placeholder="Nhập giá bán" value="${existingData.price_sale || ''}">
+                                    ${priceSaleErrors.map(error => `<div class="text-danger">${error}</div>`).join('')}
                                 </div>
                                 <div class="my-3">
                                     <label for="quantity-${variantId}" class="form-label">Số lượng</label>
                                     <input type="number" id="quantity-${variantId}" name="variants_child[${variantId}][quantity]" class="form-control" placeholder="Nhập số lượng" value="${existingData.quantity || ''}">
+                                    ${quantityErrors.map(error => `<div class="text-danger">${error}</div>`).join('')}
                                 </div>
                                 <div class="mb-3">
                                     <label for="image-${variantId}" class="form-label">Ảnh</label>
                                     <input type="file" id="image-${variantId}" name="variants_child[${variantId}][img]" class="form-control" onchange="previewImage(event, 'preview-${variantId}')">
+                                    ${imageErrors.map(error => `<div class="text-danger">${error}</div>`).join('')}
                                     <img id="preview-${variantId}" src="#" alt="Preview ảnh" class="mt-2" style="max-width: 150px; display: none;">
                                 </div>
                             </div>
                         </td>
                     </tr>
-                `;
+                    `;
                     container.append(row);
                 });
             }
@@ -395,6 +492,47 @@
 
             // Khởi tạo bảng lần đầu nếu cần
             updateVariantTable();
+        });
+    </script>
+
+    <script>
+        var oldVariantSettings = @json(old('variants_child', []));
+        window.toggleVariantSettings = function(variantId) {
+            $(`#variantSettingsRow-${variantId}`).toggle();
+        };
+    </script>
+
+    <script>
+        var validationErrors = @json($errors->getMessages());
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Update the Select2 initialization for variant
+            $('#variant').select2({
+                placeholder: "Chọn biến thể",
+                allowClear: true,
+                language: {
+                    noResults: function() {
+                        return "Không tìm thấy kết quả";
+                    }
+                }
+            });
+
+            // Modify the product type change handler
+            $('#product_type').on('change', function() {
+                var isVariant = $(this).val() === 'has_variant';
+                $('.selectVariant').toggleClass('d-none', !isVariant);
+                $('.price_no_variant, .quantity_no_variant').toggleClass('d-none', isVariant);
+
+                if (!isVariant) {
+                    // Reset variant selections
+                    $('#variant').val(null).trigger('change');
+                    $('#childVariantContainer').hide();
+                }
+            });
+
+            // ...rest of your existing code...
         });
     </script>
 
