@@ -26,14 +26,13 @@ class CartController extends Controller
             'attributes' => [
                 'added_order' => CartSession::getContent()->count() + 1,
                 'sku' => $request->sku,
+                'img' => $request->img,
                 'status' => $request->status,
             ],
         ]);
         if (auth()->check()) {
             $this->saveCartData(auth()->id());
         }
-        // $cartData = CartSession::getContent();
-        // Log::info($cartData);
         return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công');
     }
 
@@ -41,19 +40,24 @@ class CartController extends Controller
     {
         $cartData = CartSession::getContent();
         foreach ($cartData as $item) {
-            Cart::updateOrCreate(
-                [
-                    'user_id' => $user_id,
-                    'product_id' => $item->id,
-                    'attributes->sku' => $item->attributes->sku, // Kiểm tra SKU
-                ],
-                [
-                    'quantity' => $item->quantity,
-                    'attributes' => json_encode($item->attributes),
-                ]
-            );
+            try {
+                Cart::updateOrCreate(
+                    [
+                        'user_id' => $user_id,
+                        'product_id' => $item->id,
+                        'sku' => $item->attributes->sku,
+                    ],
+                    [
+                        'quantity' => $item->quantity,
+                    ]
+                );
+            } catch (\Exception $e) {
+                Log::error('Lỗi khi lưu giỏ hàng vào cơ sở dữ liệu: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Lỗi khi lưu giỏ hàng. Vui lòng thử lại.');
+            }
         }
     }
+
 
     public function deleteCart()
     {
@@ -95,10 +99,10 @@ class CartController extends Controller
         $delete = CartSession::remove($id);
         if (auth()->check()) {
             $userId = auth()->id();
-            $sku = CartSession::get($id)->attributes->sku; // Lấy SKU từ giỏ hàng
+            // $sku = CartSession::get($id)->attributes->sku;
             Cart::where('user_id', $userId)
                 ->where('product_id', $id)
-                ->where('attributes->sku', $sku) // Kiểm tra SKU
+                // ->where('attributes->sku', $sku)
                 ->delete();
         }
 

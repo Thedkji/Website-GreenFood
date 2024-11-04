@@ -3,6 +3,17 @@
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 @include('clients.layouts.components.singer-page')
 <div class="container-fluid py-5">
     <div class="container py-5">
