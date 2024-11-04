@@ -25,14 +25,10 @@ class CartComposer
         } else {
             $cartItems = CartSession::getContent();
         }
-
-        // Calculate cart totals
         $cartTotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
         $cartQuantity = $cartItems->sum('quantity');
-
-        // Send data to the view
         $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId'));
     }
 }

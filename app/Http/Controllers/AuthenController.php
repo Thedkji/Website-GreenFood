@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\authens\LoginRequest;
 use App\Http\Requests\authens\RegisterRequest;
+use Darryldecode\Cart\Facades\CartFacade as CartSession;
 
 class AuthenController extends Controller
 {
@@ -27,6 +28,7 @@ class AuthenController extends Controller
                 'email' => $req->email,
                 'password' => $req->password
             ])) {
+                CartSession::clear();
                 return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
             }
         } catch (\Exception $e) {
@@ -42,32 +44,32 @@ class AuthenController extends Controller
         return view('authens.Register');
     }
     public function postRegister(RegisterRequest $req)
-{
-    // Kiểm tra xem email đã tồn tại chưa
-    $check = User::where('email', $req->email)->exists();
+    {
+        // Kiểm tra xem email đã tồn tại chưa
+        $check = User::where('email', $req->email)->exists();
 
-    if (!$check) {
-        // Tạo đối tượng User mới và lưu dữ liệu
-        $user = new User();
-        $user->name = $req->name;
-        $user->email = $req->email;
-        $user->password = bcrypt($req->password); // Mã hóa mật khẩu
-        $user->phone = $req->phone;
-        $user->user_name = $req->user_name;
+        if (!$check) {
+            // Tạo đối tượng User mới và lưu dữ liệu
+            $user = new User();
+            $user->name = $req->name;
+            $user->email = $req->email;
+            $user->password = bcrypt($req->password); // Mã hóa mật khẩu
+            $user->phone = $req->phone;
+            $user->user_name = $req->user_name;
 
 
-        $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
+            $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
 
-        return redirect()->back()->with([
-            'message' => 'Đăng ký thành công!'
-        ]);
-    } else {
-        // Thông báo nếu email đã tồn tại
-        return redirect()->back()->withErrors([
-            'email' => 'Email đã tồn tại, vui lòng chọn email khác.'
-        ]);
+            return redirect()->back()->with([
+                'message' => 'Đăng ký thành công!'
+            ]);
+        } else {
+            // Thông báo nếu email đã tồn tại
+            return redirect()->back()->withErrors([
+                'email' => 'Email đã tồn tại, vui lòng chọn email khác.'
+            ]);
+        }
     }
-}
 
 
 
@@ -76,8 +78,10 @@ class AuthenController extends Controller
 
 
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
+        CartSession::clear();
         return redirect()->route('authens.login')->with(['Đăng xuất thành công']);
     }
 }

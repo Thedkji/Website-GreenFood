@@ -9,7 +9,6 @@
         @if ($cartItems->isNotEmpty())
         @foreach ($cartItems as $item)
         @if (isset($userId))
-
         <div class="form-check text-start my-3">
             <form action="{{ route('client.removeCart', ['id' => $item->id]) }}" method="post">
                 @csrf
@@ -31,6 +30,7 @@
                                 <span>Variant not available</span>
                                 @endif
                                 @endif
+
                             </p>
                         </div>
                     </div>
@@ -62,10 +62,10 @@
         @endif
     </div>
     <div class="offcanvas-footer ">
-        <form action="{{ route('client.deleteCart') }}" method="POST">
+        <!-- <form action="{{ route('client.deleteCart') }}" method="POST">
             @csrf
             <button onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
-        </form>
+        </form> -->
         <a href="{{route('client.cart')}}" class="px-5 d-flex justify-content-between mx-5 my-5 btn btn-success">Truy cập giỏ hàng </a>
     </div>
 </div>
