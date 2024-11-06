@@ -1,5 +1,5 @@
 @php
-    $products = App\Models\Product::pluck('name');
+    $products = App\Models\Product::withTrashed()->pluck('name');
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Định dạng cho phép
     $maxFileSize = 2 * 1024 * 1024; // Kích thước tối đa 2MB
 @endphp
@@ -32,7 +32,7 @@
         if ($('#name').val().trim() == "") {
             errTrue('#err_name', '#name', 'Tên sản phẩm không được để trống');
         } else if (existingProductsName.includes($('#name').val().trim())) {
-            errTrue('#err_name', '#name', 'Tên sản phẩm đã tồn tại');
+            errTrue('#err_name', '#name', 'Tên sản phẩm đã tồn tại hoặc chưa xóa vĩnh viễn');
         } else {
             errFalse('#err_name');
         }
