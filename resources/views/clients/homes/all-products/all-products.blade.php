@@ -47,6 +47,7 @@
                                             </div>
 
                                             <input type="hidden" name="id_product" value="{{ $product->id }}">
+
                                             <input type="hidden" name="name" value="{{ $product->name }}">
                                             <input type="hidden" name="status" value="{{ $product->status }}">
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
@@ -77,12 +78,14 @@
                                                 @endforeach
                                                 <input type="hidden" name="sku" value="{{ $product->variantGroups[0]->sku }}">
                                                 <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_sale }}">
+                                                <input type="hidden" name="img" value="{{ $product->variantGroups[0]->img }}">
                                                 @else
                                                 <p>
                                                     Giá: {{ app('formatPrice')($product->price_sale) }}
                                                 </p>
                                                 <input type="hidden" name="sku" value="{{ $product->sku }}">
                                                 <input type="hidden" name="price" value="{{ $product->price_sale }}">
+                                                <input type="hidden" name="img" value="{{ $product->img }}">
                                                 @endif
 
                                                 <div class="d-flex justify-content-between flex-lg-wrap">

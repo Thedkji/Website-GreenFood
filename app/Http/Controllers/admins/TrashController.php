@@ -141,16 +141,16 @@ class TrashController extends Controller
 
         try {
             // Lấy thông tin người dùng cần xóa
-            $user = User::withTrashed()->findOrFail($id);
+            $users = User::withTrashed()->findOrFail($id);
 
 
             // Xóa ảnh đại diện nếu có
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($users->avatar) {
+                Storage::disk('public')->delete($users->avatar);
             }
 
             // Xóa người dùng vĩnh viễn khỏi cơ sở dữ liệu
-            $user->forceDelete();
+            $users->forceDelete();
 
             DB::commit();
             return redirect()->back()->with('success', 'Tài khoản đã được xóa vĩnh viễn thành công.');

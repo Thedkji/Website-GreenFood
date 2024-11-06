@@ -96,6 +96,13 @@ class UserController extends Controller
         }
     }
 
+    public function detail($id){
+        $provinces = DB::table('provinces')->get();
+        $districts = DB::table('districts')->get();
+        $wards = DB::table('wards')->get();
+        $user = User::findOrFail($id);
+        return view('admins.users.detail-users', compact('user','provinces','districts','wards'));
+    }
     public function destroy($id)
     {
         DB::beginTransaction();

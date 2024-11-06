@@ -77,6 +77,22 @@
                             </thead>
                             <tbody>
                                 @foreach ($decodedItems as $items)
+                                @if (isset($userId))
+                                <tr>
+                                    <th scope="row">
+                                        <div class="d-flex align-items-center mt-2">
+                                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-2.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                        </div>
+                                    </th>
+                                    <td class="py-5">{{$items['product']['name']}}</td>
+                                    <td class="py-5">
+                                        <p>{{ number_format($items['product']['status'] === 0 ? $items['product']['price_sale'] : ($variantDetails[$items['id']]->price_sale ?? $items['price'])) }} VNĐ</p>
+                                    </td>
+                                    <td class="py-5">{{$items['quantity']}}</td>
+                                    <td class="py-5">{{$items['sku']}}</td>
+                                    <td class="py-5">{{number_format( $items['product']['status'] === 0 ? $items['product']['price_sale'] : ($variantDetails[$items['id']]->price_sale ?? $items['price']) * $items['quantity'])}} VNĐ</td>
+                                </tr>
+                                @else
                                 <tr>
                                     <th scope="row">
                                         <div class="d-flex align-items-center mt-2">
@@ -89,6 +105,7 @@
                                     <td class="py-5">{{$items['attributes']['sku']}}</td>
                                     <td class="py-5">{{number_format($items['price'] * $items['quantity'])}} VNĐ</td>
                                 </tr>
+                                @endif
                                 @endforeach
 
                                 <tr>

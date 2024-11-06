@@ -63,13 +63,24 @@
                     </a>
 
                     <div class="nav-item dropdown">
-                        <a href="{{ route("client.login") }}" class="nav-link">
+                        @guest
+                        <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
+                        <a href="{{ route("authens.login") }}" class="nav-link">
                             <i class="fas fa-user fa-2x"></i>
                         </a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                            <a href="{{ route("client.login") }}" class="dropdown-item">Đăng Nhập</a>
-                            <a href="{{ route("client.register") }}" class="dropdown-item">Đăng Ký</a>
+                            <a href="{{ route("authens.login") }}" class="dropdown-item">Đăng Nhập</a>
+                            <a href="{{ route("authens.register") }}" class="dropdown-item">Đăng Ký</a>
                         </div>
+                    @else
+                        <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
+                        <span class="nav-item nav-link">Xin chào, {{ Auth::user()->name }}</span>
+                        <a href="{{ route('authens.logout') }}" class="nav-item nav-link">
+                            Đăng Xuất
+                        </a>
+
+                    @endguest
+
                     </div>
                 </div>
             </div>

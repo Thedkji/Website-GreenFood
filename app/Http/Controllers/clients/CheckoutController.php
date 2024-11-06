@@ -17,13 +17,29 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
+
+        if (!$datas) {
+            return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
+        }
         $decodedItems = array_map(function ($itemJson) {
             return json_decode($itemJson, true);
         }, $datas);
-        $totalPrice = array_reduce($decodedItems, function ($carry, $item) {
-            return $carry + ($item['price'] * $item['quantity']);
+        $variantDetails = [];
+        $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
+            if ($item['product']['status'] === 0) {
+                $itemTotal = $item['quantity'] * $item['product']['price_sale'];
+                $variantDetails[$item['id']] = null;
+            } else {
+                $variant = VariantGroup::where('product_id', $item['product_id'])
+                    ->where('sku', $item['sku'])
+                    ->first();
+                $itemTotal = $variant ? $item['quantity'] * $variant->price_sale : $item['quantity'] * $item['price'];
+                $variantDetails[$item['id']] = $variant;
+            }
+            return $carry + $itemTotal;
         }, 0);
-        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'datas'));
+        $userId = auth()->check() ? auth()->id() : null;
+        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'datas', 'userId', 'variantDetails'));
     }
 
     public function getCheckOut(OrderRequest $request)
