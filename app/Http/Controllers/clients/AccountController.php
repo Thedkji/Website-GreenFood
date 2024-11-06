@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\clients;
 
+
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
 use Illuminate\Http\Request;
+use App\Models\PasswordResetTokens;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -83,22 +86,64 @@ class AccountController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('clients.login')->with(['Đăng xuất thành công']);
+        return redirect()->route('client.login')->with(['Đăng xuất thành công']);
     }
 
 
-    public function forgotPass(){
+    public function forgotPass()
+    {
         return view("clients.accounts.forgot-password");
     }
-    public function postForgotPassword(ForGotPasswordRequest $req){
+    public function postForgotPassword(ForGotPasswordRequest $req)
+    {
         $user = User::where('email', $req->email)->first();
 
+        $token = Str::random(64);
+        $tokenData = [
+            'email' => $req->email,
+            'token' => $token
+        ];
 
-        Mail::to($req->email)->send(new ForgotPassword($user));
+
+        if (PasswordResetTokens::create($tokenData)) {
+            Mail::to($req->email)->send(new ForgotPassword($user, $token));
+            return redirect()->back()->with(['success' => 'Chúng tôi đã gửi link reset mật khẩu đến email của bạn!']);
+        }
+        return redirect()->back()->with(['error' => 'Email khóng tồn tại vui lòng chọn email khác!']);
+        // Mail::to($req->email)->send(new ForgotPassword($user));
         // if($user){
         //     $user->update(['password' => bcrypt($req->password)]);
         //     return redirect()->route('clients.login');
         // }
-        // dd($user);
+        // dd($tokenData);
+    }
+
+
+    public function resetPassword($token)
+    {
+
+        $tokenData = PasswordResetTokens::checkToken($token);
+        // dd($tokenData);
+        return view('clients.accounts.reset-password');
+    }
+    public function postResetPassword($token)
+    {
+        request()->validate([
+            'password' => 'required|min:6',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $tokenData = PasswordResetTokens::checkToken($token);
+        $user = $tokenData->user;
+
+        $data = [
+            'password' => bcrypt(request(('password')))
+        ];
+
+        $check = $user->update($data);
+        if ($check) {
+            return redirect()->route('client.login')->with(['success' => 'Bạn đã đổi mật khẩu thành công!']);
+        }
+        return redirect()->back()->with(['error' => 'Bạn đã đổi mật khẩu không thành công. Vui lòng chọn mật khẩu khác!']);
     }
 }

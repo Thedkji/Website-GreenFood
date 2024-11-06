@@ -16,9 +16,13 @@ class ForgotPassword extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
-    {
+    public $user;
+    public $token;
 
+    public function __construct($data, $token_data)
+    {
+        $this->user = $data;
+        $this->token = $token_data;
     }
 
     /**
@@ -37,7 +41,7 @@ class ForgotPassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'clients.accounts.forgot-password',
+            view: 'clients.emails.forgot-password',
         );
     }
 

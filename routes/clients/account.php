@@ -18,6 +18,8 @@ Route::controller(AccountController::class)
         Route::post('forgot-pass', 'postForgotPassword')->name('postForgotPassword');
         Route::get('/logout', 'logout')->name('logout');
 
+        Route::get('reset-password/{token}', 'resetPassword')->name('resetPassword');
+        Route::post('reset-password/{token}', 'postResetPassword')->name('postResetPassword');
     });
 
     // Route::group(['prefix' => 'authens', 'as' => 'authens.'], function () {

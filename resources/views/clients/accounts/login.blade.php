@@ -42,7 +42,9 @@
                                 </div>
                             @endif
                         </article>
-
+                        @if (session('messageError'))
+                        <span class="text-danger">{{ session('messageError') }}</span>
+                    @endif
                         <article class="text-end">
                             <p class="">
                                 <span class="text-primary">
@@ -52,7 +54,17 @@
                         </article>
 
                         <button class="btn btn-primary text-white p-2">Đăng nhập</button>
+                        @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                         <p class=" p-2">Bạn chưa có tài khoản ?
                             <span class="text-primary">
                                 <a href="{{ route('client.register') }}">Đăng ký ngay</a>
