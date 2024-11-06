@@ -3,6 +3,17 @@
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 @include('clients.layouts.components.singer-page')
 <div class="container-fluid py-5">
     <div class="container py-5">
@@ -23,6 +34,68 @@
                 <tbody>
                     @if ($cartItems->isNotEmpty())
                     @foreach ($cartItems as $item)
+                    @if (isset($userId))
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="selectBox[]" value="{{ $item }}">
+                        </th>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                            </div>
+                        </th>
+                        <td>
+                            <p class="mb-0 mt-4">{{ $item->product->name }}</p>
+                            <p class="mb-0 mt-4"></p>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">
+                                @if ($item->product->status === 0)
+                                {{ number_format($item->product->price_sale) }} VNĐ
+                                @else
+                                @if(isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
+                                @foreach($variantGroups[$item->sku] as $variant)
+                                {{ number_format($variant->price_sale) }} VNĐ
+                                @endforeach
+                                @endif
+                                @endif
+                            </p>
+                        </td>
+                        <td>
+                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" name="quantities[{{ $item->id }}]" class="form-control form-control-sm text-center border-0" value="{{ $item->quantity }}">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">
+                                @if ($item->product->status === 0)
+                                {{ number_format($item->product->price_sale * $item->quantity) }} VNĐ
+                                @else
+                                @if(isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
+                                @foreach($variantGroups[$item->sku] as $variant)
+                                {{ number_format($variant->price_sale * $item->quantity) }} VNĐ
+                                @endforeach
+                                @endif
+                                @endif
+                            </p>
+                        </td>
+                        <td>
+                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @else
                     <tr>
                         <th>
                             <input type="checkbox" name="selectBox[]" value="{{ $item }}">
@@ -63,6 +136,7 @@
                             </button>
                         </td>
                     </tr>
+                    @endif
                     @endforeach
                     @endif
                 </tbody>
