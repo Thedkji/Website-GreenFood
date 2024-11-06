@@ -18,6 +18,6 @@ class CheckAdminMiddleware
                 return redirect()->route('client.home');
             }
         }else{}
-        return redirect()->route('authens.login')->with(['messageError'=>'Bạn phải đăng nhập trước']);
+        return redirect()->route('client.login')->with(['messageError'=>'Bạn phải đăng nhập trước']);
     }
 }
