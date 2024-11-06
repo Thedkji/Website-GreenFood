@@ -21,6 +21,38 @@ class ProductController extends Controller
 {
     public function index()
     {
+        // Xử lý xóa nhiều sản phẩm
+        if (request('ids')) {
+            // Lấy danh sách sản phẩm với các mối quan hệ cần thiết
+            $products = Product::whereIn('id', request('ids'))->get();
+
+            DB::transaction(function () use ($products) {
+                foreach ($products as $product) {
+                    if ($product->status == 1) {
+                        $variantGroups = VariantGroup::where('product_id', $product->id)->get();
+
+                        foreach ($variantGroups as $variantGroup) {
+                            $variantGroup->variants()->sync([]);
+                        }
+
+                        $product->variantGroups()->delete();
+                    }
+
+                    if ($product->categories) {
+                        $product->categories()->sync([]);
+                    }
+
+                    $product->delete();
+
+                    $product->galleries()->delete();
+                }
+            });
+            
+            return response([
+                'message' => 'Xóa sản phẩm thành công',
+            ]);
+        }
+
         // Lấy giá trị bộ lọc từ query string
         $status = request()->input('statusProduct');
 
@@ -127,7 +159,7 @@ class ProductController extends Controller
                             if ($request->hasFile("variant_child_values.{$key}.img")) {
                                 $img = $request->file("variant_child_values.{$key}.img");
                                 $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-                                $dataVariantGroups['img'] = $img->storeAs('products', $filename);
+                                $dataVariantGroups['img'] = $img->storeAs('product_variants', $filename);
                             } else {
                                 $dataVariantGroups['img'] = null; // Không có ảnh thì đặt là null
                             }
@@ -147,7 +179,7 @@ class ProductController extends Controller
                     foreach ($request->file('galleries') as $gallery) { // Đảm bảo sử dụng file 'galleries'
                         if ($gallery) { // Kiểm tra xem $gallery có khác null không
                             $filename = time() . '_' . uniqid() . '.' . $gallery->getClientOriginalExtension(); // Thay đổi này để sử dụng getClientOriginalExtension()
-                            $galleryPath = $gallery->storeAs('products', $filename);
+                            $galleryPath = $gallery->storeAs('galleries', $filename);
 
                             $dataGallery = [
                                 'product_id' => $product->id,
@@ -200,5 +232,45 @@ class ProductController extends Controller
     }
 
     public function update($id, ProductUpdateRequest $request) {}
-    public function destroy($id) {}
+    public function destroy(Product $product)
+    {
+        DB::transaction(function () use ($product) {
+
+            if ($product->status == 1) {
+                $variantGroups = VariantGroup::where('product_id', $product->id)->get();
+                // dd($variantGroups);
+
+                foreach ($variantGroups as $variantGroup) {
+                    $variantGroup->variants()->sync([]);
+
+                    // if ($variantGroup->img) {
+                    //     Storage::delete($variantGroup->img);
+                    // }
+                }
+
+                $product->variantGroups()->delete();
+            }
+
+            if ($product->categories) {
+                $product->categories()->sync([]);
+            }
+
+            $product->delete();
+
+
+            // if ($product->img) {
+            //     Storage::delete($product->img);
+            // }
+
+
+            // if ($product->galleries) {
+            //     foreach ($product->galleries as $gallery) {
+            //         Storage::delete($gallery->path);
+            //     }
+            // }
+            $product->galleries()->delete();
+        });
+
+        return back()->with('success', 'Xóa sản phẩm thành công');
+    }
 }
