@@ -18,10 +18,9 @@
                         <form action="{{ route('authens.login') }}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label for="useremail" class="form-label">Email<span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="useremail" name="email"
-                                    placeholder="Nhập Email">
-                                @error('email')
+                                <label for="user_name" class="form-label">Tên đăng nhập <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Nhập Tài khoản, Email hoặc Số điện thoại">
+                                @error('user_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

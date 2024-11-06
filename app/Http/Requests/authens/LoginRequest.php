@@ -22,7 +22,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'max:255'],
+            // 'email' => ['required', 'email', 'max:255'],
+            'user_name' => ['required'],
             'password' => ['required', 'min:8', 'max:100']
         ];
     }
@@ -31,8 +32,10 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => 'Vui lòng nhập Email',
-            'email.max' => 'Tài khoản Email quá dài không hợp lệ ',
+            // 'email.required' => 'Vui lòng nhập Email',
+            // 'email.max' => 'Tài khoản Email quá dài không hợp lệ ',
+            'user_name.required' => 'Vui lòng nhập tên đăng nhập',
+            // 'user_name.confirmed' => 'Tên đăng nhập không tồn tại',
             'password.required' => 'Vui lòng nhập mật khẩu',
             'password.min' => 'Vui lòng nhập mật khẩu dài hơn 8 kí tự ',
             'password.max' => 'Mật khẩu quá dài ...'
