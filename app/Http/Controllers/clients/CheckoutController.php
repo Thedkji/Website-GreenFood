@@ -92,7 +92,7 @@ class CheckoutController extends Controller
                     'product_quantity' => $item['quantity'],
                 ]);
                 if (auth()->check()) {
-                    Cart::where('id', $item['id'])->delete();
+                    Cart::where('id', $item['id'])->where('user_id', auth()->id())->delete();
                 } else {
                     CartSession::remove($item['id']);
                 }
