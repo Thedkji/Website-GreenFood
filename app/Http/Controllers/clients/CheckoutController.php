@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,13 +12,13 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\VariantGroup;
 use Darryldecode\Cart\Facades\CartFacade as CartSession;
+use Illuminate\Foundation\Auth\User;
 
 class CheckoutController extends Controller
 {
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
-
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
         }
@@ -38,10 +39,10 @@ class CheckoutController extends Controller
             }
             return $carry + $itemTotal;
         }, 0);
-        $userId = auth()->check() ? auth()->id() : null;
-        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'datas', 'userId', 'variantDetails'));
+        $userInfo = auth()->user() ?? null;
+        $userId = $userInfo ? $userInfo->id : null;
+        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'userId', 'variantDetails'));
     }
-
     public function getCheckOut(OrderRequest $request)
     {
         DB::beginTransaction();
@@ -59,21 +60,41 @@ class CheckoutController extends Controller
             ]);
             $cartItems = json_decode($request->data[0], true);
             foreach ($cartItems as $item) {
+                $productName = auth()->check() ? $item['product']['name'] : $item['name'];
+                $productSku = auth()->check() ? $item['sku'] : $item['attributes']['sku'];
+                if (auth()->check()) {
+                    if ($item['product']['status'] === 0) {
+                        $productPrice = $item['product']['price_sale'];
+                        Product::where('sku', $productSku)
+                            ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                    } elseif ($item['product']['status'] === 1) {
+                        $variant = VariantGroup::where('sku', $productSku)->first();
+                        $productPrice = $variant ? $variant->price_sale : $item['price'];
+                        VariantGroup::where('sku', $productSku)
+                            ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                    }
+                } else {
+                    $productPrice = $item['price'];
+                    if ($item['attributes']['status'] == 0) {
+                        Product::where('sku', $productSku)
+                            ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                    } else {
+                        VariantGroup::where('sku', $productSku)
+                            ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                    }
+                }
                 $order->orderDetails()->create([
                     'order_id' => $order->id,
-                    'product_sku' => $item['attributes']['sku'],
-                    'product_img' => 'abc.jpg',
-                    'product_name' => $item['name'],
-                    'product_price' => $item['price'],
+                    'product_sku' => $productSku,
+                    'product_img' => $item['attributes']['img'] ?? 'abc.jpg',
+                    'product_name' => $productName,
+                    'product_price' => $productPrice,
                     'product_quantity' => $item['quantity'],
                 ]);
-                CartSession::remove($item['id']);
-                if ($item['attributes']['status'] == 0) {
-                    Product::where('sku', $item['attributes']['sku'])
-                        ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                if (auth()->check()) {
+                    Cart::where('id', $item['id'])->delete();
                 } else {
-                    VariantGroup::where('sku', $item['attributes']['sku'])
-                        ->update(['quantity' => DB::raw('quantity - ' . $item['quantity'])]);
+                    CartSession::remove($item['id']);
                 }
             }
             DB::commit();
@@ -81,7 +102,7 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Lỗi đặt hàng: ' . $e->getMessage());
-            return redirect()->route('client.home')->with('error', 'Đơn hàng đã được đặt không thành công!');
+            return redirect()->route('client.home')->with('error', 'Đơn hàng đã không thành công!');
         }
     }
 }

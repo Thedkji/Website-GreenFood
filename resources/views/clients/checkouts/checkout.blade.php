@@ -14,37 +14,37 @@
                 <div class="col-md-12 col-lg-6 col-xl-7">
                     <div class="form-item">
                         <label class="form-label my-3">Họ và tên</label>
-                        <input type="text" class="form-control" name="fullName" value="{{old('fullName')}}">
+                        <input type="text" class="form-control" name="fullName" value="{{$userInfo ? $userInfo->name : old('fullName')}}">
                         <x-feedback name="fullName" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control" value="{{old('phone')}}">
+                        <input type="tel" name="phone" class="form-control" value="{{$userInfo ? $userInfo->phone : old('phone')}}">
                         <x-feedback name="phone" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{old('email')}}">
+                        <input type="email" name="email" class="form-control" value="{{$userInfo ? $userInfo->email : old('email')}}">
                         <x-feedback name="email" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Province</label>
-                        <input type="text" class="form-control" name="province" value="{{old('province')}}">
+                        <input type="text" class="form-control" name="province" value="{{$userInfo ? $userInfo->province : old('province')}}">
                         <x-feedback name="province" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">District</label>
-                        <input type="text" name="district" class="form-control" value="{{old('district')}}">
+                        <input type="text" name="district" class="form-control" value="{{$userInfo ? $userInfo->district : old('district')}}">
                         <x-feedback name="district" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Ward</label>
-                        <input type="text" class="form-control" name="ward" value="{{old('ward')}}">
+                        <input type="text" class="form-control" name="ward" value="{{$userInfo ? $userInfo->ward : old('ward')}}">
                         <x-feedback name="ward" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Địa chỉ</label>
-                        <input type="text" class="form-control" name="address" value="{{old('address')}}">
+                        <input type="text" class="form-control" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                         <x-feedback name="address" />
                     </div>
                     <!-- <div class="form-check my-3">
