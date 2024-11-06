@@ -9,6 +9,30 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AccountController::class)
     ->group(function () {
         Route::get('register', 'register')->name('register');
+        Route::post('register', 'postRegister')->name('postRegister');
+
         Route::get('login', 'login')->name('login');
+        Route::post('login', 'postLogin')->name('postLogin');
+
         Route::get('forgot-pass', 'forgotPass')->name('forgotPass');
+        Route::post('forgot-pass', 'postForgotPassword')->name('postForgotPassword');
+        Route::get('/logout', 'logout')->name('logout');
+
     });
+
+    // Route::group(['prefix' => 'authens', 'as' => 'authens.'], function () {
+    //     Route::get('/login', [AuthenController::class, 'login'])->name('login');
+    //     Route::post('/login', [AuthenController::class, 'postLogin'])->name('postLogin');
+
+    //     Route::get('/register', [AuthenController::class, 'register'])->name('register');
+    //     Route::post('/register', [AuthenController::class, 'postRegister'])->name('postRegister');
+
+    //     Route::get('/logout', [AuthenController::class, 'logout'])->name('logout');
+
+        // Route::get('/forgotpassword', [AuthenController::class, 'forgotpassword'])->name('forgotpassword');
+        // Route::post('/forgotpassword', [AuthenController::class, 'authSendEmail'])->name('authSendEmail');
+
+
+        // Route::get('/PasswordChange', [AuthenController::class, 'PasswordChange'])->name('PasswordChange');
+        // Route::get('/notificationDone', [AuthenController::class, 'notificationDone'])->name('notificationDone');
+    // });

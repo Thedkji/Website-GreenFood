@@ -12,12 +12,13 @@
             </div>
 
             <div>
-                <form action="" method="post" class="row justify-content-between g-4 mt-3">
+                <form action="{{ route('client.login') }}" method="post" class="row justify-content-between g-4 mt-3">
+                    @csrf
                     <section class="col-md-12 d-flex flex-column gap-3">
                         <article>
                             <div>
-                                <label for="" class="fw-bold">Tên đăng nhập <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control my-2 p-2" name="user_name"
+                                <label for="user_name" class="fw-bold">Tên đăng nhập <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control my-2 p-2" id="user_name" name="user_name"
                                     placeholder="Nhập tên đăng nhập hoặc số điện thoại của bạn">
                             </div>
 

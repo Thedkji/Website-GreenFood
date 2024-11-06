@@ -16,25 +16,34 @@ class AuthenController extends Controller
 
         return view('authens.login');
     }
+
     public function postLogin(LoginRequest $req)
     {
-
         try {
-            $credentials = $req->only('email', 'password');
+            $credentials = ['password' => $req->password];
+            $loginInput = $req->user_name;
+
+            // Kiểm tra đầu vào là tên đăng nhập, email, hay số điện thoại
+            if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+                $credentials['email'] = $loginInput;
+            } elseif (preg_match('/^\d+$/', $loginInput)) {
+                $credentials['phone'] = $loginInput;
+            } else {
+                $credentials['user_name'] = $loginInput;
+            }
+
             $remember = $req->has('remember');
 
-            if (Auth::attempt($credentials, $remember, [
-                'email' => $req->email,
-                'password' => $req->password
-            ])) {
+            if (Auth::attempt($credentials, $remember)) {
                 return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
+            } else {
+                return redirect()->back()->withErrors(['errorsMessage' => 'Tên đăng nhập, email hoặc số điện thoại hoặc mật khẩu không đúng!']);
             }
         } catch (\Exception $e) {
-            return redirect()->back()->with([
-                'errorsMessage' => 'Email hoặc Mật Khẩu không đúng !!!'
-            ]);
+            return redirect()->back()->withErrors(['errorsMessage' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
         }
     }
+
 
 
     public function register()
@@ -42,41 +51,37 @@ class AuthenController extends Controller
         return view('authens.Register');
     }
     public function postRegister(RegisterRequest $req)
-{
-    // Kiểm tra xem email đã tồn tại chưa
-    $check = User::where('email', $req->email)->exists();
+    {
+        // Kiểm tra xem email đã tồn tại chưa
+        $check = User::where('email', $req->email)->exists();
 
-    if (!$check) {
-        // Tạo đối tượng User mới và lưu dữ liệu
-        $user = new User();
-        $user->name = $req->name;
-        $user->email = $req->email;
-        $user->password = bcrypt($req->password); // Mã hóa mật khẩu
-        $user->phone = $req->phone;
-        $user->user_name = $req->user_name;
+        if (!$check) {
+            // Tạo đối tượng User mới và lưu dữ liệu
+            $user = new User();
+            $user->name = $req->name;
+            $user->email = $req->email;
+            $user->password = bcrypt($req->password); // Mã hóa mật khẩu
+            $user->phone = $req->phone;
+            $user->user_name = $req->user_name;
 
 
-        $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
+            $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
 
-        return redirect()->back()->with([
-            'message' => 'Đăng ký thành công!'
-        ]);
-    } else {
-        // Thông báo nếu email đã tồn tại
-        return redirect()->back()->withErrors([
-            'email' => 'Email đã tồn tại, vui lòng chọn email khác.'
-        ]);
+            return redirect()->back()->with([
+                'message' => 'Đăng ký thành công!'
+            ]);
+        } else {
+            // Thông báo nếu email đã tồn tại
+            return redirect()->back()->withErrors([
+                'email' => 'Email đã tồn tại, vui lòng chọn email khác.'
+            ]);
+        }
     }
-}
 
 
 
-
-
-
-
-
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect()->route('authens.login')->with(['Đăng xuất thành công']);
     }
