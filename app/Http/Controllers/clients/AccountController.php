@@ -28,42 +28,54 @@ class AccountController extends Controller
         return view("clients.accounts.login");
     }
     public function postLogin(LoginRequest $req)
-    {
-        try {
-            $credentials = ['password' => $req->password];
-            $loginInput = $req->user_name;
+{
+    try {
+        $credentials = ['password' => $req->password];
+        $loginInput = $req->user_name;
 
-            // Xác định xem đầu vào là email, số điện thoại, hay tên đăng nhập
-            if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
-                $credentials['email'] = $loginInput;
-            } elseif (preg_match('/^\d+$/', $loginInput)) {
-                $credentials['phone'] = $loginInput;
-            } else {
-                $credentials['user_name'] = $loginInput;
-            }
-
-            $remember = $req->has('remember');
-
-            if (Auth::attempt($credentials, $remember)) {
-                return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
-            } else {
-                // Kiểm tra xem người dùng có tồn tại không
-                $userExists = User::where(function ($query) use ($loginInput) {
-                    $query->where('user_name', $loginInput)
-                        ->orWhere('email', $loginInput)
-                        ->orWhere('phone', $loginInput);
-                })->exists();
-
-                if ($userExists) {
-                    return redirect()->back()->withErrors(['password' => 'Mật khẩu không đúng!']);
-                } else {
-                    return redirect()->back()->withErrors(['user_name' => 'Tên đăng nhập, email hoặc số điện thoại không đúng!']);
-                }
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
+        // Xác định xem đầu vào là email, số điện thoại, hay tên đăng nhập
+        if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $loginInput;
+        } elseif (preg_match('/^\d+$/', $loginInput)) {
+            $credentials['phone'] = $loginInput;
+        } else {
+            $credentials['user_name'] = $loginInput;
         }
+
+        $remember = $req->has('remember');
+
+        // Kiểm tra xem tài khoản có tồn tại và có xác minh chưa
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            // Kiểm tra xem tài khoản đã được xác minh hay chưa
+            if ($user->email_verified_at === null) {
+                // Nếu chưa xác minh, yêu cầu người dùng xác minh email
+                Auth::logout(); // Đăng xuất người dùng
+                return redirect()->back()->withErrors(['email' => 'Tài khoản chưa được xác minh. Vui lòng kiểm tra email để xác minh tài khoản.']);
+            }
+
+            // Nếu tài khoản đã được xác minh, chuyển hướng đến trang dashboard
+            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
+        } else {
+            // Kiểm tra xem người dùng có tồn tại không
+            $userExists = User::where(function ($query) use ($loginInput) {
+                $query->where('user_name', $loginInput)
+                    ->orWhere('email', $loginInput)
+                    ->orWhere('phone', $loginInput);
+            })->exists();
+
+            if ($userExists) {
+                return redirect()->back()->withErrors(['password' => 'Mật khẩu không đúng!']);
+            } else {
+                return redirect()->back()->withErrors(['user_name' => 'Tên đăng nhập, email hoặc số điện thoại không đúng!']);
+            }
+        }
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
     }
+}
+
 
 
     public function postRegister(RegisterRequest $req)

@@ -11,10 +11,15 @@
                 <h1 class="text-primary">Đăng Nhập</h1>
             </div>
             @if (session('message'))
-            <div class="alert alert-warning" role="alert">
-                <strong> {{ session('message') }} </strong>
-            </div>
-        @endif
+                <div class="alert alert-warning" role="alert">
+                    <strong> {{ session('message') }} </strong>
+                </div>
+            @endif
+            @if ($errors->has('email'))
+                <div class="my-2 alert alert-danger">
+                    {{ $errors->first('email') }}
+                </div>
+            @endif
             <div>
                 <form action="{{ route('client.login') }}" method="post" class="row justify-content-between g-4 mt-3">
                     @csrf
