@@ -62,13 +62,13 @@
                         </span>
                     </a>
 
-                    <div class="nav-item dropdown">
+                    <div class="nav-item  dropdown">
                         @guest
                             <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
                             <a href="{{ route('client.login') }}" class="nav-link">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
-                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <div class="dropdown-menu bg-secondary rounded-0">
                                 <a href="{{ route('client.login') }}" class="dropdown-item">Đăng Nhập</a>
                                 <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
                             </div>
@@ -77,13 +77,13 @@
                             <a href="{{ route('client.login') }}" class="nav-link">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
-                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
                                 <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
 
                                 <!-- Kiểm tra nếu người dùng là admin -->
                                 @if (Auth::user()->role === 0)
                                     <a href="{{ route('admin.dashboard') }}" class="dropdown-item nav-item nav-link">
-                                        Quản trị 
+                                        Quản trị
                                     </a>
                                 @endif
 

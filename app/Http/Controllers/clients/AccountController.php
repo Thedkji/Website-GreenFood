@@ -4,6 +4,7 @@ namespace App\Http\Controllers\clients;
 
 
 use App\Models\User;
+use App\Mail\VerifyAccount;
 use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class AccountController extends Controller
             $credentials = ['password' => $req->password];
             $loginInput = $req->user_name;
 
-            // Kiểm tra đầu vào là tên đăng nhập, email, hay số điện thoại
+            // Xác định xem đầu vào là email, số điện thoại, hay tên đăng nhập
             if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
                 $credentials['email'] = $loginInput;
             } elseif (preg_match('/^\d+$/', $loginInput)) {
@@ -46,12 +47,24 @@ class AccountController extends Controller
             if (Auth::attempt($credentials, $remember)) {
                 return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
             } else {
-                return redirect()->back()->withErrors(['error' => 'Tên đăng nhập, email hoặc số điện thoại hoặc mật khẩu không đúng!']);
+                // Kiểm tra xem người dùng có tồn tại không
+                $userExists = User::where(function ($query) use ($loginInput) {
+                    $query->where('user_name', $loginInput)
+                        ->orWhere('email', $loginInput)
+                        ->orWhere('phone', $loginInput);
+                })->exists();
+
+                if ($userExists) {
+                    return redirect()->back()->withErrors(['password' => 'Mật khẩu không đúng!']);
+                } else {
+                    return redirect()->back()->withErrors(['user_name' => 'Tên đăng nhập, email hoặc số điện thoại không đúng!']);
+                }
             }
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
         }
     }
+
 
     public function postRegister(RegisterRequest $req)
     {
@@ -70,8 +83,11 @@ class AccountController extends Controller
 
             $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
 
-            return redirect()->back()->with([
-                'message' => 'Đăng ký thành công!'
+            // Gửi email xác nhận tài khoản
+            Mail::to($user->email)->send(new VerifyAccount($user));
+            // dd('error');
+            return redirect()->route('client.login')->with([
+                'message' => 'Bạn đã đăng ký tài khoản thành công. Vui lòng vào email của bạn để xác nhận email !'
             ]);
         } else {
             // Thông báo nếu email đã tồn tại
@@ -81,7 +97,12 @@ class AccountController extends Controller
         }
     }
 
-
+    public function verify($email)
+    {
+        $user = User::where('email', $email)->whereNull('email_verified_at')->firstOrFail();
+        User::where('email', $email)->update(['email_verified_at' => now()]);
+        return redirect()->route('client.login')->with(['success' => 'Xác nhận tài khoản thành công!']);
+    }
 
     public function logout()
     {
