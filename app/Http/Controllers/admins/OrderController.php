@@ -41,16 +41,21 @@ class OrderController extends Controller
         return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
     }
 
-    public function updateOrder(OrderRequest $request, $id)
+    public function updateOrder(Request $request, $id)
     {
-        $orders = Order::find($id);
-        if ($request->has('status') && $request->has('status') !== 5) {
-            $orders->update(['status' => $request->input('status')]);
-        } elseif ($request->has('status') && $request->has('status') == 5) {
-            $orders->update([
-                'status' => $request->input('status'),
-                'cancel_reson' => $request->input('cancel_reson')
-            ]);
+        $order = Order::find($id);
+        if ($order) {
+            $status = $request->input('status');
+            $order->update(['status' => $status]);
+        }
+        return redirect()->back();
+    }
+
+    public function cancelOrder(Request $request, $id)
+    {
+        $order = Order::find($id);
+        if ($order) {
+            $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
         }
         return redirect()->back();
     }

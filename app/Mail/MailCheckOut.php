@@ -30,7 +30,7 @@ class MailCheckOut extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mail Check Out',
+            subject: 'Thông tin đơn hàng',
         );
     }
 

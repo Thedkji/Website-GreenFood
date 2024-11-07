@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\authens\LoginRequest;
 use App\Http\Requests\authens\RegisterRequest;
 use App\Http\Requests\authens\ForGotPasswordRequest;
+use Darryldecode\Cart\Facades\CartFacade as CartSession;
 
 class AccountController extends Controller
 {
@@ -40,7 +41,7 @@ class AccountController extends Controller
             } else {
                 $credentials['user_name'] = $loginInput;
             }
-
+            CartSession::clear();
             $remember = $req->has('remember');
 
             if (Auth::attempt($credentials, $remember)) {
@@ -86,6 +87,7 @@ class AccountController extends Controller
     public function logout()
     {
         Auth::logout();
+        CartSession::clear();
         return redirect()->route('client.login')->with(['Đăng xuất thành công']);
     }
 

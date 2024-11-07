@@ -108,6 +108,9 @@ class CheckoutController extends Controller
                     CartSession::remove($item['id']);
                 }
             }
+            if (!$request->has('cash')) {
+                return redirect()->back()->with('error', 'Chọn phương thức thanh toán');
+            }
             Mail::to($order->email)->send(new MailCheckOut($order));
             DB::commit();
             session(['check' => true]);
