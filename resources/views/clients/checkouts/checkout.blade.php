@@ -4,7 +4,19 @@
 
 @section('content')
 @include('clients.layouts.components.singer-page')
+
 <div class="container-fluid py-5">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="container py-5">
         <h1 class="mb-4">Billing details</h1>
         <form action="{{route('client.getCheckOut')}}" method="POST">

@@ -16,4 +16,22 @@ class MessageController extends Controller
     {
         return view("clients.layouts.components.messages.emails.failure-email");
     }
+
+    public function showSuccessCheckOut()
+    {
+        if (!session('check')) {
+            return redirect()->route('client.home');
+        }
+        session()->forget('check');
+        return view("clients.layouts.components.messages.checkout.success-checkout");
+    }
+
+    public function showFailureCheckOut()
+    {
+        if (!session('check')) {
+            return redirect()->route('client.home');
+        }
+        session()->forget('check');
+        return view("clients.layouts.components.messages.checkout.failure-checkout");
+    }
 }

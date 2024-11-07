@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\admins\OrderRequest;
+use App\Mail\MailCheckOut;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\VariantGroup;
 use Darryldecode\Cart\Facades\CartFacade as CartSession;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -25,20 +27,29 @@ class CheckoutController extends Controller
         $decodedItems = array_map(function ($itemJson) {
             return json_decode($itemJson, true);
         }, $datas);
+        session(['cart_items' => $datas]);
         $variantDetails = [];
-        $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
-            if ($item['product']['status'] === 0) {
-                $itemTotal = $item['quantity'] * $item['product']['price_sale'];
+        if (auth()->check()) {
+            $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
+                if ($item['product']['status'] === 0) {
+                    $itemTotal = $item['quantity'] * $item['product']['price_sale'];
+                    $variantDetails[$item['id']] = null;
+                } else {
+                    $variant = VariantGroup::where('product_id', $item['product_id'])
+                        ->where('sku', $item['sku'])
+                        ->first();
+                    $itemTotal = $variant ? $item['quantity'] * $variant->price_sale : $item['quantity'] * $item['price'];
+                    $variantDetails[$item['id']] = $variant;
+                }
+                return $carry + $itemTotal;
+            }, 0);
+        } else {
+            $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
+                $itemTotal = $item['quantity'] * $item['price'];
                 $variantDetails[$item['id']] = null;
-            } else {
-                $variant = VariantGroup::where('product_id', $item['product_id'])
-                    ->where('sku', $item['sku'])
-                    ->first();
-                $itemTotal = $variant ? $item['quantity'] * $variant->price_sale : $item['quantity'] * $item['price'];
-                $variantDetails[$item['id']] = $variant;
-            }
-            return $carry + $itemTotal;
-        }, 0);
+                return $carry + $itemTotal;
+            }, 0);
+        }
         $userInfo = auth()->user() ?? null;
         $userId = $userInfo ? $userInfo->id : null;
         return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'userId', 'variantDetails'));
@@ -97,12 +108,14 @@ class CheckoutController extends Controller
                     CartSession::remove($item['id']);
                 }
             }
+            Mail::to($order->email)->send(new MailCheckOut($order));
             DB::commit();
-            return redirect()->route('client.home')->with('success', 'Đơn hàng đã được đặt thành công!');
+            session(['check' => true]);
+            return redirect()->route('client.showSuccessCheckOut')->with('success', 'Đơn hàng đã được đặt thành công!');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Lỗi đặt hàng: ' . $e->getMessage());
-            return redirect()->route('client.home')->with('error', 'Đơn hàng đã không thành công!');
+            return redirect()->route('client.showFailureCheckOut')->with('error', 'Đơn hàng đã không thành công!');
         }
     }
 }
