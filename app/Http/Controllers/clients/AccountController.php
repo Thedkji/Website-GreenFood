@@ -104,6 +104,7 @@ class AccountController extends Controller
             'token' => $token
         ];
 
+        PasswordResetTokens::where('email', $req->email)->delete();
 
         if (PasswordResetTokens::create($tokenData)) {
             Mail::to($req->email)->send(new ForgotPassword($user, $token));
