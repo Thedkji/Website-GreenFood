@@ -3,19 +3,20 @@
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
 @section('content')
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
 
-@if (session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
-</div>
-@endif
 @include('clients.layouts.components.singer-page')
 <div class="container-fluid py-5">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="container py-5">
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
@@ -34,7 +35,7 @@
                 <tbody>
                     @if ($cartItems->isNotEmpty())
                     @foreach ($cartItems as $item)
-                    @if (isset($userId))
+                    @if (auth()->check())
                     <tr>
                         <th>
                             <input type="checkbox" name="selectBox[]" value="{{ $item }}">
