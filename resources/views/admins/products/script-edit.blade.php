@@ -10,7 +10,11 @@
         let selectedVariantValuesContainer = $('#selectedVariantValuesContainer');
         let variantValuesTableBody = $('#variantValuesTableBody');
 
-        // Đối tượng toàn cục để lưu trữ các giá trị biến thể
+        if ($('#imagePreviewAvatar').css('display') == 'none') {
+            $('#img').show();
+        }
+        
+        //Đối tượng toàn cục để lưu trữ các giá trị biến thể
         let variantValues = {};
 
         // Khởi tạo Select2

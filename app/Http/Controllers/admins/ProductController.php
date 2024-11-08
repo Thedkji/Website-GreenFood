@@ -47,7 +47,7 @@ class ProductController extends Controller
                     $product->galleries()->delete();
                 }
             });
-            
+
             return response([
                 'message' => 'Xóa sản phẩm thành công',
             ]);
@@ -229,6 +229,30 @@ class ProductController extends Controller
 
             return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
         }
+    }
+
+    public function edit(Product $product,Request $request)
+    {
+
+        $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
+        $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
+
+
+        if ($request->category_id) {
+            $categories = Category::whereIn('parent_id', $request->category_id)->get();
+            return response()->json([
+                'categories' => $categories,
+            ]);
+        }
+
+        if ($request->variant_id) {
+            $variants = Variant::whereIn('parent_id', $request->variant_id)->get();
+            return response()->json([
+                'variants' => $variants,
+            ]);
+        }
+
+        return view('admins.products.edit-product', compact('categories', 'variants','product'));
     }
 
     public function update($id, ProductUpdateRequest $request) {}
