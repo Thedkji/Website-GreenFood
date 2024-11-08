@@ -4,7 +4,19 @@
 
 @section('content')
 @include('clients.layouts.components.singer-page')
+
 <div class="container-fluid py-5">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="container py-5">
         <h1 class="mb-4">Billing details</h1>
         <form action="{{route('client.getCheckOut')}}" method="POST">
@@ -130,7 +142,7 @@
                     <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                         <div class="col-12">
                             <div class="form-check text-start my-3">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
+                                <input type="checkbox" name="cash" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
                                 <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
                             </div>
                         </div>

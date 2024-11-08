@@ -64,6 +64,7 @@
 
                     <div class="nav-item  dropdown">
                         @guest
+
                             <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
                             <a href="{{ route('client.login') }}" class="nav-link">
                                 <i class="fas fa-user fa-2x"></i>
@@ -92,7 +93,6 @@
                                 </a>
                             </div>
                         @endguest
-
 
                     </div>
                 </div>
