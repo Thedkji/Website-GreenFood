@@ -74,7 +74,7 @@ class CartController extends Controller
             Cart::where('user_id', auth()->id())->delete();
         }
 
-        return redirect()->route('client.home');
+        return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công');
     }
 
     public function updateCart(Request $request)

@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
             Hủy đơn hàng
             </button>
-            <form style="margin-right:10px ;" action="{{route('admin.orders.updateOrder', $orders->id)}}" id="updateStatusForm" method="post">
+            <form style="margin-right:10px ;" action="{{route('admin.orders.cancelOrder', $orders->id)}}" id="updateStatusForm" method="post">
                 @csrf
                 @method('PUT')
                 <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
@@ -98,13 +98,13 @@
                 <button type="submit" class="btn btn-primary">Hoàn thành đơn hàng và đánh giá</button>
             </form>
             @break
-
             @case(4)
             <span class="badge bg-danger p-2">Hoàn trả hàng</span>
             @break
-
             @default
-            <span class="badge bg-secondary p-2">Không thể thay đổi trạng thái</span>
+            <span class="badge bg-secondary p-2">
+                Không thể thay đổi trạng thái : {{$orders->status === 5 ? $orders->cancel_reson : ''}}
+            </span>
             @endswitch
 
     </div>
@@ -155,8 +155,8 @@
                     {{ app('formatPrice')($orderDetail->product_price) }} VNĐ
                 </td>
                 <td scope="col">{{ $orderDetail->product_quantity }}</td>
-                <td scope="col">{{ $orderDetail->coupon_name }}</td>
-                <td scope="col">{{ $orderDetail->coupon_quantity }}</td>
+                <td scope="col">{{ $orderDetail->coupon_name ?? 'Không có' }}</td>
+                <td scope="col">{{ $orderDetail->coupon_quantity ?? 'Không có'}}</td>
 
                 <td scope="col">
                     {{ app('formatPrice')($orderDetail->coupon_price) }} VNĐ
@@ -167,7 +167,7 @@
                 @endphp
 
                 <td scope="col">
-                    <span class="text-success">{{ app('formatPrice')($total) }} VNĐ</span>
+                    <span class="text-success">{{ app('formatPrice')($orderDetail->product_quantity * $orderDetail->product_price) }} VNĐ</span>
                 </td>
 
                 <td scope="col">{{ $orderDetail->created_at }}</td>
