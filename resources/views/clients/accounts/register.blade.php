@@ -28,11 +28,7 @@
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.phone'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.phone') }}
-                                </div>
-                            @endif
+                            
                         </article>
                         <article>
                             <div>
@@ -44,11 +40,7 @@
                             @error('phone')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.phone'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.phone') }}
-                                </div>
-                            @endif
+
                         </article>
 
                         <article>
@@ -60,11 +52,7 @@
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.phone'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.phone') }}
-                                </div>
-                            @endif
+
                         </article>
 
                         <article>
@@ -77,11 +65,7 @@
                             @error('user_name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.user_name'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.user_name') }}
-                                </div>
-                            @endif
+
                         </article>
 
                         <article>
@@ -93,11 +77,7 @@
                             @error('password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.password'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.password') }}
-                                </div>
-                            @endif
+
                         </article>
 
                         <article>
@@ -110,11 +90,7 @@
                             @error('password_confirmation')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @if (session('error.password_confirmation'))
-                                <div class="my-2 alert alert-danger">
-                                    {{ session('error.password_confirmation') }}
-                                </div>
-                            @endif
+
                         </article>
 
                         <button class="btn btn-primary text-white p-2">Đăng ký</button>

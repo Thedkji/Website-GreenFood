@@ -4,6 +4,7 @@ namespace App\Http\Controllers\clients;
 
 
 use App\Models\User;
+use App\Mail\VerifyAccount;
 use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
 use Illuminate\Http\Request;
@@ -28,31 +29,56 @@ class AccountController extends Controller
         return view("clients.accounts.login");
     }
     public function postLogin(LoginRequest $req)
-    {
-        try {
-            $credentials = ['password' => $req->password];
-            $loginInput = $req->user_name;
 
-            // Kiểm tra đầu vào là tên đăng nhập, email, hay số điện thoại
-            if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
-                $credentials['email'] = $loginInput;
-            } elseif (preg_match('/^\d+$/', $loginInput)) {
-                $credentials['phone'] = $loginInput;
-            } else {
-                $credentials['user_name'] = $loginInput;
-            }
-            CartSession::clear();
-            $remember = $req->has('remember');
+{
+    try {
+        $credentials = ['password' => $req->password];
+        $loginInput = $req->user_name;
 
-            if (Auth::attempt($credentials, $remember)) {
-                return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Tên đăng nhập, email hoặc số điện thoại hoặc mật khẩu không đúng!']);
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
+        // Xác định xem đầu vào là email, số điện thoại, hay tên đăng nhập
+        if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $loginInput;
+        } elseif (preg_match('/^\d+$/', $loginInput)) {
+            $credentials['phone'] = $loginInput;
+        } else {
+            $credentials['user_name'] = $loginInput;
         }
+
+        $remember = $req->has('remember');
+
+        // Kiểm tra xem tài khoản có tồn tại và có xác minh chưa
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            // Kiểm tra xem tài khoản đã được xác minh hay chưa
+            if ($user->email_verified_at === null) {
+                // Nếu chưa xác minh, yêu cầu người dùng xác minh email
+                Auth::logout(); // Đăng xuất người dùng
+                return redirect()->back()->withErrors(['email' => 'Tài khoản chưa được xác minh. Vui lòng kiểm tra email để xác minh tài khoản.']);
+            }
+
+            // Nếu tài khoản đã được xác minh, chuyển hướng đến trang dashboard
+            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
+        } else {
+            // Kiểm tra xem người dùng có tồn tại không
+            $userExists = User::where(function ($query) use ($loginInput) {
+                $query->where('user_name', $loginInput)
+                    ->orWhere('email', $loginInput)
+                    ->orWhere('phone', $loginInput);
+            })->exists();
+
+            if ($userExists) {
+                return redirect()->back()->withErrors(['password' => 'Mật khẩu không đúng!']);
+            } else {
+                return redirect()->back()->withErrors(['user_name' => 'Tên đăng nhập, email hoặc số điện thoại không đúng!']);
+            }
+        }
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi trong quá trình đăng nhập.']);
     }
+}
+
+
 
     public function postRegister(RegisterRequest $req)
     {
@@ -71,8 +97,11 @@ class AccountController extends Controller
 
             $user->save(); // Lưu đối tượng User vào cơ sở dữ liệu
 
-            return redirect()->back()->with([
-                'message' => 'Đăng ký thành công!'
+            // Gửi email xác nhận tài khoản
+            Mail::to($user->email)->send(new VerifyAccount($user));
+            // dd('error');
+            return redirect()->route('client.login')->with([
+                'message' => 'Bạn đã đăng ký tài khoản thành công. Vui lòng vào email của bạn để xác nhận email !'
             ]);
         } else {
             // Thông báo nếu email đã tồn tại
@@ -82,7 +111,12 @@ class AccountController extends Controller
         }
     }
 
-
+    public function verify($email)
+    {
+        $user = User::where('email', $email)->whereNull('email_verified_at')->firstOrFail();
+        User::where('email', $email)->update(['email_verified_at' => now()]);
+        return redirect()->route('client.login')->with(['success' => 'Xác nhận tài khoản thành công!']);
+    }
 
     public function logout()
     {
@@ -106,6 +140,7 @@ class AccountController extends Controller
             'token' => $token
         ];
 
+        PasswordResetTokens::where('email', $req->email)->delete();
 
         if (PasswordResetTokens::create($tokenData)) {
             Mail::to($req->email)->send(new ForgotPassword($user, $token));
