@@ -38,16 +38,13 @@
         <thead>
             <tr>
                 <td scope="col">Id</td>
-                <td scope="col">Name</td>
-                <td scope="col">Avatar</td>
-                <td scope="col">User Name</td>
+                <td scope="col">Họ và tên</td>
+                <td scope="col">Ảnh</td>
+                <td scope="col">Tên đăng nhập</td>
                 <td scope="col">Email</td>
-                <td scope="col">Phone</td>
-                <td scope="col">province</td>
-                <td scope="col">district</td>
-                <td scope="col">ward</td>
-                <td scope="col">Address</td>
-                <td scope="col">Role</td>
+                <td scope="col">Số điện thoại</td>
+                <td scope="col">Địa chỉ</td>
+                <td scope="col">Vai trò</td>
                 <td scope="col">Thao Tác</td>
             </tr>
         </thead>
@@ -63,9 +60,9 @@
                         {{-- <th scope="row">{{ $value->password }}</th> --}}
                         <th scope="row">{{ $value->email }}</th>
                         <th scope="row">{{ $value->phone }}</th>
-                        <th scope="row">{{ $value->province }}</th>
+                        {{-- <th scope="row">{{ $value->province }}</th>
                         <th scope="row">{{ $value->district }}</th>
-                        <th scope="row">{{ $value->ward }}</th>
+                        <th scope="row">{{ $value->ward }}</th> --}}
                         <th scope="row">{{ $value->address }}</th>
                         <th scope="row">{{ $value->role }}</th>
                         <th scope="row">

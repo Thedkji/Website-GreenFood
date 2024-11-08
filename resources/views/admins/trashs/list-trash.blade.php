@@ -146,10 +146,10 @@
 
                         <td>
                             <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.trashs.restoreProduct', ['product' => $product->id]) }}"
+                                <a href="{{ route('admin.trashs.restoreProduct', $product->id) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.trashs.destroyProduct', ['product' => $product->id]) }}"
+                                <form action="{{ route('admin.trashs.destroyProduct', $product->id) }}"
                                     method="post">
                                     @csrf
                                     @method('DELETE')
