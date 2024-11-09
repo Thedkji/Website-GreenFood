@@ -24,7 +24,7 @@
         <div class="row w-50">
             <div class="col-lg-8">
                 <div class="mb-3">
-                    <label for="" class="form-label">Tên biến thể</label>
+                    <label for="" class="form-label">Tên danh mục</label>
                     <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                 </div>
 
@@ -34,8 +34,8 @@
 
                 <div>
                     <select name="selectCategory" class="form-select" onchange="categoryChange()">
-                        <option value="0">Biến thể không có giá trị</option>
-                        <option value="1">Giá trị của biến thể</option>
+                        <option value="0">Danh mục cha</option>
+                        <option value="1">Chọn danh mục cha</option>
                     </select>
                 </div>
 
@@ -49,8 +49,16 @@
                 </div>
 
                 <div class="col-12 my-3">
-                    <button class="btn btn-primary" type="submit">Thêm mới</button>
+                    <button class="btn btn-success" type="submit">Thêm mới</button>
                 </div>
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary " type="button">
+                        <a class="text-white" href="{{route('admin.categories.index')}}">Quay lại</a>
+                    </button>
+                </div>
+
+
             </div>
         </div>
     </form>
