@@ -30,18 +30,14 @@
         </div>
     </div>
     <h2 class="text-primary">Danh sách người dùng</h2>
-    <table class="mb-3 table table-striped ">
+    <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
-                <td scope="col">Id</td>
-                <td scope="col">Name</td>
-                <td scope="col">Avatar</td>
-                <td scope="col">User Name</td>
-                <td scope="col">Email</td>
-                <td scope="col">Phone</td>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
                 <th scope="col">Ngày xóa</th>
 
-                <td scope="col">Thao Tác</td>
+                <th scope="col">Thao Tác</th>
             </tr>
         </thead>
         <tbody>
@@ -50,18 +46,15 @@
                     <tr>
                         <th scope="row">{{ $value->id }}</th>
                         <th scope="row">{{ $value->name }}</th>
-                        <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:150px"></th>
-                        <th scope="row">{{ $value->user_name }}</th>
-                        {{-- <th scope="row">{{ $value->password }}</th> --}}
-                        <th scope="row">{{ $value->email }}</th>
-                        <th scope="row">{{ $value->phone }}</th>
+                        {{-- <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
+                                style="width:150px"></th> --}}
+
                         <td scope="row">{{ $value->deleted_at }}</td>
 
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
                                 <a href="{{ route('admin.trashs.restoreUser', $value->id) }}"
-                                    style="background-color: transparent;" class="link-success fs-15"><i
+                                    style="background-color: transparent;"  onclick="return confirmRestore();" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
                                 <form action="{{ route('admin.trashs.destroyUser', $value->id) }}" method="post">
                                     @csrf
@@ -83,13 +76,11 @@
         </tbody>
     </table>
     <h2 class="text-primary">Danh sách danh mục</h2>
-    <table class="mb-3 table table-striped table-nowrap align-middle mb-0 text-center">
+    <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Tên danh mục</th>
-                <th scope="col">ID danh mục cha</th>
-                {{-- <th scope="col">Ngày tạo</th> --}}
                 <th scope="col">Ngày xóa</th>
                 <th scope="col">Thao tác</th>
             </tr>
@@ -99,12 +90,11 @@
                 <tr>
                     <td>{{ $category->id }}</td>
                     <td>{{ $category->name }}</td>
-                    <td>{{ $category->parent_id }}</td>
                     <td>{{ $category->deleted_at }}</td>
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.trashs.restoreCategory', $category->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreCategory', $category->id) }}" onclick="return confirmRestore();" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
 
                             <form action="{{ route('admin.trashs.destroyCategory', $category) }}" method="post">
@@ -127,7 +117,6 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Tên sản phẩm</th>
-                <th scope="col">Ảnh</th>
                 <th scope="col">Ngày xóa</th>
 
                 <th scope="col">Thao tác</th>
@@ -139,15 +128,15 @@
                     <tr>
                         <th scope="row">{{ $product->id }}</th>
                         <td>{{ $product->name }}</td>
-                        <td>
+                        {{-- <td>
                             <img src="{{ env('VIEW_IMG') . '/' . $product->img }}" alt="Ảnh sản phẩm" style="width:150px">
-                        </td>
+                        </td> --}}
                         <td scope="col">{{ $product->deleted_at }}</td>
 
                         <td>
                             <div class="hstack gap-3 flex-wrap">
                                 <a href="{{ route('admin.trashs.restoreProduct', $product->id) }}"
-                                    style="background-color: transparent;" class="link-success fs-15"><i
+                                    style="background-color: transparent;" onclick="return confirmRestore();" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
                                 <form action="{{ route('admin.trashs.destroyProduct', $product->id) }}"
                                     method="post">
@@ -170,15 +159,15 @@
     </table>
     <h2 class="text-primary">Danh sách bình luận</h2>
     <div class="table-responsive">
-        <table class="mb-3 table table-striped table-hover align-middle mb-0">
+        <table class="mb-3 table table-striped align-middle  mb-0">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Tên sản phẩm</th>
                     <th scope="col">Khách hàng </th>
-                    <th scope="col">Bình luận</th>
+                    {{-- <th scope="col">Bình luận</th>
                     <th scope="col">Ảnh</th>
-                    <th scope="col">Sao</th>
+                    <th scope="col">Sao</th> --}}
                     <th scope="col">Ngày xóa</th>
 
                     <th scope="col">Thao tác</th>
@@ -190,7 +179,7 @@
                         <th scope="row">{{ $comment->id }}</th>
                         <td>{{ $comment->product->name }}</td>
                         <td>{{ $comment->user->name ?? 'Anonymous' }}</td>
-                        <td>{{ $comment->content }}</td>
+                        {{-- <td>{{ $comment->content }}</td>
                         <td>
                             @if ($comment->img)
                                 <img src="{{ asset('storage/' . $comment->img) }}" alt="Image" width="150">
@@ -206,13 +195,13 @@
                                 @endfor
                             </div>
                         </td>
-                        <td>{{ $comment->created_at }}</td>
+                        <td>{{ $comment->created_at }}</td> --}}
                         <td scope="col">{{ $comment->deleted_at }}</td>
 
                         <td>
                             <div class="hstack gap-2">
                                 <a href="#" class="link-danger fs-15"
-                                    onclick="event.preventDefault(); document.getElementById('delete-form-{{ $comment->id }}').submit();">
+                                    onclick="event.preventDefault();  document.getElementById('delete-form-{{ $comment->id }}').submit();" onclick="return confirmRestore();">
                                     <i class="ri-delete-bin-line"></i>
                                 </a>
                                 <form id="delete-form-{{ $comment->id }}"
@@ -229,7 +218,7 @@
         </table>
     </div>
     <h2 class="text-primary">Danh sách mua hàng</h2>
-    <table class="mb-3 table table-striped table-nowrap align-middle mb-0 text-center">
+    <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
                 <th scope="col">STT</th>
@@ -250,7 +239,7 @@
 
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.trashs.restoreOrder', $order->id) }}" class="link-success fs-15"><i
+                            <a href="{{ route('admin.trashs.restoreOrder', $order->id) }}" onclick="return confirmRestore();" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
                             <a href="{{ route('admin.trashs.destroyOrder', $order->id) }}" class="link-danger fs-15"
                                 onclick="return confirm('Đơn hàng sẽ bị xóa và chuyển vào thùng rác , vẫn chấp nhận xóa ??? ')">
@@ -269,3 +258,10 @@
         {{ $users->links('pagination::bootstrap-4') }}
     </div>
 @endsection
+@push('scripts')
+<script>
+    function confirmRestore() {
+        return confirm('Bạn có chắc chắn muốn khôi phục?');
+    }
+</script>
+@endpush

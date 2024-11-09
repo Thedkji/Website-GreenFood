@@ -100,12 +100,10 @@ class AccountController extends Controller
             // Gửi email xác nhận tài khoản
             Mail::to($user->email)->send(new VerifyAccount($user));
             // dd('error');
-            return redirect()->route('client.login')->with([
-                'message' => 'Bạn đã đăng ký tài khoản thành công. Vui lòng vào email của bạn để xác nhận email !'
-            ]);
+            return redirect()->route('client.showSuccess')->with(['success' => 'Chúng tôi đã gửi xác nhận về email !']);
         } else {
             // Thông báo nếu email đã tồn tại
-            return redirect()->back()->withErrors([
+            return redirect()->route('client.showSuccess')->withErrors([
                 'email' => 'Email đã tồn tại, vui lòng chọn email khác.'
             ]);
         }

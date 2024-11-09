@@ -22,7 +22,7 @@
 
                 <div class="search-box ms-2">
                     <form action="{{ route('admin.users.index') }}" method="GET">
-                        <input type="text" name="search" class="form-control search" placeholder="Tìm kiếm...">
+                        <input type="text" name="search" class="form-control search" value = "{{ request()->input('search') }}" placeholder="Tìm kiếm...">
                         <i class="ri-search-line search-icon"></i>
                         {{-- <button class="btn btn-primary" type="submit">Tìm kiếm</button> --}}
                     </form>
@@ -64,7 +64,7 @@
                         <th scope="row">{{ $value->district }}</th>
                         <th scope="row">{{ $value->ward }}</th> --}}
                         <th scope="row">{{ $value->address }}</th>
-                        <th scope="row">{{ $value->role }}</th>
+                        <th scope="row">{{ $value->role === 0 ? 'Admin': 'User' }}</th>
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
                                 <a href="{{ route('admin.users.detail', $value->id) }}">
