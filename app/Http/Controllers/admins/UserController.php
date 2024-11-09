@@ -42,6 +42,16 @@ class UserController extends Controller
             $data = $request->all();
             $data['password'] = bcrypt($data['password']);
 
+            // Lấy tên đầy đủ của ward, district, và province từ các bảng tương ứng
+            $ward = DB::table('wards')->where('code', $request->ward)->first();
+            $district = DB::table('districts')->where('code', $request->district)->first();
+            $province = DB::table('provinces')->where('code', $request->province)->first();
+
+            // Gán tên đầy đủ vào mảng $data
+            $data['ward'] = $ward ? $ward->full_name : null;
+            $data['district'] = $district ? $district->full_name : null;
+            $data['province'] = $province ? $province->full_name : null;
+
             if ($request->hasFile('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
@@ -51,11 +61,12 @@ class UserController extends Controller
 
             $user = User::create($data);
             return redirect()->route('admin.users.index')->with('success', 'Người dùng đã được thêm mới thành công.');
-            // return redirect()->back()->with('success', 'Người dùng đã được thêm mới thành công.');
         } catch (\Exception $e) {
             return redirect()->route('admin.users.index')->with('error', 'Có lỗi xảy ra khi thêm người dùng. Vui lòng thử lại.');
         }
     }
+
+
 
 
 

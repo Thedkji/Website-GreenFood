@@ -21,12 +21,12 @@ class TrashController extends Controller
     {
         $users = User::onlyTrashed()->paginate(5);
         $products = Product::onlyTrashed()->paginate(5);
-        $variants = Variant::onlyTrashed()->paginate(5);
+        // $variants = Variant::onlyTrashed()->paginate(5);
         $orders = Order::onlyTrashed()->paginate(5);
         $categories = Category::onlyTrashed()->paginate(5);
         $comments = Comment::onlyTrashed()->paginate(5);
         $suppliers = Supplier::onlyTrashed()->paginate(5);
-        return view('admins.trashs.list-trash', compact('users', 'products', 'variants', 'orders', 'categories', 'comments', 'suppliers'));
+        return view('admins.trashs.list-trash', compact('users', 'products', 'orders', 'categories', 'comments', 'suppliers'));
     }
 
 
