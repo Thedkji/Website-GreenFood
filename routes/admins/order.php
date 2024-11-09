@@ -12,4 +12,5 @@ Route::prefix('orders')
         Route::get('/', [OrderController::class, 'showOder'])->name('showOder');
         Route::get('/show-order-detail/{id}', [OrderController::class, 'showOrderDetail'])->name('showOrderDetail');
         Route::put('/update-order/{id}', [OrderController::class, 'updateOrder'])->name('updateOrder');
+        Route::put('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name('cancelOrder');
     });

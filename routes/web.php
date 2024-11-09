@@ -58,19 +58,3 @@ Route::prefix('client')
     });
 
 
-    Route::group(['prefix' => 'authens', 'as' => 'authens.'], function () {
-        Route::get('/login', [AuthenController::class, 'login'])->name('login');
-        Route::post('/login', [AuthenController::class, 'postLogin'])->name('postLogin');
-
-        Route::get('/register', [AuthenController::class, 'register'])->name('register');
-        Route::post('/register', [AuthenController::class, 'postRegister'])->name('postRegister');
-
-        Route::get('/logout', [AuthenController::class, 'logout'])->name('logout');
-
-        // Route::get('/forgotpassword', [AuthenController::class, 'forgotpassword'])->name('forgotpassword');
-        // Route::post('/forgotpassword', [AuthenController::class, 'authSendEmail'])->name('authSendEmail');
-
-
-        // Route::get('/PasswordChange', [AuthenController::class, 'PasswordChange'])->name('PasswordChange');
-        // Route::get('/notificationDone', [AuthenController::class, 'notificationDone'])->name('notificationDone');
-    });

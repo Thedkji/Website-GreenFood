@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($variantGroups as $productVariant)
+            @foreach ($product->variantGroups as $productVariant)
                 <tr>
                     <td>
                         <input type="checkbox" class="product-checkbox" onclick="toggleDeleteButton()"
@@ -97,7 +97,7 @@
         </div>
         <div class="col-sm">
             <div class="mt-3 d-flex justify-content-sm-end">
-                {{ $variantGroups->links() }}
+                {{-- {{ $variantGroups->links() }} --}}
             </div>
         </div>
     </div>

@@ -4,7 +4,19 @@
 
 @section('content')
 @include('clients.layouts.components.singer-page')
+
 <div class="container-fluid py-5">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="container py-5">
         <h1 class="mb-4">Billing details</h1>
         <form action="{{route('client.getCheckOut')}}" method="POST">
@@ -14,37 +26,37 @@
                 <div class="col-md-12 col-lg-6 col-xl-7">
                     <div class="form-item">
                         <label class="form-label my-3">Họ và tên</label>
-                        <input type="text" class="form-control" name="fullName" value="{{old('fullName')}}">
+                        <input type="text" class="form-control" name="fullName" value="{{$userInfo ? $userInfo->name : old('fullName')}}">
                         <x-feedback name="fullName" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control" value="{{old('phone')}}">
+                        <input type="tel" name="phone" class="form-control" value="{{$userInfo ? $userInfo->phone : old('phone')}}">
                         <x-feedback name="phone" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{old('email')}}">
+                        <input type="email" name="email" class="form-control" value="{{$userInfo ? $userInfo->email : old('email')}}">
                         <x-feedback name="email" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Province</label>
-                        <input type="text" class="form-control" name="province" value="{{old('province')}}">
+                        <input type="text" class="form-control" name="province" value="{{$userInfo ? $userInfo->province : old('province')}}">
                         <x-feedback name="province" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">District</label>
-                        <input type="text" name="district" class="form-control" value="{{old('district')}}">
+                        <input type="text" name="district" class="form-control" value="{{$userInfo ? $userInfo->district : old('district')}}">
                         <x-feedback name="district" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Ward</label>
-                        <input type="text" class="form-control" name="ward" value="{{old('ward')}}">
+                        <input type="text" class="form-control" name="ward" value="{{$userInfo ? $userInfo->ward : old('ward')}}">
                         <x-feedback name="ward" />
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Địa chỉ</label>
-                        <input type="text" class="form-control" name="address" value="{{old('address')}}">
+                        <input type="text" class="form-control" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                         <x-feedback name="address" />
                     </div>
                     <!-- <div class="form-check my-3">
@@ -77,6 +89,22 @@
                             </thead>
                             <tbody>
                                 @foreach ($decodedItems as $items)
+                                @if (isset($userId))
+                                <tr>
+                                    <th scope="row">
+                                        <div class="d-flex align-items-center mt-2">
+                                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-2.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                        </div>
+                                    </th>
+                                    <td class="py-5">{{$items['product']['name']}}</td>
+                                    <td class="py-5">
+                                        <p>{{ number_format($items['product']['status'] === 0 ? $items['product']['price_sale'] : ($variantDetails[$items['id']]->price_sale ?? $items['price'])) }} VNĐ</p>
+                                    </td>
+                                    <td class="py-5">{{$items['quantity']}}</td>
+                                    <td class="py-5">{{$items['sku']}}</td>
+                                    <td class="py-5">{{number_format( $items['product']['status'] === 0 ? $items['product']['price_sale'] : ($variantDetails[$items['id']]->price_sale ?? $items['price']) * $items['quantity'])}} VNĐ</td>
+                                </tr>
+                                @else
                                 <tr>
                                     <th scope="row">
                                         <div class="d-flex align-items-center mt-2">
@@ -89,6 +117,7 @@
                                     <td class="py-5">{{$items['attributes']['sku']}}</td>
                                     <td class="py-5">{{number_format($items['price'] * $items['quantity'])}} VNĐ</td>
                                 </tr>
+                                @endif
                                 @endforeach
 
                                 <tr>
@@ -113,7 +142,7 @@
                     <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                         <div class="col-12">
                             <div class="form-check text-start my-3">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
+                                <input type="checkbox" name="cash" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
                                 <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
                             </div>
                         </div>

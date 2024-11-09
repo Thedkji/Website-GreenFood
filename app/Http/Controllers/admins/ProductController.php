@@ -21,6 +21,38 @@ class ProductController extends Controller
 {
     public function index()
     {
+        // Xử lý xóa nhiều sản phẩm
+        if (request('ids')) {
+            // Lấy danh sách sản phẩm với các mối quan hệ cần thiết
+            $products = Product::whereIn('id', request('ids'))->get();
+
+            DB::transaction(function () use ($products) {
+                foreach ($products as $product) {
+                    if ($product->status == 1) {
+                        $variantGroups = VariantGroup::where('product_id', $product->id)->get();
+
+                        foreach ($variantGroups as $variantGroup) {
+                            $variantGroup->variants()->sync([]);
+                        }
+
+                        $product->variantGroups()->delete();
+                    }
+
+                    if ($product->categories) {
+                        $product->categories()->sync([]);
+                    }
+
+                    $product->delete();
+
+                    $product->galleries()->delete();
+                }
+            });
+            
+            return response([
+                'message' => 'Xóa sản phẩm thành công',
+            ]);
+        }
+
         // Lấy giá trị bộ lọc từ query string
         $status = request()->input('statusProduct');
 
@@ -47,16 +79,31 @@ class ProductController extends Controller
         return view('admins.products.list-product', compact('products'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
         $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
 
 
+
+        if ($request->category_id) {
+            $categories = Category::whereIn('parent_id', $request->category_id)->get();
+            return response()->json([
+                'categories' => $categories,
+            ]);
+        }
+
+        if ($request->variant_id) {
+            $variants = Variant::whereIn('parent_id', $request->variant_id)->get();
+            return response()->json([
+                'variants' => $variants,
+            ]);
+        }
+
         return view('admins.products.add-product', compact('categories', 'variants'));
     }
 
-    public function store(ProductRequest $request) 
+    public function store(Request $request)
     {
         try {
             DB::transaction(function () use ($request) {
@@ -72,6 +119,7 @@ class ProductController extends Controller
                 }
 
                 if ($request->product_type == "has_variant") {
+
                     $dataPro = [
                         'name' => $request->name,
                         'slug' => Str::slug($request->name),
@@ -92,35 +140,36 @@ class ProductController extends Controller
 
                     // Xử lý variants_child
                     if ($request->has('variants_child') && is_array($request->variants_child)) {
-                        foreach ($request->variants_child as $variantId => $variantData) {
-                            // Skip if required data is missing
-                            if (empty($variantData['price_sale']) || !isset($variantData['quantity'])) {
+                        foreach ($request->variant_child_values as $key => $value) {
+                            // Bỏ qua nếu thiếu dữ liệu cần thiết
+                            if (empty($value['price_sale']) || !isset($value['quantity'])) {
                                 continue;
                             }
 
+                            // Khởi tạo mảng dữ liệu cho mỗi `variant_child`
                             $dataVariantGroups = [
                                 'product_id' => $product->id,
                                 'sku' => "SPBT" . mt_rand('100000', '999999'),
-                                'price_regular' => $variantData['price_regular'] ?? 0,
-                                'price_sale' => $variantData['price_sale'],
-                                'quantity' => $variantData['quantity'],
+                                'price_regular' => $value['price_regular'] ?? 0,
+                                'price_sale' => $value['price_sale'],
+                                'quantity' => $value['quantity'],
                             ];
 
-                            // Xử lý ảnh nếu có
-                            if ($request->hasFile("variants_child.{$variantId}.img")) {
-                                $img = $request->file("variants_child.{$variantId}.img");
+                            // Xử lý ảnh riêng biệt cho từng `variant_child`
+                            if ($request->hasFile("variant_child_values.{$key}.img")) {
+                                $img = $request->file("variant_child_values.{$key}.img");
                                 $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-                                $dataVariantGroups['img'] = $img->storeAs('products', $filename);
+                                $dataVariantGroups['img'] = $img->storeAs('product_variants', $filename);
+                            } else {
+                                $dataVariantGroups['img'] = null; // Không có ảnh thì đặt là null
                             }
 
-                            Log::info('Creating variant group:', $dataVariantGroups);
-
-                            // Tạo VariantGroup
+                            // Tạo bản ghi variant group cho từng `variant_child`
                             $variantGroup = VariantGroup::create($dataVariantGroups);
 
-                            // Attach variant
-                            $variantGroup->variants()->attach($variantId);
+                            $variantGroup->variants()->attach($key);
                         }
+                        // dd($request->variants_child);
                     }
                 } else {
                     $product = Product::create($data);
@@ -130,7 +179,7 @@ class ProductController extends Controller
                     foreach ($request->file('galleries') as $gallery) { // Đảm bảo sử dụng file 'galleries'
                         if ($gallery) { // Kiểm tra xem $gallery có khác null không
                             $filename = time() . '_' . uniqid() . '.' . $gallery->getClientOriginalExtension(); // Thay đổi này để sử dụng getClientOriginalExtension()
-                            $galleryPath = $gallery->storeAs('products', $filename);
+                            $galleryPath = $gallery->storeAs('galleries', $filename);
 
                             $dataGallery = [
                                 'product_id' => $product->id,
@@ -160,7 +209,7 @@ class ProductController extends Controller
         if (request('showVariantproduct') == true) {
             $product = Product::findOrFail($product->id);
 
-            $variantGroups = $product->variantGroups()->orderByDesc('id')->paginate(8);
+            $variantGroups = $product->variantGroups()->orderByDesc('id')->get();
 
             return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
         } else {
@@ -183,5 +232,45 @@ class ProductController extends Controller
     }
 
     public function update($id, ProductUpdateRequest $request) {}
-    public function destroy($id) {}
+    public function destroy(Product $product)
+    {
+        DB::transaction(function () use ($product) {
+
+            if ($product->status == 1) {
+                $variantGroups = VariantGroup::where('product_id', $product->id)->get();
+                // dd($variantGroups);
+
+                foreach ($variantGroups as $variantGroup) {
+                    $variantGroup->variants()->sync([]);
+
+                    // if ($variantGroup->img) {
+                    //     Storage::delete($variantGroup->img);
+                    // }
+                }
+
+                $product->variantGroups()->delete();
+            }
+
+            if ($product->categories) {
+                $product->categories()->sync([]);
+            }
+
+            $product->delete();
+
+
+            // if ($product->img) {
+            //     Storage::delete($product->img);
+            // }
+
+
+            // if ($product->galleries) {
+            //     foreach ($product->galleries as $gallery) {
+            //         Storage::delete($gallery->path);
+            //     }
+            // }
+            $product->galleries()->delete();
+        });
+
+        return back()->with('success', 'Xóa sản phẩm thành công');
+    }
 }
