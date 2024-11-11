@@ -58,7 +58,7 @@
                 <div class="mb-3">
                     <label for="inputFileAvatar">Ảnh sản phẩm</label>
                     <input type="file" class="form-control img" name="img" id="inputFileAvatar"
-                        onchange="previewImage(event, 'imagePreviewAvatar')">
+                        onchange="previewImage2(event, 'imagePreviewAvatar')">
                     <div class="form-group mt-2">
                         <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện"
                             style="max-width: 150px; display: none;">
@@ -79,34 +79,36 @@
                 <div class="mb-3">
                     <label for="inputFileAvatar">Thư viện ảnh</label>
                     <input type="file" class="form-control gallery" id="inputFileGallery" name="galleries[]"
-                        onchange="previewMultipleImages(event)" multiple>
+                        onchange="previewMultipleImages2(event)" multiple>
                     <div class="form-group mt-2" id="imagePreviewSlideContainer">
                         <!-- Container sẽ chứa các ảnh preview -->
                     </div>
                 </div>
 
                 @if ($product->galleries)
-                    <div class="mt-2">
+                    <div class="mt-2" id="existingGallery">
                         @foreach ($product->galleries as $gallery)
                             <img src="{{ env('VIEW_IMG') }}/{{ $gallery->path }}" alt="Preview ảnh đại diện"
-                                id="img" style="max-width: 150px;">
+                                style="max-width: 150px; margin: 5px;">
                         @endforeach
                     </div>
                 @endif
+
 
                 <div id="err_galleries" class="my-3 text-danger">
                 </div>
 
                 <!-- Danh mục -->
                 <div class="mb-3">
-                    <label for="category">Danh mục</label>
                     <select name="categories[]" id="category" multiple="multiple">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
-                                {{ in_array($category->id, old('categories', [])) ? 'selected' : '' }}>
-                                {{ $category->name }}</option>
+                                {{ in_array($category->id, old('categories', $product->categories->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                         @endforeach
                     </select>
+
 
                     <div id="err_category" class="my-3 text-danger">
                     </div>
@@ -126,9 +128,11 @@
                 <div class="mb-3">
                     <label for="product_type">Loại sản phẩm</label>
                     <select name="product_type" id="product_type" class="form-control">
-                        <option value="no_variant" {{ old('product_type') == 'no_variant' ? 'selected' : '' }}>Không có
+                        <option value="no_variant"
+                            {{ old('product_type') == 'no_variant' || $product->status == 0 ? 'selected' : '' }}>Không có
                             biến thể</option>
-                        <option value="has_variant" {{ old('product_type') == 'has_variant' ? 'selected' : '' }}>Có biến
+                        <option value="has_variant"
+                            {{ old('product_type') == 'has_variant' || $product->status == 1 ? 'selected' : '' }}>Có biến
                             thể</option>
                     </select>
                 </div>
@@ -137,7 +141,7 @@
                     <div class="col-lg-6 mb-3">
                         <label for="price_regular" class="form-label">Giá gốc - VNĐ</label>
                         <input type="number" class="form-control" name="price_regular" id="price_regular"
-                            value="{{ old('price_regular') }}" placeholder="nhập giá gốc">
+                            value="{{ old('price_regular',$product->price_regular) }}" placeholder="nhập giá gốc">
                         <div id="err_price_regular" class="my-3 text-danger">
                         </div>
                     </div>
@@ -146,7 +150,7 @@
                         <label for="price_sale" class="form-label">Giá bán - VNĐ <span
                                 class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="price_sale" id="price_sale"
-                            value="{{ old('price_sale') }}" placeholder="nhập giá bán">
+                            value="{{ old('price_sale',$product->price_sale) }}" placeholder="nhập giá bán">
 
                         <div id="err_price_sale" class="mt-2 text-danger">
                         </div>
@@ -157,7 +161,7 @@
                 <div class="mb-3 quantity_no_variant">
                     <label for="quantity" class="form-label">Số lượng <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" name="quantity" id="quantity"
-                        value="{{ old('quantity') }}" placeholder="nhập số lượng">
+                        value="{{ old('quantity',$product->quantity) }}" placeholder="nhập số lượng">
 
                     <div id="err_quantity" class="my-3 text-danger">
                     </div>
@@ -169,8 +173,9 @@
                     <select name="variants[]" id="variant" multiple="multiple">
                         @foreach ($variants as $variant)
                             <option value="{{ $variant->id }}"
-                                {{ in_array($variant->id, old('variants', [])) ? 'selected' : '' }}>
-                                {{ $variant->name }}</option>
+                                {{ in_array($variant->id, old('variants', $parentIds)) ? 'selected' : '' }}>
+                                {{ $variant->name }}
+                            </option>
                         @endforeach
                     </select>
 
@@ -204,4 +209,58 @@
 
     @include('admins.products.script-edit')
     @include('admins.products.validate')
+
+    <script>
+        // Hàm để xem trước ảnh được chọn
+        function previewImage2(event, previewId) {
+            // Ẩn ảnh cũ lấy từ cơ sở dữ liệu nếu có
+            const oldImage = document.getElementById('img');
+            if (oldImage) {
+                oldImage.style.display = 'none';
+            }
+
+            // Hiển thị ảnh mới
+            const preview = document.getElementById(previewId);
+            if (event.target.files && event.target.files[0]) {
+                preview.src = URL.createObjectURL(event.target.files[0]);
+                preview.style.display = 'block';
+
+                // Giải phóng bộ nhớ sau khi ảnh đã được tải
+                preview.onload = function() {
+                    URL.revokeObjectURL(preview.src);
+                }
+            } else {
+                // Ẩn phần preview nếu không có ảnh được chọn
+                preview.style.display = 'none';
+                preview.src = ''; // Đảm bảo đường dẫn ảnh không còn được giữ
+            }
+        }
+
+        // Hàm để xem trước nhiều ảnh được chọn cho thư viện
+        function previewMultipleImages2(event) {
+            const previewContainer = document.getElementById('imagePreviewSlideContainer');
+            previewContainer.innerHTML = ''; // Xóa các ảnh cũ nếu có
+
+            // Ẩn thư viện ảnh cũ nếu có ảnh mới được chọn
+            const existingGallery = document.getElementById('existingGallery');
+            if (existingGallery) {
+                existingGallery.style.display = 'none';
+            }
+
+            if (event.target.files) {
+                Array.from(event.target.files).forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.style.maxWidth = '150px';
+                    img.style.margin = '5px';
+                    previewContainer.appendChild(img);
+
+                    // Giải phóng bộ nhớ sau khi ảnh đã được tải
+                    img.onload = function() {
+                        URL.revokeObjectURL(img.src);
+                    };
+                });
+            }
+        }
+    </script>
 @endsection

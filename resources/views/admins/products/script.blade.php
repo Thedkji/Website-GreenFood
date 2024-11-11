@@ -91,9 +91,6 @@
             });
         });
 
-
-
-
         // Xử lý khi thay đổi biến thể cha
         $('#variant').change(function(e) {
             e.preventDefault();
@@ -170,7 +167,6 @@
                                             <div id="err_price_sale-${value}" class="my-3 text-danger"></div> 
                                         </div>  
 
-
                                         <div class="my-3">
                                             <label for="quantity-${value}" class="form-label">Số lượng <span class="text-danger">*</span></label>
                                             <input type="number" id="quantity-${value}" name="variant_child_values[${value}][quantity]" class="form-control" placeholder="Nhập số lượng" value="${existingData['quantity'] || ''}">
@@ -216,6 +212,5 @@
             let item = $(this).data('item');
             $(`#variantSettingsRow-${item}`).toggle();
         });
-
     });
 </script>

@@ -231,12 +231,20 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Product $product,Request $request)
+    public function edit(Product $product, Request $request)
     {
 
         $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
         $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
+        $allCategories = Category::all();
+        $productVariant = Product::with(['variantGroups.variants'])->find($product->id);
+        $allVariants = Variant::all();
 
+        $variantGroups = $product->variantGroups()->with('variants')->orderByDesc('id')->get();
+
+        $parentIds = $variantGroups->flatMap(function ($variantGroup) {
+            return $variantGroup->variants->pluck('parent_id'); // Lấy tất cả parent_id của variants trong variantGroup
+        })->unique()->toArray();
 
         if ($request->category_id) {
             $categories = Category::whereIn('parent_id', $request->category_id)->get();
@@ -252,7 +260,16 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('admins.products.edit-product', compact('categories', 'variants','product'));
+        return view('admins.products.edit-product', compact(
+            'variantGroups',
+            'categories',
+            'variants',
+            'productVariant',
+            'allCategories',
+            'allVariants',
+            'product',
+            'parentIds',
+        ));
     }
 
     public function update($id, ProductUpdateRequest $request) {}
@@ -278,7 +295,7 @@ class ProductController extends Controller
             if ($product->categories) {
                 $product->categories()->sync([]);
             }
-
+            $product->carts()->delete();
             $product->delete();
 
 
