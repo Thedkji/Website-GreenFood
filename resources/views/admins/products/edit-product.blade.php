@@ -18,9 +18,11 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data" id="form-add-product">
+    <form action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data"
+        id="form-add-product">
         @csrf
-
+        @method('PUT')
+        
         <div class="row">
             <div class="col-lg-8">
                 <!-- Các trường nhập liệu sản phẩm -->
@@ -141,7 +143,7 @@
                     <div class="col-lg-6 mb-3">
                         <label for="price_regular" class="form-label">Giá gốc - VNĐ</label>
                         <input type="number" class="form-control" name="price_regular" id="price_regular"
-                            value="{{ old('price_regular',$product->price_regular) }}" placeholder="nhập giá gốc">
+                            value="{{ old('price_regular', $product->price_regular) }}" placeholder="nhập giá gốc">
                         <div id="err_price_regular" class="my-3 text-danger">
                         </div>
                     </div>
@@ -150,7 +152,7 @@
                         <label for="price_sale" class="form-label">Giá bán - VNĐ <span
                                 class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="price_sale" id="price_sale"
-                            value="{{ old('price_sale',$product->price_sale) }}" placeholder="nhập giá bán">
+                            value="{{ old('price_sale', $product->price_sale) }}" placeholder="nhập giá bán">
 
                         <div id="err_price_sale" class="mt-2 text-danger">
                         </div>
@@ -161,7 +163,7 @@
                 <div class="mb-3 quantity_no_variant">
                     <label for="quantity" class="form-label">Số lượng <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" name="quantity" id="quantity"
-                        value="{{ old('quantity',$product->quantity) }}" placeholder="nhập số lượng">
+                        value="{{ old('quantity', $product->quantity) }}" placeholder="nhập số lượng">
 
                     <div id="err_quantity" class="my-3 text-danger">
                     </div>

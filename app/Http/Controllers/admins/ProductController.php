@@ -42,6 +42,7 @@ class ProductController extends Controller
                         $product->categories()->sync([]);
                     }
 
+                    $product->carts()->delete();
                     $product->delete();
 
                     $product->galleries()->delete();
@@ -236,7 +237,7 @@ class ProductController extends Controller
 
         $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
         $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
-        $allCategories = Category::all();
+        $allCategories = Category::whereNotNull('parent_id')->get();
         $productVariant = Product::with(['variantGroups.variants'])->find($product->id);
         $allVariants = Variant::all();
 
@@ -272,7 +273,92 @@ class ProductController extends Controller
         ));
     }
 
-    public function update($id, ProductUpdateRequest $request) {}
+    public function update(Product $product, Request $request)
+    {
+
+        DB::transaction(function () use ($request, $product) {
+            // Xử lý sản phẩm không có biến thể
+            $data = $request->all();
+            $data['slug'] = Str::slug($data['name']);
+
+            if ($request->hasFile('img')) {
+                $img = $request->file('img');
+                $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                $data['img'] = $img->storeAs('products', $filename);
+            }
+
+            // Xử lý ảnh của sản phẩm
+            if ($request->hasFile('galleries')) {
+                $product->galleries()->delete(); // Xóa ảnh cũ
+                foreach ($request->file('galleries') as $gallery) {
+                    if ($gallery) {
+                        $filename = time() . '_' . uniqid() . '.' . $gallery->getClientOriginalExtension();
+                        $galleryPath = $gallery->storeAs('galleries', $filename);
+
+                        $dataGallery = [
+                            'product_id' => $product->id,
+                            'path' => $galleryPath,
+                        ];
+
+                        $product->galleries()->create($dataGallery);
+                    }
+                }
+            }
+
+            if ($request->categories) {
+                $product->categories()->sync($request->categories);
+            }
+            // dd($request->all());
+
+
+            if ($request->product_type == 'no_variant') {
+                $data['status'] = 0;
+                if (!$product->sku) {
+                    $data['sku'] = "SP" . mt_rand('100000', '999999');
+                }
+                $product->update($data);
+
+
+                foreach ($product->variantGroups as $variantGroup) {
+                    $variantGroup->variants()->sync([]);
+                };
+
+                $product->gallery()->delete();
+            } else {
+                $data['status'] = 1;
+
+                $data['sku'] = null;
+                $data['price_sale'] = null;
+                $data['price_regular'] = null;
+                $data['quantity'] = null;
+
+                $product->update($data);
+
+                if ($request->variants && $request->variants_child && $request->variant_child_values) {
+                    $dataVariantGroups = [];
+                    foreach ($request->variant_child_values as $id => $variantGroup) {
+                        $dataVariantGroups['sku'] = "SPBT" . mt_rand('100000', '999999');
+                        $dataVariantGroups['product_id'] = $product->id;
+                        $dataVariantGroups['price_regular'] = $variantGroup['price_regular'] ?? 0;
+                        $dataVariantGroups['price_sale'] = $variantGroup['price_sale'] ?? 0;
+                        $dataVariantGroups['quantity'] = $variantGroup['quantity'] ?? 0;
+
+                        if (isset($variantGroup['img']) && $variantGroup['img']) {
+                            $img = $variantGroup['img'];
+                            $name =  time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                            $dataVariantGroups['img'] = $img->storeAs('product_variants', $name) ?? null;
+                        }
+
+                        $variantGroups = VariantGroup::create($dataVariantGroups);
+                        $variantGroups->variants()->attach($id);
+                    }
+                }
+            }
+        });
+
+        return back()->with('success', 'Sửa sản phẩm thành công');
+    }
+
     public function destroy(Product $product)
     {
         DB::transaction(function () use ($product) {

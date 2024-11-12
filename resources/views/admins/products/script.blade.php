@@ -63,7 +63,7 @@
         });
 
         // Xử lý danh mục cha thay đổi
-        $('#category').change(function(e) {
+        $('#category').change(async function(e) {
             e.preventDefault();
 
             // Gọi AJAX để lấy giá trị biến thể con
@@ -92,7 +92,7 @@
         });
 
         // Xử lý khi thay đổi biến thể cha
-        $('#variant').change(function(e) {
+        $('#variant').change(async function(e) {
             e.preventDefault();
 
             // Gọi AJAX để lấy giá trị biến thể con
@@ -107,7 +107,8 @@
 
                     childVariant.empty();
                     response.variants.map((item) => {
-                        childVariant.append(new Option(item.name, item.id, false,
+                        childVariant.append(new Option(item.name, item.id,
+                            false,
                             false));
                     });
 
@@ -121,7 +122,7 @@
         });
 
         // Xử lý khi thay đổi giá trị biến thể con
-        $('#childVariant').change(function(e) {
+        $('#childVariant').change(async function(e) {
             e.preventDefault();
 
             let selectedVariantValues = $(this).val();
@@ -167,7 +168,7 @@
                                             <div id="err_price_sale-${value}" class="my-3 text-danger"></div> 
                                         </div>  
 
-                                        <div class="my-3">
+                                        <div class="my-2">
                                             <label for="quantity-${value}" class="form-label">Số lượng <span class="text-danger">*</span></label>
                                             <input type="number" id="quantity-${value}" name="variant_child_values[${value}][quantity]" class="form-control" placeholder="Nhập số lượng" value="${existingData['quantity'] || ''}">
                                         </div>

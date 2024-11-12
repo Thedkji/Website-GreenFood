@@ -73,7 +73,7 @@
         // Dữ liệu danh mục con (truyền từ PHP sang JavaScript)
         let categories = @json($product->categories->whereNotNull('parent_id')->pluck('id')); // Mảng các id đã chọn
         let allCategories = @json($allCategories); // Mảng tất cả các danh mục con
-
+        console.log(allCategories);
         // Duyệt qua tất cả các danh mục con và thêm vào thẻ <select>
         allCategories.forEach(function(category) {
             let isSelected = categories.includes(category
@@ -241,7 +241,7 @@
                                 <input type="number" id="salePrice-${value}" name="variant_child_values[${value}][price_sale]" class="form-control" placeholder="Nhập giá bán" value="${existingData.price_sale}">
                                 <div id="err_price_sale-${value}" class="my-3 text-danger"></div> 
                             </div>
-                            <div class="my-3">
+                            <div class="my-2">
                                 <label for="quantity-${value}" class="form-label">Số lượng <span class="text-danger">*</span></label>
                                 <input type="number" id="quantity-${value}" name="variant_child_values[${value}][quantity]" class="form-control" placeholder="Nhập số lượng" value="${existingData.quantity}">
                                 <div id="err_quantity-${value}" class="my-3 text-danger"></div> 

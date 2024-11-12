@@ -39,9 +39,16 @@
 
         if ($('#product_type').val() == 'no_variant') {
             // Validate giá bán
+
+            if ($('#price_regular').val() < $('#price_sale').val()) {
+                errTrue('#err_price_regular', '#price_regular', 'Giá gốc không được nhỏ hơn giá bán');
+            } else {
+                errFalse('#err_price_regular');
+            }
+
             if ($('#price_sale').val() == "") {
                 errTrue('#err_price_sale', '#price_sale', 'Giá bán không được để trống');
-            } else if ($('#price_regular').val() != "" && $('#price_sale').val() > $('#price_regular').val()) {
+            } else if ($('#price_sale').val() > $('#price_regular').val()) {
                 errTrue('#err_price_sale', '#price_sale', 'Giá bán phải nhỏ hơn hoặc bằng giá gốc');
             } else {
                 errFalse('#err_price_sale');
@@ -73,31 +80,36 @@
 
                 // Kiểm tra giá bán
                 if (priceSale == "") {
-                    errTrue(`#err_price_sale-${value}`, `#salePrice-${value}`, 'Giá bán không được để trống');
+                    errTrue(`#err_price_sale-${value}`, `#salePrice-${value}`,
+                        'Giá bán không được để trống');
 
-                    $(`#variantSettingsRow-${value}`).show();  // Hiển thị dòng thiết lập
+                    $(`#variantSettingsRow-${value}`).show(); // Hiển thị dòng thiết lập
                 } else if (parseFloat(priceSale) > parseFloat(priceRegular)) {
-                    errTrue(`#err_price_sale-${value}`, `#salePrice-${value}`, 'Giá bán phải nhỏ hơn hoặc bằng giá gốc');
-                    $(`#variantSettingsRow-${value}`).show();  // Hiển thị dòng thiết lập
+                    errTrue(`#err_price_sale-${value}`, `#salePrice-${value}`,
+                        'Giá bán phải nhỏ hơn hoặc bằng giá gốc');
+                    $(`#variantSettingsRow-${value}`).show(); // Hiển thị dòng thiết lập
                 } else {
                     errFalse(`#err_price_sale-${value}`);
                 }
 
                 // Kiểm tra số lượng
                 if (quantity == "") {
-                    errTrue(`#err_quantity-${value}`, `#quantity-${value}`, 'Số lượng không được để trống');
-                    $(`#variantSettingsRow-${value}`).show();  // Hiển thị dòng thiết lập
+                    errTrue(`#err_quantity-${value}`, `#quantity-${value}`,
+                        'Số lượng không được để trống');
+                    $(`#variantSettingsRow-${value}`).show(); // Hiển thị dòng thiết lập
                 } else {
                     errFalse(`#err_quantity-${value}`);
                 }
 
                 // Kiểm tra ảnh
                 if (img && img.size > maxFileSize) {
-                    errTrue(`#err_img_variant-${value}`, `#image-${value}`, 'Ảnh vượt quá kích thước cho phép');
-                    $(`#variantSettingsRow-${value}`).show();  // Hiển thị dòng thiết lập
-                } else if (img && !allowedExtensions.includes(img.name.split('.').pop().toLowerCase())) {
+                    errTrue(`#err_img_variant-${value}`, `#image-${value}`,
+                        'Ảnh vượt quá kích thước cho phép');
+                    $(`#variantSettingsRow-${value}`).show(); // Hiển thị dòng thiết lập
+                } else if (img && !allowedExtensions.includes(img.name.split('.').pop()
+                        .toLowerCase())) {
                     errTrue(`#err_img_variant-${value}`, `#image-${value}`, 'Ảnh không đúng định dạng');
-                    $(`#variantSettingsRow-${value}`).show();  // Hiển thị dòng thiết lập
+                    $(`#variantSettingsRow-${value}`).show(); // Hiển thị dòng thiết lập
                 } else {
                     errFalse(`#err_img_variant-${value}`);
                 }
