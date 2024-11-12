@@ -60,9 +60,10 @@
         <div class="mt-3">
             <label for="province">Thành phố/Tỉnh</label>
             <select name="province" id="province" class="form-control" value="{{ $user->province }}" required>
-                <option value=""> Chọn Thành phố/Tỉnh </option>
                 @foreach ($provinces as $province)
-                    <option value="{{ $province->code }}">{{ $province->name }}</option>
+                <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
+                    {{ $province->name }}
+                </option>
                 @endforeach
             </select>
             <x-feedback name="province" />
@@ -71,7 +72,11 @@
         <div class="mt-3">
             <label for="district">Quận/Huyện</label>
             <select name="district" id="district" class="form-control" value="{{ $user->district }}" required>
-                <option value=""> Chọn Quận/Huyện </option>
+                @foreach ($districts as $district)
+                    <option value="{{ $district->code }}" {{ $district->code == $user->district ? 'selected' : '' }}>
+                        {{ $district->name }}
+                    </option>
+                @endforeach
             </select>
             <x-feedback name="district" />
 
@@ -79,7 +84,11 @@
         <div class="mt-3">
             <label for="ward">Phường/Xã</label>
             <select name="ward" id="ward" class="form-control" value="{{ $user->ward }}" required>
-                <option value=""> Chọn Phường/Xã </option>
+                @foreach ($wards as $ward)
+                    <option value="{{ $ward->code }}" {{ $ward->code == $user->ward ? 'selected' : '' }}>
+                        {{ $ward->name }}
+                    </option>
+                @endforeach
             </select>
             <x-feedback name="ward" />
 

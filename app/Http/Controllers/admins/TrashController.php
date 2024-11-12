@@ -21,12 +21,12 @@ class TrashController extends Controller
     {
         $users = User::onlyTrashed()->paginate(5);
         $products = Product::onlyTrashed()->paginate(5);
-        $variants = Variant::onlyTrashed()->paginate(5);
+        // $variants = Variant::onlyTrashed()->paginate(5);
         $orders = Order::onlyTrashed()->paginate(5);
         $categories = Category::onlyTrashed()->paginate(5);
         $comments = Comment::onlyTrashed()->paginate(5);
         $suppliers = Supplier::onlyTrashed()->paginate(5);
-        return view('admins.trashs.list-trash', compact('users', 'products', 'variants', 'orders', 'categories', 'comments', 'suppliers'));
+        return view('admins.trashs.list-trash', compact('users', 'products', 'orders', 'categories', 'comments', 'suppliers'));
     }
 
 
@@ -141,16 +141,16 @@ class TrashController extends Controller
 
         try {
             // Lấy thông tin người dùng cần xóa
-            $user = User::withTrashed()->findOrFail($id);
+            $users = User::withTrashed()->findOrFail($id);
 
 
             // Xóa ảnh đại diện nếu có
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($users->avatar) {
+                Storage::disk('public')->delete($users->avatar);
             }
 
             // Xóa người dùng vĩnh viễn khỏi cơ sở dữ liệu
-            $user->forceDelete();
+            $users->forceDelete();
 
             DB::commit();
             return redirect()->back()->with('success', 'Tài khoản đã được xóa vĩnh viễn thành công.');

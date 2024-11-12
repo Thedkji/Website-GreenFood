@@ -5,50 +5,76 @@
     <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Danh mục sản phẩm</a></li>
     <li class="breadcrumb-item active">Thêm danh mục sản phẩm</li>
 @endsection
+
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    <div>
-        @session('success')
-            <p class="alert alert-success">
-                {{ session('success') }}
-            </p>
-        @endsession
-    </div>
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    <form method="post" action="{{ route('admin.categories.store') }}">
+        @csrf
+        @method('POST')
+        <div class="row w-50">
+            <div class="col-lg-8">
+                <div class="mb-3">
+                    <label for="" class="form-label">Tên danh mục</label>
+                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                </div>
 
-    <div class="w-50">
-        <form action="{{ route('admin.categories.store') }}" method="post">
-            @csrf
-            <div>
-                <label for="" class="form-label">Tên danh mục</label>
-                <input class="form-control" id="choices-text-remove-button" data-choices="" data-choices-limit="3"
-                    data-choices-removeitem="" type="text" value="{{ old('name') }}" placeholder="Nhập tên danh mục"
-                    name="name">
-            </div>
-
-            <div class="my-3">
                 @error('name')
-                    <p class="text-danger">{{ $message }}</p>
+                    <div class="text-danger my-3">{{ $message }}</div>
                 @enderror
-            </div>
 
-            <div class="my-3">
-                <label for="" class="form-label">Chọn danh mục cha</label>
-                <div class="">
-                    <select class="form-select mb-3" aria-label="Default select example" name="parent_id">
-                        <option selected="" value="">Chọn danh mục cha</option>
+                <div>
+                    <select name="selectCategory" class="form-select" onchange="categoryChange()">
+                        <option value="0">Danh mục cha</option>
+                        <option value="1">Chọn danh mục cha</option>
+                    </select>
+                </div>
+
+                <!-- Sửa tên và ẩn select này -->
+                <div id="valueSelectContainer" class="d-none my-3">
+                    <select name="parent_id" class="form-select">
                         @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ old('parent_id', $category->id) }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-success" type="submit">Thêm mới</button>
+                </div>
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary " type="button">
+                        <a class="text-white" href="{{route('admin.categories.index')}}">Quay lại</a>
+                    </button>
+                </div>
+
+
             </div>
-
-            <button class="btn btn-primary">Thêm mới</button>
-        </form>
-    </div>
-
-
-    {{-- <div class="mt-3">
-        {{ $orders->links() }}
-    </div> --}}
+        </div>
+    </form>
 @endsection
+
+<script>
+    function categoryChange() {
+        let selectCategory = document.querySelector('select[name="selectCategory"]');
+        let valueSelectContainer = document.getElementById('valueSelectContainer'); // Lấy thẻ div chứa select mới
+        let value = selectCategory.value;
+
+        // Hiển thị hoặc ẩn select mới dựa trên giá trị
+        if (value == 1) {
+            valueSelectContainer.classList.remove('d-none');
+        } else {
+            valueSelectContainer.classList.add('d-none');
+        }
+    }
+</script>

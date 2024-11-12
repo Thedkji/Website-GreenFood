@@ -7,3 +7,4 @@ use Illuminate\Support\Facades\Route;
 /* Viết route ở đây */
 
 Route::resource('products', ProductController::class);
+

@@ -38,13 +38,20 @@
         </div>
         <div class="col-sm">
             <select id="statusProduct" name="statusProduct" class="form-select w-50" onchange="this.form.submit()">
-                <option value="allPro" {{ request('statusProduct') == 'allPro' ? 'selected' : '' }}>Tất cả sản phẩm</option>
+                <option value="allPro" {{ request('statusProduct') == 'allPro' ? 'selected' : '' }}>Tất cả sản phẩm
+                </option>
                 <option value="0" {{ request('statusProduct') == 0 ? 'selected' : '' }}>Sản phẩm không có biến thể
                 </option>
                 <option value="1" {{ request('statusProduct') == 1 ? 'selected' : '' }}>Sản phẩm có biến thể</option>
             </select>
         </div>
     </form>
+
+    <div class="my-3">
+        <button class="btn btn-success">
+            <a href="{{ route('admin.products.create') }}" class="text-white">Thêm</a>
+        </button>
+    </div>
 
     <table class="table table-striped align-middle mb-0 text-center fs-6">
         <thead>
@@ -57,8 +64,8 @@
                 <th scope="col">Tên</th>
                 <th scope="col">Slug</th>
                 <th scope="col">Ảnh</th>
-                <th scope="col">Giá thường</th>
-                <th scope="col">Giá giảm</th>
+                <th scope="col">Giá gốc</th>
+                <th scope="col">Giá bán</th>
                 <th scope="col">Số lượng</th>
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Ngày tạo</th>
@@ -70,31 +77,36 @@
             @foreach ($products as $product)
                 <tr>
                     <td>
-                        <input type="checkbox" class="product-checkbox" onclick="toggleDeleteButton()"
-                            value="{{ $product->id }}">
+                        <input type="checkbox" class="product-checkbox" name="product-checkbox"
+                            onclick="toggleDeleteButton()" value="{{ $product->id }}">
                     </td>
                     <td>{{ $product->id }}</td>
-                    <td>{{ $product->sku }}</td>
+                    <td>
+                        <span class="text-success">{{ $product->sku }}</span>
+                    </td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->slug }}</td>
+
                     <td>
                         <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
                             style="width: 100px; height: 100px; object-fit: cover;">
                     </td>
+
                     <td>{{ app('formatPrice')($product->price_regular) }} VNĐ</td>
                     <td class="text-success">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
                     <td>{{ $product->quantity }}</td>
+
                     <td>
 
                         <a href="{{ route('admin.products.show', [
                             'product' => $product->id,
-                            'showVariantproduct' => $product->status !== 0 ? 'true' : null
+                            'showVariantproduct' => $product->status !== 0 ? 'true' : null,
                         ]) }}"
-                        name="variantGroups">
-                        <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
-                            {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
-                        </span>
-                    </a>
+                            name="variantGroups">
+                            <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
+                                {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
+                            </span>
+                        </a>
 
 
 
@@ -104,29 +116,22 @@
                     <td>{{ $product->updated_at }}</td>
 
                     <td class="">
-                        <a
-                            href="{{ route('admin.products.show', [
-                                'product' => $product->id,
-                                'showVariantproduct' => $product->status !== 0 ? 'true' : null,
-                            ]) }}">
-                            <i class="fa-regular fa-eye"></i>
-                        </a>
-
-
-
 
                         <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15"><i
                                 class="ri-edit-2-line"></i></a>
 
+                    </td>
 
+                    <td>
                         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                             style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <a href="#" class="link-danger fs-15"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
+                            <button
+                                onclick="return confirm('Xóa sản phẩm này cũng sẽ xóa các biến thể của sản phẩm , vẫn muốn xóa ?')"
+                                class="btn text-danger">
                                 <i class="ri-delete-bin-line"></i>
-                            </a>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -134,10 +139,12 @@
         </tbody>
     </table>
 
-    <div class="row">
+    <div class="row my-3">
         <div class="col-sm">
-            <button type="submit" class="btn btn-danger" id="delete-button" style="display: none;">Xóa</button>
+            <button type="button" class="btn btn-danger" id="delete-button" name="product-delete-checkbox"
+                style="display: none;" onclick="deleteSelected()">Xóa</button>
         </div>
+
         <div class="col-sm">
             <div class="mt-3 d-flex justify-content-sm-end">
                 {{ $products->links() }}
@@ -168,5 +175,30 @@
         const deleteButton = document.getElementById('delete-button');
         deleteButton.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline-block' :
             'none';
+    }
+
+
+    function deleteSelected() {
+        if ($('#delete-button').submit()) {
+            if (confirm('Xóa sản phẩm này cũng sẽ xóa các biến thể của sản phẩm , vẫn muốn xóa ?')) {
+                let ids = $('.product-checkbox:checked').map((_, checkbox) => checkbox.value).get();
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.products.index') }}",
+                    data: {
+                        ids: ids
+                    },
+
+                    success: function(response) {
+                        alert('Xóa sản phẩm thành công');
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
     }
 </script>

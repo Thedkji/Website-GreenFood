@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\admins;
+namespace App\Http\Requests\authens;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryUpdateRequest extends FormRequest
+class ForGotPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,18 +21,20 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('category')->id;
         return [
-            "name" => "required|unique:categories,name,$id",
-            "parent_id" => "nullable",
+            'email' => 'required', 'exists:users',
         ];
     }
 
-    public function messages(): array
+
+    public function messages()
     {
         return [
-            "name.required" => "Bạn cần nhập tên danh mục",
-            "name.unique" => "Tên danh mục không được trùng",
+
+            'email.required' => 'Vui lòng nhập Email',
+
+            'email.exists' => 'Email đã tồn tại.',
+
         ];
     }
 }

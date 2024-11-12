@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthenController;
 use App\Http\Controllers\admins\CommentController;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 // Admin
 Route::prefix('admin')
     ->name('admin.')
+    ->middleware('checkAdmin')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
         require_once base_path("routes/admins/user.php");
@@ -54,3 +56,5 @@ Route::prefix('client')
         require_once base_path("routes/clients/error.php");
         require_once base_path("routes/clients/message.php");
     });
+
+

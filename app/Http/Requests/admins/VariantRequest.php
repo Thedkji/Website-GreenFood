@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\admins;
 
-use App\Models\Variant;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,21 +26,24 @@ class VariantRequest extends FormRequest
             'name' => ['required'],
         ];
 
-        // Kiểm tra tính duy nhất của name chỉ khi parent_id là null
+        $variantId = $this->route('variant'); // Lấy id của biến thể hiện tại nếu đang cập nhật
+
+        // Kiểm tra uniqueness cho 'name' chỉ khi `parent_id` là `null`
         $rules['name'][] = Rule::unique('variants')
             ->where(function ($query) {
-                return $query->whereNull('parent_id');
+                return $query->whereNull('parent_id'); // Chỉ kiểm tra unique khi parent_id là null
             })
-            ->ignore($this->route('variant')); // Bỏ qua giá trị hiện tại nếu đang cập nhật
+            ->ignore($variantId); // Bỏ qua id hiện tại nếu là cập nhật
 
         return $rules;
     }
+
 
     public function messages(): array
     {
         return [
             'name.required' => 'Bạn cần nhập tên biến thể',
-            'name.unique' => 'Tên biến thể đã tồn tại',
+            'name.unique' => 'Tên biến thể này đã tồn tại',
         ];
     }
 }
