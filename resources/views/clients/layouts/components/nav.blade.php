@@ -3,15 +3,15 @@
         <div class="d-flex justify-content-between">
             <div class="top-info ps-2">
                 <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
-                        class="text-white">123 Street, New York</a></small>
+                        class="text-white">123, Mỹ Đình, Hà Nội</a></small>
                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
-                        class="text-white">Email@Example.com</a></small>
+                        class="text-white">greenfood8386@gmail.com</a></small>
             </div>
-            <div class="top-link pe-2">
+            {{-- <div class="top-link pe-2">
                 <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
                 <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
                 <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="container px-0">
@@ -27,9 +27,9 @@
                 <div class="navbar-nav mx-auto">
                     <a href="{{ route('client.home') }}" class="nav-item nav-link active">Trang chủ</a>
                     <a href="{{ route('client.shop') }}" class="nav-item nav-link">Sản phẩm</a>
-                    <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
+                    {{-- <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a> --}}
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Danh mục</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
                             <a href="{{ route('client.cart') }}" class="dropdown-item">Cart</a>
                             <a href="{{ route('client.checkout') }}" class="dropdown-item">Checkout</a>
