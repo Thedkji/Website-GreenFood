@@ -44,7 +44,6 @@
                     <th scope="col">Ảnh</th>
                     <th scope="col">Sao</th>
                     <th scope="col">Thời gian</th>
-                    <th scope="col">Trả lời</th>
                     <th scope="col">Thao tác</th>
                 </tr>
             </thead>
@@ -70,13 +69,10 @@
                             </div>
                         </td>
                         <td>{{ $comment->created_at }}</td>
-                        <td>
+                       
+                        <td>          
                             <div class="hstack gap-2">
-                                <a href="{{ route('admin.comments.create', $comment->id) }}" class="btn btn-primary btn-sm">Trả lời</a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="hstack gap-2">
+                            <a href="{{ route('admin.comments.detail', $comment->id) }}"><i class="fa-regular fa-eye"></i></a>
                                 <a href="#" class="link-danger fs-15" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $comment->id }}').submit();">
                                     <i class="ri-delete-bin-line"></i>
                                 </a>
