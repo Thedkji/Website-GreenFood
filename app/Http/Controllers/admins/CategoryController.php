@@ -101,7 +101,7 @@ class CategoryController extends Controller
                 // Nếu ID không phải là số, tức là thêm mới
                 if (!is_numeric($id)) {
                     if (empty($name)) {
-                        return redirect()->route('admin.categories.edit', $category->id)->with('error', 'Bạn cần nhập giá trị danh mục');
+                        return redirect()->route('admin.categories.edit', $category->id)->with('error', 'Bạn cần nhập danh mục con');
                     } else {
                         // Thêm mới danh mục con
                         Category::create([
