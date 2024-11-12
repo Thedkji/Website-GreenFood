@@ -10,6 +10,7 @@ use App\Http\Requests\admins\VariantRequest;
 use App\Models\Category;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -19,6 +20,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         // Lấy từ khóa tìm kiếm từ request
+
         $search = $request->input('search');
         $categories = Category::where('parent_id', '=', Null)->with('children')->paginate(8);
 
@@ -91,36 +93,42 @@ class CategoryController extends Controller
         // Cập nhật tên của danh mục gốc
         $category->update(['name' => $request->name]);
 
+        // Lưu trữ ID của các danh mục con đã tồn tại
+        $existingChildIds = $category->children()->pluck('id')->toArray();
+
         if ($request->parent_id) {
             foreach ($request->parent_id as $id => $name) {
-                // Kiểm tra nếu ID là 'new' (được tạo từ input mới)
-                if ($id === 'new') {
-                    if ($name == '') {
+                // Nếu ID không phải là số, tức là thêm mới
+                if (!is_numeric($id)) {
+                    if (empty($name)) {
                         return redirect()->route('admin.categories.edit', $category->id)->with('error', 'Bạn cần nhập giá trị danh mục');
                     } else {
-                        // Nếu ID là 'new', nghĩa là người dùng muốn thêm mới
+                        // Thêm mới danh mục con
                         Category::create([
                             'name' => $name,
                             'parent_id' => $category->id, // Đặt parent_id là ID của danh mục chính
                         ]);
                     }
                 } else {
-                    // Nếu ID không rỗng, tìm danh mục con theo ID
+                    // Nếu ID là số, tức là cập nhật danh mục con đã tồn tại
                     $childCategory = Category::find($id);
-
-                    // Nếu tìm thấy danh mục con, cập nhật `name` cho danh mục đó
                     if ($childCategory) {
+                        // Cập nhật tên danh mục con
                         $childCategory->update(['name' => $name]);
+                        // Xóa ID này khỏi danh sách ID đã tồn tại
+                        $existingChildIds = array_diff($existingChildIds, [$id]);
                     }
                 }
             }
         }
 
+        // Nếu có các danh mục con bị xóa, thực hiện xóa
+        if (!empty($existingChildIds)) {
+            Category::destroy($existingChildIds);
+        }
+
         return redirect()->route('admin.categories.edit', $category->id)->with('success', 'Cập nhật thành công!');
     }
-
-
-
 
 
 
@@ -146,9 +154,28 @@ class CategoryController extends Controller
             $category->delete();
         }
 
-
-
-
         return back()->with('success', 'Xóa danh mục thành công');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            try {
+                DB::transaction(function () use ($ids) {
+                    // Lấy ID của các danh mục con
+                    $childIds = Category::whereIn('parent_id', $ids)->pluck('id')->toArray();
+                    // Xóa các danh mục cha và con
+                    Category::whereIn('id', array_merge($ids, $childIds))->delete();
+                });
+
+                return response()->json(['success' => 'Xóa danh mục thành công']);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Có lỗi xảy ra khi xóa danh mục: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return response()->json(['error' => 'Không có danh mục nào được chọn'], 400);
     }
 }

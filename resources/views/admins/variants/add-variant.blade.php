@@ -52,8 +52,15 @@
                 </div>
 
                 <div class="col-12 my-3">
-                    <button class="btn btn-primary" type="submit">Thêm mới</button>
+                    <button class="btn btn-success" type="submit">Thêm mới</button>
                 </div>
+
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary " type="button">
+                        <a class="text-white" href="{{route('admin.variants.index')}}">Quay lại</a>
+                    </button>
+                </div>
+
             </div>
         </div>
     </form>
