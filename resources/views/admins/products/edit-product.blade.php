@@ -192,6 +192,9 @@
                     </select>
                 </div>
 
+                <div id="err_childVariant" class="my-3 text-danger">
+                </div>
+
                 <!-- Bảng hiển thị giá trị của giá trị biến thể -->
                 <div id="selectedVariantValuesContainer" class="mb-3">
                     <label for="variantValuesTable">Giá trị đã chọn</label>
@@ -210,7 +213,7 @@
     </form>
 
     @include('admins.products.script-edit')
-    @include('admins.products.validate')
+    @include('admins.products.validate-edit')
 
     <script>
         // Hàm để xem trước ảnh được chọn
