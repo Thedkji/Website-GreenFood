@@ -21,6 +21,11 @@
             {{ session('error') }}
         </div>
     @endif
+    <div class="col-12 mb-3">
+        <button class="btn btn-primary " type="button">
+            <a class="text-white" href="{{route('admin.variants.index')}}">Quay lại</a>
+        </button>
+    </div>
 
     <form method="post" action="{{ route('admin.variants.update', $variant->id) }}">
         @csrf
@@ -51,6 +56,9 @@
                             <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $child->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
+                        </div>
+
+                        <div class = "my-3">
                             @error("parent_id.$child->id")
                                 <div class="text-danger my-2">{{ $message }}</div>
                             @enderror

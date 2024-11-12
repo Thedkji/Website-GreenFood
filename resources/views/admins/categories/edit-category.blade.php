@@ -19,6 +19,11 @@
             {{ session('error') }}
         </div>
     @endif
+    <div class="col-12 mb-3">
+        <button class="btn btn-primary " type="button">
+            <a class="text-white" href="{{route('admin.categories.index')}}">Quay lại</a>
+        </button>
+    </div>
 
     <form method="post" action="{{ route('admin.categories.update', $category->id) }}">
         @csrf
@@ -28,8 +33,8 @@
             <!-- Phần đổi tên danh mục -->
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control border-success" id="name" name="name" placeholder="Tên danh mục"
-                        value="{{ old('name', $category->name) }}">
+                    <input type="text" class="form-control border-success" id="name" name="name"
+                        placeholder="Tên danh mục" value="{{ old('name', $category->name) }}">
                     <label for="name">Tên danh mục</label>
                     @error('name')
                         <div class="text-danger my-3">{{ $message }}</div>
@@ -37,18 +42,21 @@
                 </div>
             </div>
 
-            <!-- Phần giá trị danh mục -->
+            <!-- Phần Danh mục con -->
             <div class="col-12">
                 <label for="value" class="form-label">Danh mục con</label>
 
                 <div class="category-value-container">
-                    @foreach ($childrenName as $key => $child)
+                    @foreach ($childrenName as $child)
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" name="parent_id[{{ $child->id }}]"
-                                value="{{ old('parent_id.' . $child->id, $child->name) }}">
+                                value="{{ old('parent_id.' . $child->id, $child->name) }}" placeholder="Danh mục con">
                             <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $child->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
+                        </div>
+
+                        <div class = "my-3">
                             @error("parent_id.$child->id")
                                 <div class="text-danger my-2">{{ $message }}</div>
                             @enderror
@@ -70,6 +78,7 @@
     </form>
 
     <script>
+        // Tạo form khi nhấn nút xóa bằng js
         function confirmDelete(childId) {
             if (confirm("Xóa giá trị này ?")) {
                 // Tạo form mới
@@ -109,8 +118,10 @@
             var input = document.createElement('input');
             input.type = 'text';
             input.className = 'form-control';
-            input.name = 'parent_id[new]'; // Đặt tên cho input mới
-            input.placeholder = 'Giá trị danh mục';
+            // Sử dụng timestamp hoặc số tăng dần để tạo tên duy nhất cho input mới
+            var index = Date.now(); // Sử dụng timestamp làm tên duy nhất
+            input.name = 'parent_id[new_' + index + ']'; // Sử dụng giá trị 'new_' để đánh dấu là danh mục mới
+            input.placeholder = 'Danh mục con';
 
             // Tạo icon xóa
             var deleteIcon = document.createElement('button');
