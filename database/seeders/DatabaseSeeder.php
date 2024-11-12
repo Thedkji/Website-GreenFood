@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
             CategoryProductSeeder::class,
             CouponCategorySeeder::class,
 
-            CouponUserSeeder::class,
 
             CouponProductSeeder::class,
             VariantGroupVariantSeed::class,

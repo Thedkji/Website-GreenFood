@@ -12,6 +12,7 @@ class Coupon extends Model
 
     protected $fillable = [
         "name",
+        "discount_type",
         "coupon_amount",
         "minimum_spend",
         "maximum_spend",
@@ -33,8 +34,4 @@ class Coupon extends Model
         return $this->belongsToMany(Product::class,'coupon_product');
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class,'coupon_user');
-    }
 }
