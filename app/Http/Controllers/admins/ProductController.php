@@ -318,15 +318,13 @@ class ProductController extends Controller
                 }
                 $product->update($data);
 
-
                 foreach ($product->variantGroups as $variantGroup) {
                     $variantGroup->variants()->sync([]);
                 };
 
-                $product->gallery()->delete();
+                $product->variantGroups()->delete();
             } else {
                 $data['status'] = 1;
-
                 $data['sku'] = null;
                 $data['price_sale'] = null;
                 $data['price_regular'] = null;
@@ -335,23 +333,54 @@ class ProductController extends Controller
                 $product->update($data);
 
                 if ($request->variants && $request->variants_child && $request->variant_child_values) {
-                    $dataVariantGroups = [];
-                    foreach ($request->variant_child_values as $id => $variantGroup) {
-                        $dataVariantGroups['sku'] = "SPBT" . mt_rand('100000', '999999');
-                        $dataVariantGroups['product_id'] = $product->id;
-                        $dataVariantGroups['price_regular'] = $variantGroup['price_regular'] ?? 0;
-                        $dataVariantGroups['price_sale'] = $variantGroup['price_sale'] ?? 0;
-                        $dataVariantGroups['quantity'] = $variantGroup['quantity'] ?? 0;
+                    foreach ($request->variant_child_values as $variantId => $variantGroupData) {
+                        // Tìm `VariantGroup` liên kết với `Variant` thông qua bảng pivot
+                        $existingVariantGroup = VariantGroup::where('product_id', $product->id)
+                            ->whereHas('variants', function ($query) use ($variantId) {
+                                $query->where('variants.id', $variantId);
+                            })
+                            ->first();
 
-                        if (isset($variantGroup['img']) && $variantGroup['img']) {
-                            $img = $variantGroup['img'];
-                            $name =  time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-                            $dataVariantGroups['img'] = $img->storeAs('product_variants', $name) ?? null;
+                        // Chuẩn bị dữ liệu để cập nhật hoặc tạo mới
+                        $dataVariantGroups = [
+                            'price_regular' => $variantGroupData['price_regular'] ?? 0,
+                            'price_sale'    => $variantGroupData['price_sale'] ?? 0,
+                            'quantity'      => $variantGroupData['quantity'] ?? 0,
+                        ];
+
+                        // Xử lý ảnh nếu có
+                        if (isset($variantGroupData['img']) && $variantGroupData['img']) {
+                            $img = $variantGroupData['img'];
+                            $name = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                            $dataVariantGroups['img'] = $img->storeAs('product_variants', $name);
                         }
 
-                        $variantGroups = VariantGroup::create($dataVariantGroups);
-                        $variantGroups->variants()->attach($id);
+                        if ($existingVariantGroup) {
+                            // Cập nhật `VariantGroup` hiện có
+                            $existingVariantGroup->update($dataVariantGroups);
+                        } else {
+                            // Tạo mới `VariantGroup`
+                            $dataVariantGroups['sku'] = "SPBT" . mt_rand(100000, 999999);
+                            $dataVariantGroups['product_id'] = $product->id;
+
+                            $newVariantGroup = VariantGroup::create($dataVariantGroups);
+                            // Gắn quan hệ với `Variant` thông qua bảng pivot
+                            $newVariantGroup->variants()->attach($variantId);
+                        }
                     }
+
+                    // Xóa `VariantGroup` không còn trong yêu cầu
+                    $variantIds = array_keys($request->variant_child_values);
+                    $product->variantGroups()
+                        ->whereDoesntHave('variants', function ($query) use ($variantIds) {
+                            $query->whereIn('variants.id', $variantIds);
+                        })
+                        ->each(function ($variantGroup) {
+                            // Xóa quan hệ với `Variant`
+                            $variantGroup->variants()->detach();
+                            // Xóa `VariantGroup`
+                            $variantGroup->delete();
+                        });
                 }
             }
         });
