@@ -17,7 +17,7 @@ class Comment extends Model
         "content",
         "img",
     ];
-
+    
     public function product()
     {
         return $this->belongsTo(Product::class);
