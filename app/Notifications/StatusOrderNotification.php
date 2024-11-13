@@ -10,13 +10,14 @@ use Illuminate\Notifications\Notification;
 class StatusOrderNotification extends Notification
 {
     use Queueable;
-
+    private $product;
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($product)
     {
         //
+        $this->product = $product;
     }
 
     /**
@@ -35,9 +36,9 @@ class StatusOrderNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Cảnh báo tồn kho thấp')
+            ->line("Số lượng hiện tại là " . ($this->product->status === 0 ? $this->product->quantity : $this->product->variantGroups->first()->quantity) . ".")
+            ->action('Xem sản phẩm', url("/products/{$this->product->id}"));
     }
 
     /**
