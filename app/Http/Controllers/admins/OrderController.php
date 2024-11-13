@@ -4,9 +4,11 @@ namespace App\Http\Controllers\admins;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\OrderRequest;
+use App\Mail\MailCheckOut;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -47,6 +49,7 @@ class OrderController extends Controller
         if ($order) {
             $status = $request->input('status');
             $order->update(['status' => $status]);
+            Mail::to($order->email)->send(new MailCheckOut($order));
         }
         return redirect()->back();
     }
@@ -56,6 +59,7 @@ class OrderController extends Controller
         $order = Order::find($id);
         if ($order) {
             $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
+            Mail::to($order->email)->send(new MailCheckOut($order));
         }
         return redirect()->back();
     }

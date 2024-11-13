@@ -142,7 +142,7 @@
                     <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                         <div class="col-12">
                             <div class="form-check text-start my-3">
-                                <input type="checkbox" name="cash" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
+                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
                                 <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
                             </div>
                         </div>

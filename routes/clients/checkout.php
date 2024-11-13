@@ -10,4 +10,5 @@ Route::controller(CheckoutController::class)
     ->group(function () {
         Route::get('thanh-toan', 'checkout')->name('checkout');
         Route::post('thanh-toan-don-hang', 'getCheckOut')->name('getCheckOut');
+        Route::get('/vnpay-return/{orderId}', 'handleVnPayResponse')->name('vnpay.callback');
     });

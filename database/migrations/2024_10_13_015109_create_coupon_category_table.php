@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('coupon_category', function (Blueprint $table) {
             $table->foreignIdFor(Coupon::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
-
             $table->primary([
                 'coupon_id',
                 'category_id',

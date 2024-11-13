@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('discount_type')->default(0)->comment('
+                0: Giảm theo phần trăm ,
+                1: Giảm theo giá tiền , 
+                [Kiểu mã giảm giá muốn áp dụng cho toàn bộ hoặc mặt hàng nhất định]
+            '
+            );
             $table->integer('coupon_amount')->comment('Giá trị muốn giảm giá VD: 5%');
             $table->integer('minimum_spend')->comment('Giá trị thấp nhất có thể giảm giá');
             $table->integer('maximum_spend')->comment('Giá trị cao nhất có thể giảm giá');
@@ -25,9 +31,9 @@ return new class extends Migration
                 ->default(0)
                 ->comment(
                     '
-                                0: Công khai ,
-                                1: Riêng tư , 
-                                [Kiểu mã giảm giá muốn áp dụng cho tất cả khách hàng hoặc 1 số khách hàng nhất định]
+                                0: Áp dụng cho toàn bộ mặt hàng ,
+                                1:  Áp dụng cho toàn bộ mặt hàng nhất định , 
+                                [Kiểu mã giảm giá muốn áp dụng cho toàn bộ hoặc mặt hàng nhất định]
                             '
                 );
             $table->integer('status')
