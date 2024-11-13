@@ -9,7 +9,7 @@
 @section('title-message', 'Chúng tôi đã gửi xác nhận về email !')
 
 @section('content-message',
-    'Chúng tôi đã gửi email tới hòm thư email@gmail.com , bạn vui lòng kiểm tra email để xác
+    'Chúng tôi đã gửi email tới hòm thư của bạn , bạn vui lòng kiểm tra email để xác
     nhận')
 
 @section('link')

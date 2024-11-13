@@ -93,12 +93,12 @@
                             <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
                         </div>
                         @else
-                        <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
-                        <a href="{{ route('client.login') }}" class="nav-link">
-                            <i class="fas fa-user fa-2x"></i>
-                        </a>
-                        <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
-                            <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
+                            <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
+                            <a href="{{ route('client.login') }}" class="nav-link">
+                                <i class="fas fa-user fa-2x"></i>
+                            </a>
+                            <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
+                                <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
 
                             <!-- Kiểm tra nếu người dùng là admin -->
                             @if (Auth::user()->role === 0)
@@ -119,10 +119,3 @@
         </nav>
     </div>
 </div>
-<script>
-    document.getElementById('liveToastBtn').addEventListener('click', function() {
-        var toastEl = document.getElementById('liveToast');
-        var toast = new bootstrap.Toast(toastEl);
-        toast.show();
-    });
-</script>

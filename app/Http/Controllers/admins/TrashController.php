@@ -159,7 +159,26 @@ class TrashController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa tài khoản: ' . $e->getMessage());
         }
     }
+    public function destroyProduct($id){
+        try {
+            // Lấy thông tin người dùng cần xóa
+            $products = Product::withTrashed()->findOrFail($id);
 
+            // Xóa ảnh đại diện nếu có
+            if ($products->avatar) {
+                Storage::disk('public')->delete($products->avatar);
+            }
+
+            // Xóa người dùng vĩnh viễn khỏi cơ sở dữ liệu
+            $products->forceDelete();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Tài khoản đã được xóa vĩnh viễn thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa tài khoản: ' . $e->getMessage());
+        }
+    }
     public function destroyVariant($id)
     {
         try {
