@@ -30,7 +30,7 @@
 
         <div class="mt-3">
             <label for="avatar">Ảnh</label>
-            <input type="file" class="form-control" name="avatar" id="avatar" required
+            <input type="file" class="form-control" name="avatar" id="avatar"
                 onchange="previewImage(event, 'image_user')">
         </div>
 
