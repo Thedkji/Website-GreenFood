@@ -17,7 +17,7 @@
         <p class="progress-bar bg-success" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 3 ? '' : 'display:none' }}" aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">Giao hàng thành công</p>
         @endif
         @if ($orders->status != 6)
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 4 ? '' : 'display:none' }}" aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">Giao hàng không thành công</p>
+        <p class="progress-bar " role="progressbar" style='width: 16.66%; margin-right: 10px;{{ $orders->status >= 4 ? '' : 'display:none' }}' aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">Giao hàng không thành công</p>
         @endif
         <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 6 ? '' : 'display:none' }}" aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">Đánh giá</p>
         @endif
@@ -149,7 +149,7 @@
                 <td scope="col">{{ $orderDetail->order_id }}</td>
                 <td scope="col">{{ $orderDetail->product_name }}</td>
                 <td scope="col">
-                    <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="">
+                    <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="" style="width:100px;height:100px">
                 </td>
                 <td scope="col">
                     {{ app('formatPrice')($orderDetail->product_price) }} VNĐ
