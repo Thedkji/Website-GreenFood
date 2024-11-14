@@ -4,6 +4,7 @@ namespace App\Http\Controllers\clients;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,42 @@ class CheckoutController extends Controller
         $decodedItems = array_map(function ($itemJson) {
             return json_decode($itemJson, true);
         }, $datas);
-        // dd($decodedItems);
+
+        $couponsAll = Coupon::with(['categories.children', 'products'])->get();
+
+        // Lấy các product_id từ $decodedItems
+        $productIds = array_column($decodedItems, 'product_id');
+
+        // Lấy các sản phẩm liên kết với $productIds
+        $Products = Product::with('categories')->whereIn('id', $productIds)->get();
+
+        // Lấy ID của các danh mục liên kết với các sản phẩm
+        $categoryIds = $Products->flatMap(function ($product) {
+            return $product->categories->pluck('id');
+        })->unique();
+
+        // Lọc các mã giảm giá khả dụng dựa trên sản phẩm hoặc danh mục
+        $availableCoupons = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds) {
+            $isProductMatch = false;
+            $isCategoryMatch = false;
+
+            // Kiểm tra sản phẩm liên kết với coupon
+            foreach ($coupon->products as $product) {
+                if (in_array($product->id, $productIds)) {
+                    $isProductMatch = true;
+                    break;
+                }
+            }
+            // Kiểm tra danh mục liên kết với coupon
+            foreach ($coupon->categories as $category) {
+                if (in_array($category->id, $categoryIds->toArray())) {
+                    $isCategoryMatch = true;
+                    break;
+                }
+            }
+            // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
+            return $isProductMatch || $isCategoryMatch;
+        });
         $variantDetails = [];
         if (auth()->check()) {
             $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
@@ -54,8 +90,8 @@ class CheckoutController extends Controller
         }
         $userInfo = auth()->user() ?? null;
         $userId = $userInfo ? $userInfo->id : null;
-        // dd(session('cart_items'));
-        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'userId', 'variantDetails'));
+
+        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'userId', 'variantDetails', 'availableCoupons'));
     }
 
     public function getCheckOut(OrderRequest $request)

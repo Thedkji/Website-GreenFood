@@ -156,6 +156,19 @@
                         </div>
                     </div>
                     <div class="mt-5">
+                        <select class="form-control" name="coupon_id" id="coupon_id">
+                            <option value="" disabled selected>Chọn mã giảm giá</option>
+                            @if($availableCoupons->isEmpty())
+                            <option value="" disabled>Không có mã giảm giá</option>
+                            @else
+                            @foreach($availableCoupons as $coupon)
+                            <option value="{{ $coupon->id }}">{{ $coupon->name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+
+                    </div>
+                    <div class="mt-5">
                         <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
                         <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
                     </div>
