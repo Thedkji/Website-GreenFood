@@ -49,8 +49,9 @@ class OrderController extends Controller
         if ($order) {
             $status = $request->input('status');
             $order->update(['status' => $status]);
-            Mail::to($order->email)->send(new MailCheckOut($order));
+            Mail::to($order->email)->queue(new MailCheckOut($order));
         }
+        
         return redirect()->back();
     }
 
