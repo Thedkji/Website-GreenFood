@@ -36,7 +36,6 @@
                     @if ($cartItems->isNotEmpty())
                     @foreach ($cartItems as $item)
                     @if (auth()->check())
-
                     <tr>
                         <th>
                             <input type="checkbox" name="selectBox[]" value="{{ $item }}">
