@@ -24,6 +24,7 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
+
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
         }
@@ -44,33 +45,11 @@ class CheckoutController extends Controller
             return $product->categories->pluck('id');
         })->unique();
 
-        // Lọc các mã giảm giá khả dụng dựa trên sản phẩm hoặc danh mục
-        $availableCoupons = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds) {
-            $isProductMatch = false;
-            $isCategoryMatch = false;
-
-            // Kiểm tra sản phẩm liên kết với coupon
-            foreach ($coupon->products as $product) {
-                if (in_array($product->id, $productIds)) {
-                    $isProductMatch = true;
-                    break;
-                }
-            }
-            // Kiểm tra danh mục liên kết với coupon
-            foreach ($coupon->categories as $category) {
-                if (in_array($category->id, $categoryIds->toArray())) {
-                    $isCategoryMatch = true;
-                    break;
-                }
-            }
-            // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
-            return $isProductMatch || $isCategoryMatch;
-        });
         $variantDetails = [];
         if (auth()->check()) {
             $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
                 if ($item['product']['status'] === 0) {
-                    $itemTotal = $item['quantity'] * $item['product']['price_sale'];
+                    $itemTotal = $item['quantity'] *  $item['product']['price_sale'];
                     $variantDetails[$item['id']] = null;
                 } else {
                     $variant = VariantGroup::where('product_id', $item['product_id'])
@@ -88,11 +67,52 @@ class CheckoutController extends Controller
                 return $carry + $itemTotal;
             }, 0);
         }
-        $userInfo = auth()->user() ?? null;
-        $userId = $userInfo ? $userInfo->id : null;
+        if ($request->has('coupon_id')) {
+            $coupon = Coupon::find($request->input('coupon_id'));
+            if ($coupon && $coupon->status == 0 && $coupon->minimum_spend <= $totalPrice) {
+                $totalPrice = max(0, $totalPrice - $coupon->maximum_spend); // Trừ giá trị coupon vào tổng giá
+            }
+        }
+        // Lọc các mã giảm giá khả dụng dựa trên sản phẩm hoặc danh mục
+        $availableCoupons = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds, $totalPrice) {
+            // Kiểm tra trạng thái phát hành
+            if ($coupon->status != 0) {
+                return false;
+            }
+            // Không hiển thị mã nếu giá trị tối thiểu lớn hơn tổng giá trị đơn hàng
+            if ($coupon->minimum_spend > $totalPrice) {
+                return false;
+            }
+            // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
+            if ($coupon->type == 0) {
+                return true;
+            }
+            // Nếu không có thì xét điều kiện
+            $isProductMatch = false;
+            $isCategoryMatch = false;
+            // Kiểm tra sản phẩm liên kết với coupon
+            foreach ($coupon->products as $product) {
+                if (in_array($product->id, $productIds)) {
+                    $isProductMatch = true;
+                    break;
+                }
+            }
+            // Kiểm tra danh mục liên kết với coupon
+            foreach ($coupon->categories as $category) {
+                if (in_array($category->id, $categoryIds->toArray())) {
+                    $isCategoryMatch = true;
+                    break;
+                }
+            }
+            // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
+            return $isProductMatch || $isCategoryMatch;
+        });
 
-        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'userId', 'variantDetails', 'availableCoupons'));
+        $userInfo = auth()->user() ?? null;
+
+        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
+
 
     public function getCheckOut(OrderRequest $request)
     {
@@ -131,7 +151,6 @@ class CheckoutController extends Controller
             return redirect()->route('client.showFailureCheckOut')->with('error', 'Đơn hàng đã không thành công! Vui lòng thử lại sau.');
         }
     }
-
 
     private function VnPayCheckOut(Request $request, $order)
     {

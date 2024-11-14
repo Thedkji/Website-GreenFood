@@ -89,7 +89,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($decodedItems as $items)
-                                @if (isset($userId))
+                                @if (isset($userInfo))
                                 <tr>
                                     <th scope="row">
                                         <div class="d-flex align-items-center mt-2">
@@ -156,18 +156,23 @@
                         </div>
                     </div>
                     <div class="mt-5">
-                        <select class="form-control" name="coupon_id" id="coupon_id">
+                        <select class="form-select" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
                             <option value="" disabled selected>Chọn mã giảm giá</option>
                             @if($availableCoupons->isEmpty())
                             <option value="" disabled>Không có mã giảm giá</option>
                             @else
                             @foreach($availableCoupons as $coupon)
-                            <option value="{{ $coupon->id }}">{{ $coupon->name }}</option>
+                            <option value="{{ $coupon->id }}" data-discount="{{ $coupon->maximum_spend }}">
+                                {{ $coupon->name }} - Tối đa: {{ number_format($coupon->maximum_spend) }} VND;
+                                Kết thúc: {{ date('d-m-Y', strtotime($coupon->expiration_date)) }};
+                                {{ $coupon->description }}
+                            </option>
                             @endforeach
                             @endif
                         </select>
-
                     </div>
+                    <div id="totalPrice">Tổng giá: <span>{{ number_format($totalPrice) }} VND</span></div>
+
                     <div class="mt-5">
                         <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
                         <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
