@@ -16,6 +16,7 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\VariantGroup;
 use Darryldecode\Cart\Facades\CartFacade as CartSession;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -67,12 +68,7 @@ class CheckoutController extends Controller
                 return $carry + $itemTotal;
             }, 0);
         }
-        if ($request->has('coupon_id')) {
-            $coupon = Coupon::find($request->input('coupon_id'));
-            if ($coupon && $coupon->status == 0 && $coupon->minimum_spend <= $totalPrice) {
-                $totalPrice = max(0, $totalPrice - $coupon->maximum_spend); // Trừ giá trị coupon vào tổng giá
-            }
-        }
+
         // Lọc các mã giảm giá khả dụng dựa trên sản phẩm hoặc danh mục
         $availableCoupons = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds, $totalPrice) {
             // Kiểm tra trạng thái phát hành
@@ -83,6 +79,11 @@ class CheckoutController extends Controller
             if ($coupon->minimum_spend > $totalPrice) {
                 return false;
             }
+            // Kiểm tra số lượng còn đủ không
+            if ($coupon->quantity == 0) {
+                return false;
+            }
+
             // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
             if ($coupon->type == 0) {
                 return true;
@@ -113,13 +114,34 @@ class CheckoutController extends Controller
         return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
 
+    public function applyCoupon(Request $request)
+    {
+        $couponId = $request->coupon_id;
+        session()->forget('coupon');
+        $couponInfo = Coupon::find($couponId);
+        if ($couponInfo) {
+            session(['coupon' => [
+                'id' => $couponInfo->id,
+                'discount_type' => $couponInfo->discount_type,
+                'type' => $couponInfo->type,
+                'amount' => $couponInfo->coupon_amount,
+                'name' => $couponInfo->name,
+                'discount' => $couponInfo->maximum_spend,
+            ]]);
+
+            return redirect()->back()->with('success', 'Mã giảm giá đã được thêm thành công');
+        }
+        return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
+    }
+
 
     public function getCheckOut(OrderRequest $request)
     {
         DB::beginTransaction();
         try {
+            $paymentMethod = $request->input('payment_method');
             // Kiểm tra phương thức thanh toán
-            if (!$request->has('Delivery') && !$request->has('Paypal')) {
+            if (!$paymentMethod) {
                 return redirect()->back()->with('error', 'Vui lòng chọn phương thức thanh toán');
             }
 
@@ -137,7 +159,7 @@ class CheckoutController extends Controller
 
             DB::commit();
             // Kiểm tra phương thức thanh toán, nếu là Paypal thì chuyển sang VNPay Checkout
-            if ($request->has('Paypal')) {
+            if ($paymentMethod === "VNPay") {
                 session(['cart_items' => $request->data[0]]);
                 return $this->VnPayCheckOut($request, $order);
             }
