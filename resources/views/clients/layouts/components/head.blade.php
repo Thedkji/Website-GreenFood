@@ -25,3 +25,5 @@
 
 <!-- Template Stylesheet -->
 <link href="{{ env('VIEW_CLIENT') }}/css/style.css?time={{ time() }}" rel="stylesheet">
+
+<script src="{{ env('VIEW_ADMIN') }}/ajax/jquery-3.7.1.min.js?time={{ time() }}"></script>
