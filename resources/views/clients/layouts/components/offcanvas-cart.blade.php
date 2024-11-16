@@ -12,7 +12,7 @@
             <form action="{{ route('client.removeCart', ['id' => $item->id]) }}" method="post">
                 @csrf
                 <label class="form-check-label d-flex justify-content-between" for="{{ $item->id }}">
-                    <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid rounded" style="width:80px; height:80px;" alt="">
+                    <img src="{{ env('VIEW_IMG').(isset($userId) ? $item->product->img : $item->attributes->img) }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="">
                     <div class="px-4">
                         <h4>{{ isset($userId) ? $item->product->name : $item->name }}</h4>
                         <div class="d-flex justify-content-between">
