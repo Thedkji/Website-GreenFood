@@ -10,6 +10,31 @@
     /* Điều chỉnh độ rộng tối đa */
 }
 
+.pagination .rounded {
+    padding: 8px 18px; /* Thêm khoảng cách giữa các nút */
+    font-size: 16px;    /* Giảm kích thước font */
+}
+
+.pagination .rounded i {
+    font-size: 14px; /* Giảm kích thước icon */
+    color: #888; /* Màu nhạt hơn */
+    transition: all 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+
+.pagination .rounded.active i {
+    color: white; /* Màu icon khi active */
+}
+
+.pagination .rounded.disabled {
+    pointer-events: none;
+    opacity: 0.6; /* Giảm độ sáng khi không thể click */
+}
+
+
+
+
+
 #spinner {
     opacity: 0;
     visibility: hidden;

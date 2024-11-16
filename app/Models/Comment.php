@@ -17,7 +17,7 @@ class Comment extends Model
         "content",
         "img",
     ];
-    
+
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -31,5 +31,10 @@ class Comment extends Model
     public function rates()
     {
         return $this->hasMany(Rate::class);
+    }
+
+    public function parentUser()
+    {
+        return $this->belongsTo(User::class, 'parent_user_id');
     }
 }
