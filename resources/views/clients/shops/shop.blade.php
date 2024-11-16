@@ -21,5 +21,5 @@
 </div>
 </div>
 <!-- Fruits Shop End-->
-
+@include('clients.shops.action')
 @endsection

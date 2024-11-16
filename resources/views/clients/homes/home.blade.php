@@ -2,6 +2,8 @@
 
 @section('title', 'Fruitables - Trang chủ')
 @section('content')
+
+
 <!-- Hero Start -->
 @include('clients/homes/banner-slide/hero-start')
 <!-- Hero End -->
@@ -24,6 +26,7 @@
 <!-- Bestsaler Product End -->
 
 <!-- Featurs Section Start -->
+
 <div class="container-fluid featurs py-5">
     <div class="container py-5">
         <div class="text-center mx-auto mb-5" style="max-width: 700px;">
