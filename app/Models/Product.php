@@ -20,6 +20,7 @@ class Product extends Model
         "description",
         "description_short",
         "quantity",
+        "view",
         "status",
     ];
 

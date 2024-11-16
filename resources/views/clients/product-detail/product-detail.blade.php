@@ -103,16 +103,15 @@
 
                                 @foreach ($product->variantGroups as $variantGroup)
                                     @foreach ($variantGroup->variants as $variant)
-                                        @if ($variant->parent_id === null)
-                                            {{-- Đây là biến thể cha, hiển thị tên của nó --}}
-                                            {{ $variant->name }} (Cha)
-                                        @else
-                                            {{-- Đây là biến thể con, lấy tên của biến thể cha --}}
-                                            {{ $variant->parent->name }}: {{ $variant->name }} (Con)
+                                        @if ($loop->first)
+                                            <!-- Kiểm tra nếu là biến thể đầu tiên trong nhóm -->
+                                            {{ $variant->parent->name }} <!-- Hiển thị tên parent một lần -->
                                         @endif
+                                        {{ $variant->name }} (Con)
                                         <br>
                                     @endforeach
                                 @endforeach
+
 
                             @endif
 
