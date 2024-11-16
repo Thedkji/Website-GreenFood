@@ -12,7 +12,6 @@ class ProductController extends Controller
 {
     public function home(Request $request)
     {
-        checkAllProductQuantities();
         $products = Product::with(['categories', 'variantGroups.variants.parent'])->paginate(8);
         $categories = Category::all();
         return view("clients.homes.home", compact('products', 'categories'));

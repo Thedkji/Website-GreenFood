@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(CheckoutController::class)
     ->group(function () {
         Route::get('thanh-toan', 'checkout')->name('checkout');
+        Route::post('ma-giam-gia', 'applyCoupon')->name('applyCoupon');
         Route::post('thanh-toan-don-hang', 'getCheckOut')->name('getCheckOut');
         Route::get('/vnpay-return/{orderId}', 'handleVnPayResponse')->name('vnpay.callback');
     });

@@ -61,27 +61,6 @@
                             {{ $cartQuantity }}
                         </span>
                     </a>
-                    <a href="#" class="position-relative me-4 my-auto" id="liveToastBtn">
-                        <i class="fa fa-bell fa-2x"></i>
-                    </a>
-                    <div class="toast-container position-fixed top-10 end-0 p-3" style="z-index: 1050;">
-                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header">
-                                <strong class="me-auto">Thông báo</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                <!-- Xem trong app/Helpers/CheckQuantity.php -->
-                                @if (session('statusProducts'))
-                                <ul>
-                                    @foreach (session('statusProducts') as $message)
-                                    <li>{{ $message }}</li>
-                                    @endforeach
-                                </ul>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
                     <div class="nav-item  dropdown">
                         @guest
                         <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
