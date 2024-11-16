@@ -25,7 +25,6 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
-
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
         }
@@ -110,30 +109,55 @@ class CheckoutController extends Controller
         });
 
         $userInfo = auth()->user() ?? null;
-
         return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
 
+    // public function applyCoupon(Request $request)
+    // {
+    //     $couponId = $request->coupon_id;
+    //     session()->forget('coupon');
+    //     $couponInfo = Coupon::find($couponId);
+    //     if ($couponInfo) {
+    //         session(['coupon' => [
+    //             'id' => $couponInfo->id,
+    //             'discount_type' => $couponInfo->discount_type,
+    //             'type' => $couponInfo->type,
+    //             'amount' => $couponInfo->coupon_amount,
+    //             'name' => $couponInfo->name,
+    //             'discount' => $couponInfo->maximum_spend,
+    //         ]]);
+    //         session()->save();
+    //         return redirect()->back()->with('success', 'Mã giảm giá đã được thêm thành công');
+    //     }
+    //     return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
+    // }
     public function applyCoupon(Request $request)
     {
         $couponId = $request->coupon_id;
-        session()->forget('coupon');
         $couponInfo = Coupon::find($couponId);
+
         if ($couponInfo) {
-            session(['coupon' => [
+            // Tạo biến $coupon chứa thông tin mã giảm giá
+            $coupon = [
                 'id' => $couponInfo->id,
                 'discount_type' => $couponInfo->discount_type,
                 'type' => $couponInfo->type,
                 'amount' => $couponInfo->coupon_amount,
                 'name' => $couponInfo->name,
                 'discount' => $couponInfo->maximum_spend,
-            ]]);
+                'product_id' => $couponInfo->products->pluck('id')->toArray(),
+                'category_id' => $couponInfo->categories->pluck('id')->toArray(),
+            ];
 
-            return redirect()->back()->with('success', 'Mã giảm giá đã được thêm thành công');
+            // Truyền thông tin mã giảm giá vào view
+            return redirect()->back()->with([
+                'success' => 'Mã giảm giá đã được thêm thành công',
+                'coupon' => $coupon,
+            ]);
         }
+
         return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
     }
-
 
     public function getCheckOut(OrderRequest $request)
     {
