@@ -13,7 +13,7 @@
             <div class="search-box">
                 <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                 <i class="ri-search-line search-icon"></i>
-            </div>      
+            </div>
 
         </div>
     </div>
@@ -58,7 +58,6 @@
                     <th scope="col">@sortablelink('total','Tổng hóa đơn')</th>
                     <th scope="col">@sortablelink('status','Trạng thái')</th>
                     <th scope="col">@sortablelink('created_at','Ngày tạo')</th>
-                    <th scope="col">@sortablelink('updated_at','Ngày cập nhật')</th>
                     <th scope="col">Thao tác</th>
                 </tr>
             </thead>
@@ -101,7 +100,6 @@
                         @endswitch
                     </td>
                     <td scope="col">{{ $order->created_at }}</td>
-                    <td scope="col">{{ $order->updated_at }}</td>
                     <td>
                         <div class=" gap-3 flex-wrap">
                             <a href="{{ route('admin.orders.showOrderDetail', $order->id) }}"><i class="fa-regular fa-eye"></i></a>
