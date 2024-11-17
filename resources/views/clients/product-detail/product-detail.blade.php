@@ -3,7 +3,133 @@
 @section('title', 'Chi tiểt sản phẩm')
 
 @section('content')
+    <style>
+        .active_variantGroup {
+            border: 1px solid greenyellow !important;
+            background: #f5f5f5;
+        }
 
+        .variant-parent {
+            display: block;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        .variant-option {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #555;
+            /* transition: background-color 0.3s; */
+        }
+
+        .variant-option:hover {
+            background-color: #f5f5f5;
+            border-color: #ccc;
+        }
+
+        .variant-img {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+
+        /* Container styling */
+        .container {
+            padding: 20px;
+        }
+
+        /* Product Card */
+        .product-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            transition: box-shadow 0.3s, transform 0.3s;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* Product Image */
+        .product-img-container {
+            flex: 0 0 100px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-right: 20px;
+        }
+
+        .product-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Product Info */
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .product-pricing {
+            margin-bottom: 8px;
+        }
+
+        .price-regular {
+            text-decoration: line-through;
+            color: #999;
+            margin-right: 10px;
+        }
+
+        .price-sale {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .product-rating i {
+            margin-right: 2px;
+            color: #f1c40f;
+        }
+
+        .product-rating i.text-secondary {
+            color: #ddd;
+        }
+
+        /* Adjustments for responsiveness */
+        @media (max-width: 576px) {
+            .product-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product-img-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Chi tiết sản phẩm</h1>
@@ -27,12 +153,13 @@
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                            class="d-block w-100 img-fluid rounded" alt="Image">
+                                            class="d-block w-100 img-fluid rounded" alt="Image" style="height: 550px">
                                     </div>
                                     @foreach ($product->galleries as $gallery)
                                         <div class="carousel-item">
                                             <img src="{{ env('VIEW_IMG') }}/{{ $gallery->path }}"
-                                                class="d-block w-100 img-fluid rounded" alt="Image">
+                                                class="d-block w-100 img-fluid rounded" alt="Image"
+                                                style="height: 550px">
                                         </div>
                                     @endforeach
                                 </div>
@@ -72,12 +199,14 @@
                             </p>
                             @if ($product->status == 0)
                                 <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
-                                <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                    {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                </h6>
-                                <h4 class="fw-bold mb-3 text-success">
-                                    {{ app('formatPrice')($product->price_sale) }} VNĐ
-                                </h4>
+                                <div id="price_variantGroup">
+                                    <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
+                                    </h6>
+                                    <h4 class="fw-bold mb-3 text-success">
+                                        {{ app('formatPrice')($product->price_sale) }} VNĐ
+                                    </h4>
+                                </div>
                             @else
                                 <!-- Trường hợp có biến thể, lấy giá thấp nhất từ variantGroup -->
                                 @php
@@ -85,12 +214,14 @@
                                 @endphp
 
                                 @if ($variant)
-                                    <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                        {{ app('formatPrice')($variant->price_regular) }} VNĐ
-                                    </h6>
-                                    <h4 class="fw-bold mb-3 text-success">
-                                        {{ app('formatPrice')($variant->price_sale) }} VNĐ
-                                    </h4>
+                                    <div id="price_variantGroup">
+                                        <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                                            {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                        </h6>
+                                        <h4 class="fw-bold mb-3 text-success">
+                                            {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                        </h4>
+                                    </div>
                                 @else
                                     <!-- Nếu không có biến thể nào khả dụng, hiển thị thông báo hoặc giá mặc định -->
                                     <h6 class="fw-bold mb-3 text-muted">Không có giá khả dụng</h6>
@@ -98,18 +229,72 @@
                             @endif
 
                             @if ($product->status == 1)
+                                @php
+                                    $displayedParents = []; // Mảng tạm để lưu các parent đã hiển thị
+                                    $lowestPrice = null; // Biến lưu giá thấp nhất
+                                    $lowestPriceVariantGroup = null; // Biến lưu group có giá thấp nhất
 
+                                    // Tìm giá thấp nhất trong tất cả variantGroups
+                                    foreach ($product->variantGroups as $variantGroup) {
+                                        if ($lowestPrice === null || $variantGroup->price_sale < $lowestPrice) {
+                                            $lowestPrice = $variantGroup->price_sale;
+                                            $lowestPriceVariantGroup = $variantGroup; // Lưu lại group có giá thấp nhất
+                                        }
+                                    }
 
+                                    // Sắp xếp các variantGroups theo giá, nhóm có giá thấp nhất sẽ nằm đầu
+                                    $sortedVariantGroups = $product->variantGroups->sortBy('price_sale');
+                                @endphp
 
-                                @foreach ($product->variantGroups as $variantGroup)
-                                    @foreach ($variantGroup->variants as $variant)
-                                        @if ($loop->first)
-                                            <!-- Kiểm tra nếu là biến thể đầu tiên trong nhóm -->
-                                            {{ $variant->parent->name }} <!-- Hiển thị tên parent một lần -->
-                                        @endif
-                                        {{ $variant->name }} (Con)
-                                        <br>
-                                    @endforeach
+                                @foreach ($sortedVariantGroups as $variantGroup)
+                                    @if ($variantGroup == $lowestPriceVariantGroup)
+                                        <!-- Kiểm tra xem variantGroup có giá thấp nhất hay không -->
+                                        @foreach ($variantGroup->variants as $variant)
+                                            @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                <strong
+                                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                @php
+                                                    $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                @endphp
+                                            @endif
+
+                                            <!-- Hiển thị biến thể có giá thấp nhất đầu tiên và thêm class 'active' -->
+                                            <a href="###" class="variant-option active"
+                                                data-id="{{ $variantGroup->id }}">
+                                                @if ($variantGroup->img)
+                                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                        alt="" class="variant-img">
+                                                @else
+                                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                                                        class="variant-img">
+                                                @endif
+                                                <span>{{ $variant->name }}</span>
+                                            </a>
+                                        @endforeach
+                                    @else
+                                        <!-- Hiển thị các variantGroup còn lại -->
+                                        @foreach ($variantGroup->variants as $variant)
+                                            @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                <strong
+                                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                @php
+                                                    $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                @endphp
+                                            @endif
+
+                                            <!-- Hiển thị các biến thể khác, không có class 'active' -->
+                                            <a href="###" class="variant-option" data-id="{{ $variantGroup->id }}">
+                                                @if ($variantGroup->img)
+                                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                        alt="" class="variant-img">
+                                                @else
+                                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                                                        class="variant-img">
+                                                @endif
+                                                <span>{{ $variant->name }}</span>
+                                            </a>
+                                        @endforeach
+                                    @endif
                                 @endforeach
 
 
@@ -118,7 +303,7 @@
 
                             <p class="mb-4">{!! $product->description_short !!}</p>
 
-                            {{-- <div class="input-group quantity mb-5" style="width: 100px;">
+                            <div class="input-group quantity my-4" style="width: 100px;">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                                         <i class="fa fa-minus"></i>
@@ -131,9 +316,9 @@
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
-                            </div> --}}
+                            </div>
                             <a href="#"
-                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                class="btn border border-secondary rounded-pill px-4 py-3 mb-4 text-primary"><i
                                     class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng</a>
                         </div>
                         <div class="col-lg-12">
@@ -148,7 +333,8 @@
                                 </div>
                             </nav>
                             <div class="tab-content mb-5">
-                                <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                    aria-labelledby="nav-about-tab">
                                     @php
                                         use Illuminate\Support\Str;
                                     @endphp
@@ -233,7 +419,8 @@
                                     </script>
 
                                 </div>
-                                <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
+                                <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                    aria-labelledby="nav-mission-tab">
                                     @foreach ($product->comments as $comment)
                                         <div class="d-flex mb-4">
                                             {{-- Avatar người bình luận --}}
@@ -267,6 +454,7 @@
                                                     </p>
                                                 @endif
 
+
                                                 {{-- Thông tin người trả lời nếu có --}}
                                                 @if ($comment->parentUser)
                                                     <div class="d-flex mt-3">
@@ -293,169 +481,59 @@
                 <div class="col-lg-4 col-xl-3">
                     <div class="row g-4 fruite">
                         <div class="col-lg-12">
-                            <div class="mb-4">
-                                <h4>Categories</h4>
-                                <ul class="list-unstyled fruite-categorie">
-                                    <li>
-                                        <div class="d-flex justify-content-between fruite-name">
-                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Apples</a>
-                                            <span>(3)</span>
+                            <h4 class="mb-4">Sản phẩm nổi bật</h4>
+                            @foreach ($productHot as $product)
+                                <a href="{{ route('client.product-detail', $product->id) }}"
+                                    class="text-decoration-none text-dark">
+                                    <div class="product-card mb-4">
+                                        <!-- Image -->
+                                        <div class="product-img-container">
+                                            @if ($product->img)
+                                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                    alt="{{ $product->name }}" class="product-img">
+                                            @else
+                                                <img src="" alt="{{ $product->name }}" class="product-img">
+                                            @endif
                                         </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-between fruite-name">
-                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Oranges</a>
-                                            <span>(5)</span>
+                                        <!-- Product Info -->
+                                        <div class="product-info">
+                                            <h6 class="product-name">
+                                                {{ $product->name }}
+                                                @if ($product->variantGroups->isNotEmpty())
+                                                    @php
+                                                        $variant = $product->variantGroups
+                                                            ->whereNotNull('price_sale')
+                                                            ->sortBy('price_sale')
+                                                            ->first();
+                                                    @endphp
+                                                    @if ($variant)
+                                                        - {{ $variant->name }}
+                                                    @endif
+                                                @endif
+                                            </h6>
+                                            <!-- Pricing -->
+                                            <div class="product-pricing">
+                                                @if (isset($variant) && $variant->price_regular)
+                                                    <span
+                                                        class="price-regular">{{ number_format($variant->price_regular, 0) }}
+                                                        VNĐ</span>
+                                                @endif
+                                                <span
+                                                    class="price-sale">{{ number_format($variant->price_sale ?? $product->price_sale, 0) }}
+                                                    VNĐ</span>
+                                            </div>
+                                            <!-- Ratings -->
+                                            <div class="product-rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i
+                                                        class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
+                                                @endfor
+                                            </div>
                                         </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-between fruite-name">
-                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Strawbery</a>
-                                            <span>(2)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-between fruite-name">
-                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Banana</a>
-                                            <span>(8)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex justify-content-between fruite-name">
-                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Pumpkin</a>
-                                            <span>(5)</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <h4 class="mb-4">Featured products</h4>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/featur-1.jpg" class="img-fluid rounded"
-                                        alt="Image">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
                                     </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/featur-2.jpg" class="img-fluid rounded"
-                                        alt="">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/featur-3.jpg" class="img-fluid rounded"
-                                        alt="">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-4.jpg"
-                                        class="img-fluid rounded" alt="">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-5.jpg"
-                                        class="img-fluid rounded" alt="">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                    <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-6.jpg"
-                                        class="img-fluid rounded" alt="">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center my-4">
-                                <a href="#"
-                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Vew
-                                    More</a>
-                            </div>
+                                </a>
+                            @endforeach
+
                         </div>
                         {{-- <div class="col-lg-12">
                             <div class="position-relative">
@@ -622,4 +700,5 @@
         </div>
     </div>
 
+    @include('clients.product-detail.script')
 @endsection
