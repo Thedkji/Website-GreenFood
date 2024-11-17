@@ -18,18 +18,28 @@
     </div>
     @endif
     <div class="container py-5">
+        <div class="d-flex justify-content-between mb-5">
+            <form action="{{ route('client.deleteCart') }}" method="POST">
+                @csrf
+                <button onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
+            </form>
+            <button type="submit" formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">Cập nhật số lượng</button>
+        </div>
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Products</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">
+                            <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                        </th>
+                        <th scope="col">Ảnh</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Mã sản phẩm</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +48,7 @@
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}">
+                            <input type="checkbox" name="selectBox[]" value="{{ $item }}" class="cart-checkbox">
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
@@ -46,11 +56,21 @@
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">{{ $item->product->name }}</p>
-                            <p class="mb-0 mt-4"></p>
+                            <strong class="mb-0 mt-4">{{ $item->product->name }}</strong>
+
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">
+                            <strong class="mb-0 mt-4">@if ($item->product->status === 0)
+                                {{ $item->product->sku }}
+                                @else
+                                @foreach ($variantGroups[$item->sku] ?? [] as $variant)
+                                {{ $variant->sku }}
+                                @endforeach
+                                @endif
+                            </strong>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4 text-danger">
                                 @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale) }} VNĐ
                                 @else
@@ -78,7 +98,7 @@
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">
+                            <p class="mb-0 mt-4 text-success">
                                 @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale * $item->quantity) }} VNĐ
                                 @else
@@ -96,10 +116,11 @@
                             </button>
                         </td>
                     </tr>
+
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}">
+                            <input type="checkbox" name="selectBox[]" value="{{ $item }}" class="cart-checkbox">
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
@@ -107,11 +128,13 @@
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">{{ $item->name }}</p>
-                            <p class="mb-0 mt-4">{{ $item->attributes->sku }}</p>
+                            <strong class="mb-0 mt-4">{{ $item->name }}</strong>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">{{ number_format($item->price) }} VNĐ</p>
+                            <strong class="mb-0 mt-4">{{ $item->attributes->sku }}</strong>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4 text-danger">{{ number_format($item->price) }} VNĐ</p>
                         </td>
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
@@ -129,7 +152,7 @@
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">{{ number_format(($item->price) * ($item->quantity)) }} VNĐ</p>
+                            <p class="mb-0 mt-4 text-success">{{ number_format(($item->price) * ($item->quantity)) }} VNĐ</p>
                         </td>
                         <td>
                             <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
@@ -139,28 +162,35 @@
                     </tr>
                     @endif
                     @endforeach
+
                     @endif
                 </tbody>
             </table>
-            <button type="submit" formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">Cập nhật số lượng</button>
+            <div class="mt-3 d-flex justify-content-sm-end">
+                {{auth()->check() ? $cartItems->links() : ""}}
+            </div>
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Total</h5>
-                            <p class="mb-0 pe-4">{{ number_format($cartTotal) }} VNĐ</p>
+                            <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
+                            <p class="mb-0 pe-4 text-success">{{ number_format($cartTotal) }} VNĐ</p>
                         </div>
-                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Proceed Checkout</button>
+                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Thanh toán</button>
                     </div>
                 </div>
             </div>
         </form>
-        <form action="{{ route('client.deleteCart') }}" method="POST">
-            @csrf
-            <button onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
-        </form>
+
     </div>
 </div>
 
 @endsection
+<script>
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('.cart-checkbox');
+        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+        toggleDeleteButton();
+    }
+</script>

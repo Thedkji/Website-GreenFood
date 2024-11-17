@@ -17,7 +17,7 @@ class CartComposer
         $cartItems = [];
 
         if ($userId) {
-            $cartItems = Cart::where('user_id', $userId)->with('product')->get();
+            $cartItems = Cart::where('user_id', $userId)->with('product')->paginate('7');
             if ($cartItems) {
                 foreach ($cartItems as $item) {
                     if ($item->product && $item->product->status == 1) {
