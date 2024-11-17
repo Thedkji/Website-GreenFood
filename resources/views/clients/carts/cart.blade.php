@@ -42,7 +42,7 @@
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                <img src="{{ env('VIEW_IMG').$item->product->img }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
@@ -103,7 +103,7 @@
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                <img src="{{ env('VIEW_IMG') .$item->attributes->img}}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>

@@ -37,7 +37,7 @@
                                         @method('POST')
                                         <div class="rounded position-relative fruite-item">
                                             <div class="fruite-img">
-                                                <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
+                                                <img src="{{ env('VIEW_IMG') }}{{$product->img}}" class="img-fluid w-100 rounded-top" alt="">
                                             </div>
 
                                             <div class="text-white bg-success px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
