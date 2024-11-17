@@ -25,7 +25,6 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
-
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
         }
@@ -76,7 +75,7 @@ class CheckoutController extends Controller
                 return false;
             }
             // Không hiển thị mã nếu giá trị tối thiểu lớn hơn tổng giá trị đơn hàng
-            if ($coupon->minimum_spend > $totalPrice) {
+            if ($coupon->minimum_spend > $totalPrice || $totalPrice > $coupon->maximum_spend) {
                 return false;
             }
             // Kiểm tra số lượng còn đủ không
@@ -105,31 +104,34 @@ class CheckoutController extends Controller
                     break;
                 }
             }
+
             // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
             return $isProductMatch || $isCategoryMatch;
         });
-
         $userInfo = auth()->user() ?? null;
-
         return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
 
     public function applyCoupon(Request $request)
     {
         $couponId = $request->coupon_id;
-        session()->forget('coupon');
         $couponInfo = Coupon::find($couponId);
+
         if ($couponInfo) {
-            session(['coupon' => [
+            $coupon = [
                 'id' => $couponInfo->id,
                 'discount_type' => $couponInfo->discount_type,
                 'type' => $couponInfo->type,
                 'amount' => $couponInfo->coupon_amount,
                 'name' => $couponInfo->name,
                 'discount' => $couponInfo->maximum_spend,
-            ]]);
-
-            return redirect()->back()->with('success', 'Mã giảm giá đã được thêm thành công');
+                'product_id' => $couponInfo->products?->pluck('id')->toArray(),
+                'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
+            ];
+            return redirect()->back()->with([
+                'success' => 'Mã giảm giá đã được thêm thành công',
+                'coupon' => $coupon,
+            ]);
         }
         return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
     }
@@ -289,6 +291,12 @@ class CheckoutController extends Controller
     private function finalizeOrder($order, $cartData)
     {
         $cartItems = json_decode($cartData, true);
+        if (session('coupon')) {
+            $coupon = session('coupon');
+            $couponName = $coupon['name'];
+            $couponId = $coupon['id'];
+            dd($coupon);
+        }
         if (auth()->check()) {
             foreach ($cartItems as $item) {
                 $productSku = $item['sku'];
@@ -326,6 +334,7 @@ class CheckoutController extends Controller
         Mail::to($order->email)->send(new MailCheckOut($order));
         session(['check' => true]);
     }
+
     private function removeCartItems($cartItems)
     {
 
