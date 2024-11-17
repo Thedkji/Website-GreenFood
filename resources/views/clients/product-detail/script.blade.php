@@ -20,13 +20,19 @@
                 $('#price_variantGroup').html(`
                     <div id="price_variantGroup">
                         <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                            ${response.data.price_regular} VNĐ  
+                            ${formatCurrency(response.data.price_regular)} VNĐ  
                         </h6>
                         <h4 class="fw-bold mb-3 text-success">
-                            ${response.data.price_sale} VNĐ  
+                            ${formatCurrency(response.data.price_sale)} VNĐ  
                         </h4>
                     </div>
                 `);
+
+                $('#quantity_variantGroup').html(`
+                                <p id="quantity_variantGroup">
+                                    Số lượng :  ${response.data.quantity}
+                                </p>
+                    `);
             }
         });
 
@@ -74,6 +80,12 @@
                         </h4>
                     </div>
                 `);
+
+                        $('#quantity_variantGroup').html(`
+                                <p id="quantity_variantGroup">
+                                    Số lượng :  ${response.data.quantity}
+                                </p>
+                    `);
                     }
                 });
             }

@@ -2,6 +2,11 @@
 
 @section('title', 'Chi tiểt sản phẩm')
 
+{{-- Link --}}
+@section('title_page', 'Chi tiết sản phẩm')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Chi tiết sản phẩm')
+
 @section('content')
     <style>
         .active_variantGroup {
@@ -129,17 +134,75 @@
                 margin-bottom: 15px;
             }
         }
+
+        .vesitable-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            /* Đảm bảo chiều cao toàn phần */
+            max-width: 300px;
+            /* Cố định chiều rộng */
+        }
+
+        .vesitable-img img {
+            height: 200px;
+            object-fit: cover;
+            /* Đảm bảo ảnh vừa khung */
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .vesitable-item h4 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            height: 50px;
+            /* Cố định chiều cao */
+            overflow: hidden;
+            /* Cắt bớt nội dung quá dài */
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .vesitable-item p {
+            height: 60px;
+            /* Giới hạn chiều cao phần mô tả */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.5;
+            /* Khoảng cách dòng cho dễ đọc */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* Giới hạn 3 dòng */
+            -webkit-box-orient: vertical;
+        }
+
+
+
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Khoảng cách giữa giá cũ và giá giảm */
+        }
+
+        .price-container .text-danger {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #81C408 !important;
+            /* Màu đỏ nhã nhặn */
+
+        }
+
+        .price-container .text-muted {
+            font-size: 1rem;
+            color: #6c757d;
+            /* Màu xám trung tính */
+            text-decoration: line-through;
+            /* Gạch ngang giá cũ */
+        }
     </style>
-    <!-- Single Page Header start -->
-    <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">Chi tiết sản phẩm</h1>
-        {{-- <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">Shop Detail</li>
-        </ol> --}}
-    </div>
-    <!-- Single Page Header End -->
 
 
     <!-- Single Product Start -->
@@ -302,6 +365,16 @@
 
 
                             <p class="mb-4">{!! $product->description_short !!}</p>
+
+                            @if ($product->status == 0)
+                                <p id="quantity_variantGroup">
+                                    Số lượng : {{ $product->quantity }}
+                                </p>
+                            @else
+                                <p id="quantity_variantGroup">
+                                    Số lượng : {{ $variantGroup->quantity }}
+                                </p>
+                            @endif
 
                             <div class="input-group quantity my-4" style="width: 100px;">
                                 <div class="input-group-btn">
@@ -492,15 +565,18 @@
                                                 <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
                                                     alt="{{ $product->name }}" class="product-img">
                                             @else
-                                                <img src="" alt="{{ $product->name }}" class="product-img">
+                                                <img src="{{ env('VIEW_IMG') }}/default-image.png"
+                                                    alt="{{ $product->name }}" class="product-img">
                                             @endif
                                         </div>
+
                                         <!-- Product Info -->
                                         <div class="product-info">
-                                            <h6 class="product-name">
+                                            <h6 class="product-name truncate-text">
                                                 {{ $product->name }}
-                                                @if ($product->variantGroups->isNotEmpty())
+                                                @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
                                                     @php
+                                                        // Lấy biến thể có giá sale thấp nhất
                                                         $variant = $product->variantGroups
                                                             ->whereNotNull('price_sale')
                                                             ->sortBy('price_sale')
@@ -511,17 +587,38 @@
                                                     @endif
                                                 @endif
                                             </h6>
+
                                             <!-- Pricing -->
                                             <div class="product-pricing">
-                                                @if (isset($variant) && $variant->price_regular)
-                                                    <span
-                                                        class="price-regular">{{ number_format($variant->price_regular, 0) }}
-                                                        VNĐ</span>
+                                                @if ($product->status == 0)
+                                                    <!-- Nếu không có biến thể, lấy giá từ bảng product -->
+                                                    @if ($product->price_regular)
+                                                        <span
+                                                            class="price-regular">{{ number_format($product->price_regular, 0) }}
+                                                            VNĐ</span>
+                                                    @endif
+
+                                                    @if ($product->price_sale)
+                                                        <span
+                                                            class="price-sale">{{ number_format($product->price_sale, 0) }}
+                                                            VNĐ</span>
+                                                    @endif
+                                                @elseif ($product->status == 1 && isset($variant))
+                                                    <!-- Nếu có biến thể, lấy giá sale và regular từ variant -->
+                                                    @if ($variant->price_regular)
+                                                        <span
+                                                            class="price-regular">{{ number_format($variant->price_regular, 0) }}
+                                                            VNĐ</span>
+                                                    @endif
+
+                                                    @if ($variant->price_sale)
+                                                        <span
+                                                            class="price-sale">{{ number_format($variant->price_sale, 0) }}
+                                                            VNĐ</span>
+                                                    @endif
                                                 @endif
-                                                <span
-                                                    class="price-sale">{{ number_format($variant->price_sale ?? $product->price_sale, 0) }}
-                                                    VNĐ</span>
                                             </div>
+
                                             <!-- Ratings -->
                                             <div class="product-rating">
                                                 @for ($i = 1; $i <= 5; $i++)
@@ -548,154 +645,88 @@
                     </div>
                 </div>
             </div>
-            <h1 class="fw-bold mb-0">Related products</h1>
+            <h1 class="fw-bold mb-0">Sản phẩm cùng loại</h1>
             <div class="vesitable">
                 <div class="owl-carousel vegetable-carousel justify-content-center">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-6.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$4.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                    @foreach ($relatedProducts as $product)
+                        @if ($product->variantGroups->isEmpty())
+                            <!-- Sản phẩm chính -->
+                            <div class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img">
+                                    <a href="{{ route('client.product-detail', $product->id) }}">
+                                        <img src="{{ $product->img ? env('VIEW_IMG') . '/' . $product->img : env('VIEW_IMG') . '/default-image.png' }}"
+                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                    </a>
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                    style="top: 10px; right: 10px;">
+                                    {{ $product->categories->first()->name ?? 'Product' }}
+                                </div>
+                                <div class="p-4 pb-0 rounded-bottom">
+                                    <h4>
+                                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-dark">
+                                            {{ $product->name }}
+                                        </a>
+                                    </h4>
+                                    <p class="text-dark">
+                                        {{ Str::words(strip_tags($product->description_short), 200, '...') }}
+                                    </p>
+                                    <!-- Giá -->
+                                    <div class="price-container d-flex align-items-center">
+                                        @if ($product->price_sale)
+                                            <p class="text-danger fs-5 fw-bold me-3">
+                                                {{ number_format($product->price_sale, 0) }} VNĐ
+                                            </p>
+                                            <p class="text-muted fs-6 text-decoration-line-through">
+                                                {{ number_format($product->price_regular, 0) }} VNĐ
+                                            </p>
+                                        @else
+                                            <p class="text-dark fs-5 fw-bold">Liên hệ</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-1.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$4.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                        @else
+                            @php
+                                // Tìm giá thấp nhất trong các biến thể
+                                $minPrice = $product->variantGroups->min(function ($variant) {
+                                    return $variant->price_sale ?? $variant->price_regular;
+                                });
+                            @endphp
+                            <!-- Biến thể -->
+                            <div class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img">
+                                    <a href="{{ route('client.product-detail', $product->id) }}">
+                                        <img src="{{ $product->variantGroups->first()->img ? env('VIEW_IMG') . '/' . $product->img : env('VIEW_IMG') . '/default-image.png' }}"
+                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                    </a>
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                    style="top: 10px; right: 10px;">
+                                    {{ $product->categories->first()->name ?? 'Variant' }}</div>
+                                <div class="p-4 pb-0 rounded-bottom">
+                                    <h4>
+                                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-dark">
+                                            {{ $product->name }}
+                                        </a>
+                                    </h4>
+                                    <p>{!! $product->description_short ?? 'No description available' !!}</p>
+                                    <!-- Giá -->
+                                    <div class="price-container d-flex align-items-center">
+                                        @if ($minPrice)
+                                            <p class="text-danger fs-5 fw-bold me-3">
+                                                {{ number_format($minPrice, 0) }} VNĐ
+                                            </p>
+                                        @else
+                                            <p class="text-dark fs-5 fw-bold">Liên hệ</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-3.png"
-                                class="img-fluid w-100 rounded-top bg-light" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Banana</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-4.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Bell Papper</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-5.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Potatoes</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-6.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-5.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Potatoes</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/vegetable-item-6.jpg"
-                                class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; right: 10px;">Vegetable</div>
-                        <div class="p-4 pb-0 rounded-bottom">
-                            <h4>Parsely</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-5 fw-bold">$7.99 / kg</p>
-                                <a href="#"
-                                    class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
+                        @endif
+                    @endforeach
                 </div>
+
             </div>
         </div>
     </div>

@@ -205,7 +205,7 @@
 
                                     <!-- Product Info -->
                                     <div class="product-info">
-                                        <h6 class="product-name">
+                                        <h6 class="product-name truncate-text">
                                             {{ $product->name }}
                                             @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
                                                 @php
