@@ -233,7 +233,7 @@
 
                                                 @if ($product->price_sale)
                                                     <span
-                                                        class="price-sale">{{ number_format($product->price_sale, 0) }}
+                                                        class="price-sale text-primary">{{ number_format($product->price_sale, 0) }}
                                                         VNĐ</span>
                                                 @endif
                                             @elseif ($product->status == 1 && isset($variant))
@@ -246,7 +246,7 @@
 
                                                 @if ($variant->price_sale)
                                                     <span
-                                                        class="price-sale">{{ number_format($variant->price_sale, 0) }}
+                                                        class="price-sale text-primary">{{ number_format($variant->price_sale, 0) }}
                                                         VNĐ</span>
                                                 @endif
                                             @endif

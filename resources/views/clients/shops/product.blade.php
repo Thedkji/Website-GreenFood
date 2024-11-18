@@ -125,7 +125,7 @@
                                     style="font-size:14px;opacity: 75%;">
                                     {{ app('formatPrice')($product->price_regular) }} VNĐ
                                 </span>
-                                <p class="fw-bold text-danger" style="font-size: 20px;">
+                                <p class="fw-bold text-primary" style="font-size: 20px;">
                                     {{ app('formatPrice')($product->price_sale) }} VNĐ
                                 </p>
                             @elseif ($product->status == 1)
@@ -141,7 +141,7 @@
                                         style="font-size:14px;opacity: 75%;">
                                         {{ app('formatPrice')($variant->price_regular) }} VNĐ
                                     </span>
-                                    <p class="fw-bold text-danger" style="font-size: 20px;">
+                                    <p class="fw-bold text-primary" style="font-size: 20px;">
                                         {{ app('formatPrice')($variant->price_sale) }} VNĐ
                                     </p>
                                 @endif

@@ -8,202 +8,7 @@
 @section('title_page_active', 'Chi tiết sản phẩm')
 
 @section('content')
-    <style>
-        .active_variantGroup {
-            border: 1px solid greenyellow !important;
-            background: #f5f5f5;
-        }
-
-        .variant-parent {
-            display: block;
-            font-size: 1.2rem;
-            margin-top: 15px;
-            color: #333;
-        }
-
-        .variant-option {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #555;
-            /* transition: background-color 0.3s; */
-        }
-
-        .variant-option:hover {
-            background-color: #f5f5f5;
-            border-color: #ccc;
-        }
-
-        .variant-img {
-            width: 30px;
-            height: 30px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-
-        /* Container styling */
-        .container {
-            padding: 20px;
-        }
-
-        /* Product Card */
-        .product-card {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            transition: box-shadow 0.3s, transform 0.3s;
-            background-color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .product-card:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            transform: translateY(-5px);
-        }
-
-        /* Product Image */
-        .product-img-container {
-            flex: 0 0 100px;
-            overflow: hidden;
-            border-radius: 12px;
-            margin-right: 20px;
-        }
-
-        .product-img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-
-        /* Product Info */
-        .product-info {
-            flex: 1;
-        }
-
-        .product-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .product-pricing {
-            margin-bottom: 8px;
-        }
-
-        .price-regular {
-            text-decoration: line-through;
-            color: #999;
-            margin-right: 10px;
-        }
-
-        .price-sale {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .product-rating i {
-            margin-right: 2px;
-            color: #f1c40f;
-        }
-
-        .product-rating i.text-secondary {
-            color: #ddd;
-        }
-
-        /* Adjustments for responsiveness */
-        @media (max-width: 576px) {
-            .product-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .product-img-container {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-        }
-
-        .vesitable-item {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            /* Đảm bảo chiều cao toàn phần */
-            max-width: 300px;
-            /* Cố định chiều rộng */
-        }
-
-        .vesitable-img img {
-            height: 200px;
-            object-fit: cover;
-            /* Đảm bảo ảnh vừa khung */
-            width: 100%;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .vesitable-item h4 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            height: 50px;
-            /* Cố định chiều cao */
-            overflow: hidden;
-            /* Cắt bớt nội dung quá dài */
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .vesitable-item p {
-            height: 60px;
-            /* Giới hạn chiều cao phần mô tả */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.5;
-            /* Khoảng cách dòng cho dễ đọc */
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            /* Giới hạn 3 dòng */
-            -webkit-box-orient: vertical;
-        }
-
-
-
-
-        .price-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            /* Khoảng cách giữa giá cũ và giá giảm */
-        }
-
-        .price-container .text-danger {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #81C408 !important;
-            /* Màu đỏ nhã nhặn */
-
-        }
-
-        .price-container .text-muted {
-            font-size: 1rem;
-            color: #6c757d;
-            /* Màu xám trung tính */
-            text-decoration: line-through;
-            /* Gạch ngang giá cũ */
-        }
-    </style>
-
+    @include('clients.product-detail.css')
 
     <!-- Single Product Start -->
     <div class="container-fluid py-5 mt-5">
@@ -243,15 +48,7 @@
 
                             </div>
                         </div>
-                        <style>
-                            .carousel-item img {
-                                width: 100%;
-                                height: 400px;
-                                /* Đặt chiều cao cố định cho ảnh */
-                                object-fit: cover;
-                                /* Đảm bảo ảnh lấp đầy vùng chứa mà không bị biến dạng */
-                            }
-                        </style>
+
                         <div class="col-lg-6">
                             <h4 class="fw-bold mb-3" style="width: 430px; overflow-wrap: break-word">{{ $product->name }}
                             </h4>
@@ -266,7 +63,7 @@
                                     <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
                                         {{ app('formatPrice')($product->price_regular) }} VNĐ
                                     </h6>
-                                    <h4 class="fw-bold mb-3 text-success">
+                                    <h4 class="fw-bold mb-3 text-primary">
                                         {{ app('formatPrice')($product->price_sale) }} VNĐ
                                     </h4>
                                 </div>
@@ -281,7 +78,7 @@
                                         <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
                                             {{ app('formatPrice')($variant->price_regular) }} VNĐ
                                         </h6>
-                                        <h4 class="fw-bold mb-3 text-success">
+                                        <h4 class="fw-bold mb-3 text-primary">
                                             {{ app('formatPrice')($variant->price_sale) }} VNĐ
                                         </h4>
                                     </div>
@@ -422,75 +219,6 @@
                                             thêm</a>
                                     </div>
 
-                                    <style>
-                                        #description {
-                                            position: relative;
-                                            max-width: 100%;
-                                            padding-bottom: 60px;
-                                            /* Tạo khoảng trống cho nút */
-                                        }
-
-                                        #description-content {
-                                            max-height: 500px;
-                                            overflow: hidden;
-                                            position: relative;
-                                            transition: max-height 0.5s ease;
-                                        }
-
-                                        #description.collapsed #description-content {
-                                            max-height: none;
-                                        }
-
-                                        #description-overlay {
-                                            position: absolute;
-                                            bottom: 60px;
-                                            /* Điều chỉnh để không che nút */
-                                            left: 0;
-                                            width: 100%;
-                                            height: 50px;
-                                            background: linear-gradient(transparent, #fff);
-                                            display: block;
-                                        }
-
-                                        #description.collapsed #description-overlay {
-                                            display: none;
-                                        }
-
-                                        #read-more {
-                                            bottom: 10px;
-                                            left: 50%;
-                                            transform: translateX(-50%);
-                                            z-index: 1;
-                                        }
-                                    </style>
-
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            var description = document.getElementById('description');
-                                            var readMore = document.getElementById('read-more');
-                                            var content = document.getElementById('description-content');
-
-                                            // Kiểm tra chiều cao thực tế của nội dung
-                                            if (content.scrollHeight <= 200) {
-                                                // Nếu nội dung không vượt quá chiều cao giới hạn, ẩn nút và overlay
-                                                readMore.style.display = 'none';
-                                                document.getElementById('description-overlay').style.display = 'none';
-                                            }
-
-                                            readMore.addEventListener('click', function() {
-                                                description.classList.toggle('collapsed');
-                                                if (description.classList.contains('collapsed')) {
-                                                    readMore.textContent = 'Thu gọn';
-                                                } else {
-                                                    readMore.textContent = 'Đọc thêm';
-                                                    description.scrollIntoView({
-                                                        behavior: 'smooth'
-                                                    });
-                                                }
-                                            });
-                                        });
-                                    </script>
-
                                 </div>
                                 <div class="tab-pane" id="nav-mission" role="tabpanel"
                                     aria-labelledby="nav-mission-tab">
@@ -552,182 +280,11 @@
                 </div>
 
                 <div class="col-lg-4 col-xl-3">
-                    <div class="row g-4 fruite">
-                        <div class="col-lg-12">
-                            <h4 class="mb-4">Sản phẩm nổi bật</h4>
-                            @foreach ($productHot as $product)
-                                <a href="{{ route('client.product-detail', $product->id) }}"
-                                    class="text-decoration-none text-dark">
-                                    <div class="product-card mb-4">
-                                        <!-- Image -->
-                                        <div class="product-img-container">
-                                            @if ($product->img)
-                                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                                    alt="{{ $product->name }}" class="product-img">
-                                            @else
-                                                <img src="{{ env('VIEW_IMG') }}/default-image.png"
-                                                    alt="{{ $product->name }}" class="product-img">
-                                            @endif
-                                        </div>
-
-                                        <!-- Product Info -->
-                                        <div class="product-info">
-                                            <h6 class="product-name truncate-text">
-                                                {{ $product->name }}
-                                                @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
-                                                    @php
-                                                        // Lấy biến thể có giá sale thấp nhất
-                                                        $variant = $product->variantGroups
-                                                            ->whereNotNull('price_sale')
-                                                            ->sortBy('price_sale')
-                                                            ->first();
-                                                    @endphp
-                                                    @if ($variant)
-                                                        - {{ $variant->name }}
-                                                    @endif
-                                                @endif
-                                            </h6>
-
-                                            <!-- Pricing -->
-                                            <div class="product-pricing">
-                                                @if ($product->status == 0)
-                                                    <!-- Nếu không có biến thể, lấy giá từ bảng product -->
-                                                    @if ($product->price_regular)
-                                                        <span
-                                                            class="price-regular">{{ number_format($product->price_regular, 0) }}
-                                                            VNĐ</span>
-                                                    @endif
-
-                                                    @if ($product->price_sale)
-                                                        <span
-                                                            class="price-sale">{{ number_format($product->price_sale, 0) }}
-                                                            VNĐ</span>
-                                                    @endif
-                                                @elseif ($product->status == 1 && isset($variant))
-                                                    <!-- Nếu có biến thể, lấy giá sale và regular từ variant -->
-                                                    @if ($variant->price_regular)
-                                                        <span
-                                                            class="price-regular">{{ number_format($variant->price_regular, 0) }}
-                                                            VNĐ</span>
-                                                    @endif
-
-                                                    @if ($variant->price_sale)
-                                                        <span
-                                                            class="price-sale">{{ number_format($variant->price_sale, 0) }}
-                                                            VNĐ</span>
-                                                    @endif
-                                                @endif
-                                            </div>
-
-                                            <!-- Ratings -->
-                                            <div class="product-rating">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <i
-                                                        class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
-                                                @endfor
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
-
-                        </div>
-                        {{-- <div class="col-lg-12">
-                            <div class="position-relative">
-                                <img src="{{ env('VIEW_CLIENT') }}/img/banner-fruits.jpg" class="img-fluid w-100 rounded"
-                                    alt="">
-                                <div class="position-absolute"
-                                    style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                    <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
-                                </div>
-                            </div>
-                        </div> --}}
-                    </div>
+                    @include('clients.product-detail.product-hot')
                 </div>
             </div>
             <h1 class="fw-bold mb-0">Sản phẩm cùng loại</h1>
-            <div class="vesitable">
-                <div class="owl-carousel vegetable-carousel justify-content-center">
-                    @foreach ($relatedProducts as $product)
-                        @if ($product->variantGroups->isEmpty())
-                            <!-- Sản phẩm chính -->
-                            <div class="border border-primary rounded position-relative vesitable-item">
-                                <div class="vesitable-img">
-                                    <a href="{{ route('client.product-detail', $product->id) }}">
-                                        <img src="{{ $product->img ? env('VIEW_IMG') . '/' . $product->img : env('VIEW_IMG') . '/default-image.png' }}"
-                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
-                                    </a>
-                                </div>
-                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                    style="top: 10px; right: 10px;">
-                                    {{ $product->categories->first()->name ?? 'Product' }}
-                                </div>
-                                <div class="p-4 pb-0 rounded-bottom">
-                                    <h4>
-                                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-dark">
-                                            {{ $product->name }}
-                                        </a>
-                                    </h4>
-                                    <p class="text-dark">
-                                        {{ Str::words(strip_tags($product->description_short), 200, '...') }}
-                                    </p>
-                                    <!-- Giá -->
-                                    <div class="price-container d-flex align-items-center">
-                                        @if ($product->price_sale)
-                                            <p class="text-danger fs-5 fw-bold me-3">
-                                                {{ number_format($product->price_sale, 0) }} VNĐ
-                                            </p>
-                                            <p class="text-muted fs-6 text-decoration-line-through">
-                                                {{ number_format($product->price_regular, 0) }} VNĐ
-                                            </p>
-                                        @else
-                                            <p class="text-dark fs-5 fw-bold">Liên hệ</p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            @php
-                                // Tìm giá thấp nhất trong các biến thể
-                                $minPrice = $product->variantGroups->min(function ($variant) {
-                                    return $variant->price_sale ?? $variant->price_regular;
-                                });
-                            @endphp
-                            <!-- Biến thể -->
-                            <div class="border border-primary rounded position-relative vesitable-item">
-                                <div class="vesitable-img">
-                                    <a href="{{ route('client.product-detail', $product->id) }}">
-                                        <img src="{{ $product->variantGroups->first()->img ? env('VIEW_IMG') . '/' . $product->img : env('VIEW_IMG') . '/default-image.png' }}"
-                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
-                                    </a>
-                                </div>
-                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                    style="top: 10px; right: 10px;">
-                                    {{ $product->categories->first()->name ?? 'Variant' }}</div>
-                                <div class="p-4 pb-0 rounded-bottom">
-                                    <h4>
-                                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-dark">
-                                            {{ $product->name }}
-                                        </a>
-                                    </h4>
-                                    <p>{!! $product->description_short ?? 'No description available' !!}</p>
-                                    <!-- Giá -->
-                                    <div class="price-container d-flex align-items-center">
-                                        @if ($minPrice)
-                                            <p class="text-danger fs-5 fw-bold me-3">
-                                                {{ number_format($minPrice, 0) }} VNĐ
-                                            </p>
-                                        @else
-                                            <p class="text-dark fs-5 fw-bold">Liên hệ</p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-
-            </div>
+            @include('clients.product-detail.product-related')
         </div>
     </div>
 
