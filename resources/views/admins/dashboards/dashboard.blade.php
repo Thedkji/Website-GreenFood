@@ -1,6 +1,6 @@
 @extends('admins.layouts.master')
 
-@section('title', 'Dashboard | Velzon - Admin - Bảng điều khiển')  
+@section('title', 'Dashboard | Velzon - Admin - Bảng điều khiển')
 
 @section('start-page-title' , 'Bảng điều khiển')
 
@@ -15,9 +15,8 @@
                     <div class="col-12">
                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                             <div class="flex-grow-1">
-                                <h4 class="fs-16 mb-1">Good Morning, Anna!</h4>
-                                <p class="text-muted mb-0">Here's what's happening with your store
-                                    today.</p>
+                                <h4 class="fs-16 mb-1">Chào mừng {{ auth()->user()->name }}!</h4>
+                                <p class="text-muted mb-0">Sau đây là những gì đang diễn ra tại cửa hàng của bạn ngày hôm nay.</p>
                             </div>
                             <div class="mt-3 mt-lg-0">
                                 <form action="javascript:void(0);">
@@ -65,7 +64,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Total Earnings</p>
+                                            Tổng Doanh Thu</p>
                                     </div>
                                     <div class="flex-shrink-0">
                                         <h5 class="text-success fs-14 mb-0">
@@ -76,11 +75,13 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                data-target="559.25">0</span>k
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                            <span class="counter-value" data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">
+                                                {{ number_format($totalEarnings, 0, ',', '.') }}
+                                            </span> VND
                                         </h4>
-                                        <a href="" class="text-decoration-underline">View net
-                                            earnings</a>
+
+                                        <a href="" class="text-decoration-underline">Xem tổng doanh thu</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -99,7 +100,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Orders</p>
+                                            Đơn Hàng</p>
                                     </div>
                                     <div class="flex-shrink-0">
                                         <h5 class="text-danger fs-14 mb-0">
@@ -111,10 +112,9 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="36894">0</span>
+                                                data-target="36894">{{ $orderCoumts }}</span>
                                         </h4>
-                                        <a href="" class="text-decoration-underline">View all
-                                            orders</a>
+                                        <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -133,7 +133,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Customers</p>
+                                            Người Dùng</p>
                                     </div>
                                     <div class="flex-shrink-0">
                                         <h5 class="text-success fs-14 mb-0">
@@ -145,10 +145,9 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="183.35">0</span>M
+                                                data-target="183.35">{{ $userCounts }}</span>
                                         </h4>
-                                        <a href="" class="text-decoration-underline">See
-                                            details</a>
+                                        <a href="" class="text-decoration-underline">Xem chi tiết </a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
