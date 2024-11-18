@@ -1,119 +1,151 @@
 <script>
     $(document).ready(function() {
-        // Đảm bảo biến thể đầu tiên được chọn và có class 'active_variantGroup'
         let firstVariantOption = $('.variant-option').first(); // Lấy phần tử variant đầu tiên
-        firstVariantOption.addClass('active_variantGroup'); // Thêm class 'active_variantGroup' cho nó
+        let hasVariants = firstVariantOption.length > 0; // Kiểm tra có biến thể hay không
 
-        // Gửi yêu cầu AJAX cho phần tử đầu tiên để cập nhật giá
-        let variantGroupID = firstVariantOption.data(
-            'id'); // Lấy variantGroupID từ data-id của phần tử đầu tiên
-        $.ajax({
-            type: "GET",
-            url: `{{ route('client.product-detail', ':id', ':variantGroupID') }}`
-                .replace(':id', '{{ $product->id }}')
-                .replace(':variantGroupID', variantGroupID),
-            data: {
-                variantGroupID: variantGroupID
-            },
-            success: function(response) {
-                // Cập nhật giá trị khi bấm vào phần tử
-                $('#price_variantGroup').html(`
-                    <div id="price_variantGroup">
-                        <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                            ${formatCurrency(response.data.price_regular)} VNĐ  
-                        </h6>
-                        <h4 class="fw-bold mb-3 text-success">
-                            ${formatCurrency(response.data.price_sale)} VNĐ  
-                        </h4>
-                    </div>
-                `);
+        if (hasVariants) {
+            firstVariantOption.addClass(
+                'active_variantGroup'); // Thêm class 'active_variantGroup' cho biến thể đầu tiên
 
-                $('#quantity_variantGroup').html(`
-                                <p id="quantity_variantGroup">
-                                    Số lượng :  ${response.data.quantity}
-                                </p>
-                    `);
-            }
-        });
+            // Lấy variantGroupID của biến thể đầu tiên và gửi yêu cầu AJAX
+            let variantGroupID = firstVariantOption.data('id');
+            updateVariantDetails(variantGroupID);
+        } else {
+            // Nếu không có biến thể, cập nhật thông tin mặc định của sản phẩm
+            updateDefaultProductDetails();
+        }
 
         // Xử lý sự kiện click cho các variant option
         $('.variant-option').on('click', function(e) {
             e.preventDefault();
 
             let variantGroupID = $(this).data('id'); // Lấy variantGroupID từ data-id
-            console.log(variantGroupID);
 
-            // Kiểm tra xem phần tử đã có lớp 'active_variantGroup' chưa
             if ($(this).hasClass('active_variantGroup')) {
-                // Nếu đã có lớp, xóa lớp và hiển thị lại giá ban đầu
                 $(this).removeClass('active_variantGroup');
-                location.reload();
+                location.reload(); // Reset lại trang khi bỏ chọn
             } else {
-                // Loại bỏ lớp 'active_variantGroup' của các phần tử khác
-                $('.variant-option').removeClass('active_variantGroup');
-                $(this).addClass(
-                    'active_variantGroup'); // Thêm lớp 'active_variantGroup' vào phần tử đang chọn
+                $('.variant-option').removeClass('active_variantGroup'); // Xóa lớp cũ
+                $(this).addClass('active_variantGroup'); // Thêm lớp vào phần tử đang chọn
 
                 // Gửi yêu cầu AJAX để lấy thông tin giá
-                $.ajax({
-                    type: "GET",
-                    url: `{{ route('client.product-detail', ':id', ':variantGroupID') }}`
-                        .replace(':id', '{{ $product->id }}')
-                        .replace(':variantGroupID', variantGroupID),
-                    data: {
-                        variantGroupID: variantGroupID
-                    },
-                    success: function(response) {
-                        // Format giá tiền theo định dạng  VNĐ  
-                        const formatCurrency = (amount) => {
-                            return new Intl.NumberFormat('vi-VN').format(amount);
-                        };
-
-                        // Cập nhật giá trị khi bấm vào phần tử
-                        $('#price_variantGroup').html(`
-                    <div id="price_variantGroup">
-                        <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                            ${formatCurrency(response.data.price_regular)} VNĐ  
-                        </h6>
-                        <h4 class="fw-bold mb-3 text-success">
-                            ${formatCurrency(response.data.price_sale)} VNĐ
-                        </h4>
-                    </div>
-                `);
-
-                        $('#quantity_variantGroup').html(`
-                                <p id="quantity_variantGroup">
-                                    Số lượng :  ${response.data.quantity}
-                                </p>
-                    `);
-                    }
-                });
+                updateVariantDetails(variantGroupID);
             }
         });
 
-        var description = document.getElementById('description');
-        var readMore = document.getElementById('read-more');
-        var content = document.getElementById('description-content');
-
-        // Kiểm tra chiều cao thực tế của nội dung
-        if (content.scrollHeight <= 200) {
-            // Nếu nội dung không vượt quá chiều cao giới hạn, ẩn nút và overlay
-            readMore.style.display = 'none';
-            document.getElementById('description-overlay').style.display = 'none';
+        // Hàm gửi yêu cầu AJAX và cập nhật giá
+        function updateVariantDetails(variantGroupID) {
+            $.ajax({
+                type: "GET",
+                url: `{{ route('client.product-detail', ':id', ':variantGroupID') }}`
+                    .replace(':id', '{{ $product->id }}')
+                    .replace(':variantGroupID', variantGroupID),
+                data: {
+                    variantGroupID: variantGroupID
+                },
+                success: function(response) {
+                    updatePriceAndQuantity(response.data);
+                    quantityChange(response.data.quantity);
+                },
+            });
         }
 
-        readMore.addEventListener('click', function() {
-            description.classList.toggle('collapsed');
-            if (description.classList.contains('collapsed')) {
-                readMore.textContent = 'Thu gọn';
-            } else {
-                readMore.textContent = 'Đọc thêm';
-                description.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
+        // Hàm cập nhật thông tin sản phẩm mặc định
+        function updateDefaultProductDetails() {
+            const defaultPrice = '{{ $product->price }}'; // Giá mặc định của sản phẩm
+            const defaultQuantity = '{{ $product->quantity }}'; // Số lượng mặc định
 
+            updatePriceAndQuantity({
+                price_regular: defaultPrice,
+                price_sale: defaultPrice,
+                quantity: defaultQuantity,
+            });
 
+            quantityChange(defaultQuantity);
+        }
+
+        // Hàm cập nhật giá và số lượng
+        function updatePriceAndQuantity(data) {
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('vi-VN').format(amount);
+            };
+
+            $('#price_variantGroup').html(`
+            <div id="price_variantGroup">
+                <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                    ${formatCurrency(data.price_regular)} VNĐ  
+                </h6>
+                <h4 class="fw-bold mb-3 text-success">
+                    ${formatCurrency(data.price_sale)} VNĐ
+                </h4>
+            </div>
+        `);
+
+            $('#quantity_variantGroup').html(`
+            <p id="quantity_variantGroup">
+                Số lượng: ${data.quantity}
+            </p>
+        `);
+
+            $('.custom-quantity-input').val(1); // Reset số lượng về 1
+        }
+
+        // Hàm xử lý thay đổi số lượng
+        function quantityChange(MaxQuantity) {
+            const customMaxQuantity = MaxQuantity;
+
+            // Xóa các sự kiện trước đó để tránh gắn lại nhiều lần
+            $(document).off('click', '.custom-btn-minus');
+            $(document).off('click', '.custom-btn-plus');
+            $(document).off('input', '.custom-quantity-input');
+            $(document).off('blur', '.custom-quantity-input');
+
+            // Nút giảm số lượng
+            $(document).on('click', '.custom-btn-minus', function() {
+                let $input = $(this).closest('.custom-quantity').find('.custom-quantity-input');
+                let value = parseInt($input.val()) || 1;
+
+                if (value > 1) { // Không cho phép giảm xuống dưới 1
+                    $input.val(value - 1);
+                }
+            });
+
+            // Nút tăng số lượng
+            $(document).on('click', '.custom-btn-plus', function() {
+                let $input = $(this).closest('.custom-quantity').find('.custom-quantity-input');
+                let value = parseInt($input.val()) || 1;
+
+                if (value < customMaxQuantity) { // Không cho phép vượt quá số lượng tối đa
+                    $input.val(value + 1);
+                }
+            });
+
+            // Kiểm tra nhập số lượng thủ công
+            $(document).on('input', '.custom-quantity-input', function() {
+                let value = $(this).val().replace(/[^0-9]/g, ''); // Chỉ cho phép nhập số
+                value = parseInt(value) || 1;
+
+                if (value < 1) { // Không cho phép dưới 1
+                    value = 1;
+                } else if (value > customMaxQuantity) { // Không cho phép vượt quá tối đa
+                    value = customMaxQuantity;
+                }
+
+                $(this).val(value); // Cập nhật giá trị
+            });
+
+            // Xử lý khi mất focus khỏi ô nhập
+            $(document).on('blur', '.custom-quantity-input', function() {
+                let value = parseInt($(this).val()) || 1;
+
+                if (value < 1) { // Đặt lại giá trị nếu nhỏ hơn 1
+                    value = 1;
+                } else if (value > customMaxQuantity) { // Đặt lại giá trị nếu vượt quá tối đa
+                    value = customMaxQuantity;
+                }
+
+                $(this).val(value);
+            });
+        }
     });
 </script>
