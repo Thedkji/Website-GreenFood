@@ -5,17 +5,34 @@
 @section('content')
 @include('clients.layouts.components.singer-page')
 
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
+<div class="toast-container">
+    @if (session('success'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('success') }}
+        </div>
+        <div class="toast-progress bg-success"></div>
+    </div>
+    @endif
 
-@if (session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
+    @if (session('error'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
+    </div>
+    @endif
 </div>
-@endif
+
 <div class="container-fluid py-5">
     <div class="container py-5">
         <h1 class="mb-4">Chi tiết đơn hàng</h1>
@@ -109,18 +126,22 @@
                                 @endphp
                                 @foreach ($decodedItems as $item)
                                 @php
+                                if($userInfo){
                                 $itemPrice = $item['product']['status'] === 0
                                 ? $item['product']['price_sale']
                                 : ($variantDetails[$item['id']]->price_sale ?? $item['price']);
+                                }else{
+                                $itemPrice = $item['price'];
+                                }
                                 $itemQuantity = $item['quantity'];
                                 @endphp
                                 <tr>
                                     <td>
-                                        <img src="{{ env('VIEW_IMG') . $item['product']['img'] }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ $item['product']['name'] }}">
+                                        <img src="{{ env('VIEW_IMG') . ($userInfo ? $item['product']['img'] :  $item['attributes']['img']) }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ $userInfo ? $item['product']['name'] :  $item['name'] }}">
                                     </td>
                                     <td class="text-start">
-                                        <strong>{{ $item['product']['name'] }}</strong><br>
-                                        <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $item['sku'] }}</strong></span>
+                                        <strong>{{ $userInfo ? $item['product']['name'] :  $item['name'] }}</strong><br>
+                                        <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
                                     </td>
                                     <td>
                                         <strong class="text-success">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
@@ -269,3 +290,28 @@
 </div>
 <!-- Checkout Page End -->
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Tìm tất cả các toast
+        const toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach((toast) => {
+            // Hiển thị toast bằng Bootstrap
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            }); // 3000ms = 3 giây
+            bsToast.show();
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        });
+    });
+    toastOptions = {
+        autohide: true,
+        delay: 5000 // Thời gian hiển thị (ms)
+    };
+    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
+    toast.show();
+</script>

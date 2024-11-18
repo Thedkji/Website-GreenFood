@@ -296,7 +296,6 @@ class CheckoutController extends Controller
         if ($coupon) {
             $decodedCoupon = json_decode($coupon[0], true);
             if (is_array($decodedCoupon) && isset($decodedCoupon['id'])) {
-                // Giảm số lượng mã giảm giá
                 Coupon::where('id', $decodedCoupon['id'])->decrement('quantity', 1);
             }
             $couponName = $decodedCoupon['name'];
@@ -323,10 +322,11 @@ class CheckoutController extends Controller
             ]);
 
             // Cập nhật số lượng sản phẩm trong kho
-            if (auth()->check() && $item['product']['status'] === 0) {
-                Product::where('sku', $productSku)->decrement('quantity', $productQuantity);
-            } elseif (auth()->check()) {
-                VariantGroup::where('sku', $productSku)->decrement('quantity', $productQuantity);
+            $productStatus = auth()->check() ? $item['product']['status'] : $item['attributes']['status'];
+            if ($productStatus == 0) {
+                Product::where('sku', $productSku)->where('quantity', '>=', $productQuantity)->decrement('quantity', $productQuantity);
+            } else {
+                VariantGroup::where('sku', $productSku)->where('quantity', '>=', $productQuantity)->decrement('quantity', $productQuantity);
             }
         }
 

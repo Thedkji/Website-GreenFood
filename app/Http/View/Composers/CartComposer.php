@@ -5,6 +5,7 @@ namespace App\Http\View\Composers;
 use Illuminate\View\View;
 use Darryldecode\Cart\Facades\CartFacade as CartSession;
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\VariantGroup;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,24 +47,25 @@ class CartComposer
         } else {
             $cartItems = CartSession::getContent();
             foreach ($cartItems as $item) {
-                if ($item->product && $item->product->status == 1) {
-                    $variantGroups[$item->sku] = VariantGroup::where('product_id', $item->product->id)
-                        ->where('sku', $item->sku)
+                if ($item->attributes->status == 1) {
+                    $variantGroups[$item->attributes->sku] = VariantGroup::where('product_id', $item->id)
+                        ->where('sku', $item->attributes->sku)
                         ->get();
-                    $variant = $variantGroups[$item->sku]->first();
+                    $variant = $variantGroups[$item->attributes->sku]->first();
                     if ($variant && $variant->quantity < $item->quantity) {
                         $lowStockVariants[] = [
-                            'sku' => $item->sku,
-                            'name' => $item->product->name,
+                            'sku' => $item->attributes->sku,
+                            'name' => $item->name,
                             'stock' => $variant->quantity,
                         ];
                     }
-                } elseif ($item->product && $item->product->status == 0) {
-                    if ($item->product->quantity < $item->quantity) {
+                } elseif ($item->attributes->status == 0) {
+                    $product = Product::find($item->id);
+                    if ($product && $product->quantity < $item->quantity) {
                         $lowStockVariants[] = [
-                            'sku' => $item->sku,
-                            'name' => $item->product->name,
-                            'stock' => $item->product->quantity,
+                            'sku' => $item->attributes->sku,
+                            'name' => $item->name,
+                            'stock' => $product->quantity,
                         ];
                     }
                 }

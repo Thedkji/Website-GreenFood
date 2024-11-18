@@ -7,7 +7,33 @@
 <li class="breadcrumb-item active">Đơn hàng chi tiết</li>
 @endsection
 @section('content')
+<div class="toast-container">
+    @if (session('success'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('success') }}
+        </div>
+        <div class="toast-progress bg-success"></div>
+    </div>
+    @endif
 
+    @if (session('error'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
+    </div>
+    @endif
+</div>
 <div class="mb-3 border p-3 border-success rounded bg-white">
     <h5 class="fs-4 text-uppercase text-success mb-4">Trạng thái đơn hàng hiện tại</h5>
     <div class="progress progress-step-arrow bg-white">
@@ -225,8 +251,6 @@
                 <th scope="col">Ảnh</th>
                 <th scope="col">Giá</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Mã giảm giá đã áp dụng</th>
-                <th scope="col">Số lượng mã giảm giá</th>
                 <th scope="col">Số tiền đã giảm</th>
                 <th scope="col">Thành tiền</th>
             </tr>
@@ -243,8 +267,6 @@
                 </td>
                 <td class="text-danger">{{ app('formatPrice')($orderDetail->product_price) }} VNĐ</td>
                 <td> x {{ $orderDetail->product_quantity }}</td>
-                <td>{{ $orderDetail->coupon_name ?? 'Không có' }}</td>
-                <td>{{ $orderDetail->coupon_quantity ?? 'Không có' }}</td>
                 <td>
                     {{ app('formatPrice')($orderDetail->coupon_price) }} VNĐ
                 </td>
@@ -260,7 +282,7 @@
 
             @if ($orderDetails->count() > 0)
             <tr>
-                <td colspan="7"></td>
+                <td colspan="6"></td>
                 <td colspan="1">
                     <p class="">Tổng tiền:</p>
                 </td>
@@ -269,7 +291,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="6"></td>
                 <td colspan="1">
                     <p>Số tiền được giảm:</p>
                 </td>
@@ -278,7 +300,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7"></td>
+                <td colspan="6"></td>
                 <td colspan="1">
                     <strong>Tiền sau giảm:</strong>
                 </td>
@@ -298,3 +320,28 @@
 </div>
 
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Tìm tất cả các toast
+        const toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach((toast) => {
+            // Hiển thị toast bằng Bootstrap
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            }); // 3000ms = 3 giây
+            bsToast.show();
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        });
+    });
+    toastOptions = {
+        autohide: true,
+        delay: 5000 // Thời gian hiển thị (ms)
+    };
+    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
+    toast.show();
+</script>
