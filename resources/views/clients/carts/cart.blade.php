@@ -1,6 +1,6 @@
 @extends('clients.layouts.master')
 
-@section('title', 'Fruitables - Đăng ký tài khoản')
+@section('title', 'Fruitables - Giỏ hàng')
 
 @section('content')
 
@@ -18,15 +18,16 @@
     </div>
     @endif
     <div class="container py-5">
-        <div class="d-flex justify-content-between mb-5">
-            <form action="{{ route('client.deleteCart') }}" method="POST">
-                @csrf
-                <button onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
-            </form>
-            <button type="submit" formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">Cập nhật số lượng</button>
-        </div>
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
+            <div class="d-flex justify-content-between gap-3 mb-4">
+                <button formaction="{{ route('client.deleteCart') }}" formmethod="post" onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning">
+                    Xóa tất cả
+                </button>
+                <button formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">
+                    Cập nhật số lượng
+                </button>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -48,7 +49,19 @@
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}" class="cart-checkbox">
+                            <input
+                                type="checkbox"
+                                name="selectBox[]"
+                                value="{{ $item }}"
+                                class="cart-checkbox"
+                                @if (!empty($lowStockVariants))
+                                @foreach ($lowStockVariants as $stock)
+                                @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                            disabled
+                            @endif
+                            @endforeach
+                            @endif
+                            >
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
@@ -56,7 +69,7 @@
                             </div>
                         </th>
                         <td>
-                            <strong class="mb-0 mt-4">{{ $item->product->name }}</strong>
+                            <p class="mb-0 mt-4">{{ $item->product->name }}</p>
 
                         </td>
                         <td>
@@ -109,18 +122,37 @@
                                 @endif
                                 @endif
                             </p>
+                            @if (!empty($lowStockVariants))
+                            @foreach ($lowStockVariants as $stock)
+                            @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                                <p>Còn lại : {{$stock['stock']}}</p>
+                                @endif
+                                @endforeach
+                                @endif
+
                         </td>
                         <td>
-                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
+                            <p formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
                                 <i class="fa fa-times text-danger"></i>
-                            </button>
+                            </p>
                         </td>
                     </tr>
-
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}" class="cart-checkbox">
+                            <input
+                                type="checkbox"
+                                name="selectBox[]"
+                                value="{{ $item }}"
+                                class="cart-checkbox"
+                                @if (!empty($lowStockVariants))
+                                @foreach ($lowStockVariants as $stock)
+                                @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                            disabled
+                            @endif
+                            @endforeach
+                            @endif
+                            >
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
@@ -153,6 +185,14 @@
                         </td>
                         <td>
                             <p class="mb-0 mt-4 text-success">{{ number_format(($item->price) * ($item->quantity)) }} VNĐ</p>
+
+                            @if (!empty($lowStockVariants))
+                            @foreach ($lowStockVariants as $stock)
+                            @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                                <p>Còn lại : {{$stock['stock']}}</p>
+                                @endif
+                                @endforeach
+                                @endif
                         </td>
                         <td>
                             <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
@@ -166,6 +206,7 @@
                     @endif
                 </tbody>
             </table>
+
             <div class="mt-3 d-flex justify-content-sm-end">
                 {{auth()->check() ? $cartItems->links() : ""}}
             </div>

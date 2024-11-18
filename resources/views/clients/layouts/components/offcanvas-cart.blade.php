@@ -35,6 +35,15 @@
                                 <strong>{{ $item->attributes->sku }}</strong>
                                 @endif
                             </span>
+                            <span>
+                                @if (!empty($lowStockVariants))
+                                @foreach ($lowStockVariants as $stock)
+                                @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                                    <span>Còn lại : {{$stock['stock']}}</span>
+                                    @endif
+                                    @endforeach
+                                    @endif
+                            </span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-danger fw-bold">

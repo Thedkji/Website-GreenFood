@@ -15,7 +15,7 @@ class CartComposer
         $userId = Auth::check() ? Auth::id() : null;
         $variantGroups = [];
         $cartItems = [];
-
+        $lowStockVariants = [];
         if ($userId) {
             $cartItems = Cart::where('user_id', $userId)->with('product')->paginate('7');
             if ($cartItems) {
@@ -24,11 +24,50 @@ class CartComposer
                         $variantGroups[$item->sku] = VariantGroup::where('product_id', $item->product->id)
                             ->where('sku', $item->sku)
                             ->get();
+                        $variant = $variantGroups[$item->sku]->first();
+                        if ($variant && $variant->quantity < $item->quantity) {
+                            $lowStockVariants[] = [
+                                'sku' => $item->sku,
+                                'name' => $item->product->name,
+                                'stock' => $variant->quantity,
+                            ];
+                        }
+                    } elseif ($item->product && $item->product->status == 0) {
+                        if ($item->product->quantity < $item->quantity) {
+                            $lowStockVariants[] = [
+                                'sku' => $item->sku,
+                                'name' => $item->product->name,
+                                'stock' => $item->product->quantity,
+                            ];
+                        }
                     }
                 }
             }
         } else {
             $cartItems = CartSession::getContent();
+            foreach ($cartItems as $item) {
+                if ($item->product && $item->product->status == 1) {
+                    $variantGroups[$item->sku] = VariantGroup::where('product_id', $item->product->id)
+                        ->where('sku', $item->sku)
+                        ->get();
+                    $variant = $variantGroups[$item->sku]->first();
+                    if ($variant && $variant->quantity < $item->quantity) {
+                        $lowStockVariants[] = [
+                            'sku' => $item->sku,
+                            'name' => $item->product->name,
+                            'stock' => $variant->quantity,
+                        ];
+                    }
+                } elseif ($item->product && $item->product->status == 0) {
+                    if ($item->product->quantity < $item->quantity) {
+                        $lowStockVariants[] = [
+                            'sku' => $item->sku,
+                            'name' => $item->product->name,
+                            'stock' => $item->product->quantity,
+                        ];
+                    }
+                }
+            }
         }
 
         $cartTotal = $cartItems->sum(function ($item) use ($variantGroups) {
@@ -42,6 +81,6 @@ class CartComposer
 
         $cartQuantity = $cartItems->sum('quantity');
 
-        $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId'));
+        $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId', 'lowStockVariants'));
     }
 }
