@@ -8,3 +8,9 @@
 
  <!-- Template Javascript -->
  <script src="{{ env('VIEW_CLIENT') }}/js/main.js"></script>
+
+ <!-- Toastr CSS -->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+ <!-- Toastr JS -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

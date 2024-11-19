@@ -5,132 +5,154 @@
 @section('content')
 @include('clients.layouts.components.singer-page')
 
-<div class="container-fluid py-5">
+<div class="toast-container">
     @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('success') }}
+        </div>
+        <div class="toast-progress bg-success"></div>
     </div>
     @endif
 
     @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
     </div>
     @endif
+</div>
+
+<div class="container-fluid py-5">
     <div class="container py-5">
-        <h1 class="mb-4">Billing details</h1>
+        <h1 class="mb-4">Chi tiết đơn hàng</h1>
         <form action="{{route('client.getCheckOut')}}" method="POST">
             @csrf
             @method('POST')
-            <div class="row g-5">
-                <div class="col-md-12 col-lg-6 col-xl-7">
-                    <div class="form-item">
-                        <label class="form-label my-3">Họ và tên</label>
-                        <input type="text" class="form-control" name="fullName" value="{{$userInfo ? $userInfo->name : old('fullName')}}">
-                        <x-feedback name="fullName" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control" value="{{$userInfo ? $userInfo->phone : old('phone')}}">
-                        <x-feedback name="phone" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{$userInfo ? $userInfo->email : old('email')}}">
-                        <x-feedback name="email" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Province</label>
-                        <input type="text" class="form-control" name="province" value="{{$userInfo ? $userInfo->province : old('province')}}">
-                        <x-feedback name="province" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">District</label>
-                        <input type="text" name="district" class="form-control" value="{{$userInfo ? $userInfo->district : old('district')}}">
-                        <x-feedback name="district" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Ward</label>
-                        <input type="text" class="form-control" name="ward" value="{{$userInfo ? $userInfo->ward : old('ward')}}">
-                        <x-feedback name="ward" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Địa chỉ</label>
-                        <input type="text" class="form-control" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
-                        <x-feedback name="address" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Ghi chú</label>
-                        <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)">{{ old('note') }}</textarea>
-                        <x-feedback name="note" />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Phương thức thanh toán</label>
-                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
-                            <div class="col-12">
-                                <div class="form-check text-start my-3">
-                                    <input type="radio" class="form-check-input bg-primary border-0" id="Paypal-1" name="payment_method" value="VNPay">
-                                    <label class="form-check-label" for="Paypal-1">Chuyển khoản VN Pay</label>
-                                </div>
-                            </div>
+            <div class="row g-5 mt-5">
+                <div class="col-md-12 col-lg-8 col-xl-8 row">
+                    <div class="col-md-12 col-lg-6">
+                        <div class="form-item">
+                            <label class="form-label my-3">Họ và tên</label>
+                            <input type="text" class="form-control" name="fullName" value="{{$userInfo ? $userInfo->name : old('fullName')}}">
+                            <x-feedback name="fullName" />
                         </div>
-                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
-                            <div class="col-12">
-                                <div class="form-check text-start my-3">
-                                    <input type="radio" class="form-check-input bg-primary border-0" id="Delivery-1" name="payment_method" value="Delivery">
-                                    <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
-                                </div>
-                            </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">Số điện thoại</label>
+                            <input type="tel" name="phone" class="form-control" value="{{$userInfo ? $userInfo->phone : old('phone')}}">
+                            <x-feedback name="phone" />
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{$userInfo ? $userInfo->email : old('email')}}">
+                            <x-feedback name="email" />
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">Ghi chú (Nếu có)</label>
+                            <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)">{{ old('note') }}</textarea>
+                            <x-feedback name="note" />
                         </div>
                     </div>
+                    <div class="col-md-12 col-lg-6">
+                        <div class="form-item">
+                            <label class="form-label my-3">Province</label>
+                            <input type="text" class="form-control" name="province" value="{{$userInfo ? $userInfo->province : old('province')}}">
+                            <x-feedback name="province" />
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">District</label>
+                            <input type="text" name="district" class="form-control" value="{{$userInfo ? $userInfo->district : old('district')}}">
+                            <x-feedback name="district" />
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">Ward</label>
+                            <input type="text" class="form-control" name="ward" value="{{$userInfo ? $userInfo->ward : old('ward')}}">
+                            <x-feedback name="ward" />
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">Địa chỉ</label>
+                            <input type="text" class="form-control" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
+                            <x-feedback name="address" />
+                        </div>
 
+                        <div class="form-item">
+                            <label class="form-label my-3">Phương thức thanh toán</label>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Paypal-1" name="payment_method" value="VNPay">
+                                        <label class="form-check-label" for="Paypal-1">Chuyển khoản VN Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Delivery-1" name="payment_method" value="Delivery">
+                                        <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4 mt-5">
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
                     </div>
                 </div>
-
-                <div class="col-md-12 col-lg-6 col-xl-5">
+                <div class="col-md-12 col-lg-4 col-xl-4">
                     <div class="table-responsive">
                         <table class="table text-center align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Hình ảnh</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Giá</th>
-                                    <th>Số lượng</th>
-                                    <th>SKU</th>
-                                    <th>Tổng</th>
+                                    <th style="width: 120px;">Hình ảnh</th>
+                                    <th>Thông tin</th>
+                                    <th style="width: 150px;">Tổng</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                 $totalDiscount = 0;
                                 @endphp
-
                                 @foreach ($decodedItems as $item)
                                 @php
+                                if($userInfo){
                                 $itemPrice = $item['product']['status'] === 0
                                 ? $item['product']['price_sale']
                                 : ($variantDetails[$item['id']]->price_sale ?? $item['price']);
+                                }else{
+                                $itemPrice = $item['price'];
+                                }
                                 $itemQuantity = $item['quantity'];
                                 @endphp
                                 <tr>
                                     <td>
-                                        <img src="{{ env('VIEW_IMG') . $item['product']['img'] }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ $item['product']['name'] }}">
+                                        <img src="{{ env('VIEW_IMG') . ($userInfo ? $item['product']['img'] :  $item['attributes']['img']) }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ $userInfo ? $item['product']['name'] :  $item['name'] }}">
                                     </td>
-                                    <td>{{ $item['product']['name'] }}</td>
-                                    <td>{{ number_format($itemPrice) }} VNĐ</td>
-                                    <td>{{ $itemQuantity }}</td>
-                                    <td>{{ $item['sku'] }}</td>
-                                    <td>{{ number_format($itemPrice * $itemQuantity) }} VNĐ</td>
+                                    <td class="text-start">
+                                        <strong>{{ $userInfo ? $item['product']['name'] :  $item['name'] }}</strong><br>
+                                        <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr class="table-light">
-                                    <td colspan="2"></td>
-                                    <td colspan="2"><strong>Tổng tiền:</strong></td>
-                                    <td colspan="2"><strong>{{ number_format($totalPrice ) }} VNĐ</strong></td>
+                                    <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
+                                    <td><strong class="text-success">{{ number_format($totalPrice) }} VNĐ</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -234,8 +256,12 @@
                         @endif
                     </div>
                     @endif
+                    @if (session('coupon'))
+                    <input type="hidden" name="coupon[]" value="{{json_encode($coupon)}}">
+                    @endif
                     <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
+
         </form>
         <form action="{{ route('client.applyCoupon') }}" method="post">
             @csrf
@@ -249,19 +275,43 @@
                     <option value="{{ $coupon->id }}"
                         data-discount="{{ $coupon->maximum_spend }}"
                         {{ session('coupon') && session('coupon.id') == $coupon->id ? 'selected' : '' }}>
-                        {{ $coupon->name }} - Tối đa: {{ number_format($coupon->maximum_spend) }} VND;
-                        Kết thúc: {{ date('d-m-Y', strtotime($coupon->expiration_date)) }};
-                        {{ $coupon->description }}
+                        {{ $coupon->name }} - Tối đa: {{ number_format($coupon->maximum_spend) }} VND
                     </option>
                     @endforeach
                     @endif
                 </select>
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary col ml-2" type="submit">Áp dụng mã</button>
+                <button class="btn border-secondary px-4 py-3 text-primary col mx-1" type="submit">Áp dụng mã</button>
             </div>
         </form>
+
     </div>
 </div>
 </div>
 </div>
 <!-- Checkout Page End -->
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Tìm tất cả các toast
+        const toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach((toast) => {
+            // Hiển thị toast bằng Bootstrap
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            }); // 3000ms = 3 giây
+            bsToast.show();
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        });
+    });
+    toastOptions = {
+        autohide: true,
+        delay: 5000 // Thời gian hiển thị (ms)
+    };
+    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
+    toast.show();
+</script>
