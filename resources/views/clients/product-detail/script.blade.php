@@ -86,6 +86,7 @@
                         <input type="hidden" name="product_id" value="${data.product_id}">
                         <input type="hidden" name="status" value="${status}">
                         <input type="hidden" name="name" value="{{ $product->name }}">
+                        <input type="hidden" name="img" value="${data.img}">
                     </div>
                 `);
             }
