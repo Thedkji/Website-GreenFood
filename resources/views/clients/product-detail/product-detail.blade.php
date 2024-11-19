@@ -60,6 +60,8 @@
                                         <span>{{ $category->name }},</span>
                                     @endforeach
                                 </p>
+
+
                                 @if ($product->status == 0)
                                     <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
                                     <div id="price_variantGroup">
@@ -72,6 +74,7 @@
                                     </div>
 
                                     <input type="hidden" name="price" value="{{ $product->price_sale ?? 1 }}">
+                                    <input type="hidden" name="name" value="{{ $product->name }}">
                                     <input type="hidden" name="sku" value="{{ $product->sku }}">
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="img" value="{{ $product->img }}">

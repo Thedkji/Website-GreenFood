@@ -44,7 +44,7 @@
                                                 {{ $category->name }}
                                                 @endforeach
                                             </div>
-                                            <input type="hidden" name="id_product" value="{{ $product->id }}">
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                                             <input type="hidden" name="name" value="{{ $product->name }}">
                                             <input type="hidden" name="status" value="{{ $product->status }}">
                                             <input type="hidden" name="img" value="{{ $product->img }}">
