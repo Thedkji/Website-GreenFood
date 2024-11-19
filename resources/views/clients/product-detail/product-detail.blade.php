@@ -50,155 +50,175 @@
                         </div>
 
                         <div class="col-lg-6">
-                            <h4 class="fw-bold mb-3" style="width: 430px; overflow-wrap: break-word">{{ $product->name }}
-                            </h4>
-                            <p class="mb-3"><span class="fw-bold">Danh mục:</span>
-                                @foreach ($product->categories as $category)
-                                    <span>{{ $category->name }},</span>
-                                @endforeach
-                            </p>
-                            @if ($product->status == 0)
-                                <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
-                                <div id="price_variantGroup">
-                                    <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                    </h6>
-                                    <h4 class="fw-bold mb-3 text-primary">
-                                        {{ app('formatPrice')($product->price_sale) }} VNĐ
-                                    </h4>
-                                </div>
-                            @else
-                                <!-- Trường hợp có biến thể, lấy giá thấp nhất từ variantGroup -->
-                                @php
-                                    $variant = $product->variantGroups->sortBy('price_sale')->first();
-                                @endphp
-
-                                @if ($variant)
+                            <form action="{{ route('client.addToCart') }}" method="post">
+                                @csrf
+                                <h4 class="fw-bold mb-3" style="width: 430px; overflow-wrap: break-word">
+                                    {{ $product->name }}
+                                </h4>
+                                <p class="mb-3"><span class="fw-bold">Danh mục:</span>
+                                    @foreach ($product->categories as $category)
+                                        <span>{{ $category->name }},</span>
+                                    @endforeach
+                                </p>
+                                @if ($product->status == 0)
+                                    <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
                                     <div id="price_variantGroup">
                                         <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                            {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                            {{ app('formatPrice')($product->price_regular) }} VNĐ
                                         </h6>
                                         <h4 class="fw-bold mb-3 text-primary">
-                                            {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                            {{ app('formatPrice')($product->price_sale) }} VNĐ
                                         </h4>
                                     </div>
+
+                                    <input type="hidden" name="price" value="{{ $product->price_sale ?? 1 }}">
+                                    <input type="hidden" name="sku" value="{{ $product->sku }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="img" value="{{ $product->img }}">
+                                    <input type="hidden" name="status" value="{{ $product->status }}">
                                 @else
-                                    <!-- Nếu không có biến thể nào khả dụng, hiển thị thông báo hoặc giá mặc định -->
-                                    <h6 class="fw-bold mb-3 text-muted">Không có giá khả dụng</h6>
-                                @endif
-                            @endif
+                                    <!-- Trường hợp có biến thể, lấy giá thấp nhất từ variantGroup -->
+                                    @php
+                                        $variant = $product->variantGroups->sortBy('price_sale')->first();
+                                    @endphp
 
-                            @if ($product->status == 1)
-                                @php
-                                    $displayedParents = []; // Mảng tạm để lưu các parent đã hiển thị
-                                    $lowestPrice = null; // Biến lưu giá thấp nhất
-                                    $lowestPriceVariantGroup = null; // Biến lưu group có giá thấp nhất
-
-                                    // Tìm giá thấp nhất trong tất cả variantGroups
-                                    foreach ($product->variantGroups as $variantGroup) {
-                                        if ($lowestPrice === null || $variantGroup->price_sale < $lowestPrice) {
-                                            $lowestPrice = $variantGroup->price_sale;
-                                            $lowestPriceVariantGroup = $variantGroup; // Lưu lại group có giá thấp nhất
-                                        }
-                                    }
-
-                                    // Sắp xếp các variantGroups theo giá, nhóm có giá thấp nhất sẽ nằm đầu
-                                    $sortedVariantGroups = $product->variantGroups->sortBy('price_sale');
-                                @endphp
-
-                                @foreach ($sortedVariantGroups as $variantGroup)
-                                    @if ($variantGroup == $lowestPriceVariantGroup)
-                                        <!-- Kiểm tra xem variantGroup có giá thấp nhất hay không -->
-                                        @foreach ($variantGroup->variants as $variant)
-                                            @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
-                                                <strong
-                                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
-                                                @php
-                                                    $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
-                                                @endphp
-                                            @endif
-
-                                            <!-- Hiển thị biến thể có giá thấp nhất đầu tiên và thêm class 'active' -->
-                                            <a href="###" class="variant-option active"
-                                                data-id="{{ $variantGroup->id }}">
-                                                @if ($variantGroup->img)
-                                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
-                                                        alt="" class="variant-img">
-                                                @else
-                                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
-                                                        class="variant-img">
-                                                @endif
-                                                <span>{{ $variant->name }}</span>
-                                            </a>
-                                        @endforeach
+                                    @if ($variant)
+                                        <div id="price_variantGroup">
+                                            <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                                                {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                            </h6>
+                                            <h4 class="fw-bold mb-3 text-primary">
+                                                {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                            </h4>
+                                        </div>
+                                        <input type="hidden" name="img" value="{{ $product->img }}">
                                     @else
-                                        <!-- Hiển thị các variantGroup còn lại -->
-                                        @foreach ($variantGroup->variants as $variant)
-                                            @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
-                                                <strong
-                                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
-                                                @php
-                                                    $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
-                                                @endphp
-                                            @endif
-
-                                            <!-- Hiển thị các biến thể khác, không có class 'active' -->
-                                            <a href="###" class="variant-option" data-id="{{ $variantGroup->id }}">
-                                                @if ($variantGroup->img)
-                                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
-                                                        alt="" class="variant-img">
-                                                @else
-                                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
-                                                        class="variant-img">
-                                                @endif
-                                                <span>{{ $variant->name }}</span>
-                                            </a>
-                                        @endforeach
+                                        <!-- Nếu không có biến thể nào khả dụng, hiển thị thông báo hoặc giá mặc định -->
+                                        <h6 class="fw-bold mb-3 text-muted">Không có giá khả dụng</h6>
                                     @endif
-                                @endforeach
+                                @endif
+
+                                @if ($product->status == 1)
+                                    @php
+                                        $displayedParents = []; // Mảng tạm để lưu các parent đã hiển thị
+                                        $lowestPrice = null; // Biến lưu giá thấp nhất
+                                        $lowestPriceVariantGroup = null; // Biến lưu group có giá thấp nhất
+
+                                        // Tìm giá thấp nhất trong tất cả variantGroups
+                                        foreach ($product->variantGroups as $variantGroup) {
+                                            if ($lowestPrice === null || $variantGroup->price_sale < $lowestPrice) {
+                                                $lowestPrice = $variantGroup->price_sale;
+                                                $lowestPriceVariantGroup = $variantGroup; // Lưu lại group có giá thấp nhất
+                                            }
+                                        }
+
+                                        // Sắp xếp các variantGroups theo giá, nhóm có giá thấp nhất sẽ nằm đầu
+                                        $sortedVariantGroups = $product->variantGroups->sortBy('price_sale');
+                                    @endphp
+
+                                    @foreach ($sortedVariantGroups as $variantGroup)
+                                        @if ($variantGroup == $lowestPriceVariantGroup)
+                                            <!-- Kiểm tra xem variantGroup có giá thấp nhất hay không -->
+                                            @foreach ($variantGroup->variants as $variant)
+                                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                    <strong
+                                                        class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                    @php
+                                                        $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                    @endphp
+                                                @endif
+
+                                                <!-- Hiển thị biến thể có giá thấp nhất đầu tiên và thêm class 'active' -->
+                                                <a href="###" class="variant-option active"
+                                                    data-id="{{ $variantGroup->id }}">
+                                                    @if ($variantGroup->img)
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                            alt="" class="variant-img">
+                                                    @else
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                            alt="" class="variant-img">
+                                                    @endif
+                                                    <span>{{ $variant->name }}</span>
+                                                </a>
+                                            @endforeach
+                                        @else
+                                            <!-- Hiển thị các variantGroup còn lại -->
+                                            @foreach ($variantGroup->variants as $variant)
+                                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                    <strong
+                                                        class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                    @php
+                                                        $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                    @endphp
+                                                @endif
+
+                                                <!-- Hiển thị các biến thể khác, không có class 'active' -->
+                                                <a href="###" class="variant-option" data-id="{{ $variantGroup->id }}">
+                                                    @if ($variantGroup->img)
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                            alt="" class="variant-img">
+                                                    @else
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                            alt="" class="variant-img">
+                                                    @endif
+                                                    <span>{{ $variant->name }}</span>
+                                                </a>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
 
 
-                            @endif
+                                @endif
 
 
-                            <p class="mb-4">{!! $product->description_short !!}</p>
+                                <p class="mb-4">{!! $product->description_short !!}</p>
 
-                            @if ($product->status == 0)
-                                <p id="quantity_variantGroup">
-                                    Số lượng : {{ $product->quantity }}
-                                </p>
-                            @else
-                                <p id="quantity_variantGroup">
-                                    Số lượng : {{ $variantGroup->quantity }}
-                                </p>
-                            @endif
+                                @if ($product->status == 0)
+                                    <p id="quantity_variantGroup">
+                                        Số lượng : {{ $product->quantity }}
+                                    </p>
+                                @else
+                                    <p id="quantity_variantGroup">
+                                        Số lượng : {{ $variantGroup->quantity }}
+                                    </p>
+                                @endif
 
-                            <div class="input-group custom-quantity my-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm custom-btn-minus rounded-circle bg-light border">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
+                                <div class="input-group custom-quantity my-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm custom-btn-minus rounded-circle bg-light border"
+                                            type="button">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text"
+                                        class="form-control form-control-sm text-center custom-quantity-input border-0"
+                                        value="1">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm custom-btn-plus rounded-circle bg-light border"
+                                            type="button">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    <input type="hidden" id="hidden-quantity" name="quantity" value="">
+
                                 </div>
-                                <input type="text"
-                                    class="form-control form-control-sm text-center custom-quantity-input border-0"
-                                    value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm custom-btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
 
-                            <a href="#"
-                                class="btn border border-secondary rounded-pill px-4 py-3 mb-4 text-primary"><i
-                                    class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng</a>
+                                <button id="add-to-cart"
+                                    class="btn border border-secondary rounded-pill px-4 py-3 mb-4 text-primary">
+                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                                </button>
+
+
+                            </form>
                         </div>
                         <div class="col-lg-12">
                             <nav>
                                 <div class="nav nav-tabs mb-3">
                                     <button class="nav-link active border-white border-bottom-0" type="button"
-                                        role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
-                                        aria-controls="nav-about" aria-selected="true">Mô tả</button>
+                                        role="tab" id="nav-about-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-about" aria-controls="nav-about" aria-selected="true">Mô
+                                        tả</button>
                                     <button class="nav-link border-white border-bottom-0" type="button" role="tab"
                                         id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
                                         aria-controls="nav-mission" aria-selected="false">Đánh giá</button>

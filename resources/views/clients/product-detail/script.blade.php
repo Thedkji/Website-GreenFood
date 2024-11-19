@@ -2,6 +2,7 @@
     $(document).ready(function() {
         let firstVariantOption = $('.variant-option').first(); // Lấy phần tử variant đầu tiên
         let hasVariants = firstVariantOption.length > 0; // Kiểm tra có biến thể hay không
+        console.log($('#hidden-quantity')); // Kiểm tra xem phần tử có tồn tại hay không
 
         if (hasVariants) {
             firstVariantOption.addClass(
@@ -69,22 +70,30 @@
             const formatCurrency = (amount) => {
                 return new Intl.NumberFormat('vi-VN').format(amount);
             };
-
-            $('#price_variantGroup').html(`
-            <div id="price_variantGroup">
-                <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                    ${formatCurrency(data.price_regular)} VNĐ  
-                </h6>
-                <h4 class="fw-bold mb-3 text-success">
-                    ${formatCurrency(data.price_sale)} VNĐ
-                </h4>
-            </div>
-        `);
+            let status = {{ $product->status }};
+            console.log(status);
+            if (status == 1) {
+                $('#price_variantGroup').html(`
+                    <div id="price_variantGroup">
+                        <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                            ${formatCurrency(data.price_regular)} VNĐ  
+                        </h6>
+                        <h4 class="fw-bold mb-3 text-primary">
+                            ${formatCurrency(data.price_sale)} VNĐ
+                        </h4>
+                        <input type="hidden" name="price" value="${data.price_sale}">
+                        <input type="hidden" name="sku" value="${data.sku}">
+                        <input type="hidden" name="product_id" value="${data.product_id}">
+                        
+                    </div>
+                `);
+            }
 
             $('#quantity_variantGroup').html(`
             <p id="quantity_variantGroup">
                 Số lượng: ${data.quantity}
             </p>
+
         `);
 
             $('.custom-quantity-input').val(1); // Reset số lượng về 1
@@ -108,6 +117,9 @@
                 if (value > 1) { // Không cho phép giảm xuống dưới 1
                     $input.val(value - 1);
                 }
+
+                // Cập nhật giá trị vào trường hidden quantity
+                $('#hidden-quantity').val($input.val());
             });
 
             // Nút tăng số lượng
@@ -118,6 +130,9 @@
                 if (value < customMaxQuantity) { // Không cho phép vượt quá số lượng tối đa
                     $input.val(value + 1);
                 }
+
+                // Cập nhật giá trị vào trường hidden quantity
+                $('#hidden-quantity').val($input.val());
             });
 
             // Kiểm tra nhập số lượng thủ công
@@ -132,6 +147,9 @@
                 }
 
                 $(this).val(value); // Cập nhật giá trị
+
+                // Cập nhật giá trị vào trường hidden quantity
+                $('#hidden-quantity').val(value);
             });
 
             // Xử lý khi mất focus khỏi ô nhập
@@ -145,7 +163,19 @@
                 }
 
                 $(this).val(value);
+
+                // Cập nhật giá trị vào trường hidden quantity
+                $('#hidden-quantity').val(value);
             });
+
+            // Đảm bảo trường hidden quantity luôn có giá trị mặc định ban đầu
+            if ($('#hidden-quantity').val() === '') {
+                $('#hidden-quantity').val(1); // Gán giá trị mặc định là 1 nếu không có giá trị
+            }
         }
+
+
+        // Xử lý sự kiện thêm vào giỏ hàng
+
     });
 </script>
