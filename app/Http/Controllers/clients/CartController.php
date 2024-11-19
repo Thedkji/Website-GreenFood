@@ -19,7 +19,8 @@ class CartController extends Controller
     // Trang chủ
     public function addToCart(Request $request)
     {
-        $productId = $request->id_product;
+
+        $productId = $request->product_id;
         $sku = $request->sku;
         $quantity = $request->input('quantity', 1);
         if (auth()->check()) {
@@ -41,6 +42,7 @@ class CartController extends Controller
             }
         } else {
             $existingSessionItem = CartSession::get($productId);
+
             if ($existingSessionItem) {
                 CartSession::update($productId, [
                     'quantity' => [
