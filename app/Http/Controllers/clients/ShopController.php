@@ -69,30 +69,7 @@ class ShopController extends Controller
                 ->paginate(12);
         }
 
-        $productHot = Product::withCount('comments')  // Đếm số lượng comment cho mỗi sản phẩm
-            ->with(['comments' => function ($query) {
-                $query->with(['rates' => function ($rateQuery) {
-                    $rateQuery->orderBy('star', 'desc'); // Lấy rate cao nhất trong mỗi comment
-                }]);
-            }])
-            ->with(['variantGroups' => function ($variantQuery) {
-                // Kiểm tra nếu có mối quan hệ với variantGroups và lấy giá sale thấp nhất
-                $variantQuery->orderBy('price_sale', 'asc')->limit(1); // Lấy biến thể có giá sale thấp nhất
-            }])
-            ->selectRaw('products.*, 
-        (select count(*) from comments where comments.product_id = products.id and comments.deleted_at is null) as comments_count')
-            ->addSelect([
-                'max_star' => Rate::selectRaw('MAX(star)')
-                    ->join('comments', 'rates.comment_id', '=', 'comments.id')
-                    ->whereColumn('comments.product_id', 'products.id')
-                    ->whereNull('comments.deleted_at')
-                    ->whereNull('rates.deleted_at')
-                    ->limit(1)
-            ])
-            ->orderByDesc('comments_count')  // Sắp xếp theo số lượng comment giảm dần
-            ->orderByDesc('max_star')  // Sắp xếp theo rating cao nhất giảm dần
-            ->limit(6)  // Lấy 4 sản phẩm nổi bật nhất
-            ->get();
+        $productHot = Product::orderByDesc('view')->limit(4)->get();
 
         return view("clients.shops.shop", compact("products", 'categories', 'productHot'));
     }
