@@ -85,5 +85,11 @@
 <script src="{{ env('VIEW_ADMIN') }}/libs/prismjs/prism.js?time={{ time() }}"></script>
 
 <script src="{{ env('VIEW_ADMIN') }}/js/pages/form-validation.init.js?time={{ time() }}"></script>
+
+<!-- Toastr CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
 {{-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> --}}
