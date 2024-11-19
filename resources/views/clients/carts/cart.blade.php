@@ -182,12 +182,15 @@
                         <td>
                             <strong class="mb-0 mt-4">{{ $item->name }}</strong>
                         </td>
+                        
                         <td>
                             <strong class="mb-0 mt-4">{{ $item->attributes->sku }}</strong>
                         </td>
+                        
                         <td>
                             <p class="mb-0 mt-4 text-danger">{{ number_format($item->price) }} VNĐ</p>
                         </td>
+                        
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
