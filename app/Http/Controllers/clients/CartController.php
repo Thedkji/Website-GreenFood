@@ -19,10 +19,10 @@ class CartController extends Controller
     // Trang chủ
     public function addToCart(Request $request)
     {
-
         $productId = $request->product_id;
         $sku = $request->sku;
         $quantity = $request->input('quantity', 1);
+
         if (auth()->check()) {
             $existingCartItem = Cart::where('user_id', auth()->id())
                 ->where('product_id', $productId)

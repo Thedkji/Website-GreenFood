@@ -71,7 +71,7 @@
                 return new Intl.NumberFormat('vi-VN').format(amount);
             };
             let status = {{ $product->status }};
-            console.log(status);
+
             if (status == 1) {
                 $('#price_variantGroup').html(`
                     <div id="price_variantGroup">
@@ -84,7 +84,8 @@
                         <input type="hidden" name="price" value="${data.price_sale}">
                         <input type="hidden" name="sku" value="${data.sku}">
                         <input type="hidden" name="product_id" value="${data.product_id}">
-                        
+                        <input type="hidden" name="status" value="${status}">
+                        <input type="hidden" name="name" value="{{ $product->name }}">
                     </div>
                 `);
             }
