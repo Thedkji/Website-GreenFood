@@ -60,6 +60,7 @@ class CartController extends Controller
                     'quantity' => $quantity,
                     'attributes' => [
                         'added_order' => CartSession::getContent()->count() + 1,
+                        'product_id' => $productId,
                         'sku' => $sku,
                         'img' => $request->img,
                         'status' => $request->status,

@@ -65,23 +65,33 @@
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
-                            <label class="form-label my-3">Province</label>
-                            <input type="text" class="form-control" name="province" value="{{$userInfo ? $userInfo->province : old('province')}}">
+                            <label for="province">Thành phố/Tỉnh</label>
+                            <select name="province" id="province123" class="form-select" value="{{ old('province') }}">
+                                <option value=""> Chọn Thành phố/Tỉnh </option>
+                                @foreach ($provinces as $province)
+                                <option value="{{ $province->code }}">{{ $province->name }}</option>
+                                @endforeach
+                            </select>
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">District</label>
-                            <input type="text" name="district" class="form-control" value="{{$userInfo ? $userInfo->district : old('district')}}">
+                            <label for="district">Quận/Huyện</label>
+                            <select name="district" id="district123" class="form-select" value="{{ old('address') }}">
+                                <option value=""> Chọn Quận/Huyện </option>
+                            </select>
                             <x-feedback name="district" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Ward</label>
-                            <input type="text" class="form-control" name="ward" value="{{$userInfo ? $userInfo->ward : old('ward')}}">
+                            <label for="ward">Phường/Xã</label>
+                            <select name="ward" id="ward123" class="form-select" value="{{ old('ward') }}">
+                                <option value=""> Chọn Phường/Xã </option>
+                            </select>
                             <x-feedback name="ward" />
+
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Địa chỉ</label>
-                            <input type="text" class="form-control" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
+                            <input type="text" class="form-control" id="address123" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                             <x-feedback name="address" />
                         </div>
 
@@ -129,7 +139,7 @@
                                 if($userInfo){
                                 $itemPrice = $item['product']['status'] === 0
                                 ? $item['product']['price_sale']
-                                : ($variantDetails[$item['id']]->price_sale ?? $item['price']);
+                                : ($variantDetails[$item['sku']]->price_sale ?? $item['price']);
                                 }else{
                                 $itemPrice = $item['price'];
                                 }
@@ -137,10 +147,38 @@
                                 @endphp
                                 <tr>
                                     <td>
-                                        <img src="{{ env('VIEW_IMG') . ($userInfo ? $item['product']['img'] :  $item['attributes']['img']) }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ $userInfo ? $item['product']['name'] :  $item['name'] }}">
+                                        @php
+                                        $imageSrc = env('VIEW_IMG') . '/';
+                                        if (isset($userId)) {
+                                        if ($item['product']['status'] === 0) {
+                                        $imageSrc .= $item['product']['img'];
+                                        } else {
+                                        $imageSrc .= $variantDetails[$item['sku']]->img ?? $item['product']['img'];
+                                        }
+                                        } else {
+                                        if ($item['attributes']['status'] === 0) {
+                                        $imageSrc .= $item['attributes']['img'];
+                                        } else {
+                                        $imageSrc .= $variantDetails[$item['attributes']['sku']]->img ?? $item['attributes']['img'];
+                                        }
+                                        }
+                                        @endphp
+                                        <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
                                     </td>
                                     <td class="text-start">
-                                        <strong>{{ $userInfo ? $item['product']['name'] :  $item['name'] }}</strong><br>
+                                        <strong>
+                                            @if (isset($userId))
+                                            {{ $item['product']['name'] }}
+                                            @if (!empty($variantDetails[$item['sku']]))
+                                            | {{ optional(\App\Models\Variant::find($variantDetails[$item['sku']]->variants[0]['parent_id']))->name }} - {{ $variantDetails[$item['sku']]->variants[0]['name'] }}
+                                            @endif
+                                            @else
+                                            {{ $item['name'] }}
+                                            @if (!empty($variantDetails[$item['attributes']['sku']]))
+                                            | {{ optional(\App\Models\Variant::find($variantDetails[$item['attributes']['sku']]->variants[0]['parent_id']))->name }} - {{ $variantDetails[$item['attributes']['sku']]->variants[0]['name'] }}
+                                            @endif
+                                            @endif
+                                        </strong><br>
                                         <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
                                     </td>
                                     <td>
@@ -292,26 +330,58 @@
 @endsection
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Tìm tất cả các toast
-        const toastElements = document.querySelectorAll(".toast");
+        const provincesData = @json($provinces);
+        const districtsData = @json($districts);
+        const wardsData = @json($wards);
 
-        toastElements.forEach((toast) => {
-            // Hiển thị toast bằng Bootstrap
-            const bsToast = new bootstrap.Toast(toast, {
-                delay: 3000
-            }); // 3000ms = 3 giây
+        // Lấy các select box và input
+        const provinceSelect = document.getElementById("province123");
+        const districtSelect = document.getElementById("district123");
+        const wardSelect = document.getElementById("ward123");
+        const addressInput = document.getElementById("address123");
+
+        // Hàm cập nhật địa chỉ
+        function updateAddress() {
+            const ward = wardSelect?.options[wardSelect.selectedIndex]?.text || "";
+            const district = districtSelect?.options[districtSelect.selectedIndex]?.text || "";
+            const province = provinceSelect?.options[provinceSelect.selectedIndex]?.text || "";
+
+            addressInput.value =
+                `${ward !== "Chọn Phường/Xã" ? ward + ", " : ""}` +
+                `${district !== "Chọn Quận/Huyện" ? district + ", " : ""}` +
+                `${province !== "Chọn Thành phố/Tỉnh" ? province : ""}`;
+        }
+
+        // Đảm bảo các phần tử tồn tại trước khi gắn sự kiện
+        if (provinceSelect && districtSelect && wardSelect && addressInput) {
+            provinceSelect.addEventListener("change", updateAddress);
+            districtSelect.addEventListener("change", updateAddress);
+            wardSelect.addEventListener("change", updateAddress);
+        }
+
+        // Toast xử lý
+        const toastElements = document.querySelectorAll(".toast");
+        toastElements.forEach((toastElement) => {
+            const bsToast = new bootstrap.Toast(toastElement, {
+                delay: 5000
+            }); // 5 giây
             bsToast.show();
 
-            // Tự động ẩn toast sau 3 giây
+            // Ẩn toast sau 5 giây
             setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
+                toastElement.classList.remove("show");
+            }, 5000);
         });
+
+        // Toast success (nếu có)
+        const toastSuccess = document.getElementById("toastSuccess");
+        if (toastSuccess) {
+            const toastOptions = {
+                autohide: true,
+                delay: 5000
+            }; // Hiển thị 5 giây
+            const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
+            bsToastSuccess.show();
+        }
     });
-    toastOptions = {
-        autohide: true,
-        delay: 5000 // Thời gian hiển thị (ms)
-    };
-    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
-    toast.show();
 </script>
