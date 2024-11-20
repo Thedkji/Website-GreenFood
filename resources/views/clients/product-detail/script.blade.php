@@ -177,7 +177,30 @@
         }
 
 
-        // Xử lý sự kiện thêm vào giỏ hàng
+        function readMore() {
+            var description = document.getElementById('description');
+            var readMore = document.getElementById('read-more');
+            var content = document.getElementById('description-content');
+            // Kiểm tra chiều cao thực tế của nội dung
+            if (content.scrollHeight <= 200) {
+                // Nếu nội dung không vượt quá chiều cao giới hạn, ẩn nút và overlay
+                readMore.style.display = 'none';
+                document.getElementById('description-overlay').style.display = 'none';
+            }
+            readMore.addEventListener('click', function() {
+                description.classList.toggle('collapsed');
+                if (description.classList.contains('collapsed')) {
+                    readMore.textContent = 'Thu gọn';
+                } else {
+                    readMore.textContent = 'Đọc thêm';
+                    description.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        }
+
+        readMore();
 
     });
 </script>
