@@ -51,8 +51,8 @@ class OrderController extends Controller
             $order->update(['status' => $status]);
             Mail::to($order->email)->queue(new MailCheckOut($order));
         }
-        
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
     }
 
     public function cancelOrder(Request $request, $id)
@@ -62,6 +62,6 @@ class OrderController extends Controller
             $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
             Mail::to($order->email)->send(new MailCheckOut($order));
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
     }
 }

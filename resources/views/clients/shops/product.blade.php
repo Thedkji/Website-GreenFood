@@ -1,70 +1,170 @@
+<style>
+    /* Đảm bảo rằng các thẻ sản phẩm chiếm toàn bộ chiều cao của cột */
+    .fruite-item {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* Đặt chiều cao cố định cho hình ảnh sản phẩm và đảm bảo ảnh lấp đầy vùng chứa */
+    .fruite-img img {
+        width: 100%;
+        height: 200px;
+        /* Bạn có thể điều chỉnh chiều cao theo nhu cầu */
+        object-fit: cover;
+        border-top-left-radius: 0.25rem;
+        /* Đảm bảo góc bo tròn khớp với thẻ */
+        border-top-right-radius: 0.25rem;
+    }
+
+    /* Định dạng nội dung thẻ sản phẩm */
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    /* Định dạng phần tiêu đề sản phẩm */
+    .card-title a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .card-title a:hover {
+        text-decoration: underline;
+    }
+
+    /* Định dạng giá cả */
+    .text-muted.text-decoration-line-through {
+        margin-right: 10px;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+    /* Định dạng đánh giá sao */
+    .product-rating i {
+        color: #ffc107;
+        /* Màu vàng cho sao */
+    }
+
+    /* Định dạng phân trang */
+    .pagination a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        margin: 0 5px;
+        border: 1px solid #dee2e6;
+        border-radius: 50%;
+        color: #000;
+        text-decoration: none;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* .pagination a:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    } */
+
+    .pagination a.active {
+        background-color: #81C408;
+        color: #fff;
+        pointer-events: none;
+    }
+
+    .pagination a.disabled {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    /* Responsive điều chỉnh */
+    @media (max-width: 576px) {
+        .fruite-img img {
+            height: 150px;
+        }
+    }
+</style>
+
 <div class="col-lg-9">
     <div class="row g-4 justify-content-center" id="shop-product">
 
         @foreach ($products as $product)
-            <div class="col-md-6 col-lg-6 col-xl-4">
-                <div class="rounded position-relative fruite-item">
+            <div class="col-md-6 col-lg-6 col-xl-4 d-flex">
+                <div class="card fruite-item w-100">
+                    <!-- Image -->
                     <div class="fruite-img">
-                        <img src="img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                    </div>
-                    <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-
-                        @if ($product->img == 'https://via.placeholder.com/300x200' || is_null($product->img))
-                            <div style="width:100%; height:150px; overflow:hidden;">
-                                <a href="{{ route('client.product-detail', $product->id) }}">
-                                    <img src="https://via.placeholder.com/300x200" alt=""
-                                        style="width:100%; height:auto; object-fit: cover;">
-                                </a>
-                            </div>
+                        @if ($product->img && $product->img !== 'https://via.placeholder.com/300x200')
+                            <a href="{{ route('client.product-detail', $product->id) }}">
+                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" class="card-img-top"
+                                    alt="{{ $product->name }}">
+                            </a>
                         @else
-                            <div style="width:100%; height:150px; overflow:hidden;">
-                                <a href="{{ route('client.product-detail', $product->id) }}">
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
-                                        style="width:100%; height:auto; object-fit: cover;">
-                                </a>
-                            </div>
+                            <a href="{{ route('client.product-detail', $product->id) }}">
+                                <img src="https://via.placeholder.com/300x200" class="card-img-top"
+                                    alt="{{ $product->name }}">
+                            </a>
                         @endif
+                    </div>
 
-                        <p class="truncate-text">{{ $product->description_short }}</p>
+                    <!-- Product Info -->
+                    <div class="card-body  d-flex flex-column">
+                        <p class="card-text ">
+                            {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
+                        </p>
 
-                        <h4 class="truncate-text">
-                            <a href="{{ route('client.product-detail', $product->id) }}">{{ $product->name }}</a>
-                        </h4>
+                        <h5 class="card-title ">
+                            <a href="{{ route('client.product-detail', $product->id) }}"
+                                class="text-decoration-none text-dark">
+                                {{ Str::limit(strip_tags($product->name), 150, '...') }}
+                            </a>
+                        </h5>
 
-
-                        @if ($product->status == 0)
-                            <span class="text-muted text-decoration-line-through" style="font-size:14px;opacity: 75%;">
-                                {{ app('formatPrice')($product->price_regular) }}VNĐ
-                            </span>
-                            <p class="fw-bold" style="font-size: 20px">
-                                {{ app('formatPrice')($product->price_sale) }} VNĐ
-                            </p>
-                        @elseif ($product->status == 1)
-                            @foreach ($product->variantGroups as $variantgroup)
+                        <!-- Pricing -->
+                        <div class="mt-auto">
+                            @if ($product->status == 0)
                                 <span class="text-muted text-decoration-line-through"
                                     style="font-size:14px;opacity: 75%;">
-                                    {{ app('formatPrice')($variantgroup->price_regular) }}
-                                    VNĐ
+                                    {{ app('formatPrice')($product->price_regular) }} VNĐ
                                 </span>
-
-                                <p class="fw-bold" style="font-size: 20px">
-
-                                    {{ app('formatPrice')($variantgroup->price_sale) }} VNĐ
-
+                                <p class="fw-bold text-primary" style="font-size: 20px;">
+                                    {{ app('formatPrice')($product->price_sale) }} VNĐ
                                 </p>
-                            @endforeach
-                        @endif
+                            @elseif ($product->status == 1)
+                                @php
+                                    $variant = $product->variantGroups
+                                        ->whereNotNull('price_sale')
+                                        ->sortBy('price_sale')
+                                        ->first();
+                                @endphp
 
+                                @if ($variant)
+                                    <span class="text-muted text-decoration-line-through"
+                                        style="font-size:14px;opacity: 75%;">
+                                        {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                    </span>
+                                    <p class="fw-bold text-primary" style="font-size: 20px;">
+                                        {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                    </p>
+                                @endif
+                            @endif
 
-
+                            <!-- Ratings -->
+                            {{-- <div class="product-rating">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i
+                                        class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
+                                @endfor
+                            </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
         @endforeach
 
-
-
-
+        <!-- Pagination -->
         <div class="col-12">
             <div class="pagination d-flex justify-content-center mt-5">
                 {{-- Nút quay về đầu --}}
@@ -107,9 +207,6 @@
                 </a>
             </div>
         </div>
-
-
-
 
     </div>
 </div>

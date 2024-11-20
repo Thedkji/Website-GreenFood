@@ -1,3 +1,92 @@
+<style>
+    /* Container styling */
+    .container {
+        padding: 20px;
+    }
+
+    /* Product Card */
+    .product-card {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        transition: box-shadow 0.3s, transform 0.3s;
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+    }
+
+    /* Product Image */
+    .product-img-container {
+        flex: 0 0 100px;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-right: 20px;
+    }
+
+    .product-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    /* Product Info */
+    .product-info {
+        flex: 1;
+    }
+
+    .product-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .product-pricing {
+        margin-bottom: 8px;
+    }
+
+    .price-regular {
+        text-decoration: line-through;
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .price-sale {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .product-rating i {
+        margin-right: 2px;
+        color: #f1c40f;
+    }
+
+    .product-rating i.text-secondary {
+        color: #ddd;
+    }
+
+    /* Adjustments for responsiveness */
+    @media (max-width: 576px) {
+        .product-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-img-container {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
 <h1 class="mb-4">Sản phẩm healthy</h1>
 <div class="row g-4">
     <div class="col-lg-12">
@@ -100,56 +189,71 @@
                         <h4 class="mb-3">Sản phẩm nổi bật</h4>
 
                         @foreach ($productHot as $product)
-                            <!-- Kiểm tra nếu sản phẩm có biến thể hoặc có giá -->
-                            @if ($product->variantGroups->isNotEmpty() || ($product->price_regular && $product->price_sale))
-                                <div class="d-flex align-items-center justify-content-start mb-4">
-                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" class="img-fluid rounded"
-                                            alt="{{ $product->name }}">
-                                    </div>
-                                    <div>
-                                        @if ($product->variantGroups->isNotEmpty())
-                                            <!-- Hiển thị biến thể có giá thấp nhất -->
-                                            @php
-                                                $variant = $product->variantGroups->sortBy('price_sale')->first();
-                                            @endphp
-                                            <h6 class="mb-2 truncate-text">{{ $product->name }} - {{ $variant->name }}
-                                            </h6>
-
-                                            <!-- Hiển thị giá từ biến thể -->
-                                            <div class="mb-2">
-                                                @if ($variant->price_regular && $variant->price_sale)
-                                                    <h5 class="text-danger text-decoration-line-through">
-                                                        {{ number_format($variant->price_regular, 2) }} $
-                                                    </h5>
-                                                    <h5 class="fw-bold me-2">
-                                                        {{ number_format($variant->price_sale, 2) }} $</h5>
-                                                @else
-                                                    <h5 class="fw-bold me-2">
-                                                        {{ number_format($variant->price_sale, 2) }} $</h5>
-                                                @endif
-                                            </div>
+                            <a href="{{ route('client.product-detail', $product->id) }}"
+                                class="text-decoration-none text-dark">
+                                <div class="product-card mb-4">
+                                    <!-- Image -->
+                                    <div class="product-img-container">
+                                        @if ($product->img)
+                                            <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                alt="{{ $product->name }}" class="product-img">
                                         @else
-                                            <!-- Hiển thị sản phẩm chính nếu có giá -->
-                                            <h6 class="mb-2 truncate-text">{{ $product->name }}</h6>
-
-                                            <!-- Hiển thị giá sản phẩm chính -->
-                                            <div class="mb-2">
-                                                @if ($product->price_regular && $product->price_sale)
-                                                    <h5 class="text-danger text-decoration-line-through">
-                                                        {{ number_format($product->price_regular, 2) }} $
-                                                    </h5>
-                                                    <h5 class="fw-bold me-2">
-                                                        {{ number_format($product->price_sale, 0) }} vnđ</h5>
-                                                @elseif($product->price_sale)
-                                                    <h5 class="fw-bold me-2">
-                                                        {{ number_format($product->price_sale, 0) }} vnđ</h5>
-                                                @endif
-                                            </div>
+                                            <img src="{{ env('VIEW_IMG') }}/default-image.png"
+                                                alt="{{ $product->name }}" class="product-img">
                                         @endif
+                                    </div>
 
-                                        <!-- Hiển thị sao đánh giá -->
-                                        <div class="d-flex mb-2">
+                                    <!-- Product Info -->
+                                    <div class="product-info">
+                                        <h6 class="product-name truncate-text">
+                                            {{ $product->name }}
+                                            @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
+                                                @php
+                                                    // Lấy biến thể có giá sale thấp nhất
+                                                    $variant = $product->variantGroups
+                                                        ->whereNotNull('price_sale')
+                                                        ->sortBy('price_sale')
+                                                        ->first();
+                                                @endphp
+                                                @if ($variant)
+                                                    - {{ $variant->name }}
+                                                @endif
+                                            @endif
+                                        </h6>
+
+                                        <!-- Pricing -->
+                                        <div class="product-pricing">
+                                            @if ($product->status == 0)
+                                                <!-- Nếu không có biến thể, lấy giá từ bảng product -->
+                                                @if ($product->price_regular)
+                                                    <span
+                                                        class="price-regular">{{ number_format($product->price_regular, 0) }}
+                                                        VNĐ</span>
+                                                @endif
+
+                                                @if ($product->price_sale)
+                                                    <span
+                                                        class="price-sale text-primary">{{ number_format($product->price_sale, 0) }}
+                                                        VNĐ</span>
+                                                @endif
+                                            @elseif ($product->status == 1 && isset($variant))
+                                                <!-- Nếu có biến thể, lấy giá sale và regular từ variant -->
+                                                @if ($variant->price_regular)
+                                                    <span
+                                                        class="price-regular">{{ number_format($variant->price_regular, 0) }}
+                                                        VNĐ</span>
+                                                @endif
+
+                                                @if ($variant->price_sale)
+                                                    <span
+                                                        class="price-sale text-primary">{{ number_format($variant->price_sale, 0) }}
+                                                        VNĐ</span>
+                                                @endif
+                                            @endif
+                                        </div>
+
+                                        <!-- Ratings -->
+                                        <div class="product-rating">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <i
                                                     class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
@@ -157,8 +261,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            </a>
                         @endforeach
+
+
 
                     </div>
 

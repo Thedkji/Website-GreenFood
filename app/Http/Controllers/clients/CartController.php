@@ -19,9 +19,10 @@ class CartController extends Controller
     // Trang chủ
     public function addToCart(Request $request)
     {
-        $productId = $request->id_product;
+        $productId = $request->product_id;
         $sku = $request->sku;
         $quantity = $request->input('quantity', 1);
+
         if (auth()->check()) {
             $existingCartItem = Cart::where('user_id', auth()->id())
                 ->where('product_id', $productId)
@@ -40,17 +41,20 @@ class CartController extends Controller
                 ]);
             }
         } else {
-            $existingSessionItem = CartSession::get($productId);
-            if ($existingSessionItem) {
-                CartSession::update($productId, [
+            $uniqueId = $productId . '-' . $sku;
+            $existingItem = CartSession::get($uniqueId);
+            if ($existingItem) {
+                // Nếu đã tồn tại, cập nhật số lượng
+                CartSession::update($uniqueId, [
                     'quantity' => [
                         'relative' => true,
                         'value' => $quantity,
                     ],
                 ]);
             } else {
+                // Nếu chưa tồn tại, thêm sản phẩm vào giỏ
                 CartSession::add([
-                    'id' => $productId,
+                    'id' => $uniqueId,
                     'name' => $request->name,
                     'price' => $request->input('price'),
                     'quantity' => $quantity,
