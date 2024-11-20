@@ -22,7 +22,8 @@ class CartComposer
             if ($cartItems) {
                 foreach ($cartItems as $item) {
                     if ($item->product && $item->product->status == 1) {
-                        $variantGroups[$item->sku] = VariantGroup::where('product_id', $item->product->id)
+                        $variantGroups[$item->sku] = VariantGroup::with('variants')
+                            ->where('product_id', $item->product->id)
                             ->where('sku', $item->sku)
                             ->get();
                         $variant = $variantGroups[$item->sku]->first();
@@ -48,7 +49,8 @@ class CartComposer
             $cartItems = CartSession::getContent();
             foreach ($cartItems as $item) {
                 if ($item->attributes->status == 1) {
-                    $variantGroups[$item->attributes->sku] = VariantGroup::where('product_id', $item->id)
+                    $variantGroups[$item->attributes->sku] = VariantGroup::with('variants')
+                        ->where('product_id', $item->id)
                         ->where('sku', $item->attributes->sku)
                         ->get();
                     $variant = $variantGroups[$item->attributes->sku]->first();
