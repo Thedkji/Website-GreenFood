@@ -55,6 +55,12 @@
                                     @include('clients.information.history-order')
                                 </div>
                             </div>
+
+                            <div class="tab-pane fade" id="pass" role="tabpanel">
+                                <div class="myaccount-content">
+                                    đổi pass
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- My Account Tab Content End -->
