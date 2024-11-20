@@ -53,18 +53,25 @@ class CheckoutController extends Controller
                     $itemTotal = $item['quantity'] *  $item['product']['price_sale'];
                     $variantDetails[$item['id']] = null;
                 } else {
-                    $variant = VariantGroup::where('product_id', $item['product_id'])
+                    $variant = VariantGroup::with('variants')->where('product_id', $item['product_id'])
                         ->where('sku', $item['sku'])
                         ->first();
                     $itemTotal = $variant ? $item['quantity'] * $variant->price_sale : $item['quantity'] * $item['price'];
-                    $variantDetails[$item['id']] = $variant;
+                    $variantDetails[$item['sku']] = $variant;
                 }
                 return $carry + $itemTotal;
             }, 0);
         } else {
             $totalPrice = array_reduce($decodedItems, function ($carry, $item) use (&$variantDetails) {
                 $itemTotal = $item['quantity'] * $item['price'];
-                $variantDetails[$item['id']] = null;
+                if ($item['attributes']['status'] === 0) {
+                    $variantDetails[$item['attributes']['product_id']] = null;
+                } else {
+                    $variant = VariantGroup::with('variants')->where('product_id', $item['attributes']['product_id'])
+                        ->where('sku', $item['attributes']['sku'])
+                        ->first();
+                    $variantDetails[$item['attributes']['sku']] = $variant;
+                }
                 return $carry + $itemTotal;
             }, 0);
         }
@@ -109,8 +116,11 @@ class CheckoutController extends Controller
             // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
             return $isProductMatch || $isCategoryMatch;
         });
+        $provinces = DB::table('provinces')->get();
+        $districts = DB::table('districts')->get();
+        $wards = DB::table('wards')->get();
         $userInfo = auth()->user() ?? null;
-        return view("clients.checkouts.checkout", compact('decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+        return view("clients.checkouts.checkout", compact('provinces', 'districts', 'wards', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
 
     public function applyCoupon(Request $request)
