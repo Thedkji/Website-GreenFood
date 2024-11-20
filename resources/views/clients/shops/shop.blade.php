@@ -1,11 +1,12 @@
 @extends('clients.layouts.master')
-
 @section('title', 'Fruitables - Sản phẩm')
 
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
-
+    {{-- Link --}}
+@section('title_page', 'Sản phẩm')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Sản phẩm')
 
 
 <!-- Fruits Shop Start-->
@@ -21,5 +22,5 @@
 </div>
 </div>
 <!-- Fruits Shop End-->
-
+@include('clients.shops.action')
 @endsection

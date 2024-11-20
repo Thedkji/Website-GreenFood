@@ -2,8 +2,11 @@
 
 @section('title', 'Fruitables - Liên hệ')
 
+@section('title_page', 'Liên hệ')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Liên hệ')
+
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
         <!-- Contact Start -->

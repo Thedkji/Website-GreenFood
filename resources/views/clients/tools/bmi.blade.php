@@ -2,8 +2,12 @@
 
 @section('title', 'Fruitables - Tính BMI')
 
+@section('title_page', 'Tính BMI')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Tính BMI')
+
 @section('content')
-    @include('clients.layouts.components.singer-page')
+
 
     <div class="container-fluid py-5">
         <!-- Contact Start -->

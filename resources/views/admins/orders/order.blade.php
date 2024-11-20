@@ -6,14 +6,40 @@
 <li class="breadcrumb-item active">Danh sách đơn hàng</li>
 @endsection
 @section('content')
+<div class="toast-container">
+    @if (session('success'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('success') }}
+        </div>
+        <div class="toast-progress bg-success"></div>
+    </div>
+    @endif
 
+    @if (session('error'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
+    </div>
+    @endif
+</div>
 <form action="{{ route('admin.orders.showOder') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
     <div class="col-sm">
         <div class="d-flex justify-content-sm-end">
             <div class="search-box">
                 <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                 <i class="ri-search-line search-icon"></i>
-            </div>      
+            </div>
 
         </div>
     </div>
@@ -58,7 +84,6 @@
                     <th scope="col">@sortablelink('total','Tổng hóa đơn')</th>
                     <th scope="col">@sortablelink('status','Trạng thái')</th>
                     <th scope="col">@sortablelink('created_at','Ngày tạo')</th>
-                    <th scope="col">@sortablelink('updated_at','Ngày cập nhật')</th>
                     <th scope="col">Thao tác</th>
                 </tr>
             </thead>
@@ -101,7 +126,6 @@
                         @endswitch
                     </td>
                     <td scope="col">{{ $order->created_at }}</td>
-                    <td scope="col">{{ $order->updated_at }}</td>
                     <td>
                         <div class=" gap-3 flex-wrap">
                             <a href="{{ route('admin.orders.showOrderDetail', $order->id) }}"><i class="fa-regular fa-eye"></i></a>
@@ -135,4 +159,27 @@
             document.getElementById("search-form").submit();
         }, 600);
     }
+    document.addEventListener("DOMContentLoaded", function() {
+        // Tìm tất cả các toast
+        const toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach((toast) => {
+            // Hiển thị toast bằng Bootstrap
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            }); // 3000ms = 3 giây
+            bsToast.show();
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        });
+    });
+    toastOptions = {
+        autohide: true,
+        delay: 5000 // Thời gian hiển thị (ms)
+    };
+    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
+    toast.show();
 </script>

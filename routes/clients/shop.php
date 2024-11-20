@@ -10,5 +10,4 @@ use Illuminate\Support\Facades\Route;
 Route::controller(ShopController::class)
     ->group(function () {
         Route::get('/shop', 'shop')->name('shop');
-
     });

@@ -58,11 +58,10 @@
                                                 {{ $category->name }}
                                                 @endforeach
                                             </div>
-
-                                            <input type="hidden" name="id_product" value="{{ $product->id }}">
-
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                                             <input type="hidden" name="name" value="{{ $product->name }}">
                                             <input type="hidden" name="status" value="{{ $product->status }}">
+                                            <input type="hidden" name="img" value="{{ $product->img }}">
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
                                                 <h4>
                                                     <a href="{{ route('client.product-detail', $product->id) }}">{{ $product->name }}</a>
@@ -93,14 +92,12 @@
                                                 @endforeach
                                                 <input type="hidden" name="sku" value="{{ $product->variantGroups[0]->sku }}">
                                                 <input type="hidden" name="price" value="{{ $product->variantGroups[0]->price_sale }}">
-                                                <input type="hidden" name="img" value="{{ $product->variantGroups[0]->img }}">
                                                 @else
                                                 <p>
                                                     Giá: {{ app('formatPrice')($product->price_sale) }} VND
                                                 </p>
                                                 <input type="hidden" name="sku" value="{{ $product->sku }}">
                                                 <input type="hidden" name="price" value="{{ $product->price_sale }}">
-                                                <input type="hidden" name="img" value="{{ $product->img }}">
                                                 @endif
                                             </div>
                                         </div>

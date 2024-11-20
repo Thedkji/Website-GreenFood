@@ -84,8 +84,8 @@
                     <td>
                         <span class="text-success">{{ $product->sku }}</span>
                     </td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->slug }}</td>
+                    <td class="truncate-text">{{ $product->name }}</td>
+                    <td class="truncate-text">{{ $product->slug }}</td>
 
                     <td>
                         <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""

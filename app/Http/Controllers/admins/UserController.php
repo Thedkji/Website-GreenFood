@@ -21,7 +21,7 @@ class UserController extends Controller
         // Truy vấn người dùng theo tên nếu có từ khóa tìm kiếm
         $users = User::query()
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', '%' . $search . '%');
+                return $query->where('name', 'like', '%' . $search . '%')->orWhere('id', $search);
             })
             ->paginate(10); // Sử dụng phân trang nếu có nhiều kết quả
         return view('admins.users.list-users', compact('users'));
@@ -86,6 +86,16 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
             $data = $request->validated(); // Sử dụng validated()
+
+            $ward = DB::table('wards')->where('code', $request->ward)->first();
+            $district = DB::table('districts')->where('code', $request->district)->first();
+            $province = DB::table('provinces')->where('code', $request->province)->first();
+
+            // Gán tên đầy đủ vào mảng $data
+            $data['ward'] = $ward ? $ward->full_name : null;
+            $data['district'] = $district ? $district->full_name : null;
+            $data['province'] = $province ? $province->full_name : null;
+
 
             if ($request->hasFile('avatar')) {
                 // Xóa ảnh cũ nếu có
