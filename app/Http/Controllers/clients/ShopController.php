@@ -14,61 +14,74 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
+
     public function shop(Request $request)
     {
         $categories = Category::with('children')->where('parent_id', null)->get();
 
-        if (request()->input('search-product')) {
-            $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                // Sắp xếp theo giá bán giảm dần và chỉ lấy variant có giá thấp nhất
-                $query->orderBy('price_sale', 'asc')->limit(1);
-            }])
-                ->where('name', 'like', '%' . request()->input('search-product') . '%') // Lọc theo tên sản phẩm
-                ->orderByDesc('id')
-                ->paginate(12);
-        } else {
+        // Bắt đầu với một truy vấn chung
+        $query = Product::with(['categories', 'galleries', 'variantGroups']);
 
-            $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                // Sắp xếp theo giá bán giảm dần và chỉ lấy variant có giá thấp nhất
-                $query->orderBy('price_sale', 'asc')->limit(1);
-            }])->orderByDesc('id')->paginate(12);
+        // Lọc theo tên sản phẩm nếu có
+        if ($search = $request->input('search-product')) {
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
+        // Lọc theo danh mục nếu có
+        if ($categoryId = $request->input('category_id')) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
 
-        if (request()->input("select_arrange")) {
+        // Lọc theo khoảng giá nếu có
+        if ($rangeInput = $request->input('rangeInput')) {
+            $query->where(function ($q) use ($rangeInput) {
+                $q->where(function ($subQuery) use ($rangeInput) {
+                    // Sản phẩm không có biến thể
+                    $subQuery->where('status', 0)
+                        ->where('price_sale', '<=', $rangeInput);
+                })->orWhere(function ($subQuery) use ($rangeInput) {
+                    // Sản phẩm có biến thể
+                    $subQuery->where('status', 1)
+                        ->whereHas('variantGroups', function ($variantQuery) use ($rangeInput) {
+                            $variantQuery->where('price_sale', '<=', $rangeInput);
+                        });
+                });
+            });
+        }
 
-            if (request()->input('select_arrange') == 'price_min') {
-                $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                    // Sắp xếp theo giá bán giảm dần và chỉ lấy variant có giá thấp nhất
-                    $query->orderBy('price_sale', 'asc')->limit(1);
-                }])->orderBy('price_sale', 'asc')->paginate(12);
-            } elseif (request()->input('select_arrange') == 'price_max') {
-                $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                    // Sắp xếp theo giá bán giảm dần và chỉ lấy variant có giá thấp nhất
-                    $query->orderBy('price_sale', 'asc')->limit(1);
-                }])->orderBy('price_sale', 'desc')->paginate(12);
+        // Sắp xếp theo giá nếu có yêu cầu
+        if ($arrange = $request->input('select_arrange')) {
+            if ($arrange == 'price_min') {
+                $query->orderByRaw('
+                CASE 
+                    WHEN status = 0 THEN price_sale 
+                    WHEN status = 1 THEN (SELECT MIN(price_sale) FROM variant_group WHERE product_id = products.id)
+                    ELSE price_sale
+                END ASC
+            ');
+            } elseif ($arrange == 'price_max') {
+                $query->orderByRaw('
+                CASE 
+                    WHEN status = 0 THEN price_sale 
+                    WHEN status = 1 THEN (SELECT MIN(price_sale) FROM variant_group WHERE product_id = products.id)
+                    ELSE price_sale
+                END DESC
+            ');
+            } else {
+                // Sắp xếp mặc định
+                $query->orderBy('id', 'desc');
             }
+        } else {
+            // Sắp xếp mặc định
+            $query->orderBy('id', 'desc');
         }
 
-        if (request('rangeInput')) {
-            $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                $query->orderBy('price_sale', 'asc'); // Sắp xếp theo giá bán giảm dần trong biến thể
-            }])
-                ->where('price_sale', '<=', request('rangeInput'))
-                ->paginate(12);
-        }
+        // Lấy danh sách sản phẩm
+        $products = $query->paginate(12);
 
-        if ($request->input('category_id')) {
-
-            $products = Product::with(['categories', 'galleries', 'variantGroups' => function ($query) {
-                $query->orderBy('price_sale', 'asc')->limit(1);
-            }])
-                ->whereHas('categories', function ($query) {
-                    $query->where('category_id', request('category_id'));
-                })
-                ->paginate(12);
-        }
-
+        // Sản phẩm xem nhiều
         $productHot = Product::orderByDesc('view')->limit(4)->get();
 
         return view("clients.shops.shop", compact("products", 'categories', 'productHot'));

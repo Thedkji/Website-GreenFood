@@ -96,26 +96,19 @@
                 <div class="card fruite-item w-100">
                     <!-- Image -->
                     <div class="fruite-img">
-                        @if ($product->img && $product->img !== 'https://via.placeholder.com/300x200')
-                            <a href="{{ route('client.product-detail', $product->id) }}">
-                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" class="card-img-top"
-                                    alt="{{ $product->name }}">
-                            </a>
-                        @else
-                            <a href="{{ route('client.product-detail', $product->id) }}">
-                                <img src="https://via.placeholder.com/300x200" class="card-img-top"
-                                    alt="{{ $product->name }}">
-                            </a>
-                        @endif
+                        <a href="{{ route('client.product-detail', $product->id) }}">
+                            <img src="{{ $product->img && $product->img !== 'https://via.placeholder.com/300x200' ? env('VIEW_IMG') . '/' . $product->img : 'https://via.placeholder.com/300x200' }}"
+                                class="card-img-top" alt="{{ $product->name }}">
+                        </a>
                     </div>
 
                     <!-- Product Info -->
-                    <div class="card-body  d-flex flex-column">
-                        <p class="card-text ">
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text">
                             {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
                         </p>
 
-                        <h5 class="card-title ">
+                        <h5 class="card-title">
                             <a href="{{ route('client.product-detail', $product->id) }}"
                                 class="text-decoration-none text-dark">
                                 {{ Str::limit(strip_tags($product->name), 150, '...') }}
@@ -125,39 +118,50 @@
                         <!-- Pricing -->
                         <div class="mt-auto">
                             @if ($product->status == 0)
-                                <span class="text-muted text-decoration-line-through"
-                                    style="font-size:14px;opacity: 75%;">
-                                    {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                </span>
-                                <p class="fw-bold text-primary" style="font-size: 20px;">
-                                    {{ app('formatPrice')($product->price_sale) }} VNĐ
-                                </p>
-                            @elseif ($product->status == 1)
-                                @php
-                                    $variant = $product->variantGroups
-                                        ->whereNotNull('price_sale')
-                                        ->sortBy('price_sale')
-                                        ->first();
-                                @endphp
-
-                                @if ($variant)
+                                <!-- Sản phẩm không có biến thể -->
+                                @if ($product->price_sale)
                                     <span class="text-muted text-decoration-line-through"
-                                        style="font-size:14px;opacity: 75%;">
-                                        {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                        style="font-size:14px; opacity:75%;">
+                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
                                     </span>
                                     <p class="fw-bold text-primary" style="font-size: 20px;">
-                                        {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                        {{ app('formatPrice')($product->price_sale) }} VNĐ
+                                    </p>
+                                @else
+                                    <p class="fw-bold text-primary" style="font-size: 20px;">
+                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
                                     </p>
                                 @endif
-                            @endif
+                            @elseif ($product->status == 1)
+                                <!-- Sản phẩm có biến thể -->
+                                @php
+                                    $variantGroup = $product->variantGroups->sortBy('price_sale')->first();
+                                @endphp
 
-                            <!-- Ratings -->
-                            {{-- <div class="product-rating">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <i
-                                        class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
-                                @endfor
-                            </div> --}}
+                                @if ($variantGroup)
+                                    @if ($variantGroup->price_sale)
+                                        <span class="text-muted text-decoration-line-through"
+                                            style="font-size:14px; opacity:75%;">
+                                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
+                                        </span>
+                                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                                            {{ app('formatPrice')($variantGroup->price_sale) }} VNĐ
+                                        </p>
+                                    @else
+                                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
+                                        </p>
+                                    @endif
+                                @else
+                                    <p class="fw-bold text-primary" style="font-size: 20px;">
+                                        Giá liên hệ
+                                    </p>
+                                @endif
+                            @else
+                                <p class="fw-bold text-primary" style="font-size: 20px;">
+                                    Giá liên hệ
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -165,48 +169,7 @@
         @endforeach
 
         <!-- Pagination -->
-        <div class="col-12">
-            <div class="pagination d-flex justify-content-center mt-5">
-                {{-- Nút quay về đầu --}}
-                <a href="{{ $products->url(1) }}" class="rounded {{ $products->onFirstPage() ? 'disabled' : '' }}">
-                    <i class="fas fa-angle-double-left"></i>
-                </a>
-
-                {{-- Nút phân trang trước --}}
-                <a href="{{ $products->previousPageUrl() }}"
-                    class="rounded {{ $products->onFirstPage() ? 'disabled' : '' }}">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-
-                {{-- Hiển thị các trang --}}
-                @php
-                    $currentPage = $products->currentPage();
-                    $lastPage = $products->lastPage();
-                    $pageLimit = 5;
-                    $startPage = max($currentPage - 2, 1); // Giới hạn số trang hiển thị phía trước
-                    $endPage = min($currentPage + 2, $lastPage); // Giới hạn số trang hiển thị phía sau
-                @endphp
-
-                {{-- Các trang --}}
-                @for ($i = $startPage; $i <= $endPage; $i++)
-                    <a href="{{ $products->url($i) }}" class="rounded {{ $i == $currentPage ? 'active' : '' }}">
-                        {{ $i }}
-                    </a>
-                @endfor
-
-                {{-- Nút phân trang tiếp theo --}}
-                <a href="{{ $products->nextPageUrl() }}"
-                    class="rounded {{ $products->hasMorePages() ? '' : 'disabled' }}">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-
-                {{-- Nút quay về cuối --}}
-                <a href="{{ $products->url($lastPage) }}"
-                    class="rounded {{ $products->onLastPage() ? 'disabled' : '' }}">
-                    <i class="fas fa-angle-double-right"></i>
-                </a>
-            </div>
-        </div>
+        @include('clients.shops.paginate')
 
     </div>
 </div>
