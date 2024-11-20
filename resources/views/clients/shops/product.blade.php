@@ -97,11 +97,15 @@
                     <!-- Image -->
                     <div class="fruite-img">
                         @if ($product->img && $product->img !== 'https://via.placeholder.com/300x200')
-                            <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" class="card-img-top"
-                                alt="{{ $product->name }}">
+                            <a href="{{ route('client.product-detail', $product->id) }}">
+                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" class="card-img-top"
+                                    alt="{{ $product->name }}">
+                            </a>
                         @else
-                            <img src="https://via.placeholder.com/300x200" class="card-img-top"
-                                alt="{{ $product->name }}">
+                            <a href="{{ route('client.product-detail', $product->id) }}">
+                                <img src="https://via.placeholder.com/300x200" class="card-img-top"
+                                    alt="{{ $product->name }}">
+                            </a>
                         @endif
                     </div>
 
