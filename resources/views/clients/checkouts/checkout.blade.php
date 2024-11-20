@@ -182,7 +182,7 @@
                                         <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
                                     </td>
                                     <td>
-                                        <strong class="text-success">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
+                                        <strong class="text-primary">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -190,7 +190,7 @@
                             <tfoot>
                                 <tr class="table-light">
                                     <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
-                                    <td><strong class="text-success">{{ number_format($totalPrice) }} VNĐ</strong></td>
+                                    <td><strong class="text-primary">{{ number_format($totalPrice) }} VNĐ</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
