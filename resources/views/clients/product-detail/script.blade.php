@@ -70,11 +70,7 @@
             const formatCurrency = (amount) => {
                 return new Intl.NumberFormat('vi-VN').format(amount);
             };
-            let status = {
-                {
-                    $product - > status
-                }
-            };
+            let status = {{ $product->status }};
 
             if (status == 1) {
                 $('#price_variantGroup').html(`
