@@ -3,7 +3,7 @@
         <div class="tab-class text-center">
             <div class="row g-4">
                 <div class="col-lg-4 text-start">
-                    <h1>Our Organic Products</h1>
+                    <h1>Sản Phẩm Nổi Bật</h1>
                 </div>
                 <div class="col-lg-8 text-end">
                     <ul class="nav nav-pills d-inline-flex text-center mb-5">
@@ -36,9 +36,22 @@
                                         @csrf
                                         @method('POST')
                                         <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="{{ env('VIEW_CLIENT') }}/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
+                                            @if ($product->img == 'https://via.placeholder.com/300x200' || is_null($product->img))
+                                            <div style="width:100%; height:150px; overflow:hidden;">
+                                                <a href="{{ route('client.product-detail', $product->id) }}">
+                                                    <img src="https://via.placeholder.com/300x200" alt=""
+                                                        style="width:100%; height:auto; object-fit: cover;">
+                                                </a>
                                             </div>
+                                            @else
+                                            <div style="width:100%; height:150px; overflow:hidden;">
+                                                <a href="{{ route('client.product-detail', $product->id) }}">
+                                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                                                        style="width:100%; height:auto; object-fit: cover;">
+                                                </a>
+                                            </div>
+                                            @endif
+
 
                                             <div class="text-white bg-success px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
                                                 @foreach($product->categories as $category)
@@ -51,13 +64,15 @@
                                             <input type="hidden" name="name" value="{{ $product->name }}">
                                             <input type="hidden" name="status" value="{{ $product->status }}">
                                             <div class="p-4 border border-success border-top-0 rounded-bottom">
-                                                <h4>{{ $product->name }}</h4>
+                                                <h4>
+                                                    <a href="{{ route('client.product-detail', $product->id) }}">{{ $product->name }}</a>
+                                                </h4>
                                                 <p>{{ $product->description_short }}</p>
 
                                                 @if (isset($product->variantGroups) && $product->variantGroups->isNotEmpty())
                                                 <div class="variant-group mb-3">
                                                     <p>
-                                                        Giá: <span id="current-price">{{ app('formatPrice')($product->variantGroups[0]->price_sale) }}</span>
+                                                        Giá: <span id="current-price">{{ app('formatPrice')($product->variantGroups[0]->price_sale) }} VND</span>
                                                     </p>
                                                 </div>
 
@@ -81,18 +96,12 @@
                                                 <input type="hidden" name="img" value="{{ $product->variantGroups[0]->img }}">
                                                 @else
                                                 <p>
-                                                    Giá: {{ app('formatPrice')($product->price_sale) }}
+                                                    Giá: {{ app('formatPrice')($product->price_sale) }} VND
                                                 </p>
                                                 <input type="hidden" name="sku" value="{{ $product->sku }}">
                                                 <input type="hidden" name="price" value="{{ $product->price_sale }}">
                                                 <input type="hidden" name="img" value="{{ $product->img }}">
                                                 @endif
-
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -108,6 +117,41 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center" style="display: flex; list-style: none; flex-direction: row;">
-    {{ $products->links('pagination::bootstrap-4') }}
+<div class="d-flex justify-content-center">
+    <ul class="pagination m-0">
+        {{ $products->links('pagination::bootstrap-4') }}
+    </ul>
 </div>
+
+
+<style>
+    .pagination {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    .pagination .page-item {
+        margin-right: 5px;
+    }
+
+
+    .pagination .page-item.active .page-link {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+
+    .pagination .page-item:hover .page-link {
+        background-color: #f8f9fa;
+        border-color: #ccc;
+    }
+
+    .pagination .page-link {
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        color: #007bff;
+    }
+</style>

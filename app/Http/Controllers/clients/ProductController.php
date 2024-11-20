@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function home(Request $request)
     {
         $products = Product::with(['categories', 'variantGroups.variants.parent'])->paginate(8);
-        $categories = Category::all();
+        $categories = Category::limit(4)->get(); 
         return view("clients.homes.home", compact('products', 'categories'));
     }
 }
