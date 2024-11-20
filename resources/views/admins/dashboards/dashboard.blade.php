@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard | Velzon - Admin - Bảng điều khiển')
 
-@section('start-page-title' , 'Bảng điều khiển')
+@section('start-page-title', 'Bảng điều khiển')
 
 @section('content')
 
@@ -16,7 +16,8 @@
                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                             <div class="flex-grow-1">
                                 <h4 class="fs-16 mb-1">Chào mừng {{ auth()->user()->name }}!</h4>
-                                <p class="text-muted mb-0">Sau đây là những gì đang diễn ra tại cửa hàng của bạn ngày hôm nay.</p>
+                                <p class="text-muted mb-0">Sau đây là những gì đang diễn ra tại cửa hàng của bạn ngày hôm
+                                    nay.</p>
                             </div>
                             <div class="mt-3 mt-lg-0">
                                 <form action="javascript:void(0);">
@@ -76,7 +77,8 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            <span class="counter-value" data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">
+                                            <span class="counter-value"
+                                                data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">
                                                 {{ number_format($totalEarnings, 0, ',', '.') }}
                                             </span> VND
                                         </h4>
@@ -112,9 +114,10 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="36894">{{ $orderCoumts }}</span>
+                                                data-target="{{ $orderCounts }}">{{ $orderCounts }}</span>
                                         </h4>
-                                        <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a>
+                                        <a href="{{ route('admin.orders.showOder') }}" class="text-decoration-underline">Xem
+                                            tất cả đơn hàng</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -147,7 +150,8 @@
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
                                                 data-target="183.35">{{ $userCounts }}</span>
                                         </h4>
-                                        <a href="" class="text-decoration-underline">Xem chi tiết </a>
+                                        <a href="{{ route('admin.users.index') }}" class="text-decoration-underline">Xem chi
+                                            tiết </a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -194,10 +198,10 @@
                 </div> <!-- end row-->
 
                 <div class="row">
-                    <div class="col-xl-8">
+                    <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header border-0 align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Revenue</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Doanh thu</h4>
                                 <div>
                                     <button type="button" class="btn btn-soft-secondary btn-sm">
                                         ALL
@@ -218,17 +222,17 @@
                                 <div class="row g-0 text-center">
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1"><span class="counter-value" data-target="7585">0</span>
+                                            <h5 class="mb-1"><span class="counter-value" data-target="7585">{{ $orderCountCompleted }}</span>
                                             </h5>
-                                            <p class="text-muted mb-0">Orders</p>
+                                            <p class="text-muted mb-0">Đơn hàng</p>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1">$<span class="counter-value" data-target="22.89">0</span>k
+                                            <h5 class="mb-1"><span class="counter-value" data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">{{ number_format($totalEarnings, 0, ',', '.') }}</span>VNĐ
                                             </h5>
-                                            <p class="text-muted mb-0">Earnings</p>
+                                            <p class="text-muted mb-0">Doanh thu</p>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -236,7 +240,7 @@
                                         <div class="p-3 border border-dashed border-start-0">
                                             <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
                                             </h5>
-                                            <p class="text-muted mb-0">Refunds</p>
+                                            <p class="text-muted mb-0">Hoàn tiền</p>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -261,7 +265,7 @@
                         </div><!-- end card -->
                     </div><!-- end col -->
 
-                    <div class="col-xl-4">
+                    {{-- <div class="col-xl-4">
                         <!-- card -->
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
@@ -307,7 +311,7 @@
                             <!-- end card body -->
                         </div>
                         <!-- end card -->
-                    </div>
+                    </div> --}}
                     <!-- end col -->
                 </div>
 
@@ -315,22 +319,23 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Best Selling Products</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Sản phẩm bán chạy nhất
+                                </h4>
                                 <div class="flex-shrink-0">
                                     <div class="dropdown card-header-dropdown">
                                         <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                            <span class="fw-semibold text-uppercase fs-12">Sort by:
-                                            </span><span class="text-muted">Today<i
+                                            <span class="fw-semibold text-uppercase fs-12">Xắp sếp theo:
+                                            </span><span class="text-muted">Hôm nay<i
                                                     class="mdi mdi-chevron-down ms-1"></i></span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#">Today</a>
-                                            <a class="dropdown-item" href="#">Yesterday</a>
-                                            <a class="dropdown-item" href="#">Last 7 Days</a>
-                                            <a class="dropdown-item" href="#">Last 30 Days</a>
-                                            <a class="dropdown-item" href="#">This Month</a>
-                                            <a class="dropdown-item" href="#">Last Month</a>
+                                            <a class="dropdown-item" href="#">Hôm nay</a>
+                                            <a class="dropdown-item" href="#">Hôm qua</a>
+                                            <a class="dropdown-item" href="#">7 ngày qua</a>
+                                            <a class="dropdown-item" href="#">30 ngày qua</a>
+                                            <a class="dropdown-item" href="#">Tháng này </a>
+                                            <a class="dropdown-item" href="#">tháng trước</a>
                                         </div>
                                     </div>
                                 </div>
@@ -340,41 +345,48 @@
                                 <div class="table-responsive table-card">
                                     <table class="table table-hover table-centered align-middle table-nowrap mb-0">
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <img src="{{ env('VIEW_ADMIN') }}/images/products/img-1.png"
-                                                                alt="" class="img-fluid d-block" />
+                                            @foreach ($bestSellerProducts as $product)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                                <img src="{{ Storage::url($product['img']) }}"
+                                                                    alt="{{ $product['name'] }}"
+                                                                    class="img-fluid d-block" />
+                                                            </div>
+                                                            <div>
+                                                                <h5 class="fs-14 my-1">
+                                                                    <a href="{{ route('product.details', $product['id']) }}"
+                                                                        class="text-reset">{{ $product['name'] }}</a>
+                                                                </h5>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a
-                                                                    href="apps-ecommerce-product-details.html"
-                                                                    class="text-reset">Branded
-                                                                    T-Shirts</a></h5>
-                                                            <span class="text-muted">24 Apr
-                                                                2021</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$29.00</h5>
-                                                    <span class="text-muted">Price</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">62</h5>
-                                                    <span class="text-muted">Orders</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">510</h5>
-                                                    <span class="text-muted">Stock</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$1,798</h5>
-                                                    <span class="text-muted">Amount</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                                    </td>
+                                                    <td>
+                                                        <h5 class="fs-14 my-1 fw-normal">
+                                                            {{ number_format($product['price']) }}đ</h5>
+                                                        <span class="text-muted">Price</span>
+                                                    </td>
+                                                    <td>
+                                                        <h5 class="fs-14 my-1 fw-normal">{{ $product['total_sold'] }}</h5>
+                                                        <span class="text-muted">Sold</span>
+                                                    </td>
+                                                    <td>
+                                                        <h5 class="fs-14 my-1 fw-normal">{{ $product['stock_left'] }}</h5>
+                                                        <span class="text-muted">Stock Left</span>
+                                                    </td>
+                                                    <td>
+                                                        <h5 class="fs-14 my-1 fw-normal">
+                                                            {{ number_format($product['total_revenue']) }}đ</h5>
+                                                        <span class="text-muted">Revenue</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+
+
+
+                                            {{-- <tr>
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm bg-light rounded p-1 me-2">
@@ -513,7 +525,7 @@
                                                     <h5 class="fs-14 my-1 fw-normal">$3996</h5>
                                                     <span class="text-muted">Amount</span>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>

@@ -120,7 +120,7 @@
 
         <div class="mt-3">
             <label for="district">Quận/Huyện</label>
-            <select name="district" id="district" class="form-control" value="{{ old('address') }}">
+            <select name="district" id="district" class="form-control" value="{{ old('district') }}">
                 <option value=""> Chọn Quận/Huyện </option>
             </select>
         </div>

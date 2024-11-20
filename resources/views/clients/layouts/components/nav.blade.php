@@ -73,7 +73,7 @@
                         </div>
                         @else
                             <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
-                            <a href="{{ route('client.login') }}" class="nav-link">
+                            <a href="" class="nav-link">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
                             <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
