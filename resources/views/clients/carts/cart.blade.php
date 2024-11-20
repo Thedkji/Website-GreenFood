@@ -195,16 +195,13 @@
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <!-- <img src="{{ env('VIEW_IMG') . $item->attributes->img }}"
-                                    class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;"
-                                    alt=""> -->
                                 @php
                                 $imageSrc = env('VIEW_IMG') . '/';
                                 if ($item->attributes->status === 0) {
                                 $imageSrc .= $item->attributes->img;
                                 } else {
                                 $variantImg = null;
-                                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                                foreach ($variantGroups[$item->attributes->sku] ?? [] as $variant) {
                                 $variantImg = $variant->img ?? $item->attributes->img;
                                 break;
                                 }

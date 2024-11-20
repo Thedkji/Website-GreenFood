@@ -28,7 +28,7 @@
                 $imageSrc .= $item->attributes->img;
                 } else {
                 $variantImg = null;
-                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                foreach ($variantGroups[$item->attributes->sku] ?? [] as $variant) {
                 $variantImg = $variant->img ?? $item->attributes->img;
                 break;
                 }
