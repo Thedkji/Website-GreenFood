@@ -1,0 +1,143 @@
+/* Container styling */
+
+
+/* Menu tài khoản */
+.myaccount-tab-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  background: #f7f8fa;
+}
+
+/* Liên kết trong menu */
+.myaccount-tab-menu a {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Hiệu ứng hover và active */
+.myaccount-tab-menu a:hover,
+.myaccount-tab-menu a.active {
+  color: #fff;
+  background-color: #81c408;
+  border-left: 4px solid #81c408;
+}
+
+.myaccount-tab-menu a.active {
+  font-weight: bold;
+}
+
+/* Tab nội dung */
+.tab-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.tab-content input[type="text"],
+.tab-content input[type="email"],
+.tab-content input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.tab-content input:focus {
+  border-color: #81c408;
+  outline: none;
+  box-shadow: 0 0 5px rgba(129, 196, 8, 0.5);
+}
+
+.tab-content button,
+.tab-content .btn {
+  background: #81c408;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.tab-content button:hover,
+.tab-content .btn:hover {
+  background: #6ca807;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Bảng */
+.myaccount-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.myaccount-table th,
+.myaccount-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.myaccount-table thead {
+  background: #81c408;
+  color: #fff;
+}
+
+.myaccount-table tbody tr:hover {
+  background: #f1f1f1;
+  transition: all 0.3s ease;
+}
+
+/* Nút chỉnh sửa địa chỉ */
+.edit-address-btn {
+  background: #81c408;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.edit-address-btn:hover {
+  background: #6ca807;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Thiết kế responsive */
+@media (max-width: 768px) {
+  .myaccount-tab-menu {
+      text-align: center;
+  }
+
+  .myaccount-tab-menu a {
+      display: inline-block;
+      margin: 10px;
+  }
+
+  .tab-content {
+      padding: 20px;
+  }
+}
