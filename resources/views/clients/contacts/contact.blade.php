@@ -5,6 +5,19 @@
 @section('content')
     @include('clients.layouts.components.singer-page')
 
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
     <div class="container-fluid py-5">
         <!-- Contact Start -->
         <div class="container-fluid contact py-5">
@@ -30,11 +43,12 @@
                             </div>
                         </div>
                         <div class="col-lg-7">
-                            <form action="" class="">
-                                <input type="text" class="w-100 form-control border-0 py-3 mb-4" placeholder="Nhập tên">
-                                <input type="email" class="w-100 form-control border-0 py-3 mb-4"
+                            <form action="{{route('client.contact.sendContact')}}" class="" method="POST">
+                                @csrf
+                                <input type="text" class="w-100 form-control border-0 py-3 mb-4" name="name" placeholder="Nhập tên">
+                                <input type="email" class="w-100 form-control border-0 py-3 mb-4" name="email"
                                     placeholder="Nhập Email">
-                                <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
+                                <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" name="message" placeholder="Nhập nội dung"></textarea>
                                 <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
                                     type="submit">Submit</button>
                             </form>
@@ -69,4 +83,6 @@
         <!-- Contact End -->
 
     </div>
+
+
 @endsection
