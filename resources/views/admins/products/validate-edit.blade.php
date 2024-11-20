@@ -1,5 +1,7 @@
 @php
-    $products = App\Models\Product::withTrashed()->pluck('name');
+    $products = App\Models\Product::withTrashed()
+        ->where('id', '<>', $product->id)
+        ->pluck('name');
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Định dạng cho phép
     $maxFileSize = 2 * 1024 * 1024; // Kích thước tối đa 2MB
 @endphp
@@ -38,6 +40,7 @@
         }
 
         if ($('#product_type').val() == 'no_variant') {
+
             // Kiểm tra giá gốc và giá bán
             if (parseFloat($('#price_regular').val()) < parseFloat($('#price_sale').val())) {
                 errTrue('#err_price_regular', '#price_regular', 'Giá gốc không được nhỏ hơn giá bán');
@@ -70,9 +73,11 @@
             } else {
                 errFalse('#err_quantity');
             }
+
         } else {
             // Validate biến thể
             if ($('#variant').val() == '') {
+                console.log($('#err_variant'));
                 errTrue('#err_variant', '#variant', 'Chưa chọn biến thể');
             } else {
                 errFalse('#err_variant');
@@ -83,7 +88,6 @@
             } else {
                 errFalse('#err_childVariant');
             }
-
 
             // Validate các giá trị biến thể con
             $('#childVariant').find('option:selected').each(function() {

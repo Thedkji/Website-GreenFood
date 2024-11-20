@@ -3,15 +3,15 @@
         <div class="d-flex justify-content-between">
             <div class="top-info ps-2">
                 <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
-                        class="text-white">123 Street, New York</a></small>
+                        class="text-white">123, Mỹ Đình, Hà Nội</a></small>
                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
-                        class="text-white">Email@Example.com</a></small>
+                        class="text-white">greenfood8386@gmail.com</a></small>
             </div>
-            <div class="top-link pe-2">
+            {{-- <div class="top-link pe-2">
                 <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
                 <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
                 <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="container px-0">
@@ -27,9 +27,9 @@
                 <div class="navbar-nav mx-auto">
                     <a href="{{ route('client.home') }}" class="nav-item nav-link active">Trang chủ</a>
                     <a href="{{ route('client.shop') }}" class="nav-item nav-link">Sản phẩm</a>
-                    <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
+                    {{-- <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a> --}}
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Danh mục</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
                             <a href="{{ route('client.cart') }}" class="dropdown-item">Cart</a>
                             <a href="{{ route('client.checkout') }}" class="dropdown-item">Checkout</a>
@@ -61,37 +61,35 @@
                             {{ $cartQuantity }}
                         </span>
                     </a>
-
                     <div class="nav-item  dropdown">
                         @guest
-
-                            <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
-                            <a href="{{ route('client.login') }}" class="nav-link">
-                                <i class="fas fa-user fa-2x"></i>
-                            </a>
-                            <div class="dropdown-menu bg-secondary rounded-0">
-                                <a href="{{ route('client.login') }}" class="dropdown-item">Đăng Nhập</a>
-                                <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
-                            </div>
+                        <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
+                        <a href="{{ route('client.login') }}" class="nav-link">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                        <div class="dropdown-menu bg-secondary rounded-0">
+                            <a href="{{ route('client.login') }}" class="dropdown-item">Đăng Nhập</a>
+                            <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
+                        </div>
                         @else
                             <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
-                            <a href="" class="nav-link">
+                            <a href="{{ route('client.login') }}" class="nav-link">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
                             <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
                                 <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
 
-                                <!-- Kiểm tra nếu người dùng là admin -->
-                                @if (Auth::user()->role === 0)
-                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item nav-item nav-link">
-                                        Quản trị
-                                    </a>
-                                @endif
+                            <!-- Kiểm tra nếu người dùng là admin -->
+                            @if (Auth::user()->role === 0)
+                            <a href="{{ route('admin.dashboard') }}" class="dropdown-item nav-item nav-link">
+                                Quản trị
+                            </a>
+                            @endif
 
-                                <a href="{{ route('client.logout') }}" class="dropdown-item nav-item nav-link">
-                                    Đăng Xuất
-                                </a>
-                            </div>
+                            <a href="{{ route('client.logout') }}" class="dropdown-item nav-item nav-link">
+                                Đăng Xuất
+                            </a>
+                        </div>
                         @endguest
 
                     </div>

@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'Comments | Danh sách bình luận')
+@section('title', 'Danh sách Bình Luận')
 
-@section('start-page-title', 'Danh sách bình luận')
+@section('start-page-title', 'Danh sách Bình Luận')
 
 @section('link')
     <li class="breadcrumb-item"><a href="{{ route('admin.comments.comment') }}">Danh sách bình luận</a></li>
@@ -21,17 +21,19 @@
         </div>
     @endif
 
-    <div class="row g-4 mb-3">
-        <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
+    <form action="{{ route('admin.comments.comment') }}" method="GET">
+        <div class="row g-4 mb-3">
+            <div class="col-sm">
+                <div class="d-flex justify-content-sm-end">
+                    <div class="search-box ms-2">
+                        <input type="text" class="form-control search" name="search" placeholder="Tìm kiếm sản phẩm..." value="{{ old('search', $searchTerm) }}">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
             </div>
         </div>
-    </div>
+    </form>
 
     <div class="table-responsive">
         <table class="table table-striped table-hover align-middle mb-0">
@@ -44,7 +46,6 @@
                     <th scope="col">Ảnh</th>
                     <th scope="col">Sao</th>
                     <th scope="col">Thời gian</th>
-                    <th scope="col">Trả lời</th>
                     <th scope="col">Thao tác</th>
                 </tr>
             </thead>
@@ -70,13 +71,10 @@
                             </div>
                         </td>
                         <td>{{ $comment->created_at }}</td>
-                        <td>
+                
+                        <td>          
                             <div class="hstack gap-2">
-                                <a href="{{ route('admin.comments.create', $comment->id) }}" class="btn btn-primary btn-sm">Trả lời</a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="hstack gap-2">
+                                <a href="{{ route('admin.comments.detail', $comment->id) }}"><i class="fa-regular fa-eye"></i></a>
                                 <a href="#" class="link-danger fs-15" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $comment->id }}').submit();">
                                     <i class="ri-delete-bin-line"></i>
                                 </a>
@@ -93,17 +91,6 @@
     </div>
 
     <div class="mt-3">
-        {{ $comments->links() }} <!-- Pagination links -->
+        {{ $comments->links() }} 
     </div>
-@endsection
-
-@section('scripts')
-<style>
-    .stars {
-        font-size: 1.5rem; /* Adjust size of stars */
-    }
-    .star {
-        cursor: default; /* Prevent cursor change */
-    }
-</style>
 @endsection
