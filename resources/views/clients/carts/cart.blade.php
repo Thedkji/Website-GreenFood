@@ -83,20 +83,29 @@
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_IMG') }}/{{ $item->product->img }}"
-                                    class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;"
-                                    alt="">
+                                @php
+                                $imageSrc = env('VIEW_IMG') . '/';
+                                if ($item->product->status === 0) {
+                                $imageSrc .= $item->product->img;
+                                } else {
+                                $variantImg = null;
+                                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                                $variantImg = $variant->img ?? $item->product->img;
+                                break;
+                                }
+                                $imageSrc .= $variantImg ?? $item->product->img;
+                                }
+                                @endphp
+                                <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
                             <p class="mb-0 mt-4">
-                                {{ $item->product->name }} |
+                                {{ $item->product->name }}
                                 @if (!empty($variantGroups[$item->sku]))
                                 @foreach ($variantGroups[$item->sku] as $variant)
-                                {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                                 @endforeach
-                                @else
-                                Không có biến thể
                                 @endif
                             </p>
                         </td>
@@ -186,20 +195,32 @@
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_IMG') . $item->attributes->img }}"
+                                <!-- <img src="{{ env('VIEW_IMG') . $item->attributes->img }}"
                                     class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;"
-                                    alt="">
+                                    alt=""> -->
+                                @php
+                                $imageSrc = env('VIEW_IMG') . '/';
+                                if ($item->attributes->status === 0) {
+                                $imageSrc .= $item->attributes->img;
+                                } else {
+                                $variantImg = null;
+                                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                                $variantImg = $variant->img ?? $item->attributes->img;
+                                break;
+                                }
+                                $imageSrc .= $variantImg ?? $item->attributes->img;
+                                }
+                                @endphp
+                                <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
                             <p class="mb-0 mt-4">
-                                {{ $item->name }} |
+                                {{ $item->name }}
                                 @if (!empty($variantGroups[$item->attributes->sku]))
                                 @foreach ($variantGroups[$item->attributes->sku] as $variant)
-                                {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                                 @endforeach
-                                @else
-                                Không có biến thể
                                 @endif
                             </p>
                         </td>

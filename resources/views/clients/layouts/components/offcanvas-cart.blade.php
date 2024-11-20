@@ -10,27 +10,48 @@
         @foreach ($cartItems as $item)
         <div class="cart-item border-bottom py-3">
             <div class="d-flex align-items-center">
-                <img src="{{ env('VIEW_IMG') }}/{{ isset($userId) ? $item->product->img : $item->attributes->img }}"
-                    class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                @php
+                $imageSrc = env('VIEW_IMG') . '/';
+                if (isset($userId)) {
+                if ($item->product->status === 0) {
+                $imageSrc .= $item->product->img;
+                } else {
+                $variantImg = null;
+                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                $variantImg = $variant->img ?? $item->product->img;
+                break; // Lấy ảnh từ biến thể đầu tiên
+                }
+                $imageSrc .= $variantImg ?? $item->product->img;
+                }
+                } else {
+                if ($item->attributes->status === 0) {
+                $imageSrc .= $item->attributes->img;
+                } else {
+                $variantImg = null;
+                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                $variantImg = $variant->img ?? $item->attributes->img;
+                break;
+                }
+                $imageSrc .= $variantImg ?? $item->attributes->img;
+                }
+                }
+                @endphp
+                <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
                 <div class="item-details ms-3 w-100">
                     <h6 class="mb-1">
                         @if (isset($userId))
-                        {{ $item->product->name }} |
+                        {{ $item->product->name }}
                         @if (!empty($variantGroups[$item->sku]))
                         @foreach ($variantGroups[$item->sku] as $variant)
-                        {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                         @endforeach
-                        @else
-                        Không có biến thể
                         @endif
                         @else
-                        {{ $item->name }} |
+                        {{ $item->name }}
                         @if (!empty($variantGroups[$item->attributes->sku]))
                         @foreach ($variantGroups[$item->attributes->sku] as $variant)
-                        {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                         @endforeach
-                        @else
-                        Không có biến thể
                         @endif
                         @endif
                     </h6>
