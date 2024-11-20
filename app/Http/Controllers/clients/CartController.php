@@ -118,11 +118,12 @@ class CartController extends Controller
 
     public function removeCart($id)
     {
-        CartSession::remove($id);
-
+        dd($id);
         if (auth()->check()) {
             $userId = auth()->id();
             Cart::where('user_id', $userId)->where('id', $id)->delete();
+        } else {
+            CartSession::remove($id);
         }
 
         return redirect()->back()->with('success', 'Xóa sản phẩm thành công');

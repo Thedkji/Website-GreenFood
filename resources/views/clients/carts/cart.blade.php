@@ -13,7 +13,7 @@
         @if (session('success'))
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
             <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Thông báo</strong>
+                <p class="me-auto">Thông báo</p>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
                     aria-label="Close"></button>
             </div>
@@ -27,7 +27,7 @@
         @if (session('error'))
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
             <div class="toast-header bg-danger text-white">
-                <strong class="me-auto">Lỗi</strong>
+                <p class="me-auto">Lỗi</p>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
                     aria-label="Close"></button>
             </div>
@@ -110,7 +110,7 @@
                             </p>
                         </td>
                         <td>
-                            <strong class="mb-0 mt-4">
+                            <p class="mb-0 mt-4">
                                 @if ($item->product->status === 0)
                                 {{ $item->product->sku }}
                                 @else
@@ -118,10 +118,10 @@
                                 {{ $variant->sku }}
                                 @endforeach
                                 @endif
-                            </strong>
+                            </p>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4 text-danger">
+                            <p class="mb-0 mt-4 text-primary">
                                 @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale) }} VNĐ
                                 @else
@@ -153,7 +153,7 @@
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4 text-success">
+                            <p class="mb-0 mt-4 text-primary">
                                 @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale * $item->quantity) }} VNĐ
                                 @else
@@ -174,11 +174,11 @@
 
                         </td>
                         <td>
-                            <p formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post"
-                                class="btn btn-md rounded-circle bg-light border mt-4"
+                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}"
+                                formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4"
                                 onclick="return confirm('Bạn có chắc chắn muốn xóa')">
                                 <i class="fa fa-times text-danger"></i>
-                            </p>
+                            </button>
                         </td>
                     </tr>
                     @else
@@ -223,11 +223,11 @@
                         </td>
 
                         <td>
-                            <strong class="mb-0 mt-4">{{ $item->attributes->sku }}</strong>
+                            <p class="mb-0 mt-4">{{ $item->attributes->sku }}</p>
                         </td>
 
                         <td>
-                            <p class="mb-0 mt-4 text-danger">{{ number_format($item->price) }} VNĐ</p>
+                            <p class="mb-0 mt-4 text-primary">{{ number_format($item->price) }} VNĐ</p>
                         </td>
 
                         <td>
@@ -284,7 +284,7 @@
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
-                            <p class="mb-0 pe-4 text-success">{{ number_format($cartTotal) }} VNĐ</p>
+                            <p class="mb-0 pe-4 text-primary">{{ number_format($cartTotal) }} VNĐ</p>
                         </div>
                         <button
                             class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"

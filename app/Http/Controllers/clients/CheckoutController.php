@@ -32,7 +32,6 @@ class CheckoutController extends Controller
         $decodedItems = array_map(function ($itemJson) {
             return json_decode($itemJson, true);
         }, $datas);
-
         $couponsAll = Coupon::with(['categories.children', 'products'])->get();
 
         // Lấy các product_id từ $decodedItems
