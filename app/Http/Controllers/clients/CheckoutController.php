@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Coupon;
+use App\Services\GHNService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\admins\OrderRequest;
 use App\Mail\MailCheckOut;
@@ -23,6 +25,13 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
+    protected $ghnService;
+
+    public function __construct(GHNService $ghnService)
+    {
+        $this->ghnService = $ghnService;
+    }
+
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
@@ -115,11 +124,9 @@ class CheckoutController extends Controller
             // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
             return $isProductMatch || $isCategoryMatch;
         });
-        $provinces = DB::table('provinces')->get();
-        $districts = DB::table('districts')->get();
-        $wards = DB::table('wards')->get();
         $userInfo = auth()->user() ?? null;
-        return view("clients.checkouts.checkout", compact('provinces', 'districts', 'wards', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+        $provinces = app(GHNService::class)->getProvinces();
+        return view("clients.checkouts.checkout", compact('provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
 
     public function applyCoupon(Request $request)

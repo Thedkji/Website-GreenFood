@@ -65,36 +65,34 @@
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
-                            <label for="province">Thành phố/Tỉnh</label>
-                            <select name="province" id="province123" class="form-select" value="{{ old('province') }}">
-                                <option value=""> Chọn Thành phố/Tỉnh </option>
-                                @foreach ($provinces as $province)
-                                <option value="{{ $province->code }}">{{ $province->name }}</option>
+                            <label for="province" class="form-label my-3">Thành phố</label>
+                            <select name="province" id="province" class="form-select" value="{{old('province')}}">
+                                <option value="">Chọn Thành phố</option>
+                                @foreach($provinces as $province)
+                                <option value="{{ $province['ProvinceID'] }}">{{ $province['ProvinceName'] }}</option>
                                 @endforeach
                             </select>
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
-                            <label for="district">Quận/Huyện</label>
-                            <select name="district" id="district123" class="form-select" value="{{ old('address') }}">
-                                <option value=""> Chọn Quận/Huyện </option>
+                            <label for="district" class="form-label my-3">Quận/Huyện</label>
+                            <select name="district" id="district-dropdown" class="form-select" value="{{old('district')}}">
+                                <option value="">Chọn Quận/Huyện</option>
                             </select>
                             <x-feedback name="district" />
                         </div>
                         <div class="form-item">
-                            <label for="ward">Phường/Xã</label>
-                            <select name="ward" id="ward123" class="form-select" value="{{ old('ward') }}">
-                                <option value=""> Chọn Phường/Xã </option>
+                            <label for="ward" class="form-label my-3">Phường/Xã</label>
+                            <select name="ward" id="ward-dropdown" class="form-select" value="{{old('ward')}}">
+                                <option value="">Chọn Phường/Xã</option>
                             </select>
                             <x-feedback name="ward" />
-
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Địa chỉ</label>
-                            <input type="text" class="form-control" id="address123" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
+                            <input type="text" class="form-control" id="address" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                             <x-feedback name="address" />
                         </div>
-
                         <div class="form-item">
                             <label class="form-label my-3">Phương thức thanh toán</label>
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
@@ -114,7 +112,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4 mt-5">
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
@@ -188,9 +185,13 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
+                                <tr class="feeShip">
+                                    <td colspan="2" class="text-end"><strong>Phí ship:</strong></td>
+                                    <td><strong class="text-primary" id="feeShip">0 VNĐ</strong></td>
+                                </tr>
                                 <tr class="table-light">
                                     <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
-                                    <td><strong class="text-primary">{{ number_format($totalPrice) }} VNĐ</strong></td>
+                                    <td><strong class="text-primary" id="totalPrice">{{ number_format($totalPrice) }} VNĐ</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -202,7 +203,7 @@
                     @php
                     $coupon = session('coupon');
                     @endphp
-                    <div class="border rounded p-3 bg-light">
+                    <div class="border rounded p-3 bg-light" id="coupon-detail">
                         {{-- Loại mã giảm giá --}}
                         <h5 class="text-primary">Chi tiết mã giảm giá</h5>
                         @if ($coupon['type'] == 0) {{-- Mã giảm giá toàn bộ sản phẩm --}}
@@ -304,7 +305,7 @@
         <form action="{{ route('client.applyCoupon') }}" method="post">
             @csrf
             <div class="mt-5 row">
-                <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
+                <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id" onchange="this.form.submit()">
                     <option value="" disabled {{ !session('coupon') ? 'selected' : '' }}>Chọn mã giảm giá</option>
                     @if ($availableCoupons->isEmpty())
                     <option value="" disabled>Không có mã giảm giá</option>
@@ -318,15 +319,12 @@
                     @endforeach
                     @endif
                 </select>
-                <button class="btn border-secondary px-4 py-3 text-primary col mx-1" type="submit">Áp dụng mã</button>
             </div>
         </form>
-
     </div>
 </div>
 </div>
 </div>
 <!-- Checkout Page End -->
 @include('clients.checkouts.script-checkout')
-
 @endsection

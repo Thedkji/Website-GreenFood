@@ -1,66 +1,143 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const provincesData = @json($provinces);
-        const districtsData = @json($districts);
-        const wardsData = @json($wards);
-
-        // Lấy các select box và input
-        const provinceSelect = document.getElementById("province123");
-        const districtSelect = document.getElementById("district123");
-        const wardSelect = document.getElementById("ward123");
-
-        // Khi chọn Thành phố/Tỉnh
-        provinceSelect.addEventListener("change", function() {
-            const selectedProvince = this.value;
-
-            // Lọc danh sách Quận/Huyện theo Thành phố/Tỉnh đã chọn
-            const filteredDistricts = districtsData.filter(d => d.province_code === selectedProvince);
-
-            // Xóa Quận/Huyện cũ và thêm Quận/Huyện mới
-            districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
-            filteredDistricts.forEach(district => {
-                districtSelect.innerHTML +=
-                    `<option value="${district.code}">${district.name}</option>`;
-            });
-
-            // Xóa Phường/Xã khi thay đổi Tỉnh
-            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+        // Chọn quận huyện -------------------------------------------------------
+        const ghnKey = "{{ env('GHN_KEY') }}";
+        const ghnShop = "{{ env('GHN_SHOPID') }}";
+        var insuranceValue = parseInt("{{ session('coupon') ? $totalPriceCoupon : $totalPrice }}", 10);
+        $('#province').change(function() {
+            const provinceId = $(this).val();
+            console.log(provinceId);
+            if (provinceId) {
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district',
+                    type: 'POST',
+                    headers: {
+                        'token': ghnKey,
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        'province_id': parseInt(provinceId, 10)
+                    }),
+                    success: function(response) {
+                        let districts = response.data;
+                        $('#district-dropdown').empty(); // Xóa các quận cũ
+                        $('#ward-dropdown').empty();
+                        $('#feeShip').empty();
+                        $('#district-dropdown').append('<option value="">Chọn Quận/Huyện</option>');
+                        districts.forEach(district => {
+                            $('#district-dropdown').append('<option value="' + district.DistrictID + '">' + district.DistrictName + '</option>');
+                        });
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
 
-        // Khi chọn Quận/Huyện
-        districtSelect.addEventListener("change", function() {
-            const selectedDistrict = this.value;
-
-            // Lọc danh sách Phường/Xã theo Quận/Huyện đã chọn
-            const filteredWards = wardsData.filter(w => w.district_code === selectedDistrict);
-
-            // Xóa Phường/Xã cũ và thêm Phường/Xã mới
-            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
-            filteredWards.forEach(ward => {
-                wardSelect.innerHTML += `<option value="${ward.code}">${ward.name}</option>`;
-            });
+        $('#district-dropdown').change(function() {
+            const districtId = $(this).val();
+            console.log(districtId);
+            if (districtId) {
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward',
+                    type: 'POST',
+                    headers: {
+                        'token': ghnKey,
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        'district_id': parseInt(districtId, 10)
+                    }),
+                    success: function(response) {
+                        let wards = response.data;
+                        $('#ward-dropdown').empty();
+                        $('#feeShip').empty();
+                        $('#ward-dropdown').append('<option value="">Chọn Phường/Xã</option>');
+                        wards.forEach(ward => {
+                            $('#ward-dropdown').append('<option value="' + ward.WardCode + '">' + ward.WardName + '</option>');
+                        });
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
-        const addressInput = document.getElementById("address123");
+        $('#ward-dropdown').change(function() {
+            const wardCode = $(this).val();
+            const districtId = $('#district-dropdown').val();
+            const provinceId = $('#province').val();
+            console.log(wardCode + '-' + districtId);
+            if (provinceId && districtId && wardCode) {
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+                    type: 'POST',
+                    headers: {
+                        'token': ghnKey,
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        "shop_id": parseInt(ghnShop, 10),
+                        "from_district": 3440, // Quận Nam từ Liêm
+                        "to_district": parseInt(districtId, 10),
+                    }),
+                    success: function(response) {
+                        let service = response.data[0];
+                        console.log(service);
+                        calculateShippingFee(service.service_id, districtId, wardCode);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
 
-        // Hàm cập nhật địa chỉ
-        function updateAddress() {
-            const ward = wardSelect?.options[wardSelect.selectedIndex]?.text || "";
-            const district = districtSelect?.options[districtSelect.selectedIndex]?.text || "";
-            const province = provinceSelect?.options[provinceSelect.selectedIndex]?.text || "";
+        function calculateShippingFee(serviceId, districtId, wardCode) {
+            $.ajax({
+                url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+                type: 'POST',
+                headers: {
+                    'token': ghnKey,
+                    'shop_id': ghnShop,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    "service_id": parseInt(serviceId, 10), // Phương tiện giao hàng
+                    "insurance_value": insuranceValue, // Tổng tiền để tính toán giá ship
+                    "from_district_id": 3440, // Quận Nam từ Liêm
+                    "to_district_id": parseInt(districtId, 10),
+                    "to_ward_code": wardCode,
+                    "weight": 1000 // Cân nặng (Chưa xử lý)
+                }),
+                success: function(response) {
+                    if (response.data) {
+                        let fee = response.data;
+                        if (fee && fee.total) {
+                            let total = parseFloat('{{session('
+                                coupon ') ? $totalPriceCoupon : $totalPrice}}');
+                            total += fee.total; // Cộng phí ship vào giá trị total
+                            $('input[name="total"]').val(total.toFixed(2)); // Cập nhật giá trị vào input "total"
+                            $('#totalPrice').text(total.toLocaleString('vi-VN') + 'VNĐ');
+                        } else {
+                            // Nếu không có phí ship thì chỉ sử dụng giá trị mặc định
+                            $('input[name="total"]').val('{{session('
+                                coupon ') ? $totalPriceCoupon : $totalPrice}}');
+                        }
+                        $('#feeShip').empty();
+                        $('#feeShip').text(new Intl.NumberFormat('vi-VN').format(fee.total) + ' VNĐ');
 
-            addressInput.value =
-                `${ward !== "Chọn Phường/Xã" ? ward + ", " : ""}` +
-                `${district !== "Chọn Quận/Huyện" ? district + ", " : ""}` +
-                `${province !== "Chọn Thành phố/Tỉnh" ? province : ""}`;
+                    } else {
+                        console.log('Không thể tính phí vận chuyển.');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         }
-
-        // Đảm bảo các phần tử tồn tại trước khi gắn sự kiện
-        if (provinceSelect && districtSelect && wardSelect && addressInput) {
-            provinceSelect.addEventListener("change", updateAddress);
-            districtSelect.addEventListener("change", updateAddress);
-            wardSelect.addEventListener("change", updateAddress);
-        }
-
+        // Xử lý thông báo -------------------------------------------------
         // Toast xử lý
         const toastElements = document.querySelectorAll(".toast");
         toastElements.forEach((toastElement) => {

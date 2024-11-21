@@ -37,14 +37,13 @@ Route::prefix('admin')
         require_once base_path("routes/admins/trash.php");
 
         require_once base_path("routes/admins/coupon.php");
-
-
     });
 
 // Client
 Route::prefix('client')
     ->name('client.')
     ->group(function () {
+        require_once base_path("routes/clients/address.php");
         require_once base_path("routes/clients/product.php");
         require_once base_path("routes/clients/shop.php");
         require_once base_path("routes/clients/product-detail.php");
@@ -57,5 +56,3 @@ Route::prefix('client')
         require_once base_path("routes/clients/message.php");
         require_once base_path("routes/clients/information.php");
     });
-
-
