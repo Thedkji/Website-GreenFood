@@ -124,11 +124,12 @@ class CheckoutController extends Controller
             // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
             return $isProductMatch || $isCategoryMatch;
         });
+
         $userInfo = auth()->user() ?? null;
         $provinces = app(GHNService::class)->getProvinces();
-        return view("clients.checkouts.checkout", compact('provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
-    }
 
+        return view("clients.checkouts.checkout", compact('Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+    }
     public function applyCoupon(Request $request)
     {
         $couponId = $request->coupon_id;
@@ -145,8 +146,8 @@ class CheckoutController extends Controller
                 'product_id' => $couponInfo->products?->pluck('id')->toArray(),
                 'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
             ];
-            return redirect()->back()->with([
-                'success' => 'Mã giảm giá đã được thêm thành công',
+            return response()->json([
+                'success' => true,
                 'coupon' => $coupon,
             ]);
         }

@@ -176,7 +176,8 @@
                                             @endif
                                             @endif
                                         </strong><br>
-                                        <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
+                                        <span class="text-muted"><span class="text-danger" id="price_old">{{ number_format($itemPrice) }} VNĐ</span><span class="text-danger" id="price_new"></span></span>
+                                        <span>X {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
                                     </td>
                                     <td>
                                         <strong class="text-primary">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
@@ -185,127 +186,36 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
+                                <tr class="table-light">
+                                    <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
+                                    <td><strong class="text-primary">{{ number_format($totalPrice) }} VNĐ</strong></td>
+                                </tr>
+                                <tr id="coupon-detail-table">
+                                </tr>
                                 <tr class="feeShip">
                                     <td colspan="2" class="text-end"><strong>Phí ship:</strong></td>
                                     <td><strong class="text-primary" id="feeShip">0 VNĐ</strong></td>
                                 </tr>
                                 <tr class="table-light">
-                                    <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
+                                    <td colspan="2" class="text-end"><strong>Tổng tiền sau cùng:</strong></td>
                                     <td><strong class="text-primary" id="totalPrice">{{ number_format($totalPrice) }} VNĐ</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
+                        <div id="coupon-detail123"></div>
                         @if(!session('coupon'))
                         <input type="hidden" name="total" value="{{$totalPrice}}">
                         @endif
                     </div>
-                    @if (session('coupon'))
-                    @php
-                    $coupon = session('coupon');
-                    @endphp
-                    <div class="border rounded p-3 bg-light" id="coupon-detail">
-                        {{-- Loại mã giảm giá --}}
-                        <h5 class="text-primary">Chi tiết mã giảm giá</h5>
-                        @if ($coupon['type'] == 0) {{-- Mã giảm giá toàn bộ sản phẩm --}}
-                        <div class="mb-3">
-                            <strong>Loại giảm giá:</strong> Toàn bộ sản phẩm
-                        </div>
-                        @if ($coupon['discount_type'] == 1) {{-- Giảm giá theo số tiền cố định --}}
-                        @php $totalPriceCoupon = $totalPrice - $coupon['amount'] @endphp
-                        <div class="mb-2">
-                            <strong>Số tiền được giảm:</strong>
-                            <span class="text-danger">{{ number_format($coupon['amount']) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-                        @elseif ($coupon['discount_type'] == 0) {{-- Giảm giá theo phần trăm --}}
-                        @php $totalPriceCoupon = $totalPrice - ($totalPrice * $coupon['amount'] / 100) @endphp
-                        <div class="mb-2">
-                            <strong>Số tiền được giảm:</strong>
-                            <span class="text-danger">{{ number_format($totalPrice * $coupon['amount'] / 100) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-                        @endif
-                        @elseif ($coupon['type'] == 1) {{-- Mã giảm giá áp dụng cho một số sản phẩm --}}
-                        <div class="mb-3">
-                            <strong>Loại giảm giá:</strong> Áp dụng cho một số sản phẩm
-                        </div>
-                        <h6 class="text-primary">Chi tiết giảm giá từng sản phẩm:</h6>
-                        <ul class="list-unstyled">
-                            @php
-                            $totalDiscount = 0;
-                            $totalPriceCoupon = 0;
-                            @endphp
-                            @foreach ($decodedItems as $item)
-                            @php
-                            $category = \App\Models\Category::with('products')
-                            ->whereHas('products', function ($query) use ($item) {
-                            $query->where('id', $item['product']['id']);
-                            })->get();
-
-                            $itemPrice = $item['product']['status'] === 0
-                            ? $item['product']['price_sale']
-                            : ($variantDetails[$item['id']]->price_sale ?? $item['price']);
-                            $itemQuantity = $item['quantity'];
-
-                            $couponProduct = in_array($item['product']['id'], $coupon['product_id']);
-                            $couponCategory = !empty(array_intersect($category->pluck('id')->toArray(), $coupon['category_id']));
-                            $discount = 0;
-                            $couponName = null;
-                            if ($couponProduct || $couponCategory) {
-                            $couponName = $coupon['name'] ?? null;
-                            if ($coupon['discount_type'] == 1) {
-                            $discount = $coupon['amount'] * $itemQuantity;
-                            } else {
-                            $discount = ($itemPrice * $coupon['amount'] / 100) * $itemQuantity;
-                            }
-                            $totalPriceForItem = ($itemPrice * $itemQuantity) - $discount;
-                            } else {
-                            $totalPriceForItem = $itemPrice * $itemQuantity;
-                            }
-
-                            $totalDiscount += $discount;
-                            $totalPriceCoupon += $totalPriceForItem;
-                            @endphp
-                            <li class="mb-2">
-                                <strong>{{ $item['product']['name'] }}</strong>
-                                <ul class="mb-0">
-                                    <li>Giá gốc: {{ number_format($itemPrice) }} VNĐ</li>
-                                    <li>Số lượng: {{ $itemQuantity }}</li>
-                                    <li>Giảm giá: <span class="text-danger">{{ number_format($discount) }} VNĐ</span></li>
-                                    <li>Thành tiền sau giảm: <span class="text-success">{{ number_format($totalPriceForItem) }} VNĐ</span></li>
-                                </ul>
-                            </li>
-                            @endforeach
-                        </ul>
-                        <div class="mt-3">
-                            <strong>Tổng số tiền giảm giá:</strong>
-                            <span class="text-danger">{{ number_format($totalDiscount) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-
-                        @endif
-                    </div>
-                    @endif
-                    @if (session('coupon'))
-                    <input type="hidden" name="coupon[]" value="{{json_encode($coupon)}}">
-                    @endif
+                    <input type="hidden" name="coupon[]" value="">
                     <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
 
         </form>
-        <form action="{{ route('client.applyCoupon') }}" method="post">
+        <form id="couponForm" action="{{ route('client.applyCoupon') }}" method="post">
             @csrf
             <div class="mt-5 row">
-                <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id" onchange="this.form.submit()">
+                <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
                     <option value="" disabled {{ !session('coupon') ? 'selected' : '' }}>Chọn mã giảm giá</option>
                     @if ($availableCoupons->isEmpty())
                     <option value="" disabled>Không có mã giảm giá</option>
