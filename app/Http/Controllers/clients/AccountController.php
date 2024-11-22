@@ -34,6 +34,7 @@ class AccountController extends Controller
     try {
         $credentials = ['password' => $req->password];
         $loginInput = $req->user_name;
+        $remember = $req->has('remember');
 
         // Xác định xem đầu vào là email, số điện thoại, hay tên đăng nhập
         if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
