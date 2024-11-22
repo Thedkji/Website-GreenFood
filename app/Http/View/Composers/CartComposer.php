@@ -13,6 +13,7 @@ class CartComposer
 {
     public function compose(View $view)
     {
+
         $userId = Auth::check() ? Auth::id() : null;
         $variantGroups = [];
         $cartItems = [];

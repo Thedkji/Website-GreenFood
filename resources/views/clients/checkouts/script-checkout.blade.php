@@ -7,10 +7,12 @@
         const totalPrice = @json($totalPrice);
         const variantDetails = @json($variantDetails);
         const Products = @json($Products);
+        const userInfo = @json($userInfo);
         let shippingFee = 0;
         let final = 0;
         let finalCoupon = 0;
         var insuranceValue = parseInt(totalPrice, 10);
+
         $('#province').change(function() {
             const provinceId = $(this).val();
             console.log(provinceId);
@@ -235,37 +237,45 @@
                             `;
                             let totalDiscount = 0;
                             let totalPriceCoupon = 0;
+                            let finalPrice = 0;
                             decodedItems.forEach(item => {
                                 let itemPrice;
-                                if (item.product.status === 0) {
-                                    itemPrice = item.product.price_sale;
+                                if (userInfo ? item.product.status === 0 : item.attributes.status === 0) {
+                                    itemPrice = userInfo ? item.product.price_sale : item.price;
                                 } else {
-                                    itemPrice = variantDetails[item.sku].price_sale;
+                                    itemPrice = userInfo ? variantDetails[item.sku].price_sale : item.price;
                                 }
                                 let itemQuantity = item.quantity;
                                 let discount = 0;
 
-                                if (coupon.product_id.includes(item.product.id) || coupon.category_id.some(catId => Products.categories.includes(catId))) {
+                                if (coupon.product_id.includes(userInfo ? item.product.id : Number(item.attributes.product_id)) || coupon.category_id.some(id => Products.categories.includes(id))) {
                                     if (coupon.discount_type == 1) {
+
                                         discount = coupon.amount * itemQuantity;
                                         finalCoupon = coupon.amount;
                                         final = totalPriceCoupon;
                                     } else {
                                         discount = (itemPrice * coupon.amount / 100) * itemQuantity;
                                     }
+                                    finalPrice = (itemPrice * itemQuantity) - discount;
+                                    if (finalPrice < 0) {
+                                        finalPrice = 1000;
+                                    }
                                     totalDiscount += discount;
-                                    totalPriceCoupon += (itemPrice * itemQuantity) - discount;
+                                    totalPriceCoupon += finalPrice;
                                 } else {
-                                    totalPriceCoupon += itemPrice * itemQuantity;
+                                    finalPrice = itemPrice * itemQuantity;
+                                    totalPriceCoupon += finalPrice;
                                 }
+
                                 couponDetail += `
                                     <li class="mb-2">
-                                        <strong>${item.product.name}</strong>
+                                        <strong>${userInfo ? item.product.name : item.name}</strong>
                                         <ul class="mb-0">
                                             <li>Giá gốc: ${new Intl.NumberFormat('vi-VN').format(itemPrice)} VNĐ</li>
                                             <li>Số lượng: ${itemQuantity}</li>
                                             <li>Giảm giá: <span class="text-danger">${new Intl.NumberFormat('vi-VN').format(parseInt(discount))} VNĐ</span></li>
-                                            <li>Thành tiền sau giảm: <span class="text-success">${new Intl.NumberFormat('vi-VN').format(parseInt((itemPrice * itemQuantity) - discount))} VNĐ</span></li>
+                                            <li>Thành tiền sau giảm: <span class="text-success">${new Intl.NumberFormat('vi-VN').format(parseInt(finalPrice))} VNĐ</span></li>
                                         </ul>
                                     </li>
                                 `;

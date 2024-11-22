@@ -44,8 +44,7 @@ class CheckoutController extends Controller
         $couponsAll = Coupon::with(['categories.children', 'products'])->get();
 
         // Lấy các product_id từ $decodedItems
-        $productIds = array_column($decodedItems, 'product_id');
-
+        $productIds = auth()->check() ? array_column($decodedItems, 'product_id') : array_map(fn($item) => $item['attributes']['product_id'], $decodedItems);
         // Lấy các sản phẩm liên kết với $productIds
         $Products = Product::with('categories')->whereIn('id', $productIds)->get();
 
