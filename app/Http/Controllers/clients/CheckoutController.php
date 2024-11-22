@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Coupon;
+use App\Services\GHNService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\admins\OrderRequest;
 use App\Mail\MailCheckOut;
@@ -23,6 +25,13 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
+    protected $ghnService;
+
+    public function __construct(GHNService $ghnService)
+    {
+        $this->ghnService = $ghnService;
+    }
+
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
@@ -35,8 +44,7 @@ class CheckoutController extends Controller
         $couponsAll = Coupon::with(['categories.children', 'products'])->get();
 
         // Lấy các product_id từ $decodedItems
-        $productIds = array_column($decodedItems, 'product_id');
-
+        $productIds = auth()->check() ? array_column($decodedItems, 'product_id') : array_map(fn($item) => $item['attributes']['product_id'], $decodedItems);
         // Lấy các sản phẩm liên kết với $productIds
         $Products = Product::with('categories')->whereIn('id', $productIds)->get();
 
@@ -115,13 +123,12 @@ class CheckoutController extends Controller
             // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
             return $isProductMatch || $isCategoryMatch;
         });
-        $provinces = DB::table('provinces')->get();
-        $districts = DB::table('districts')->get();
-        $wards = DB::table('wards')->get();
-        $userInfo = auth()->user() ?? null;
-        return view("clients.checkouts.checkout", compact('provinces', 'districts', 'wards', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
-    }
 
+        $userInfo = auth()->user() ?? null;
+        $provinces = app(GHNService::class)->getProvinces();
+
+        return view("clients.checkouts.checkout", compact('Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+    }
     public function applyCoupon(Request $request)
     {
         $couponId = $request->coupon_id;
@@ -138,8 +145,8 @@ class CheckoutController extends Controller
                 'product_id' => $couponInfo->products?->pluck('id')->toArray(),
                 'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
             ];
-            return redirect()->back()->with([
-                'success' => 'Mã giảm giá đã được thêm thành công',
+            return response()->json([
+                'success' => true,
                 'coupon' => $coupon,
             ]);
         }

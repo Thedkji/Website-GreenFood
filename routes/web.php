@@ -26,6 +26,7 @@ Route::prefix('admin')
     ->middleware('checkAdmin')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
+        require_once base_path("routes/admins/profile.php");
         require_once base_path("routes/admins/user.php");
         require_once base_path("routes/admins/product.php");
         require_once base_path("routes/admins/variant.php");
@@ -37,8 +38,6 @@ Route::prefix('admin')
         require_once base_path("routes/admins/trash.php");
 
         require_once base_path("routes/admins/coupon.php");
-
-
     });
 
 // Client
@@ -57,5 +56,3 @@ Route::prefix('client')
         require_once base_path("routes/clients/message.php");
         require_once base_path("routes/clients/information.php");
     });
-
-

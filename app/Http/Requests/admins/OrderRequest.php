@@ -28,7 +28,7 @@ class OrderRequest extends FormRequest
             'district' => 'required|string|max:100',
             'ward' => 'required|string|max:100',
             'email' => 'required|email|max:100',
-            'phone' => 'required|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
+            'phone' => 'required|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:11',
         ];
     }
 
@@ -37,10 +37,15 @@ class OrderRequest extends FormRequest
         return [
             'fullName.required' => 'Địa chỉ không được để trống.',
             'address.required' => 'Địa chỉ không được để trống.',
+            'province.required' => 'Thành phố không được để trống.',
+            'district.required' => 'Quận/huyện không được để trống.',
+            'ward.required' => 'Phường/Xã không được để trống.',
             'email.required' => 'Email không được để trống.',
             'email.email' => 'Email phải đúng định dạng.',
             'phone.required' => 'Số điện thoại không được để trống.',
             'phone.regex' => 'Số điện thoại không hợp lệ.',
+            'phone.min' => 'Số điện thoại phải đủ 10 số.',
+            'phone.max' => 'Số điện thoại không được quá 11 số.',
         ];
     }
 }
