@@ -53,7 +53,7 @@
                 @foreach($comments as $comment)
                     <tr>
                         <th scope="row">{{ $comment->id }}</th>
-                        <td>{{ $comment->product->name }}</td>
+                        <td>{{ $comment->product->name ?? 'No Product'}}</td>
                         <td>{{ $comment->user->name ?? 'Anonymous' }}</td>
                         <td>{{ $comment->content }}</td>
                         <td>
