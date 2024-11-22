@@ -60,13 +60,20 @@
                         @if (session('error_general'))
                             <span class="text-danger">{{ session('error_general') }}</span>
                         @endif
-                        <article class="text-end">
-                            <p class="">
-                                <span class="text-primary">
-                                    <a href="{{ route('client.forgotPass') }}">Quên mật khẩu</a>
-                                </span>
-                            </p>
-                        </article>
+                        <main class="d-flex justify-content-between">
+
+                            <article class="text-start">
+                                <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                                <label class="form-check-label" for="auth-remember-check">Ghi nhớ đăng nhập</label>
+                            </article>
+                            <article class="text-end">
+                                <p class="">
+                                    <span class="text-primary">
+                                        <a href="{{ route('client.forgotPass') }}">Quên mật khẩu</a>
+                                    </span>
+                                </p>
+                            </article>
+                        </main>
 
                         <button class="btn btn-primary text-white p-2">Đăng nhập</button>
                         @if (session('success'))
