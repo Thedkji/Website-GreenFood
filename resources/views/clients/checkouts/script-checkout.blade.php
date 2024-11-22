@@ -172,12 +172,11 @@
         // Áp mã giảm giá -------------------------------------------------------------
         $('#coupon_id').change(function() {
             var couponId = $(this).val();
-
+            var hiddenInput = document.querySelector('input[name="coupon[]"]');
             // Nếu không chọn coupon thì không gửi AJAX
             if (couponId === "") {
                 return;
             }
-
             // Gửi yêu cầu AJAX để áp dụng mã giảm giá
             $.ajax({
                 url: "{{ route('client.applyCoupon') }}", // Lấy URL action của form
@@ -192,7 +191,7 @@
                         // Chuyển coupon thành chuỗi JSON
                         let couponJson = JSON.stringify(coupon);
                         // Cập nhật giá trị vào trường input type="hidden"
-                        document.querySelector('input[name="coupon[]"]').value = couponJson;
+                        hiddenInput.value = couponJson;
                         let couponDetail = `
                             <div class="border rounded p-3 bg-light" id="coupon-detail">
                                 <h5 class="text-primary">Chi tiết mã giảm giá</h5>
