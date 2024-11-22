@@ -26,6 +26,7 @@ Route::prefix('admin')
     ->middleware('checkAdmin')
     ->group(function () {
         require_once base_path("routes/admins/dashboard.php");
+        require_once base_path("routes/admins/profile.php");
         require_once base_path("routes/admins/user.php");
         require_once base_path("routes/admins/product.php");
         require_once base_path("routes/admins/variant.php");

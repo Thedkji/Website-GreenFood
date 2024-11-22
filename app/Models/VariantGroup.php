@@ -40,4 +40,5 @@ class VariantGroup extends Model
     {
         return $this->belongsToMany(Variant::class, 'variant_group_variant');
     }
+
 }
