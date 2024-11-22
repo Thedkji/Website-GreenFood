@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 
 class GHNService
 {
-    protected $apiUrl;
     protected $apiKey;
 
     public function __construct()

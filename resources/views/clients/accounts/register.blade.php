@@ -23,19 +23,19 @@
                             <div>
                                 <label for="" class="fw-bold">Họ Và Tên <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control my-2 p-2" id="name" name='name'
-                                    placeholder="Nhập số họ và tên của bạn">
+                                    placeholder="Nhập số họ và tên của bạn" value="{{ old('name') }}">
                             </div>
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            
+
                         </article>
                         <article>
                             <div>
                                 <label for="" class="fw-bold">Số điện thoại <span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control my-2 p-2" id="phone" name='phone'
-                                    placeholder="Nhập số điện thoại của bạn">
+                                    placeholder="Nhập số điện thoại của bạn" value="{{ old('phone') }}">
                             </div>
                             @error('phone')
                                 <span class="text-danger">{{ $message }}</span>
@@ -47,7 +47,7 @@
                             <div>
                                 <label for="" class="fw-bold">Email <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control my-2 p-2" id="email" name="email"
-                                    placeholder="Nhập email của bạn">
+                                    placeholder="Nhập email của bạn" value="{{ old('email') }}">
                             </div>
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
@@ -60,7 +60,7 @@
                                 <label for="" class="fw-bold">Tên đăng nhập <span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control my-2 p-2" id="user_name" name='user_name'
-                                    placeholder="Nhập tên đăng nhập của bạn">
+                                    placeholder="Nhập tên đăng nhập của bạn" value="{{ old('user_name') }}">
                             </div>
                             @error('user_name')
                                 <span class="text-danger">{{ $message }}</span>
