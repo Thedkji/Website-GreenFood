@@ -12,36 +12,20 @@ class VariantSeeder extends Seeder
      */
     public function run(): void
     {
-        // Mảng để lưu trữ các biến thể đã tạo
-        $variants = [];
+        $data = [
+            ["id" => 1, "name" => "Trọng lượng", "parent_id" => null],
+            ["id" => 2, "name" => "200gram", "parent_id" => 1],
+            ["id" => 3, "name" => "350gram", "parent_id" => 1],
+            ["id" => 4, "name" => "500gram", "parent_id" => 1],
+            ["id" => 5, "name" => "Size", "parent_id" => null],
+            ["id" => 6, "name" => "Bé", "parent_id" => 5],
+            ["id" => 7, "name" => "Vừa", "parent_id" => 5],
+            ["id" => 8, "name" => "To", "parent_id" => 5],
+            // Thêm các danh mục còn lại theo cấu trúc tương tự
+        ];
 
-        // Tạo các biến thể với parent_id ban đầu là null
-        for ($i = 1; $i <= 10; $i++) {
-            // Chỉ định null cho trường parent_id cho bản ghi đầu tiên và thứ hai
-            $parentId = ($i === 1 || $i === 2) ? null : null;
-
-            $variant = Variant::create([
-                "id" => $i,
-                "name" => "Biến thể $i",
-                "parent_id" => $parentId,
-            ]);
-
-            // Thêm biến thể vào mảng
-            $variants[] = $variant;
-        }
-
-        // Mảng để chứa các ID của biến thể có parent_id là null
-        $availableParents = [1, 2]; // ID 1 và 2 có parent_id là null
-
-        // Gán parent_id cho các biến thể còn lại
-        for ($i = 3; $i <= 10; $i++) {
-            // Chọn ngẫu nhiên một parent_id từ mảng $availableParents
-            $randomParentId = $availableParents[array_rand($availableParents)];
-
-            // Cập nhật parent_id cho biến thể
-            $variantToUpdate = Variant::find($i);
-            $variantToUpdate->parent_id = $randomParentId;
-            $variantToUpdate->save();
+        foreach ($data as $variant) {
+            $variants = Variant::create($variant);
         }
     }
 }
