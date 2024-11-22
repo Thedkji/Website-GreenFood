@@ -163,7 +163,7 @@ class CheckoutController extends Controller
             if (!$paymentMethod) {
                 return redirect()->back()->with('error', 'Vui lòng chọn phương thức thanh toán');
             }
-            $coupon = $request->has('coupon') ? $request->coupon : null;
+            $coupon = $request->coupon;
             $order = Order::create([
                 'user_id' => auth()->check() ? auth()->id() : 0,
                 'phone' => $request->phone,
@@ -175,7 +175,6 @@ class CheckoutController extends Controller
                 'note' => $request->note,
                 'total' => $request->total,
             ]);
-
             DB::commit();
             // Kiểm tra phương thức thanh toán, nếu là Paypal thì chuyển sang VNPay Checkout
             if ($paymentMethod === "VNPay") {
@@ -308,13 +307,20 @@ class CheckoutController extends Controller
     private function finalizeOrder($order, $cartData, $coupon = null)
     {
         $cartItems = json_decode($cartData, true);
-        // Giảm số lượng mã giảm giá trong bảng Coupon
-        if ($coupon) {
+        // Giảm số lượng mã giảm giá trong bảng Coupon  
+        if (!empty($coupon) && isset($coupon[0]) && $coupon[0] !== null) {
             $decodedCoupon = json_decode($coupon[0], true);
+
             if (is_array($decodedCoupon) && isset($decodedCoupon['id'])) {
-                Coupon::where('id', $decodedCoupon['id'])->decrement('quantity', 1);
+                $couponId = $decodedCoupon['id'];
+                $couponName = $decodedCoupon['name'];
+
+                // Giảm số lượng mã giảm giá
+                Coupon::where('id', $couponId)->decrement('quantity', 1);
             }
-            $couponName = $decodedCoupon['name'];
+        } else {
+            // Không có mã giảm giá
+            $couponName = null;
         }
         foreach ($cartItems as $item) {
             $productSku = auth()->check() ? $item['sku'] : $item['attributes']['sku'];
@@ -334,7 +340,7 @@ class CheckoutController extends Controller
                 'product_price' => $productPrice,
                 'product_quantity' => $productQuantity,
                 'product_img' => $productImg,
-                'coupon_name' => !empty($coupon) ? $couponName : null,
+                'coupon_name' => $couponName,
             ]);
 
             // Cập nhật số lượng sản phẩm trong kho
@@ -345,7 +351,6 @@ class CheckoutController extends Controller
                 VariantGroup::where('sku', $productSku)->where('quantity', '>=', $productQuantity)->decrement('quantity', $productQuantity);
             }
         }
-
         // Xóa giỏ hàng và gửi email xác nhận
         $this->removeCartItems($cartItems);
         Mail::to($order->email)->send(new MailCheckOut($order));

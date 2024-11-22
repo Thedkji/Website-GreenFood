@@ -55,7 +55,7 @@
                 <thead>
                     <tr>
                         <th scope="col">
-                            <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                            <input type="checkbox" style="width: 20px;height: 20px;" id="select-all" onclick="toggleSelectAll(this)">
                         </th>
                         <th scope="col">Ảnh</th>
                         <th scope="col">Tên sản phẩm</th>
@@ -72,7 +72,7 @@
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}"
+                            <input type="checkbox" name="selectBox[]" style="width: 20px;height: 20px;" value="{{ $item }}"
                                 class="cart-checkbox"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
@@ -184,7 +184,7 @@
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}"
+                            <input type="checkbox" style="width: 20px;height: 20px;" name="selectBox[]" value="{{ $item }}"
                                 class="cart-checkbox"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
