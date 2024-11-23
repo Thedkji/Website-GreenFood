@@ -55,16 +55,16 @@ class ShopController extends Controller
         if ($arrange = $request->input('select_arrange')) {
             if ($arrange == 'price_min') {
                 $query->orderByRaw('
-                CASE 
-                    WHEN status = 0 THEN price_sale 
+                CASE
+                    WHEN status = 0 THEN price_sale
                     WHEN status = 1 THEN (SELECT MIN(price_sale) FROM variant_group WHERE product_id = products.id)
                     ELSE price_sale
                 END ASC
             ');
             } elseif ($arrange == 'price_max') {
                 $query->orderByRaw('
-                CASE 
-                    WHEN status = 0 THEN price_sale 
+                CASE
+                    WHEN status = 0 THEN price_sale
                     WHEN status = 1 THEN (SELECT MIN(price_sale) FROM variant_group WHERE product_id = products.id)
                     ELSE price_sale
                 END DESC
