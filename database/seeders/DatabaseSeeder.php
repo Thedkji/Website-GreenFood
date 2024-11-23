@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             DepotSeeder::class,
             CouponSeeder::class,
-            UserSeed::class,
+            UserSeeder::class,
             CartSeeder::class,
             CommentSeeder::class,
             RateSeeder::class,

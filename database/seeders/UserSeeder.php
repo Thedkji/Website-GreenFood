@@ -7,7 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 
-class UserSeed extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -111,7 +111,7 @@ class UserSeed extends Seeder
                 "name" => Arr::random($last_names) . " " . Arr::random($middle_names) . " " . Arr::random($first_names),
                 "avatar" => "https://via.placeholder.com/300x200",
                 "user_name" => "admin$i",
-                "password" => bcrypt(123),
+                "password" => bcrypt(12345678),
                 "email" => "email$i@gmail.com",
                 "phone" => Arr::random($vietnam_phone_prefixes) . $random_numbers,
                 "province" => "Hà Nội",
@@ -119,7 +119,9 @@ class UserSeed extends Seeder
                 "ward" => $random_ward,
                 // Gán địa chỉ từ giá trị random của district và ward
                 "address" => "Hà Nội, " . $random_district . ", " . $random_ward,
-                "role" => mt_rand(0, 1),
+                "email_verified_at" => fake()->dateTime(),
+                "remember_token" => fake()->dateTime(),
+                "role" => 0,
             ]);
         }
     }
