@@ -118,7 +118,6 @@ class CartController extends Controller
 
     public function removeCart($id)
     {
-        dd($id);
         if (auth()->check()) {
             $userId = auth()->id();
             Cart::where('user_id', $userId)->where('id', $id)->delete();
