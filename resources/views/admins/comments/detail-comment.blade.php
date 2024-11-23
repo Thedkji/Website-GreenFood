@@ -17,7 +17,7 @@
     <h3>Chi tiết Bình luận</h3>
     <!-- Comment Details -->
     <div class="mb-3">
-        <label>Sản phẩm: {{ $comment->product->name }}</label>
+        <label>Sản phẩm: {{ $comment->product->name ?? 'No Product'}}</label>
     </div>
     <div class="mb-3">
         <label>Khách hàng: {{ $comment->user->name ?? 'Anonymous' }}</label>
@@ -36,7 +36,7 @@
     <h5>Phản hồi</h5>
     @foreach ($replies as $reply)
         <div class="border rounded p-3 mb-3">
-            <p><strong>Khách hàng:</strong> {{ $reply->user->name ?? 'Anonymous' }}</p>
+            <p><strong>Admin:</strong> {{ $reply->user->name ?? 'Anonymous' }}</p>
             <p><strong>Nội dung:</strong> {{ $reply->content }}</p>
             @if($reply->img)
                 <img src="{{ asset('storage/' . $reply->img) }}" alt="Image" width="100">

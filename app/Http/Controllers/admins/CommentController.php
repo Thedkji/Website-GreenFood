@@ -55,7 +55,7 @@ public function store(Request $request, $id)
 
     $reply = new Comment();
     $reply->product_id = $parentComment->product_id;
-    $reply->user_id = 1; 
+    $reply->user_id = auth()->id();; 
     $reply->parent_user_id = $parentComment->user_id;
     $reply->content = $request->content;
     $reply->save();
@@ -67,7 +67,7 @@ public function store(Request $request, $id)
 
     $reply->save();
 
-    return redirect()->route('admin.comments.comment', $id)->with('success', 'Phản hồi đã được thêm thành công.');
+    return redirect()->route('admin.comments.detail', $id)->with('success', 'Phản hồi đã được thêm thành công.');
 }
 public function detail($id)
 {

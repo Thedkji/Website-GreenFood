@@ -65,36 +65,34 @@
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
-                            <label for="province">Thành phố/Tỉnh</label>
-                            <select name="province" id="province123" class="form-select" value="{{ old('province') }}">
-                                <option value=""> Chọn Thành phố/Tỉnh </option>
-                                @foreach ($provinces as $province)
-                                <option value="{{ $province->code }}">{{ $province->name }}</option>
+                            <label for="province" class="form-label my-3">Thành phố</label>
+                            <select name="province" id="province" class="form-select" value="{{old('province')}}">
+                                <option value="">Chọn Thành phố</option>
+                                @foreach($provinces as $province)
+                                <option value="{{ $province['ProvinceID'] }}">{{ $province['ProvinceName'] }}</option>
                                 @endforeach
                             </select>
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
-                            <label for="district">Quận/Huyện</label>
-                            <select name="district" id="district123" class="form-select" value="{{ old('address') }}">
-                                <option value=""> Chọn Quận/Huyện </option>
+                            <label for="district" class="form-label my-3">Quận/Huyện</label>
+                            <select name="district" id="district-dropdown" class="form-select" value="{{old('district')}}">
+                                <option value="">Chọn Quận/Huyện</option>
                             </select>
                             <x-feedback name="district" />
                         </div>
                         <div class="form-item">
-                            <label for="ward">Phường/Xã</label>
-                            <select name="ward" id="ward123" class="form-select" value="{{ old('ward') }}">
-                                <option value=""> Chọn Phường/Xã </option>
+                            <label for="ward" class="form-label my-3">Phường/Xã</label>
+                            <select name="ward" id="ward-dropdown" class="form-select" value="{{old('ward')}}">
+                                <option value="">Chọn Phường/Xã</option>
                             </select>
                             <x-feedback name="ward" />
-
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Địa chỉ</label>
-                            <input type="text" class="form-control" id="address123" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
+                            <input type="text" class="form-control" id="address" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                             <x-feedback name="address" />
                         </div>
-
                         <div class="form-item">
                             <label class="form-label my-3">Phương thức thanh toán</label>
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
@@ -114,7 +112,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4 mt-5">
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
@@ -179,7 +176,8 @@
                                             @endif
                                             @endif
                                         </strong><br>
-                                        <span class="text-muted"><span class="text-danger">{{ number_format($itemPrice) }} VNĐ</span> x {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
+                                        <span class="text-muted"><span class="text-danger" id="price_old">{{ number_format($itemPrice) }} VNĐ</span><span class="text-danger" id="price_new"></span></span>
+                                        <span>X {{ $itemQuantity }} <strong>{{ $userInfo ? $item['sku'] :  $item['attributes']['sku'] }}</strong></span>
                                     </td>
                                     <td>
                                         <strong class="text-primary">{{ number_format($itemPrice * $itemQuantity) }} VNĐ</strong>
@@ -192,116 +190,29 @@
                                     <td colspan="2" class="text-end"><strong>Tổng tiền:</strong></td>
                                     <td><strong class="text-primary">{{ number_format($totalPrice) }} VNĐ</strong></td>
                                 </tr>
+                                <tr id="coupon-detail-table">
+                                </tr>
+                                <tr class="feeShip">
+                                    <td colspan="2" class="text-end"><strong>Phí ship:</strong></td>
+                                    <td><strong class="text-primary" id="feeShip">0 VNĐ</strong></td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td colspan="2" class="text-end"><strong>Tổng tiền sau cùng:</strong></td>
+                                    <td><strong class="text-primary" id="totalPrice">{{ number_format($totalPrice) }} VNĐ</strong></td>
+                                </tr>
                             </tfoot>
                         </table>
+                        <div id="coupon-detail123"></div>
                         @if(!session('coupon'))
                         <input type="hidden" name="total" value="{{$totalPrice}}">
                         @endif
                     </div>
-                    @if (session('coupon'))
-                    @php
-                    $coupon = session('coupon');
-                    @endphp
-                    <div class="border rounded p-3 bg-light">
-                        {{-- Loại mã giảm giá --}}
-                        <h5 class="text-primary">Chi tiết mã giảm giá</h5>
-                        @if ($coupon['type'] == 0) {{-- Mã giảm giá toàn bộ sản phẩm --}}
-                        <div class="mb-3">
-                            <strong>Loại giảm giá:</strong> Toàn bộ sản phẩm
-                        </div>
-                        @if ($coupon['discount_type'] == 1) {{-- Giảm giá theo số tiền cố định --}}
-                        @php $totalPriceCoupon = $totalPrice - $coupon['amount'] @endphp
-                        <div class="mb-2">
-                            <strong>Số tiền được giảm:</strong>
-                            <span class="text-danger">{{ number_format($coupon['amount']) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-                        @elseif ($coupon['discount_type'] == 0) {{-- Giảm giá theo phần trăm --}}
-                        @php $totalPriceCoupon = $totalPrice - ($totalPrice * $coupon['amount'] / 100) @endphp
-                        <div class="mb-2">
-                            <strong>Số tiền được giảm:</strong>
-                            <span class="text-danger">{{ number_format($totalPrice * $coupon['amount'] / 100) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-                        @endif
-                        @elseif ($coupon['type'] == 1) {{-- Mã giảm giá áp dụng cho một số sản phẩm --}}
-                        <div class="mb-3">
-                            <strong>Loại giảm giá:</strong> Áp dụng cho một số sản phẩm
-                        </div>
-                        <h6 class="text-primary">Chi tiết giảm giá từng sản phẩm:</h6>
-                        <ul class="list-unstyled">
-                            @php
-                            $totalDiscount = 0;
-                            $totalPriceCoupon = 0;
-                            @endphp
-                            @foreach ($decodedItems as $item)
-                            @php
-                            $category = \App\Models\Category::with('products')
-                            ->whereHas('products', function ($query) use ($item) {
-                            $query->where('id', $item['product']['id']);
-                            })->get();
-
-                            $itemPrice = $item['product']['status'] === 0
-                            ? $item['product']['price_sale']
-                            : ($variantDetails[$item['id']]->price_sale ?? $item['price']);
-                            $itemQuantity = $item['quantity'];
-
-                            $couponProduct = in_array($item['product']['id'], $coupon['product_id']);
-                            $couponCategory = !empty(array_intersect($category->pluck('id')->toArray(), $coupon['category_id']));
-                            $discount = 0;
-                            $couponName = null;
-                            if ($couponProduct || $couponCategory) {
-                            $couponName = $coupon['name'] ?? null;
-                            if ($coupon['discount_type'] == 1) {
-                            $discount = $coupon['amount'] * $itemQuantity;
-                            } else {
-                            $discount = ($itemPrice * $coupon['amount'] / 100) * $itemQuantity;
-                            }
-                            $totalPriceForItem = ($itemPrice * $itemQuantity) - $discount;
-                            } else {
-                            $totalPriceForItem = $itemPrice * $itemQuantity;
-                            }
-
-                            $totalDiscount += $discount;
-                            $totalPriceCoupon += $totalPriceForItem;
-                            @endphp
-                            <li class="mb-2">
-                                <strong>{{ $item['product']['name'] }}</strong>
-                                <ul class="mb-0">
-                                    <li>Giá gốc: {{ number_format($itemPrice) }} VNĐ</li>
-                                    <li>Số lượng: {{ $itemQuantity }}</li>
-                                    <li>Giảm giá: <span class="text-danger">{{ number_format($discount) }} VNĐ</span></li>
-                                    <li>Thành tiền sau giảm: <span class="text-success">{{ number_format($totalPriceForItem) }} VNĐ</span></li>
-                                </ul>
-                            </li>
-                            @endforeach
-                        </ul>
-                        <div class="mt-3">
-                            <strong>Tổng số tiền giảm giá:</strong>
-                            <span class="text-danger">{{ number_format($totalDiscount) }} VNĐ</span>
-                        </div>
-                        <div>
-                            <strong>Tổng tiền sau giảm:</strong>
-                            <span class="text-success">{{ number_format($totalPriceCoupon) }} VNĐ</span>
-                        </div>
-
-                        @endif
-                    </div>
-                    @endif
-                    @if (session('coupon'))
-                    <input type="hidden" name="coupon[]" value="{{json_encode($coupon)}}">
-                    @endif
+                    <input type="hidden" name="coupon[]" value="">
                     <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
 
         </form>
-        <form action="{{ route('client.applyCoupon') }}" method="post">
+        <form id="couponForm" action="{{ route('client.applyCoupon') }}" method="post">
             @csrf
             <div class="mt-5 row">
                 <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
@@ -318,15 +229,12 @@
                     @endforeach
                     @endif
                 </select>
-                <button class="btn border-secondary px-4 py-3 text-primary col mx-1" type="submit">Áp dụng mã</button>
             </div>
         </form>
-
     </div>
 </div>
 </div>
 </div>
 <!-- Checkout Page End -->
 @include('clients.checkouts.script-checkout')
-
 @endsection

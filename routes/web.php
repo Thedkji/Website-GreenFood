@@ -38,8 +38,6 @@ Route::prefix('admin')
         require_once base_path("routes/admins/trash.php");
 
         require_once base_path("routes/admins/coupon.php");
-
-
     });
 
 // Client
@@ -58,5 +56,3 @@ Route::prefix('client')
         require_once base_path("routes/clients/message.php");
         require_once base_path("routes/clients/information.php");
     });
-
-
