@@ -203,7 +203,7 @@
                         if (coupon.type == 0) {
                             couponDetail += `
                                 <div class="mb-3">
-                                    <strong>Loại giảm giá:</strong> Toàn bộ sản phẩm
+                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng
                                 </div>
                             `;
                             if (coupon.discount_type == 1) { // Giảm giá theo số tiền cố định
