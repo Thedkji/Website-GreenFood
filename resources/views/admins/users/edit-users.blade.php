@@ -139,5 +139,24 @@
     provinceSelect.addEventListener('change', updateAddress);
     districtSelect.addEventListener('change', updateAddress);
     wardSelect.addEventListener('change', updateAddress);
+
+    
+    //Hiện ảnh
+    function previewImage(event, imgId) {
+        const input = event.target;
+        const imagePreview = document.getElementById(imgId);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block"; // Hiện ảnh sau khi load
+            };
+            reader.readAsDataURL(input.files[0]); // Đọc file ảnh
+        } else {
+            imagePreview.src = "#";
+            imagePreview.style.display = "none"; // Ẩn ảnh nếu không có file
+        }
+    }
 </script>
 @endpush
