@@ -33,6 +33,7 @@
                 toast.classList.remove("show");
             }, 3000);
         });
+        let updateTimer;
         $('.btn-minus, .btn-plus').click(function() {
             let button = $(this);
             // Lấy input liên quan trong cùng container
@@ -47,8 +48,6 @@
                 // Nếu không có userId, itemId là tên của input
                 itemId = input.attr('name').match(/\[(.*?)\]/)[1];
             }
-            console.log(itemId);
-
             // Lấy giá trị hiện tại của price
             let price = parseFloat($("#price-" + itemId).text().replace(/[^\d.-]/g, ''));
             // Lấy giá trị hiện tại của số lượng
@@ -58,7 +57,11 @@
             // Cập nhật giá trị priceTotal trên giao diện
             $("#priceTotal-" + itemId).text(new Intl.NumberFormat('vi-VN').format(priceTotal) + " VNĐ");
             $('input[name="priceTotal[' + itemId + ']"]').val(priceTotal);
-            updateQuantity(itemId, quantity);
+            clearTimeout(updateTimer);
+            // Đặt timer mới, chỉ gọi `updateQuantity` sau khi dừng nhấn nút 500ms
+            updateTimer = setTimeout(function() {
+                updateQuantity(itemId, quantity);
+            }, 500);
             updateGrandTotal();
         });
 
@@ -92,37 +95,6 @@
                 }
             });
         }
-
-        function showToast(type, message) {
-            // Thêm thông báo vào container
-            let toastContainer = $('.toast-container');
-
-            // Tạo toast mới
-            let toast = `
-                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header ${type === 'success' ? 'bg-success' : 'bg-danger'} text-white">
-                        <p class="me-auto">${type === 'success' ? 'Thông báo' : 'Lỗi'}</p>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body bg-white text-dark">
-                        ${message}
-                    </div>
-                    <div class="toast-progress ${type === 'success' ? 'bg-success' : 'bg-danger'}"></div>
-                </div>
-            `;
-            // Thêm toast vào container
-            toastContainer.append(toast);
-            // Hiển thị toast
-            let toastElement = toastContainer.find('.toast:last-child')[0];
-            let bsToast = new bootstrap.Toast(toastElement);
-            bsToast.show();
-            // Tùy chọn: Xóa toast sau một thời gian
-            setTimeout(() => {
-                $(toastElement).toast('hide');
-                $(toastElement).remove();
-            }, 3000);
-        }
-
     });
     toastOptions = {
         autohide: true,

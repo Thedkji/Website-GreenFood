@@ -72,6 +72,7 @@
                                 <option value="{{ $province['ProvinceID'] }}">{{ $province['ProvinceName'] }}</option>
                                 @endforeach
                             </select>
+
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
@@ -167,7 +168,7 @@
                                         }
                                         }
                                         @endphp
-                                        <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                                        <img src="{{ $imageSrc }}" name="image" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
                                     </td>
                                     <td class="text-start">
                                         <strong>

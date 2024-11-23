@@ -35,7 +35,6 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $datas = $request->selectBox;
-
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
         }
@@ -380,9 +379,30 @@ class CheckoutController extends Controller
             $productPrice = auth()->check()
                 ? ($item['product']['status'] === 0 ? $item['product']['price_sale'] : (VariantGroup::where('sku', $productSku)->first()->price_sale))
                 : $item['price'];
-            $productImg = auth()->check()
-                ? $item['product']['img'] ?? 'abc.jpg'
-                : $item['attributes']['img'] ?? 'abc.jpg';
+            if (auth()->check()) {
+                if ($item['product']['status'] === 0) {
+                    $productImg = $item['product']['img'];
+                    $variantDetails[$item['id']] = null;
+                } else {
+                    $variant = VariantGroup::with('variants')->where('product_id', $item['product_id'])
+                        ->where('sku', $item['sku'])
+                        ->first();
+                    $variantDetails[$item['sku']] = $variant;
+                    $productImg = $variantDetails[$item['sku']]->img ?? $item['product']['img'];
+                }
+            } else {
+                if ($item['attributes']['status'] === 0) {
+                    $productImg = $item['attributes']['img'];
+                    $variantDetails[$item['id']] = null;
+                } else {
+                    $variant = VariantGroup::with('variants')->where('product_id', $item['product_id'])
+                        ->where('sku', $item['sku'])
+                        ->first();
+                    $variantDetails[$item['sku']] = $variant;
+                    $productImg = $variantDetails[$item['attributes']['sku']]->img ?? $item['attributes']['img'];
+                }
+            }
+
 
             // Thêm chi tiết đơn hàng
             $order->orderDetails()->create([

@@ -221,21 +221,21 @@
     <h5 class="fs-4 text-uppercase text-success mb-4">Thông tin người nhận</h5>
     <div class="row">
         <div class="col-lg-6">
-            <p class="fs-6 mb-2 text-muted">Họ và tên:</p>
-            <p class="fs-6 text-dark">{{ $user->name }}</p>
-            <p class="fs-6 mb-2 text-muted">SĐT:</p>
-            <p class="fs-6 text-dark">{{ $orders->phone }}</p>
-            <p class="fs-6 mb-2 text-muted">Ghi chú:</p>
-            <p class="fs-6 text-dark">
+            <p class="mb-2 text-muted">Họ và tên:</p>
+            <p class="text-dark">{{ $user->name }}</p>
+            <p class="mb-2 text-muted">SĐT:</p>
+            <p class="text-dark">{{ $orders->phone }}</p>
+            <p class="mb-2 text-muted">Ghi chú:</p>
+            <p class="text-dark">
                 {{ !empty($orders->note) ? $orders->note : 'Không có ghi chú' }}
             </p>
         </div>
         <div class="col-lg-6">
-            <p class="fs-6 mb-2 text-muted">Email:</p>
-            <p class="fs-6 text-dark">{{ $orders->email }}</p>
-            <p class="fs-6 mb-2 text-muted">Địa chỉ:</p>
-            <p class="fs-6 text-dark">{{ $orders->address }}</p>
-            <p class="fs-6 text-muted">{{ $orders->ward }} - {{ $orders->district }} - {{ $orders->province }}</p>
+            <p class="mb-2 text-muted">Email:</p>
+            <p class="text-dark">{{ $orders->email }}</p>
+            <p class="mb-2 text-muted">Địa chỉ:</p>
+            <p class="text-dark">{{ $orders->address }}</p>
+            <p class="text-muted"><span id="ward">{{ $orders->ward }}</span> - <span id="district">{{ $orders->district }}</span> - <span id="province">{{ $orders->province }}</span></p>
         </div>
     </div>
 </div>
@@ -251,7 +251,6 @@
                 <th scope="col">Ảnh</th>
                 <th scope="col">Giá</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Số tiền đã giảm</th>
                 <th scope="col">Thành tiền</th>
             </tr>
         </thead>
@@ -265,11 +264,8 @@
                 <td>
                     <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="Product Image" style="max-width: 100px;">
                 </td>
-                <td class="text-danger">{{ app('formatPrice')($orderDetail->product_price) }} VNĐ</td>
+                <td class="text-success">{{ app('formatPrice')($orderDetail->product_price) }} VNĐ</td>
                 <td> x {{ $orderDetail->product_quantity }}</td>
-                <td>
-                    {{ app('formatPrice')($orderDetail->coupon_price) }} VNĐ
-                </td>
                 @php
                 $total = ($orderDetail->product_quantity * $orderDetail->product_price) - $orderDetail->coupon_price;
                 @endphp
@@ -282,7 +278,7 @@
 
             @if ($orderDetails->count() > 0)
             <tr>
-                <td colspan="6"></td>
+                <td colspan="5"></td>
                 <td colspan="1">
                     <p class="">Tổng tiền:</p>
                 </td>
@@ -291,16 +287,27 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="6"></td>
+                <td colspan="5"></td>
                 <td colspan="1">
-                    <p>Số tiền được giảm:</p>
+                    <p>Phí ship:</p>
                 </td>
                 <td colspan="3">
-                    <h3 class="text-success">{{ app('formatPrice')($totalDiscount - $orders->total) }} VNĐ</h3>
+                    <h3 class="text-danger" id="feeShip">Không có</h3>
                 </td>
             </tr>
             <tr>
-                <td colspan="6"></td>
+                <td colspan="5"></td>
+                <td colspan="1">
+                    <p>Mã giảm giá ({{$orderDetails->pluck('coupon_name')[0] ?? 'Không có'}}):</p>
+                </td>
+                @if($orderDetails->pluck('coupon_name')[0] && $orderDetails->pluck('coupon_name')[0] != null)
+                <td colspan="3">
+                    <h3 class="text-success" id="coupon-fee">Không có</h3>
+                </td>
+                @endif
+            </tr>
+            <tr>
+                <td colspan="5"></td>
                 <td colspan="1">
                     <strong>Tiền sau giảm:</strong>
                 </td>
@@ -310,7 +317,7 @@
             </tr>
             @else
             <tr>
-                <td colspan="11">
+                <td colspan="10">
                     <h2 class="text-danger">Sản phẩm này không có chi tiết</h2>
                 </td>
             </tr>
@@ -318,30 +325,5 @@
         </tbody>
     </table>
 </div>
-
+@include('admins.orders.script')
 @endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Tìm tất cả các toast
-        const toastElements = document.querySelectorAll(".toast");
-
-        toastElements.forEach((toast) => {
-            // Hiển thị toast bằng Bootstrap
-            const bsToast = new bootstrap.Toast(toast, {
-                delay: 3000
-            }); // 3000ms = 3 giây
-            bsToast.show();
-
-            // Tự động ẩn toast sau 3 giây
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
-        });
-    });
-    toastOptions = {
-        autohide: true,
-        delay: 5000 // Thời gian hiển thị (ms)
-    };
-    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
-    toast.show();
-</script>
