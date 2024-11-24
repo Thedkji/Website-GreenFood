@@ -67,9 +67,9 @@
                         <th scope="row">{{ $value->role === 0 ? 'Admin': 'User' }}</th>
                         <th scope="row">
                             <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.users.detail', $value->id) }}">
+                                {{-- <a href="{{ route('admin.users.detail', $value->id) }}">
                                     <i class="fa-regular fa-eye"></i>
-                                </a>
+                                </a> --}}
                                 <a href="{{ route('admin.users.show', $value->id) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
