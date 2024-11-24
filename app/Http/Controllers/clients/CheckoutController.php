@@ -231,7 +231,6 @@ class CheckoutController extends Controller
                 session(['cart_items' => $request->data[0]]);
                 return $this->VnPayCheckOut($request, $order);
             }
-
             $this->finalizeOrder($order, $request->data[0], $coupon);
 
             return redirect()->route('client.showSuccessCheckOut')->with('success', 'Đơn hàng đã được đặt thành công!');
@@ -395,10 +394,10 @@ class CheckoutController extends Controller
                     $productImg = $item['attributes']['img'];
                     $variantDetails[$item['id']] = null;
                 } else {
-                    $variant = VariantGroup::with('variants')->where('product_id', $item['product_id'])
-                        ->where('sku', $item['sku'])
+                    $variant = VariantGroup::with('variants')->where('product_id', $item['attributes']['product_id'])
+                        ->where('sku', $item['attributes']['sku'])
                         ->first();
-                    $variantDetails[$item['sku']] = $variant;
+                    $variantDetails[$item['attributes']['sku']] = $variant;
                     $productImg = $variantDetails[$item['attributes']['sku']]->img ?? $item['attributes']['img'];
                 }
             }
