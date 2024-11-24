@@ -3,7 +3,6 @@
 @section('title', 'User | Danh sách người dùng')
 
 @section('start-page-title', 'Danh sách người dùng')
-
 @section('content')
     @if (session('success'))
         <div class="alert alert-success">
@@ -22,7 +21,8 @@
 
                 <div class="search-box ms-2">
                     <form action="{{ route('admin.users.index') }}" method="GET">
-                        <input type="text" name="search" class="form-control search" value = "{{ request()->input('search') }}" placeholder="Tìm kiếm...">
+                        <input type="text" name="search" class="form-control search"
+                            value = "{{ request()->input('search') }}" placeholder="Tìm kiếm...">
                         <i class="ri-search-line search-icon"></i>
                         {{-- <button class="btn btn-primary" type="submit">Tìm kiếm</button> --}}
                     </form>
@@ -34,38 +34,38 @@
         </div>
     </div>
 
-    <table class="table table-striped ">
+    <table class="table table-striped text-center align-middle">
         <thead>
             <tr>
-                <td scope="col">Id</td>
-                <td scope="col">Họ và tên</td>
-                <td scope="col">Ảnh</td>
-                <td scope="col">Tên đăng nhập</td>
-                <td scope="col">Email</td>
-                <td scope="col">Số điện thoại</td>
-                <td scope="col">Địa chỉ</td>
-                <td scope="col">Vai trò</td>
-                <td scope="col">Thao Tác</td>
+                <th scope="col">Id</th>
+                <th scope="col">Họ và tên</th>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Tên đăng nhập</th>
+                <th scope="col">Email</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Địa chỉ</th>
+                <th scope="col">Vai trò</th>
+                <th scope="col">Thao Tác</th>
             </tr>
         </thead>
         <tbody>
             @if (isset($users))
                 @foreach ($users as $value)
                     <tr>
-                        <th scope="row">{{ $value->id }}</th>
-                        <th scope="row">{{ $value->name }}</th>
-                        <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:150px"></th>
-                        <th scope="row">{{ $value->user_name }}</th>
-                        {{-- <th scope="row">{{ $value->password }}</th> --}}
-                        <th scope="row">{{ $value->email }}</th>
-                        <th scope="row">{{ $value->phone }}</th>
-                        {{-- <th scope="row">{{ $value->province }}</th>
-                        <th scope="row">{{ $value->district }}</th>
-                        <th scope="row">{{ $value->ward }}</th> --}}
-                        <th scope="row">{{ $value->address }}</th>
-                        <th scope="row">{{ $value->role === 0 ? 'Admin': 'User' }}</th>
-                        <th scope="row">
+                        <td scope="row">{{ $value->id }}</td>
+                        <td scope="row">{{ $value->name }}</td>
+                        <td scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
+                                style="widtd:100px;height:100px;object-fit: cover"></td>
+                        <td scope="row">{{ $value->user_name }}</td>
+                        {{-- <td scope="row">{{ $value->password }}</td> --}}
+                        <td scope="row">{{ $value->email }}</td>
+                        <td scope="row">{{ $value->phone }}</td>
+                        {{-- <td scope="row">{{ $value->province }}</td>
+                        <td scope="row">{{ $value->district }}</td>
+                        <td scope="row">{{ $value->ward }}</td> --}}
+                        <td scope="row">{{ $value->address }}</td>
+                        <td scope="row">{{ $value->role === 0 ? 'Admin' : 'User' }}</td>
+                        <td scope="row">
                             <div class="hstack gap-3 flex-wrap">
                                 {{-- <a href="{{ route('admin.users.detail', $value->id) }}">
                                     <i class="fa-regular fa-eye"></i>
@@ -83,7 +83,7 @@
                                     </button>
                                 </form>
                             </div>
-                        </th>
+                        </td>
 
                     </tr>
                 @endforeach

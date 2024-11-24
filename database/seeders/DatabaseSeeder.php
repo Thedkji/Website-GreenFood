@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             GallerySeeder::class,
             // SupplierSeeder::class,
             // DepotSeeder::class,
-            // CouponSeeder::class,
+            CouponSeeder::class,
             // UserSeeder::class,
             // CartSeeder::class,
             // CommentSeeder::class,
@@ -29,10 +29,10 @@ class DatabaseSeeder extends Seeder
             // OrderDetailSeeder::class,
 
             CategoryProductSeeder::class,
-            // CouponCategorySeeder::class,
+            CouponCategorySeeder::class,
 
 
-            // CouponProductSeeder::class,
+            CouponProductSeeder::class,
             VariantGroupVariantSeed::class,
         ]);
     }

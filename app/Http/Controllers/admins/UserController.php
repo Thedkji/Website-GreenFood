@@ -55,7 +55,7 @@ class UserController extends Controller
             if ($request->hasFile('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
                 $data['avatar'] = $avatarPath;
             }
 
@@ -105,7 +105,7 @@ class UserController extends Controller
                 }
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
                 $data['avatar'] = $avatarPath;
             }
 

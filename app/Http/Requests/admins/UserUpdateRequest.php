@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
         $id = $this->route('user');
         return [
             'name' => 'required|max:255',
-            'avatar' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'avatar' => 'image|max:2048',
             'user_name' => "max:100|unique:users,user_name,$id",
             'email' => "required|email|max:255",
             'phone' => "required|max:10",
@@ -45,7 +45,7 @@ class UserUpdateRequest extends FormRequest
             'name.required' => 'Tên người dùng là bắt buộc.',
             // 'avatar.required' => 'Ảnh đại diện là bắt buộc.',
             'avatar.image' => 'Tệp tải lên phải là một hình ảnh.',
-            'avatar.mimes' => 'Ảnh phải có định dạng jpg, jpeg, hoặc png.',
+            // 'avatar.mimes' => 'Ảnh phải có định dạng jpg, jpeg, hoặc png.',
             'avatar.max' => 'Ảnh tải lên phải nhỏ hơn 2MB.',
             'user_name.required' => 'Tên đăng nhập là bắt buộc.',
 
