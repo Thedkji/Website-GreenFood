@@ -43,17 +43,17 @@
                 <div class="col-md-12 col-lg-8 col-xl-8 row">
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
-                            <label class="form-label my-3">Họ và tên</label>
+                            <label class="form-label my-3">Họ và tên <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="fullName" value="{{$userInfo ? $userInfo->name : old('fullName')}}">
                             <x-feedback name="fullName" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Số điện thoại</label>
+                            <label class="form-label my-3">Số điện thoại <span class="text-danger">*</span></label>
                             <input type="tel" name="phone" class="form-control" value="{{$userInfo ? $userInfo->phone : old('phone')}}">
                             <x-feedback name="phone" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Email</label>
+                            <label class="form-label my-3">Email <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control" value="{{$userInfo ? $userInfo->email : old('email')}}">
                             <x-feedback name="email" />
                         </div>
@@ -65,53 +65,61 @@
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
-                            <label for="province" class="form-label my-3">Thành phố</label>
+                            <label for="province" class="form-label my-3">Thành phố <span class="text-danger">*</span></label>
                             <select name="province" id="province" class="form-select" value="{{old('province')}}">
                                 <option value="">Chọn Thành phố</option>
                                 @foreach($provinces as $province)
                                 <option value="{{ $province['ProvinceID'] }}">{{ $province['ProvinceName'] }}</option>
                                 @endforeach
                             </select>
+
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
-                            <label for="district" class="form-label my-3">Quận/Huyện</label>
+                            <label for="district" class="form-label my-3">Quận/Huyện <span class="text-danger">*</span></label>
                             <select name="district" id="district-dropdown" class="form-select" value="{{old('district')}}">
                                 <option value="">Chọn Quận/Huyện</option>
                             </select>
                             <x-feedback name="district" />
                         </div>
                         <div class="form-item">
-                            <label for="ward" class="form-label my-3">Phường/Xã</label>
+                            <label for="ward" class="form-label my-3">Phường/Xã <span class="text-danger">*</span></label>
                             <select name="ward" id="ward-dropdown" class="form-select" value="{{old('ward')}}">
                                 <option value="">Chọn Phường/Xã</option>
                             </select>
                             <x-feedback name="ward" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Địa chỉ</label>
+                            <label class="form-label my-3">Địa chỉ <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="address" name="address" value="{{$userInfo ? $userInfo->address : old('address')}}">
                             <x-feedback name="address" />
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Phương thức thanh toán</label>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
+                            <label class="form-label my-3">Phương thức thanh toán <span class="text-danger">*</span></label>
+
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
                                         <input type="radio" class="form-check-input bg-primary border-0" id="Paypal-1" name="payment_method" value="VNPay">
-                                        <label class="form-check-label" for="Paypal-1">Chuyển khoản VN Pay</label>
+                                        <label class="form-check-label" for="Paypal-1">
+                                            <i class="fa fa-credit-card"></i> Chuyển khoản VN Pay
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom ">
+
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="Delivery-1" name="payment_method" value="Delivery">
-                                        <label class="form-check-label" for="Delivery-1">Tiền mặt</label>
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Delivery-1" name="payment_method" value="Delivery" checked>
+                                        <label class="form-check-label" for="Delivery-1">
+                                            <i class="fa fa-money-bill"></i> Tiền mặt
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4 mt-5">
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
@@ -160,7 +168,7 @@
                                         }
                                         }
                                         @endphp
-                                        <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                                        <img src="{{ $imageSrc }}" name="image" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
                                     </td>
                                     <td class="text-start">
                                         <strong>
@@ -224,7 +232,7 @@
                     <option value="{{ $coupon->id }}"
                         data-discount="{{ $coupon->maximum_spend }}"
                         {{ session('coupon') && session('coupon.id') == $coupon->id ? 'selected' : '' }}>
-                        {{ $coupon->name }} - Tối đa: {{ number_format($coupon->maximum_spend) }} VND
+                        {{ $coupon->name }}
                     </option>
                     @endforeach
                     @endif

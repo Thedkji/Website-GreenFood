@@ -34,7 +34,11 @@
                         $('#feeShip').empty();
                         $('#district-dropdown').append('<option value="">Chọn Quận/Huyện</option>');
                         districts.forEach(district => {
-                            $('#district-dropdown').append('<option value="' + district.DistrictID + '">' + district.DistrictName + '</option>');
+                            let selected = '';
+                            if (userInfo && userInfo['district'].trim() == district.DistrictName.trim()) {
+                                selected = 'selected';
+                            }
+                            $('#district-dropdown').append('<option value="' + district.DistrictID + selected + '">' + district.DistrictName + '</option>');
                         });
                     },
                     error: function(error) {
@@ -64,7 +68,12 @@
                         $('#feeShip').empty();
                         $('#ward-dropdown').append('<option value="">Chọn Phường/Xã</option>');
                         wards.forEach(ward => {
-                            $('#ward-dropdown').append('<option value="' + ward.WardCode + '">' + ward.WardName + '</option>');
+                            // Kiểm tra nếu giá trị phường/xã đã được chọn (dựa trên old('ward') hoặc $userInfo->ward)
+                            let selected = '';
+                            if (userInfo && userInfo['ward'].trim() == ward.WardName.trim()) {
+                                selected = 'selected';
+                            }
+                            $('#ward-dropdown').append('<option value="' + ward.WardCode + '" ' + selected + '>' + ward.WardName + '</option>');
                         });
                     },
                     error: function(error) {
@@ -172,12 +181,11 @@
         // Áp mã giảm giá -------------------------------------------------------------
         $('#coupon_id').change(function() {
             var couponId = $(this).val();
-
+            var hiddenInput = document.querySelector('input[name="coupon[]"]');
             // Nếu không chọn coupon thì không gửi AJAX
             if (couponId === "") {
                 return;
             }
-
             // Gửi yêu cầu AJAX để áp dụng mã giảm giá
             $.ajax({
                 url: "{{ route('client.applyCoupon') }}", // Lấy URL action của form
@@ -192,7 +200,7 @@
                         // Chuyển coupon thành chuỗi JSON
                         let couponJson = JSON.stringify(coupon);
                         // Cập nhật giá trị vào trường input type="hidden"
-                        document.querySelector('input[name="coupon[]"]').value = couponJson;
+                        hiddenInput.value = couponJson;
                         let couponDetail = `
                             <div class="border rounded p-3 bg-light" id="coupon-detail">
                                 <h5 class="text-primary">Chi tiết mã giảm giá</h5>
@@ -204,7 +212,7 @@
                         if (coupon.type == 0) {
                             couponDetail += `
                                 <div class="mb-3">
-                                    <strong>Loại giảm giá:</strong> Toàn bộ sản phẩm
+                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng
                                 </div>
                             `;
                             if (coupon.discount_type == 1) { // Giảm giá theo số tiền cố định

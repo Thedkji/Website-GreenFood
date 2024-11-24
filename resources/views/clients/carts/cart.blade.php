@@ -42,20 +42,15 @@
     <div class="container py-5">
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
-            <div class="d-flex justify-content-between gap-3 mb-4">
-                <button formaction="{{ route('client.deleteCart') }}" formmethod="post"
-                    onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning">
-                    Xóa tất cả
-                </button>
-                <button formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">
-                    Cập nhật số lượng
-                </button>
-            </div>
+            <button id="delete-button" formaction="{{ route('client.deleteCart') }}" formmethod="post"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning" style="display: none;">
+                Xóa tất cả
+            </button>
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">
-                            <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                            <input type="checkbox" class="form-check-input bg-primary border-0" style="width: 20px;height: 20px;" id="select-all" onclick="toggleSelectAll(this)">
                         </th>
                         <th scope="col">Ảnh</th>
                         <th scope="col">Tên sản phẩm</th>
@@ -69,11 +64,11 @@
                 <tbody>
                     @if ($cartItems->isNotEmpty())
                     @foreach ($cartItems as $item)
+                    <input type="hidden" name="item_ids" id="itemIds">
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}"
-                                class="cart-checkbox"
+                            <input type="checkbox" name="selectBox[]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" value="{{ $item }}"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
                             disabled @endif
@@ -95,6 +90,7 @@
                                 }
                                 $imageSrc .= $variantImg ?? $item->product->img;
                                 }
+                                $quantity = $item->quantity;
                                 @endphp
                                 <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
@@ -121,7 +117,7 @@
                             </p>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4 text-primary">
+                            <p class="mb-0 mt-4 text-primary" id="price-{{ $item->id }}">
                                 @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale) }} VNĐ
                                 @else
@@ -143,7 +139,8 @@
                                 </div>
                                 <input type="text" name="quantities[{{ $item->id }}]"
                                     class="form-control form-control-sm text-center border-0"
-                                    value="{{ $item->quantity }}">
+                                    value="{{ $quantity }}">
+                                <input type="hidden" name="priceTotal[{{ $item->id }}]">
                                 <div class="input-group-btn">
                                     <button type="button"
                                         class="btn btn-sm btn-plus rounded-circle bg-light border">
@@ -153,13 +150,13 @@
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4 text-primary">
+                            <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">
                                 @if ($item->product->status === 0)
-                                {{ number_format($item->product->price_sale * $item->quantity) }} VNĐ
+                                {{ number_format($item->product->price_sale * $quantity) }} VNĐ
                                 @else
                                 @if (isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
                                 @foreach ($variantGroups[$item->sku] as $variant)
-                                {{ number_format($variant->price_sale * $item->quantity) }} VNĐ
+                                {{ number_format($variant->price_sale * $quantity) }} VNĐ
                                 @endforeach
                                 @endif
                                 @endif
@@ -184,8 +181,7 @@
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}"
-                                class="cart-checkbox"
+                            <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[]" value="{{ $item }}"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
                             disabled @endif
@@ -227,29 +223,30 @@
                         </td>
 
                         <td>
-                            <p class="mb-0 mt-4 text-primary">{{ number_format($item->price) }} VNĐ</p>
+                            <p class="mb-0 mt-4 text-primary" id="price-{{ $item->id }}">{{ number_format($item->price) }} VNĐ</p>
                         </td>
 
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
-                                    <button type="button"
-                                        class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                    <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border" data-action="decrease">
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
                                 <input type="text" name="quantities[{{ $item->id }}]"
                                     class="form-control form-control-sm text-center border-0"
                                     value="{{ $item->quantity }}">
+                                <input type="hidden" name="priceTotal[{{ $item->id }}]">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border" data-action="increase">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
+
                         </td>
                         <td>
-                            <p class="mb-0 mt-4 text-primary">{{ number_format($item->price * $item->quantity) }}
+                            <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">{{ number_format($item->price * $item->quantity) }}
                                 VNĐ</p>
 
                             @if (!empty($lowStockVariants))
@@ -270,7 +267,10 @@
                     </tr>
                     @endif
                     @endforeach
-
+                    @else
+                    <tr>
+                        <td colspan="8" class="text-center">Giỏ hàng của bạn trống</td>
+                    </tr>
                     @endif
                 </tbody>
             </table>
@@ -278,13 +278,14 @@
             <div class="mt-3 d-flex justify-content-sm-end">
                 {{ auth()->check() ? $cartItems->links() : '' }}
             </div>
+            @if ($cartItems->isNotEmpty())
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
-                            <p class="mb-0 pe-4 text-primary">{{ number_format($cartTotal) }} VNĐ</p>
+                            <p class="mb-0 pe-4 text-primary" id="grandTotal">{{ number_format($cartTotal) }} VNĐ</p>
                         </div>
                         <button
                             class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
@@ -292,39 +293,10 @@
                     </div>
                 </div>
             </div>
+            @endif
         </form>
 
     </div>
 </div>
-
+@include('clients.carts.script-cart')
 @endsection
-<script>
-    function toggleSelectAll(source) {
-        const checkboxes = document.querySelectorAll('.cart-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-        toggleDeleteButton();
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-        // Tìm tất cả các toast
-        const toastElements = document.querySelectorAll(".toast");
-
-        toastElements.forEach((toast) => {
-            // Hiển thị toast bằng Bootstrap
-            const bsToast = new bootstrap.Toast(toast, {
-                delay: 3000
-            }); // 3000ms = 3 giây
-            bsToast.show();
-
-            // Tự động ẩn toast sau 3 giây
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
-        });
-    });
-    toastOptions = {
-        autohide: true,
-        delay: 5000 // Thời gian hiển thị (ms)
-    };
-    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
-    toast.show();
-</script>
