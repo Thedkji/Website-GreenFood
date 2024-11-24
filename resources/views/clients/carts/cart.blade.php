@@ -1,61 +1,128 @@
 @extends('clients.layouts.master')
 
-@section('title', 'Fruitables - Đăng ký tài khoản')
+@section('title', 'Fruitables - Giỏ hàng')
+
+@section('title_page', 'Trang chủ')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Giỏ hàng')
 
 @section('content')
 
-@include('clients.layouts.components.singer-page')
 <div class="container-fluid py-5">
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
+    <div class="toast-container">
+        @if (session('success'))
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+            <div class="toast-header bg-success text-white">
+                <p class="me-auto">Thông báo</p>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-white text-dark">
+                {{ session('success') }}
+            </div>
+            <div class="toast-progress bg-success"></div>
+        </div>
+        @endif
 
-    @if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
+        @if (session('error'))
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+            <div class="toast-header bg-danger text-white">
+                <p class="me-auto">Lỗi</p>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-white text-dark">
+                {{ session('error') }}
+            </div>
+            <div class="toast-progress bg-danger"></div>
+        </div>
+        @endif
     </div>
-    @endif
+
     <div class="container py-5">
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
+            <button id="delete-button" formaction="{{ route('client.deleteCart') }}" formmethod="post"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning" style="display: none;">
+                Xóa tất cả
+            </button>
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Products</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">
+                            <input type="checkbox" class="form-check-input bg-primary border-0" style="width: 20px;height: 20px;" id="select-all" onclick="toggleSelectAll(this)">
+                        </th>
+                        <th scope="col">Ảnh</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Mã sản phẩm</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if ($cartItems->isNotEmpty())
                     @foreach ($cartItems as $item)
+                    <input type="hidden" name="item_ids" id="itemIds">
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}">
+                            <input type="checkbox" name="selectBox[]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" value="{{ $item }}"
+                                @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
+                                @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                            disabled @endif
+                            @endforeach
+                            @endif
+                            >
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_IMG').$item->product->img }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                @php
+                                $imageSrc = env('VIEW_IMG') . '/';
+                                if ($item->product->status === 0) {
+                                $imageSrc .= $item->product->img;
+                                } else {
+                                $variantImg = null;
+                                foreach ($variantGroups[$item->sku] ?? [] as $variant) {
+                                $variantImg = $variant->img ?? $item->product->img;
+                                break;
+                                }
+                                $imageSrc .= $variantImg ?? $item->product->img;
+                                }
+                                $quantity = $item->quantity;
+                                @endphp
+                                <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">{{ $item->product->name }}</p>
-                            <p class="mb-0 mt-4"></p>
+                            <p class="mb-0 mt-4">
+                                {{ $item->product->name }}
+                                @if (!empty($variantGroups[$item->sku]))
+                                @foreach ($variantGroups[$item->sku] as $variant)
+                                | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                @endforeach
+                                @endif
+                            </p>
                         </td>
                         <td>
                             <p class="mb-0 mt-4">
                                 @if ($item->product->status === 0)
+                                {{ $item->product->sku }}
+                                @else
+                                @foreach ($variantGroups[$item->sku] ?? [] as $variant)
+                                {{ $variant->sku }}
+                                @endforeach
+                                @endif
+                            </p>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4 text-primary" id="price-{{ $item->id }}">
+                                @if ($item->product->status === 0)
                                 {{ number_format($item->product->price_sale) }} VNĐ
                                 @else
-                                @if(isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
-                                @foreach($variantGroups[$item->sku] as $variant)
+                                @if (isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
+                                @foreach ($variantGroups[$item->sku] as $variant)
                                 {{ number_format($variant->price_sale) }} VNĐ
                                 @endforeach
                                 @endif
@@ -65,33 +132,48 @@
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                    <button type="button"
+                                        class="btn btn-sm btn-minus rounded-circle bg-light border">
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" name="quantities[{{ $item->id }}]" class="form-control form-control-sm text-center border-0" value="{{ $item->quantity }}">
+                                <input type="text" name="quantities[{{ $item->id }}]"
+                                    class="form-control form-control-sm text-center border-0"
+                                    value="{{ $quantity }}">
+                                <input type="hidden" name="priceTotal[{{ $item->id }}]">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <button type="button"
+                                        class="btn btn-sm btn-plus rounded-circle bg-light border">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">
+                            <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">
                                 @if ($item->product->status === 0)
-                                {{ number_format($item->product->price_sale * $item->quantity) }} VNĐ
+                                {{ number_format($item->product->price_sale * $quantity) }} VNĐ
                                 @else
-                                @if(isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
-                                @foreach($variantGroups[$item->sku] as $variant)
-                                {{ number_format($variant->price_sale * $item->quantity) }} VNĐ
+                                @if (isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty())
+                                @foreach ($variantGroups[$item->sku] as $variant)
+                                {{ number_format($variant->price_sale * $quantity) }} VNĐ
                                 @endforeach
                                 @endif
                                 @endif
                             </p>
+                            @if (!empty($lowStockVariants))
+                            @foreach ($lowStockVariants as $stock)
+                            @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
+                                <p>Còn lại : {{ $stock['stock'] }}</p>
+                                @endif
+                                @endforeach
+                                @endif
+
                         </td>
                         <td>
-                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
+                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}"
+                                formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa')">
                                 <i class="fa fa-times text-danger"></i>
                             </button>
                         </td>
@@ -99,68 +181,122 @@
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" value="{{ $item }}">
+                            <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[]" value="{{ $item }}"
+                                @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
+                                @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
+                            disabled @endif
+                            @endforeach
+                            @endif
+                            >
                         </th>
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="{{ env('VIEW_IMG') .$item->attributes->img}}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                @php
+                                $imageSrc = env('VIEW_IMG') . '/';
+                                if ($item->attributes->status === 0) {
+                                $imageSrc .= $item->attributes->img;
+                                } else {
+                                $variantImg = null;
+                                foreach ($variantGroups[$item->attributes->sku] ?? [] as $variant) {
+                                $variantImg = $variant->img ?? $item->attributes->img;
+                                break;
+                                }
+                                $imageSrc .= $variantImg ?? $item->attributes->img;
+                                }
+                                @endphp
+                                <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">{{ $item->name }}</p>
+                            <p class="mb-0 mt-4">
+                                {{ $item->name }}
+                                @if (!empty($variantGroups[$item->attributes->sku]))
+                                @foreach ($variantGroups[$item->attributes->sku] as $variant)
+                                | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                @endforeach
+                                @endif
+                            </p>
+                        </td>
+
+                        <td>
                             <p class="mb-0 mt-4">{{ $item->attributes->sku }}</p>
                         </td>
+
                         <td>
-                            <p class="mb-0 mt-4">{{ number_format($item->price) }} VNĐ</p>
+                            <p class="mb-0 mt-4 text-primary" id="price-{{ $item->id }}">{{ number_format($item->price) }} VNĐ</p>
                         </td>
+
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                    <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border" data-action="decrease">
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" name="quantities[{{ $item->id }}]" class="form-control form-control-sm text-center border-0" value="{{ $item->quantity }}">
+                                <input type="text" name="quantities[{{ $item->id }}]"
+                                    class="form-control form-control-sm text-center border-0"
+                                    value="{{ $item->quantity }}">
+                                <input type="hidden" name="priceTotal[{{ $item->id }}]">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border" data-action="increase">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
+
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">{{ number_format(($item->price) * ($item->quantity)) }} VNĐ</p>
+                            <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">{{ number_format($item->price * $item->quantity) }}
+                                VNĐ</p>
+
+                            @if (!empty($lowStockVariants))
+                            @foreach ($lowStockVariants as $stock)
+                            @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
+                                <p>Còn lại : {{ $stock['stock'] }}</p>
+                                @endif
+                                @endforeach
+                                @endif
                         </td>
                         <td>
-                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}" formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4" onclick="return confirm('Bạn có chắc chắn muốn xóa')">
+                            <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}"
+                                formmethod="post" class="btn btn-md rounded-circle bg-light border mt-4"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa')">
                                 <i class="fa fa-times text-danger"></i>
                             </button>
                         </td>
                     </tr>
                     @endif
                     @endforeach
+                    @else
+                    <tr>
+                        <td colspan="8" class="text-center">Giỏ hàng của bạn trống</td>
+                    </tr>
                     @endif
                 </tbody>
             </table>
-            <button type="submit" formaction="{{ route('client.updateCart') }}" formmethod="post" class="btn btn-primary">Cập nhật số lượng</button>
+
+            <div class="mt-3 d-flex justify-content-sm-end">
+                {{ auth()->check() ? $cartItems->links() : '' }}
+            </div>
+            @if ($cartItems->isNotEmpty())
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Total</h5>
-                            <p class="mb-0 pe-4">{{ number_format($cartTotal) }} VNĐ</p>
+                            <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
+                            <p class="mb-0 pe-4 text-primary" id="grandTotal">{{ number_format($cartTotal) }} VNĐ</p>
                         </div>
-                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Proceed Checkout</button>
+                        <button
+                            class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                            type="submit">Thanh toán</button>
                     </div>
                 </div>
             </div>
+            @endif
         </form>
-        <form action="{{ route('client.deleteCart') }}" method="POST">
-            @csrf
-            <button onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" type="submit" class="btn btn-warning">Xóa tất cả sản phẩm</button>
-        </form>
+
     </div>
 </div>
-
+@include('clients.carts.script-cart')
 @endsection

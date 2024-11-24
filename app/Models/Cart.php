@@ -19,7 +19,7 @@ class Cart extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->select('id', 'sku', 'name', 'img', 'price_sale', 'price_regular', 'status', 'quantity');
     }
 
     public function user()

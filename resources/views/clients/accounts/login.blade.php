@@ -3,7 +3,6 @@
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
         <div class="shadow-lg p-4 w-50 m-auto rounded bg-light">

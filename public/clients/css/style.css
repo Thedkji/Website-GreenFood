@@ -9,10 +9,19 @@
     max-width: 150px;
     /* Điều chỉnh độ rộng tối đa */
 }
-
+.truncate-text-300{
+    overflow: hidden;
+    /* Ẩn phần nội dung tràn */
+    text-overflow: ellipsis;
+    /* Thêm dấu "..." */
+    white-space: nowrap;
+    /* Giữ nội dung trên 1 dòng, không xuống dòng */
+    max-width: 300px;
+    /* Điều chỉnh độ rộng tối đa */
+}
 .pagination .rounded {
     padding: 8px 18px; /* Thêm khoảng cách giữa các nút */
-    font-size: 16px;    /* Giảm kích thước font */
+    font-size: 16px; /* Giảm kích thước font */
 }
 
 .pagination .rounded i {
@@ -20,7 +29,6 @@
     color: #888; /* Màu nhạt hơn */
     transition: all 0.3s ease; /* Hiệu ứng khi hover */
 }
-
 
 .pagination .rounded.active i {
     color: white; /* Màu icon khi active */
@@ -31,10 +39,42 @@
     opacity: 0.6; /* Giảm độ sáng khi không thể click */
 }
 
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1055;
+}
+.toast {
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.toast-header {
+    font-weight: bold;
+}
 
+.toast-body {
+    font-size: 14px;
+}
 
+.toast-progress {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: toastProgress 3s linear forwards; /* Thanh chạy hoàn tất trong 3 giây */
+}
 
+@keyframes toastProgress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
 #spinner {
     opacity: 0;
     visibility: hidden;

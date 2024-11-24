@@ -7,33 +7,139 @@
 <li class="breadcrumb-item active">Đơn hàng chi tiết</li>
 @endsection
 @section('content')
-<div class="mb-3">
-    <div class="progress progress-step-arrow">
-        <p class="progress-bar bg-danger" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 0 ? '' : 'display:none' }} " aria-valuenow="0" aria-valuemin="0" aria-valuemax="6">Chờ xác nhận</p>
+<div class="toast-container">
+    @if (session('success'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('success') }}
+        </div>
+        <div class="toast-progress bg-success"></div>
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
+    </div>
+    @endif
+</div>
+<div class="mb-3 border p-3 border-success rounded bg-white">
+    <h5 class="fs-4 text-uppercase text-success mb-4">Trạng thái đơn hàng hiện tại</h5>
+    <div class="progress progress-step-arrow bg-white">
+        <!-- Chờ xác nhận -->
+        @if($orders->status >= 0)
+        <div class="progress-bar bg-danger" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa-regular fa-clock" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "chờ xác nhận" -->
+            <div class="status-label">Chờ xác nhận</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
+        @endif
+
         @if ($orders->status != 5)
-        <p class="progress-bar bg-warning" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 1 ? '' : 'display:none' }}" aria-valuenow="1" aria-valuemin="0" aria-valuemax="6">Đã xác nhận và đang xử lý</p>
-        <p class="progress-bar bg-primary" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 2 ? '' : 'display:none' }}" aria-valuenow="2" aria-valuemin="0" aria-valuemax="6">Đang giao hàng</p>
+        <!-- Đã xác nhận và đang xử lý -->
+        @if($orders->status >= 1)
+        <div class="progress-bar bg-warning" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="1" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa-regular fa-circle-check" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đã xác nhận" -->
+            <div class="status-label">Đã xác nhận và đang xử lý</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
+        @endif
+
+        <!-- Đang giao hàng -->
+        @if($orders->status >= 2)
+        <div class="progress-bar bg-primary" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="2" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-truck" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đang giao hàng" -->
+            <div class="status-label">Đang giao hàng</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
+        @endif
+
         @if ($orders->status != 4)
-        <p class="progress-bar bg-success" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 3 ? '' : 'display:none' }}" aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">Giao hàng thành công</p>
+        <!-- Giao hàng thành công -->
+        @if($orders->status >= 3)
+        <div class="progress-bar bg-success" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-box" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao thành công" -->
+            <div class="status-label">Giao hàng thành công</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
         @endif
+        @endif
+
         @if ($orders->status != 6)
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 4 ? '' : 'display:none' }}" aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">Giao hàng không thành công</p>
+        <!-- Giao hàng không thành công -->
+        @if($orders->status >= 4)
+        <div class="progress-bar bg-secondary" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-x-circle" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao không thành công" -->
+            <div class="status-label">Giao hàng không thành công</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
         @endif
-        <p class="progress-bar " role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 6 ? '' : 'display:none' }}" aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">Đánh giá</p>
         @endif
+
+        <!-- Đánh giá -->
+        @if($orders->status >= 6)
+        <div class="progress-bar bg-info" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-star" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đánh giá" -->
+            <div class="status-label">Đánh giá</div>
+        </div>
+        @endif
+
+        @endif
+
         @if ($orders->status != 6)
-        <p class="progress-bar bg-danger" role="progressbar" style="width: 16.66%; margin-right: 10px;{{ $orders->status >= 5 ?  '' : 'display:none' }}" aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">Hủy đơn</p>
+        <!-- Hủy đơn -->
+        @if($orders->status >= 5)
+        <div class="progress-bar bg-danger" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-trash" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "hủy đơn" -->
+            <div class="status-label">Hủy đơn</div>
+        </div>
+        @endif
         @endif
     </div>
 </div>
-<div class="mb-3 border p-2 border-success rounded bg-white">
-    <h5 class="fs-1 text-uppercase">Chỉnh sửa trạng thái</h5>
+<div class="mb-3 border p-3 border-success rounded bg-white">
+    <h5 class="fs-4 text-uppercase text-success mb-4">Chỉnh sửa trạng thái đơn hàng</h5>
     <div class="d-flex">
         @if ($orders->status <= 1)
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+            <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
             Hủy đơn hàng
             </button>
-            <form style="margin-right:10px ;" action="{{route('admin.orders.cancelOrder', $orders->id)}}" id="updateStatusForm" method="post">
+            <form action="{{ route('admin.orders.cancelOrder', $orders->id) }}" method="post" id="updateStatusForm">
                 @csrf
                 @method('PUT')
                 <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
@@ -56,9 +162,10 @@
                 </div>
             </form>
             @endif
+
             @switch($orders->status)
             @case(0)
-            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm0">
+            <form action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm0" class="me-2">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="1">
@@ -67,7 +174,7 @@
             @break
 
             @case(1)
-            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm1">
+            <form action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm1" class="me-2">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="2">
@@ -76,13 +183,13 @@
             @break
 
             @case(2)
-            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2">
+            <form action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2" class="me-2">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="4">
                 <button type="submit" class="btn btn-danger">Giao không thành công</button>
             </form>
-            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2">
+            <form action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm2" class="me-2">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="3">
@@ -91,102 +198,126 @@
             @break
 
             @case(3)
-            <form style="margin-right:10px ;" action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm3">
+            <form action="{{ route('admin.orders.updateOrder', $orders->id) }}" method="post" id="updateStatusForm3" class="me-2">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="6">
                 <button type="submit" class="btn btn-primary">Hoàn thành đơn hàng và đánh giá</button>
             </form>
             @break
+
             @case(4)
             <span class="badge bg-danger p-2">Hoàn trả hàng</span>
             @break
+
             @default
             <span class="badge bg-secondary p-2">
                 Không thể thay đổi trạng thái : {{$orders->status === 5 ? $orders->cancel_reson : ''}}
             </span>
             @endswitch
-
-    </div>
-
-</div>
-
-<div class="mb-3 border p-2 border-success rounded bg-white ">
-    <h5 class="fs-1 text-uppercase">Thông tin người nhận</h5>
-    <div class="mt-5 row">
-        <div class="col-lg-4">
-            <p class="fs-7">Họ và tên : {{$user->name}}</p>
-            <p class="fs-7">SĐT : {{$orders->phone}}</p>
-        </div>
-        <div class="col-lg-4">
-            <p class="fs-7">Email : {{$orders->email}}</p>
-            <p class="fs-7">Địa chỉ : {{$orders->address}}</p>
-            <p class="fs-7">{{$orders->ward}} - {{$orders->district}} - {{$orders->province}}</p>
-        </div>
-
     </div>
 </div>
-<div class="table-responsive mt-4 mt-xl-0">
+<div class="mb-3 border p-4 border-success rounded bg-white shadow-sm">
+    <h5 class="fs-4 text-uppercase text-success mb-4">Thông tin người nhận</h5>
+    <div class="row">
+        <div class="col-lg-6">
+            <p class="mb-2 text-muted">Họ và tên:</p>
+            <p class="text-dark">{{ $user->name }}</p>
+            <p class="mb-2 text-muted">SĐT:</p>
+            <p class="text-dark">{{ $orders->phone }}</p>
+            <p class="mb-2 text-muted">Ghi chú:</p>
+            <p class="text-dark">
+                {{ !empty($orders->note) ? $orders->note : 'Không có ghi chú' }}
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <p class="mb-2 text-muted">Email:</p>
+            <p class="text-dark">{{ $orders->email }}</p>
+            <p class="mb-2 text-muted">Địa chỉ:</p>
+            <p class="text-dark">{{ $orders->address }}</p>
+            <p class="text-muted"><span id="ward">{{ $orders->ward }}</span> - <span id="district">{{ $orders->district }}</span> - <span id="province">{{ $orders->province }}</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive mt-4 mt-xl-0 border p-3 border-success rounded bg-white">
+    <h5 class="fs-4 text-uppercase text-success mb-4">Chi tiết đơn hàng</h5>
     <table class="table table-striped table-nowrap align-middle mb-0 text-center">
         <thead>
             <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Mã sản phẩm</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Giá</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Mã giảm giá đã áp dụng</th>
-                <th scope="col">Số lượng mã giảm giá</th>
-                <th scope="col">Số tiền đã giảm</th>
                 <th scope="col">Thành tiền</th>
-                <th scope="col">Ngày tạo</th>
-                <th scope="col">Ngày cập nhật</th>
             </tr>
         </thead>
         <tbody>
+            @php $totalDiscount = 0 @endphp
             @foreach ($orderDetails as $orderDetail)
             <tr>
-                <td scope="col">{{ $orderDetail->order_id }}</td>
-                <td scope="col">{{ $orderDetail->product_name }}</td>
-                <td scope="col">
-                    <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="">
+                <td>{{ $loop->iteration }}</td>
+                <td><strong>{{ $orderDetail->product_name }}</strong></td>
+                <td><strong>{{ $orderDetail->product_sku }}</strong></td>
+                <td>
+                    <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="Product Image" style="max-width: 100px;">
                 </td>
-                <td scope="col">
-                    {{ app('formatPrice')($orderDetail->product_price) }} VNĐ
-                </td>
-                <td scope="col">{{ $orderDetail->product_quantity }}</td>
-                <td scope="col">{{ $orderDetail->coupon_name ?? 'Không có' }}</td>
-                <td scope="col">{{ $orderDetail->coupon_quantity ?? 'Không có'}}</td>
-
-                <td scope="col">
-                    {{ app('formatPrice')($orderDetail->coupon_price) }} VNĐ
-                </td>
-
+                <td class="text-success">{{ app('formatPrice')($orderDetail->product_price) }} VNĐ</td>
+                <td> x {{ $orderDetail->product_quantity }}</td>
                 @php
-                $total = $orderDetail->product_price - $orderDetail->coupon_price;
+                $total = ($orderDetail->product_quantity * $orderDetail->product_price) - $orderDetail->coupon_price;
                 @endphp
-
-                <td scope="col">
-                    <span class="text-success">{{ app('formatPrice')($orderDetail->product_quantity * $orderDetail->product_price) }} VNĐ</span>
+                <td class="text-success">
+                    {{ app('formatPrice')($total) }} VNĐ
                 </td>
-
-                <td scope="col">{{ $orderDetail->created_at }}</td>
-                <td scope="col">{{ $orderDetail->updated_at }}</td>
             </tr>
+            @php $totalDiscount += $total @endphp
             @endforeach
 
             @if ($orderDetails->count() > 0)
             <tr>
-                <td colspan="8">
-                    <h2>Tổng tiền:</h2>
+                <td colspan="5"></td>
+                <td colspan="1">
+                    <p class="">Tổng tiền:</p>
                 </td>
-                <td colspan="5">
+                <td colspan="3">
+                    <h3 class="text-success">{{ app('formatPrice')($totalDiscount) }} VNĐ</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5"></td>
+                <td colspan="1">
+                    <p>Phí ship:</p>
+                </td>
+                <td colspan="3">
+                    <h3 class="text-danger" id="feeShip">Không có</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5"></td>
+                <td colspan="1">
+                    <p>Mã giảm giá ({{$orderDetails->pluck('coupon_name')[0] ?? 'Không có'}}):</p>
+                </td>
+                @if($orderDetails->pluck('coupon_name')[0] && $orderDetails->pluck('coupon_name')[0] != null)
+                <td colspan="3">
+                    <h3 class="text-success" id="coupon-fee">Không có</h3>
+                </td>
+                @endif
+            </tr>
+            <tr>
+                <td colspan="5"></td>
+                <td colspan="1">
+                    <strong>Tiền sau giảm:</strong>
+                </td>
+                <td colspan="3">
                     <h3 class="text-success">{{ app('formatPrice')($orders->total) }} VNĐ</h3>
                 </td>
             </tr>
             @else
             <tr>
-                <td colspan="13">
+                <td colspan="10">
                     <h2 class="text-danger">Sản phẩm này không có chi tiết</h2>
                 </td>
             </tr>
@@ -194,4 +325,5 @@
         </tbody>
     </table>
 </div>
+@include('admins.orders.script')
 @endsection

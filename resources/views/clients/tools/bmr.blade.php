@@ -2,8 +2,12 @@
 
 @section('title', 'Fruitables - Tính BMR và TDEE')
 
+@section('title_page', 'Tính BMR và TDEE')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Tính BMR và TDEE')
+
+
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
         <!-- Contact Start -->

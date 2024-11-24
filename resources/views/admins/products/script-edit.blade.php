@@ -199,6 +199,7 @@
                     group.variants.forEach(function(variant) {
                         if (variant.id == value) {
                             existingData = {
+                                sku: group.sku || '',
                                 price_regular: group.price_regular || '',
                                 price_sale: group.price_sale || '',
                                 quantity: group.quantity || '',
@@ -211,6 +212,7 @@
                 // Nếu không tìm thấy dữ liệu, khởi tạo dữ liệu rỗng
                 if (!existingData) {
                     existingData = {
+                        sku : '',
                         price_regular: '',
                         price_sale: '',
                         quantity: '',
@@ -222,7 +224,7 @@
                 variantValuesTableBody.append(`
             <tr>
                 <td>
-                    <h5 class="text-success">${name}</h5>
+                    <h5 class="text-success">${name} - ${existingData.sku}</h5>
                 </td>
                 <td>
                     <button class="btn btn-primary variant_value_setup" type="button" data-item="${value}">Thiết lập</button>

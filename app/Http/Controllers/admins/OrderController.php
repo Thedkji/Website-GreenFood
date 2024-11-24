@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\OrderRequest;
 use App\Mail\MailCheckOut;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\VariantGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -40,8 +42,22 @@ class OrderController extends Controller
         $orders = Order::find($id);
         $orderDetails = $orders->orderDetails()->get();
         $user = $orders->user()->firstOr();
+        // Duyệt qua từng order detail để lấy ảnh sản phẩm
+        // $orderDetails->each(function ($orderDetail) {
+        //     // Lấy SKU từ order detail
+        //     $sku = $orderDetail->product_sku;
+        //     // Kiểm tra xem SKU có trong bảng Product hay VariantGroup
+        //     $product = Product::where('sku', $sku)->first();
+        //     if ($product) {
+        //         $orderDetail->product_img = $product->img; // Gán ảnh từ bảng Product
+        //     } else {
+        //         $variant = VariantGroup::where('sku', $sku)->first();
+        //         $orderDetail->product_img = $variant ? $variant->img : null; // Gán ảnh từ VariantGroup (nếu có)
+        //     }
+        // });
         return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
     }
+
 
     public function updateOrder(Request $request, $id)
     {
@@ -51,8 +67,8 @@ class OrderController extends Controller
             $order->update(['status' => $status]);
             Mail::to($order->email)->queue(new MailCheckOut($order));
         }
-        
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
     }
 
     public function cancelOrder(Request $request, $id)
@@ -62,6 +78,6 @@ class OrderController extends Controller
             $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
             Mail::to($order->email)->send(new MailCheckOut($order));
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
     }
 }
