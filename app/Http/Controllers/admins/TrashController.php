@@ -23,10 +23,10 @@ class TrashController extends Controller
         $products = Product::onlyTrashed()->paginate(5);
         // $variants = Variant::onlyTrashed()->paginate(5);
         $orders = Order::onlyTrashed()->paginate(5);
-        $categories = Category::onlyTrashed()->paginate(5);
+        // $categories = Category::onlyTrashed()->paginate(5);
         $comments = Comment::onlyTrashed()->paginate(5);
         $suppliers = Supplier::onlyTrashed()->paginate(5);
-        return view('admins.trashs.list-trash', compact('users', 'products', 'orders', 'categories', 'comments', 'suppliers'));
+        return view('admins.trashs.list-trash', compact('users', 'products', 'orders', 'comments', 'suppliers'));
     }
 
 
@@ -88,21 +88,21 @@ class TrashController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi khôi phục đơn hàng: ' . $e->getMessage());
         }
     }
-    public function restoreCategory($id)
-    {
-        try {
-            $categories = Category::withTrashed()->findOrFail($id);
+    // public function restoreCategory($id)
+    // {
+    //     try {
+    //         $categories = Category::withTrashed()->findOrFail($id);
 
 
-            $categories->restore();
+    //         $categories->restore();
 
-            DB::commit();
-            return redirect()->back()->with('success', 'Danh mục đã được khôi phục thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi khôi phục danh mục: ' . $e->getMessage());
-        }
-    }
+    //         DB::commit();
+    //         return redirect()->back()->with('success', 'Danh mục đã được khôi phục thành công.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->with('error', 'Có lỗi xảy ra khi khôi phục danh mục: ' . $e->getMessage());
+    //     }
+    // }
     public function restoreComment($id)
     {
         try {
@@ -211,22 +211,22 @@ class TrashController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa đơn hàng: ' . $e->getMessage());
         }
     }
-    public function destroyCategory($id)
-    {
-        try {
-            $categories = Category::withTrashed()->findOrFail($id);
+    // public function destroyCategory($id)
+    // {
+    //     try {
+    //         $categories = Category::withTrashed()->findOrFail($id);
 
-            // if ($categories->img) {
-            //     Storage::disk('public')->delete($categories->img);
-            // }
-            $categories->forceDelete();
-            DB::commit();
-            return redirect()->back()->with('success', 'Danh mục đã được xóa vĩnh viễn thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa danh mục: ' . $e->getMessage());
-        }
-    }
+    //         // if ($categories->img) {
+    //         //     Storage::disk('public')->delete($categories->img);
+    //         // }
+    //         $categories->forceDelete();
+    //         DB::commit();
+    //         return redirect()->back()->with('success', 'Danh mục đã được xóa vĩnh viễn thành công.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa danh mục: ' . $e->getMessage());
+    //     }
+    // }
     public function destroyComment($id)
     {
         try {
