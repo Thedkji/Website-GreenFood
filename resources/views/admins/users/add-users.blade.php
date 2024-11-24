@@ -141,8 +141,6 @@
                 <option value=""> Chọn Phường/Xã </option>
             </select>
         </div>
-        </div>
-
         <div class="my-3">
             @error('ward')
                 <span class="text-danger">{{ $message }}</span>
@@ -174,6 +172,8 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+        </div>
+
 
         <div class="d-flex justify-content-center">
             <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay
@@ -224,6 +224,6 @@
             imagePreview.style.display = "none"; // Ẩn ảnh nếu không có file
         }
     }
-    
+
 </script>
 @endpush
