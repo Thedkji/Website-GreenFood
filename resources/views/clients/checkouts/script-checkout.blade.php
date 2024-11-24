@@ -255,10 +255,17 @@
                                 }
                                 let itemQuantity = item.quantity;
                                 let discount = 0;
-
-                                if (coupon.product_id.includes(userInfo ? item.product.id : Number(item.attributes.product_id)) || coupon.category_id.some(id => Products.categories.includes(id))) {
+                                // Lấy tất cả các categories từ Products
+                                const categories = Products.flatMap(product => product.categories || []);
+                                // Lấy danh sách id từ categories
+                                const categoryIds = categories.map(category => category.id);
+                                // Loại bỏ các id trùng lặp (unique)
+                                const uniqueCategoryIds = [...new Set(categoryIds)];
+                                if (
+                                    coupon.product_id.includes(userInfo ? item.product.id : Number(item.attributes.product_id)) ||
+                                    coupon.category_id.some(id => uniqueCategoryIds.includes(id)) // Kiểm tra giao giữa category_id và uniqueCategoryIds
+                                ) {
                                     if (coupon.discount_type == 1) {
-
                                         discount = coupon.amount * itemQuantity;
                                         finalCoupon = coupon.amount;
                                         final = totalPriceCoupon;
@@ -267,7 +274,7 @@
                                     }
                                     finalPrice = (itemPrice * itemQuantity) - discount;
                                     if (finalPrice < 0) {
-                                        finalPrice = 1000;
+                                        finalPrice = 1000; // Giá trị tối thiểu
                                     }
                                     totalDiscount += discount;
                                     totalPriceCoupon += finalPrice;
