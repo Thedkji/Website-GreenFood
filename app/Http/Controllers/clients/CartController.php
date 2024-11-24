@@ -71,50 +71,44 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Thêm sản phẩm vào giỏ hàng thành công');
     }
 
-    public function deleteCart()
+    public function deleteCart(Request $request)
     {
-        CartSession::clear();
-
-        if (auth()->check()) {
-            Cart::where('user_id', auth()->id())->delete();
+        $items = $request->selectBox;
+        $decodedItems = collect($items)->map(function ($item) {
+            return json_decode($item);  // Giải mã JSON
+        });
+        $item_id = $decodedItems->pluck('id');
+        if ($item_id) {
+            foreach ($item_id as $id) {
+                auth()->check() ? Cart::where('user_id', auth()->id())->where('id', $id)->delete() : CartSession::remove($id);
+            }
         }
 
-        return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công');
+        return redirect()->back()->with('success', 'Xóa sản phẩm thành công');
     }
 
     public function updateCart(Request $request)
     {
-        $quantities = $request->input('quantities', []);
+        $quantity = $request->quantity;
+        $item_id = $request->item_id;
         $userId = auth()->check() ? auth()->id() : null;
-        foreach ($quantities as $id => $quantity) {
-            $quantity = max(0, (int)$quantity);
-            if ($quantity === 0) {
-                if ($userId) {
-                    Cart::where('user_id', $userId)->where('id', $id)->delete();
-                    CartSession::remove($id);
-                } else {
-                    CartSession::remove($id);
-                }
+        if ($quantity === 0) {
+            if ($userId) {
+                Cart::where('user_id', $userId)->where('id', $item_id)->delete();
             } else {
-                if ($userId) {
-                    $cartItem = Cart::where('user_id', $userId)->where('id', $id)->first();
-                    if ($cartItem) {
-                        $cartItem->quantity = $quantity;
-                        $cartItem->save();
-                    }
-                } else {
-                    CartSession::update($id, [
-                        'quantity' => [
-                            'relative' => false,
-                            'value' => $quantity,
-                        ],
-                    ]);
-                }
+                CartSession::remove($item_id);
             }
+        } else {
+            $userId ? Cart::where('user_id', $userId)->where('id', $item_id)->update(['quantity' => $quantity]) : CartSession::update($item_id, [
+                'quantity' => [
+                    'relative' => false,
+                    'value' => $quantity,
+                ],
+            ]);
         }
-        session()->put('cart', CartSession::getContent()->toArray());
-        return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công');
+        return redirect()->back()->with('success', 'Cập nhật số lượng thành công');
     }
+
 
     public function removeCart($id)
     {
