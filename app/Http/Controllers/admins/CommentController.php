@@ -61,7 +61,7 @@ public function store(Request $request, $id)
     $reply->save();
 
     if ($request->hasFile('img')) {
-        $path = $request->file('img')->store('comments', 'public');
+        $path = $request->file('img')->store('comments');
         $reply->img = $path;
     }
 

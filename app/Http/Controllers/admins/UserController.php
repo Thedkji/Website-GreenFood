@@ -48,16 +48,17 @@ class UserController extends Controller
             $province = DB::table('provinces')->where('code', $request->province)->first();
 
             // Gán tên đầy đủ vào mảng $data
-            $data['ward'] = $ward ? $ward->full_name : null;
-            $data['district'] = $district ? $district->full_name : null;
-            $data['province'] = $province ? $province->full_name : null;
+            $data['ward'] = $ward ? $ward->name : null;
+            $data['district'] = $district ? $district->name : null;
+            $data['province'] = $province ? $province->name : null;
 
             if ($request->hasFile('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
                 $data['avatar'] = $avatarPath;
             }
+
 
             $user = User::create($data);
             return redirect()->route('admin.users.index')->with('success', 'Người dùng đã được thêm mới thành công.');
@@ -92,9 +93,9 @@ class UserController extends Controller
             $province = DB::table('provinces')->where('code', $request->province)->first();
 
             // Gán tên đầy đủ vào mảng $data
-            $data['ward'] = $ward ? $ward->full_name : null;
-            $data['district'] = $district ? $district->full_name : null;
-            $data['province'] = $province ? $province->full_name : null;
+            $data['ward'] = $ward ? $ward->name : null;
+            $data['district'] = $district ? $district->name : null;
+            $data['province'] = $province ? $province->name : null;
 
 
             if ($request->hasFile('avatar')) {
@@ -104,7 +105,7 @@ class UserController extends Controller
                 }
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
                 $data['avatar'] = $avatarPath;
             }
 

@@ -15,25 +15,32 @@
             {{ session('error') }}
         </div>
     @endif
-    <form novalidate action="{{ route('admin.users.update',$user->id) }}" method="post" enctype="multipart/form-data">
+    <form novalidate action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mt-3">
             <label for="name">Tên người dùng</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required  >
+            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required>
             <x-feedback name="name" />
         </div>
+
         <div class="mt-3">
             <label for="avatar">Ảnh</label>
-            <input type="file" class="form-control" name="avatar" id="avatar" value="{{ $user->avatar }}" onchange="previewImage(event, 'avatar_user')">
+            <input type="file" class="form-control" name="avatar" id="avatar" value="{{ $user->avatar }}"
+                onchange="previewImage(event, 'avatar_user')">
             <x-feedback name="avatar" />
         </div>
         <div class="form-group mb-3" style="padding-top:20px">
-            <img src="{{ Storage::url($user->avatar) }}"  alt="Ảnh khách hàng" style="width:250px ">
+            <img id="image_user"
+                src="{{ old('avatar') ?? (isset($user) && $user->avatar ? Storage::url($user->avatar) : '#') }}"
+                alt="Ảnh khách hàng"
+                style="max-width: 250px; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
         </div>
+
         <div class="mt-3">
             <label for="user_name">Tên đăng nhập</label>
-            <input type="text" name="user_name" id="user_name" class="form-control" value="{{ $user->user_name }}" required disabled >
+            <input type="text" name="user_name" id="user_name" class="form-control" value="{{ $user->user_name }}"
+                required disabled>
             <x-feedback name="user_name" />
 
         </div>
@@ -53,7 +60,8 @@
         </div>
         <div class="mt-3">
             <label for="phone">Số điện thoại</label>
-            <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}" max="10" required>
+            <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}"
+                max="10" required>
             <x-feedback name="phone" />
 
         </div>
@@ -61,9 +69,9 @@
             <label for="province">Thành phố/Tỉnh</label>
             <select name="province" id="province" class="form-control" value="{{ $user->province }}" required>
                 @foreach ($provinces as $province)
-                <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
-                    {{ $province->name }}
-                </option>
+                    <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
+                        {{ $province->name }}
+                    </option>
                 @endforeach
             </select>
             <x-feedback name="province" />
@@ -112,32 +120,55 @@
         </div>
 
         <div class="d-flex justify-content-center">
-            <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay lại</button></a>
+            <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay
+                    lại</button></a>
             <button class="btn btn-success mt-3" type="submit">Chỉnh sửa</button>
         </div>
     </form>
 @endsection
 @push('scripts')
-<script>
-    const provincesData = @json($provinces);
-    const districtsData = @json($districts);
-    const wardsData = @json($wards);
+    <script>
+        const provincesData = @json($provinces);
+        const districtsData = @json($districts);
+        const wardsData = @json($wards);
 
-    const provinceSelect = document.getElementById('province');
-    const districtSelect = document.getElementById('district');
-    const wardSelect = document.getElementById('ward');
-    const addressInput = document.getElementById('address');
+        const provinceSelect = document.getElementById('province');
+        const districtSelect = document.getElementById('district');
+        const wardSelect = document.getElementById('ward');
+        const addressInput = document.getElementById('address');
 
-    function updateAddress() {
-        const ward = wardSelect.options[wardSelect.selectedIndex].text;
-        const district = districtSelect.options[districtSelect.selectedIndex].text;
-        const province = provinceSelect.options[provinceSelect.selectedIndex].text;
+        function updateAddress() {
+            const ward = wardSelect.options[wardSelect.selectedIndex].text;
+            const district = districtSelect.options[districtSelect.selectedIndex].text;
+            const province = provinceSelect.options[provinceSelect.selectedIndex].text;
 
-        addressInput.value = `${ward !== 'Chọn Phường/Xã' ? ward + ', ' : ''}${district !== 'Chọn Quận/Huyện' ? district + ', ' : ''}${province !== 'Chọn Thành phố/Tỉnh' ? province : ''}`;
-    }
+            addressInput.value =
+                `${ward !== 'Chọn Phường/Xã' ? ward + ', ' : ''}${district !== 'Chọn Quận/Huyện' ? district + ', ' : ''}${province !== 'Chọn Thành phố/Tỉnh' ? province : ''}`;
+        }
 
-    provinceSelect.addEventListener('change', updateAddress);
-    districtSelect.addEventListener('change', updateAddress);
-    wardSelect.addEventListener('change', updateAddress);
-</script>
+        provinceSelect.addEventListener('change', updateAddress);
+        districtSelect.addEventListener('change', updateAddress);
+        wardSelect.addEventListener('change', updateAddress);
+
+
+        //Hiện ảnh
+        function previewImage(event) {
+            const input = event.target; // Lấy input file
+            const preview = document.getElementById('image_user'); // Ảnh preview
+
+            if (input.files && input.files[0]) { // Kiểm tra xem file đã được chọn chưa
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result; // Cập nhật src của ảnh preview
+                    preview.style.display = 'block'; // Hiển thị ảnh nếu bị ẩn
+                };
+
+                reader.readAsDataURL(input.files[0]); // Đọc file ảnh dưới dạng Data URL
+            } else {
+                preview.src = '#'; // Gán src rỗng nếu không có file
+                preview.style.display = 'none'; // Ẩn ảnh
+            }
+        }
+    </script>
 @endpush

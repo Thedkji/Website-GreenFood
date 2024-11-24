@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
         $id = $this->route('user');
         return [
             'name' => 'required|max:255',
-            'avatar' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'avatar' => 'image|max:2048',
             'user_name' => "required|max:100|unique:users",
 
             'password' => 'required|min:8',
@@ -48,7 +48,6 @@ class UserRequest extends FormRequest
     {
         return [
             'name.required' => 'Tên người dùng là bắt buộc.',
-            'avatar.required' => 'Ảnh đại diện là bắt buộc.',
             'avatar.image' => 'Tệp tải lên phải là một hình ảnh.',
             'avatar.mimes' => 'Ảnh phải có định dạng jpg, jpeg, hoặc png.',
             'avatar.max' => 'Ảnh tải lên phải nhỏ hơn 2MB.',

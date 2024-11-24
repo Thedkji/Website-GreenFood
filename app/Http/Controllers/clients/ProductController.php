@@ -19,7 +19,8 @@ class ProductController extends Controller
         // Bắt đầu với một truy vấn chung
         $query = Product::with(['categories', 'galleries', 'variantGroups']);
         // Lấy danh sách sản phẩm
-        $products = $query->paginate(6);
-        return view("clients.homes.home", compact("products", 'categories', ));
+        $products = $query->paginate(8);
+        $productHot = Product::orderByDesc('view')->limit(6)->get();
+        return view("clients.homes.home", compact("products", 'categories','productHot' ));
     }
 }

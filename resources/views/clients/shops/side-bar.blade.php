@@ -252,13 +252,16 @@
                                             @endif
                                         </div>
 
-                                        <!-- Ratings -->
+                                        <div style="font-size:13px">
+                                            Lượt xem: {{ $product->view }}
+                                        </div>
+                                        {{-- <!-- Ratings -->
                                         <div class="product-rating">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <i
                                                     class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
                                             @endfor
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </a>

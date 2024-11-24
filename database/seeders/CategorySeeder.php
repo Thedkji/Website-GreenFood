@@ -12,38 +12,18 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // Mảng để lưu trữ các danh mục đã tạo
-        $categories = [];
+        $categories = array(
+            array('id' => '1', 'name' => 'GÓI ĂN HEALTHY', 'parent_id' => NULL, 'created_at' => '2024-11-22 04:18:11', 'updated_at' => '2024-11-22 04:18:11'),
+            array('id' => '2', 'name' => 'BÁNH ĂN HEALTHY', 'parent_id' => NULL, 'created_at' => '2024-11-22 04:18:11', 'updated_at' => '2024-11-22 04:18:11'),
+            array('id' => '3', 'name' => 'BÁNH MỲ', 'parent_id' => '2', 'created_at' => '2024-11-22 04:18:11', 'updated_at' => '2024-11-22 04:18:11'),
+            array('id' => '4', 'name' => 'BÁNH COOKIE', 'parent_id' => '2', 'created_at' => '2024-11-22 04:18:11', 'updated_at' => '2024-11-22 04:18:11'),
+            array('id' => '5', 'name' => 'HẠT', 'parent_id' => NULL, 'created_at' => '2024-11-22 04:18:11', 'updated_at' => '2024-11-22 04:41:07'),
+            array('id' => '6', 'name' => 'GRANOLA', 'parent_id' => '5', 'created_at' => '2024-11-22 04:41:08', 'updated_at' => '2024-11-22 04:41:08'),
+            array('id' => '7', 'name' => 'CÁC LOẠI HẠT', 'parent_id' => '5', 'created_at' => '2024-11-22 04:41:08', 'updated_at' => '2024-11-22 04:41:08')
+        );
 
-        // Tạo hai danh mục đầu tiên với parent_id là null
-        for ($i = 1; $i <= 2; $i++) {
-            $category = Category::create([
-                "id" => $i,
-                "name" => "danh mục $i",
-                "parent_id" => null, // Đảm bảo parent_id là null cho 2 danh mục đầu tiên
-            ]);
-
-            // Thêm danh mục vào mảng
-            $categories[] = $category;
-        }
-
-        // Lưu các ID của danh mục có parent_id là null
-        $availableParents = [1, 2]; // ID 1 và 2 có parent_id là null
-
-        // Tạo các danh mục còn lại từ 3 đến 10 với parent_id ngẫu nhiên từ danh mục cha
-        for ($i = 3; $i <= 10; $i++) {
-            // Chọn ngẫu nhiên một parent_id từ mảng $availableParents
-            $randomParentId = $availableParents[array_rand($availableParents)];
-
-            // Tạo danh mục mới với parent_id là ngẫu nhiên
-            $category = Category::create([
-                "id" => $i,
-                "name" => "danh mục $i",
-                "parent_id" => $randomParentId,
-            ]);
-
-            // Thêm danh mục vào mảng
-            $categories[] = $category;
+        foreach ($categories as $category) {
+            Category::create($category);
         }
     }
 }
