@@ -42,7 +42,7 @@
 
                 <div class="mb-3">
                     <label for="description">Mô tả</label>
-                    <textarea name="description" id="product-ckeditor2" class="form-control">{{ old('description') }}</textarea>
+                    <textarea name="description" id="product-ckeditor2" class="form-control" style="height: 1500px">{{ old('description') }}</textarea>
                     @error('description')
                         <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
@@ -190,4 +190,5 @@
 
     @include('admins.products.script')
     @include('admins.products.validate')
+    
 @endsection

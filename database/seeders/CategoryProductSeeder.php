@@ -13,9 +13,23 @@ class CategoryProductSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
-            $cate = Category::find($i);
-            $cate->products()->attach(mt_rand(1, 20));
+        $category_product = array(
+            array('category_id' => '2', 'product_id' => '1'),
+            array('category_id' => '4', 'product_id' => '1'),
+            array('category_id' => '5', 'product_id' => '2'),
+            array('category_id' => '6', 'product_id' => '2'),
+            array('category_id' => '2', 'product_id' => '3'),
+            array('category_id' => '4', 'product_id' => '3'),
+            array('category_id' => '2', 'product_id' => '4'),
+            array('category_id' => '4', 'product_id' => '4'),
+            array('category_id' => '2', 'product_id' => '5'),
+            array('category_id' => '4', 'product_id' => '5'),
+            array('category_id' => '2', 'product_id' => '6'),
+            array('category_id' => '4', 'product_id' => '6')
+        );
+
+        foreach ($category_product as $item) {
+            Category::find($item['category_id'])->products()->attach($item['product_id']);
         }
     }
 }
