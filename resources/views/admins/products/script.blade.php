@@ -78,7 +78,8 @@
 
                     childCategory.empty();
                     response.categories.map((item) => {
-                        childCategory.append(new Option(item.name, item.id, false,
+                        childCategory.append(new Option(item.name, item.id,
+                            false,
                             false));
                     });
 
@@ -213,5 +214,6 @@
             let item = $(this).data('item');
             $(`#variantSettingsRow-${item}`).toggle();
         });
+
     });
 </script>

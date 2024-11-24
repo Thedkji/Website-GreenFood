@@ -18,21 +18,21 @@ class DatabaseSeeder extends Seeder
             VariantSeeder::class,
             VariantGroupSeed::class,
             GallerySeeder::class,
-            SupplierSeeder::class,
-            DepotSeeder::class,
-            CouponSeeder::class,
-            UserSeed::class,
-            CartSeeder::class,
-            CommentSeeder::class,
-            RateSeeder::class,
-            OrderSeeder::class,
-            OrderDetailSeeder::class,
+            // SupplierSeeder::class,
+            // DepotSeeder::class,
+            // CouponSeeder::class,
+            // UserSeeder::class,
+            // CartSeeder::class,
+            // CommentSeeder::class,
+            // RateSeeder::class,
+            // OrderSeeder::class,
+            // OrderDetailSeeder::class,
 
             CategoryProductSeeder::class,
-            CouponCategorySeeder::class,
+            // CouponCategorySeeder::class,
 
 
-            CouponProductSeeder::class,
+            // CouponProductSeeder::class,
             VariantGroupVariantSeed::class,
         ]);
     }

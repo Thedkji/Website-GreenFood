@@ -36,7 +36,9 @@
     CKEDITOR.replace('product-ckeditor');
 
     // Description
-    CKEDITOR.replace('product-ckeditor2');
+    CKEDITOR.replace('product-ckeditor2', {
+        height: 500 
+    });
 </script>
 
 <script>
