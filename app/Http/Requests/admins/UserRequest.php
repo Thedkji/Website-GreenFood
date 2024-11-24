@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
         $id = $this->route('user');
         return [
             'name' => 'required|max:255',
-            'avatar' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'avatar' => 'image|max:2048',
             'user_name' => "required|max:100|unique:users",
 
             'password' => 'required|min:8',

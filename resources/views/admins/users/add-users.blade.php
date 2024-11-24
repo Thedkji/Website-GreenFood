@@ -135,19 +135,17 @@
         @enderror
     </div>
 
-    <div class="mt-3">
-        <label for="ward">Phường/Xã</label>
-        <select name="ward" id="ward" class="form-control" value="{{ old('ward') }}">
-            <option value=""> Chọn Phường/Xã </option>
-        </select>
-    </div>
-    </div>
-
-    <div class="my-3">
-        @error('ward')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
+        <div class="mt-3">
+            <label for="ward">Phường/Xã</label>
+            <select name="ward" id="ward" class="form-control" value="{{ old('ward') }}">
+                <option value=""> Chọn Phường/Xã </option>
+            </select>
+        </div>
+        <div class="my-3">
+            @error('ward')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
 
     <div class="mt-3">
         <label for="address">Địa chỉ</label>
@@ -169,11 +167,13 @@
             </select>
         </div>
 
-    <div class="my-3">
-        @error('role')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
+        <div class="my-3">
+            @error('role')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+        </div>
+
 
     <div class="d-flex justify-content-center">
         <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay
@@ -225,6 +225,6 @@
             imagePreview.style.display = "none"; // Ẩn ảnh nếu không có file
         }
     }
-    
+
 </script>
 @endpush
