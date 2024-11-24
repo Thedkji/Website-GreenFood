@@ -75,7 +75,7 @@
             @endif
         </tbody>
     </table>
-    <h2 class="text-primary">Danh sách danh mục</h2>
+    {{-- <h2 class="text-primary">Danh sách danh mục</h2>
     <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
@@ -110,7 +110,7 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
     <h2 class="text-primary">Danh sách sản phẩm</h2>
     <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
