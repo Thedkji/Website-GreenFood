@@ -25,4 +25,34 @@ class GHNService
 
         return [];
     }
+    public function getDistricts($provinceId)
+    {
+        $response = Http::withHeaders([
+            'Token' => $this->apiKey,
+        ])->post("https://online-gateway.ghn.vn/shiip/public-api/master-data/district", [
+            'province_id' => $provinceId,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json()['data'];
+        }
+
+        return [];
+    }
+
+    // Lấy danh sách phường/xã theo ID quận/huyện
+    public function getWards($districtId)
+    {
+        $response = Http::withHeaders([
+            'Token' => $this->apiKey,
+        ])->post("https://online-gateway.ghn.vn/shiip/public-api/master-data/ward", [
+            'district_id' => $districtId,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json()['data'];
+        }
+
+        return [];
+    }
 }
