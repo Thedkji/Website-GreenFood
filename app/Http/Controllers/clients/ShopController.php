@@ -32,6 +32,8 @@ class ShopController extends Controller
             $query->whereHas('categories', function ($q) use ($categoryId) {
                 $q->where('categories.id', $categoryId);
             });
+        }else{
+            $products = $query->paginate(12);
         }
 
         // Lọc theo khoảng giá nếu có

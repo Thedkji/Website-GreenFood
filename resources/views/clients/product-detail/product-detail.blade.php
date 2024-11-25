@@ -52,12 +52,15 @@
                         <div class="col-lg-6">
                             <form action="{{ route('client.addToCart') }}" method="post">
                                 @csrf
-                                <h4 class="fw-bold mb-3" style="width: 430px; overflow-wrap: break-word">
+                                <h4 class="fw-bold mb-3" style="width: 400px; overflow-wrap: break-word">
                                     {{ $product->name }}
                                 </h4>
-                                <p class="mb-3"><span class="fw-bold">Danh mục:</span>
+                                <p class="mb-3"><span class="fw-bold text-dark">DANH MỤC:</span>
                                     @foreach ($product->categories as $category)
-                                        <span>{{ $category->name }},</span>
+                                        <a href="{{ route('client.shop', ['category_id' => $category->id]) }}"
+                                            class="filter-shop-cate" name="filter-shop-cate">
+                                            {{ $category->name }} |
+                                        </a>
                                     @endforeach
                                 </p>
 
@@ -185,6 +188,10 @@
                                         Số lượng : {{ $variantGroup->quantity }}
                                     </p>
                                 @endif
+
+                                <p style="font-size: 13px ; color: rgb(162, 160, 160)">
+                                    Lượt xem : {{ $product->view }}
+                                </p>
 
                                 <div class="input-group custom-quantity my-4" style="width: 100px;">
                                     <div class="input-group-btn">

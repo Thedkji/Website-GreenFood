@@ -4,6 +4,14 @@
         padding: 20px;
     }
 
+    .truncate-text-120 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        width: 120px;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
     /* Product Card */
     .product-card {
         display: flex;
@@ -164,6 +172,11 @@
                     <div class="col-lg-12">
                         <div class="mb-3">
                             <h4>Danh mục</h4>
+                            <label for="Categories-1" class="mb-1">
+                                <a href="{{ route('client.shop') }}" class="filter-shop-cate" name="filter-shop-cate">
+                                    TẤT CẢ
+                                </a>
+                            </label>
                             <form action="{{ route('client.shop') }}" method="get" id="form-filter-cate">
                                 @csrf
                                 @foreach ($categories as $category)
@@ -186,86 +199,8 @@
                         </div>
                     </div>
                     <div class="col-lg-12">
-                        <h4 class="mb-3">Sản phẩm nổi bật</h4>
 
-                        @foreach ($productHot as $product)
-                            <a href="{{ route('client.product-detail', $product->id) }}"
-                                class="text-decoration-none text-dark">
-                                <div class="product-card mb-4">
-                                    <!-- Image -->
-                                    <div class="product-img-container">
-                                        @if ($product->img)
-                                            <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                                alt="{{ $product->name }}" class="product-img">
-                                        @else
-                                            <img src="{{ env('VIEW_IMG') }}/default-image.png"
-                                                alt="{{ $product->name }}" class="product-img">
-                                        @endif
-                                    </div>
-
-                                    <!-- Product Info -->
-                                    <div class="product-info">
-                                        <h6 class="product-name truncate-text">
-                                            {{ $product->name }}
-                                            @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
-                                                @php
-                                                    // Lấy biến thể có giá sale thấp nhất
-                                                    $variant = $product->variantGroups
-                                                        ->whereNotNull('price_sale')
-                                                        ->sortBy('price_sale')
-                                                        ->first();
-                                                @endphp
-                                                @if ($variant)
-                                                    - {{ $variant->name }}
-                                                @endif
-                                            @endif
-                                        </h6>
-
-                                        <!-- Pricing -->
-                                        <div class="product-pricing">
-                                            @if ($product->status == 0)
-                                                <!-- Nếu không có biến thể, lấy giá từ bảng product -->
-                                                @if ($product->price_regular)
-                                                    <span
-                                                        class="price-regular">{{ number_format($product->price_regular, 0) }}
-                                                        VNĐ</span>
-                                                @endif
-
-                                                @if ($product->price_sale)
-                                                    <span
-                                                        class="price-sale text-primary">{{ number_format($product->price_sale, 0) }}
-                                                        VNĐ</span>
-                                                @endif
-                                            @elseif ($product->status == 1 && isset($variant))
-                                                <!-- Nếu có biến thể, lấy giá sale và regular từ variant -->
-                                                @if ($variant->price_regular)
-                                                    <span
-                                                        class="price-regular">{{ number_format($variant->price_regular, 0) }}
-                                                        VNĐ</span>
-                                                @endif
-
-                                                @if ($variant->price_sale)
-                                                    <span
-                                                        class="price-sale text-primary">{{ number_format($variant->price_sale, 0) }}
-                                                        VNĐ</span>
-                                                @endif
-                                            @endif
-                                        </div>
-
-                                        <div style="font-size:13px">
-                                            Lượt xem: {{ $product->view }}
-                                        </div>
-                                        {{-- <!-- Ratings -->
-                                        <div class="product-rating">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <i
-                                                    class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
-                                            @endfor
-                                        </div> --}}
-                                    </div>
-                                </div>
-                            </a>
-                        @endforeach
+                        @include('clients.product-detail.product-hot')
 
 
 
