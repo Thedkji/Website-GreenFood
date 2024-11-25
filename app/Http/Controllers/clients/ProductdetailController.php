@@ -6,36 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\VariantGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductdetailController extends Controller
 {
     public function productDetail(Request $request)
     {
         $product = Product::with(['categories', 'galleries', 'variantGroups', 'comments'])->find($request->id);
-        $view = $product->view;
-        $product->update([
-            'view' => $view + 1,
-        ]);
+
+        // Kiểm tra nếu sản phẩm này đã được xem trong session
+        if (!$request->ajax() && !$request->is('api/*')) {
+            $sessionKey = 'viewed_product_' . $product->id;
+            if (!session()->has($sessionKey)) {
+                $product->increment('view');
+                session()->put($sessionKey, true);
+            }
+        }
+        // session()->forget($sessionKey);
+
 
         $productHot = Product::orderByDesc('view')->limit(4)->get();
 
         $relatedProducts = Product::with(['variantGroups' => function ($query) {
-            $query->orderBy('price_sale', 'asc'); // Sắp xếp biến thể theo giá thấp nhất
+            // Sắp xếp biến thể theo giá thấp nhất
+            $query->orderBy('price_sale','asc')->get();
         }])
-            ->where(function ($query) use ($product) {
-                $query->whereHas('categories', function ($query) use ($product) {
-                    // Lấy sản phẩm thuộc cùng danh mục
-                    $query->whereIn('categories.id', $product->categories->pluck('id'));
-                })
-                    ->orWhereHas('variantGroups', function ($query) use ($product) {
-                        // Lấy biến thể có product_id thuộc danh mục
-                        $query->whereHas('product.categories', function ($subQuery) use ($product) {
-                            $subQuery->whereIn('categories.id', $product->categories->pluck('id'));
-                        });
-                    });
+            ->whereHas('categories', function ($query) use ($product) {
+                $query->whereIn('categories.id', $product->categories->pluck('id'));
             })
             ->limit(15)
             ->get();
+
+
 
 
         if ($request->variantGroupID) {

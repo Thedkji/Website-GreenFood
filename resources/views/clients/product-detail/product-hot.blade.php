@@ -3,7 +3,7 @@
         <h4 class="mb-4">Sản phẩm nổi bật</h4>
         @foreach ($productHot as $product)
             <a href="{{ route('client.product-detail', $product->id) }}" class="text-decoration-none text-dark">
-                <div class="product-card mb-4">
+                <div class="product-card mb-4" style="width:275px">
                     <!-- Image -->
                     <div class="product-img-container">
                         @if ($product->img)
@@ -17,7 +17,7 @@
 
                     <!-- Product Info -->
                     <div class="product-info">
-                        <h6 class="product-name truncate-text">
+                        <h6 class="product-name truncate-text-120">
                             {{ $product->name }}
                             @if ($product->variantGroups->isNotEmpty() && $product->status == 1)
                                 @php
@@ -38,35 +38,39 @@
                             @if ($product->status == 0)
                                 <!-- Nếu không có biến thể, lấy giá từ bảng product -->
                                 @if ($product->price_regular)
-                                    <span class="price-regular">{{ number_format($product->price_regular, 0) }}
+                                    <span class="price-regular" style="font-size: 13px">{{ number_format($product->price_regular, 0) }}
                                         VNĐ</span>
                                 @endif
 
                                 @if ($product->price_sale)
-                                    <span class="price-sale text-primary">{{ number_format($product->price_sale, 0) }}
+                                    <span
+                                        class="price-sale text-primary" style="font-size: 18px">{{ number_format($product->price_sale, 0) }}
                                         VNĐ</span>
                                 @endif
                             @elseif ($product->status == 1 && isset($variant))
                                 <!-- Nếu có biến thể, lấy giá sale và regular từ variant -->
                                 @if ($variant->price_regular)
-                                    <span class="price-regular">{{ number_format($variant->price_regular, 0) }}
+                                    <span class="price-regular" style="font-size: 13px">{{ number_format($variant->price_regular, 0) }}
                                         VNĐ</span>
                                 @endif
 
                                 @if ($variant->price_sale)
-                                    <span class="price-sale text-primary">{{ number_format($variant->price_sale, 0) }}
+                                    <span class="price-sale text-primary" style="font-size: 18px">{{ number_format($variant->price_sale, 0) }}
                                         VNĐ</span>
                                 @endif
                             @endif
                         </div>
 
-                        <!-- Ratings -->
-                        <div class="product-rating">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <i
-                                    class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
-                            @endfor
+                        <div style="font-size:13px">
+                            Lượt xem: {{ $product->view }}
                         </div>
+                        {{-- <!-- Ratings -->
+                    <div class="product-rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <i
+                                class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
+                        @endfor
+                    </div> --}}
                     </div>
                 </div>
             </a>

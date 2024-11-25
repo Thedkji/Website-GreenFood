@@ -181,6 +181,7 @@
             var description = document.getElementById('description');
             var readMore = document.getElementById('read-more');
             var content = document.getElementById('description-content');
+            console.log(content.scrollHeight);
             // Kiểm tra chiều cao thực tế của nội dung
             if (content.scrollHeight <= 200) {
                 // Nếu nội dung không vượt quá chiều cao giới hạn, ẩn nút và overlay

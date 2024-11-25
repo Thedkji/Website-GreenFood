@@ -32,6 +32,8 @@ class ShopController extends Controller
             $query->whereHas('categories', function ($q) use ($categoryId) {
                 $q->where('categories.id', $categoryId);
             });
+        }else{
+            $products = $query->paginate(12);
         }
 
         // Lọc theo khoảng giá nếu có
@@ -73,10 +75,7 @@ class ShopController extends Controller
                 // Sắp xếp mặc định
                 $query->orderBy('id', 'desc');
             }
-        } else {
-            // Sắp xếp mặc định
-            $query->orderBy('id', 'desc');
-        }
+        } 
 
         // Lấy danh sách sản phẩm
         $products = $query->paginate(12);
