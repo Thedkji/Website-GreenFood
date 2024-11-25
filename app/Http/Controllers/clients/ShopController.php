@@ -73,10 +73,7 @@ class ShopController extends Controller
                 // Sắp xếp mặc định
                 $query->orderBy('id', 'desc');
             }
-        } else {
-            // Sắp xếp mặc định
-            $query->orderBy('id', 'desc');
-        }
+        } 
 
         // Lấy danh sách sản phẩm
         $products = $query->paginate(12);
