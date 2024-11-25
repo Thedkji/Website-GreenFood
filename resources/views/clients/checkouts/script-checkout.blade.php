@@ -12,6 +12,103 @@
         let final = 0;
         let finalCoupon = 0;
         var insuranceValue = parseInt(totalPrice, 10);
+        var provinceName = $('#province option:selected').text();
+        if (userInfo && userInfo['province']) {
+            // Lấy danh sách quận dựa trên `province`
+            const provinceId = $('#province').val();
+            $.ajax({
+                url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district',
+                type: 'POST',
+                headers: {
+                    'token': ghnKey,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    'province_id': parseInt($('#province').val(), 10)
+                }),
+                success: function(response) {
+                    let districts = response.data;
+
+                    $('#district-dropdown').append('<option value="">Chọn Quận/Huyện</option>');
+
+                    districts.forEach(district => {
+                        let selected = '';
+                        // Loại bỏ khoảng trắng thừa và chuyển về chữ thường trước khi so sánh
+                        if (userInfo['district'] && district.DistrictName.trim().toLowerCase().includes(userInfo['district'].trim().toLowerCase())) {
+                            $('#district-dropdown').append(
+                                `<option value="${district.DistrictID}" selected>${district.DistrictName}</option>`
+                            );
+                        } else {
+                            $('#district-dropdown').append(
+                                `<option value="${district.DistrictID}" >${district.DistrictName}</option>`
+                            );
+                        }
+                    });
+                    // Tự động gọi API phường/xã nếu có `district`
+                    if (userInfo['district']) {
+                        // Gọi API để lấy danh sách phường/xã
+                        $.ajax({
+                            url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward',
+                            type: 'POST',
+                            headers: {
+                                'token': ghnKey,
+                                'Content-Type': 'application/json'
+                            },
+                            data: JSON.stringify({
+                                'district_id': parseInt($('#district-dropdown').val(), 10)
+                            }),
+                            success: function(response) {
+                                let wards = response.data;
+
+                                $('#ward-dropdown').empty();
+                                $('#ward-dropdown').append('<option value="">Chọn Phường/Xã</option>');
+                                wards.forEach(ward => {
+                                    let selected = '';
+                                    if (userInfo['ward'] && ward.WardName.trim().toLowerCase().includes(userInfo['ward'].trim().toLowerCase())) {
+                                        $('#ward-dropdown').append(
+                                            `<option value="${ward.WardCode}" selected>${ward.WardName}</option>`
+                                        );
+
+                                    } else {
+                                        $('#ward-dropdown').append(
+                                            `<option value="${ward.WardCode}" >${ward.WardName}</option>`
+                                        );
+                                    }
+                                });
+                                const wardCode = $('#ward-dropdown').val();
+                                const districtId = $('#district-dropdown').val();
+                                $.ajax({
+                                    url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+                                    type: 'POST',
+                                    headers: {
+                                        'token': ghnKey,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    data: JSON.stringify({
+                                        "shop_id": parseInt(ghnShop, 10),
+                                        "from_district": 3440, // Quận Nam từ Liêm
+                                        "to_district": parseInt(districtId, 10),
+                                    }),
+                                    success: function(response) {
+                                        let service = response.data[0];
+                                        calculateShippingFee(service.service_id, districtId, wardCode);
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
 
         $('#province').change(function() {
             const provinceId = $(this).val();
@@ -29,17 +126,34 @@
                     }),
                     success: function(response) {
                         let districts = response.data;
-                        $('#district-dropdown').empty(); // Xóa các quận cũ
+
+                        // Xóa danh sách dropdown cũ
+                        $('#district-dropdown').empty();
                         $('#ward-dropdown').empty();
                         $('#feeShip').empty();
+
+                        // Thêm tùy chọn mặc định
                         $('#district-dropdown').append('<option value="">Chọn Quận/Huyện</option>');
+
+                        // Duyệt danh sách quận/huyện
                         districts.forEach(district => {
                             let selected = '';
-                            if (userInfo && userInfo['district'].trim() == district.DistrictName.trim()) {
+
+                            // Kiểm tra nếu quận/huyện khớp với userInfo
+                            if (userInfo && userInfo['district'] && userInfo['district'].trim() === district.DistrictName.trim()) {
                                 selected = 'selected';
                             }
-                            $('#district-dropdown').append('<option value="' + district.DistrictID + selected + '">' + district.DistrictName + '</option>');
+
+                            // Tạo tùy chọn dropdown
+                            $('#district-dropdown').append(
+                                `<option value="${district.DistrictID}" ${selected}>${district.DistrictName}</option>`
+                            );
                         });
+
+                        // Gọi sự kiện change cho district nếu cần
+                        if ($('#district-dropdown').val()) {
+                            $('#district-dropdown').trigger('change');
+                        }
                     },
                     error: function(error) {
                         console.log(error);
@@ -47,7 +161,6 @@
                 });
             }
         });
-
         $('#district-dropdown').change(function() {
             const districtId = $(this).val();
             console.log(districtId);
@@ -70,10 +183,7 @@
                         wards.forEach(ward => {
                             // Kiểm tra nếu giá trị phường/xã đã được chọn (dựa trên old('ward') hoặc $userInfo->ward)
                             let selected = '';
-                            if (userInfo && userInfo['ward'].trim() == ward.WardName.trim()) {
-                                selected = 'selected';
-                            }
-                            $('#ward-dropdown').append('<option value="' + ward.WardCode + '" ' + selected + '>' + ward.WardName + '</option>');
+                            $('#ward-dropdown').append('<option value="' + ward.WardCode + '" >' + ward.WardName + '</option>');
                         });
                     },
                     error: function(error) {
@@ -109,6 +219,7 @@
                 });
             }
         });
+
 
         function calculateShippingFee(serviceId, districtId, wardCode) {
             $.ajax({

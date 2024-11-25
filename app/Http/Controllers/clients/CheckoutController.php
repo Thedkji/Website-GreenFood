@@ -9,6 +9,7 @@ use App\Models\Coupon;
 use App\Services\GHNService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -25,12 +26,6 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
-    protected $ghnService;
-
-    public function __construct(GHNService $ghnService)
-    {
-        $this->ghnService = $ghnService;
-    }
 
     public function checkout(Request $request)
     {
@@ -60,6 +55,15 @@ class CheckoutController extends Controller
             if (isset($quantities[$item['id']])) {
                 // Cập nhật quantity mới vào item
                 $decodedItems[$index]['quantity'] = $quantities[$item['id']];
+                $checkStockResult = $this->checkStock($decodedItems);
+                // Nếu có lỗi khi kiểm tra kho, có thể trả về thông báo lỗi cho người dùng
+                if ($checkStockResult) {
+                    // Ví dụ xử lý nếu có lỗi
+                    session(['check' => 'value']);
+                    return redirect()->route('client.cart')->with([
+                        'error' => 'Số lượng không đủ cho một số sản phẩm.',
+                    ]);
+                }
             }
         }
         $priceTotal = $request->priceTotal;
@@ -176,8 +180,74 @@ class CheckoutController extends Controller
 
         $userInfo = auth()->user() ?? null;
         $provinces = app(GHNService::class)->getProvinces();
-
-        return view("clients.checkouts.checkout", compact('Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+        $districtId = auth()->check() ? $userInfo->district : null;
+        $wardId = auth()->check() ? $userInfo->ward : null;
+        return view("clients.checkouts.checkout", compact('districtId', 'wardId', 'Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+    }
+    public function removeCheck(Request $request)
+    {
+        session()->forget('check');
+        return redirect()->back()->with('success', 'Cập nhật lại thành công');
+    }
+    private function checkStock($decodedItems)
+    {
+        $lowStockVariants = [];
+        $userId = Auth::check() ? Auth::id() : null;
+        if ($userId) {
+            if ($decodedItems) {
+                foreach ($decodedItems as $item) {
+                    if ($item['product'] && $item['product']['status'] == 1) {
+                        $variantGroups[$item['sku']] = VariantGroup::with('variants')
+                            ->where('product_id', $item['product']['id'])
+                            ->where('sku', $item['sku'])
+                            ->get();
+                        $variant = $variantGroups[$item['sku']]->first();
+                        if ($variant && $variant->quantity < $item['quantity']) {
+                            $lowStockVariants[] = [
+                                'sku' => $item['sku'],
+                                'name' => $item['product']['name'],
+                                'stock' => $variant->quantity,
+                            ];
+                        }
+                    } elseif ($item['product'] && $item['product']['status'] == 0) {
+                        if ($item['product']['quantity'] < $item['quantity']) {
+                            $lowStockVariants[] = [
+                                'sku' => $item['sku'],
+                                'name' => $item['product']['name'],
+                                'stock' => $item['product']['quantity'],
+                            ];
+                        }
+                    }
+                }
+            }
+        } else {
+            foreach ($decodedItems as $item) {
+                if ($item['attributes']['status'] == 1) {
+                    $variantGroups[$item['attributes']['sku']] = VariantGroup::with('variants')
+                        ->where('product_id', $item['attributes']['product_id'])
+                        ->where('sku', $item['attributes']['sku'])
+                        ->get();
+                    $variant = $variantGroups[$item['attributes']['sku']]->first();
+                    if ($variant && $variant->quantity < $item['quantity']) {
+                        $lowStockVariants[] = [
+                            'sku' => $item['attributes']['sku'],
+                            'name' => $item['name'],
+                            'stock' => $variant->quantity,
+                        ];
+                    }
+                } elseif ($item['attributes']['status'] == 0) {
+                    $product = Product::find($item->id);
+                    if ($product && $product->quantity < $item['quantity']) {
+                        $lowStockVariants[] = [
+                            'sku' => $item['attributes']['sku'],
+                            'name' => $item['attributes']['name'],
+                            'stock' => $product->quantity,
+                        ];
+                    }
+                }
+            }
+        };
+        return !empty($lowStockVariants);
     }
     public function applyCoupon(Request $request)
     {

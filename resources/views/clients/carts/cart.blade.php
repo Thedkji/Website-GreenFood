@@ -42,10 +42,9 @@
     <div class="container py-5">
         <form action="{{ route('client.checkout') }}" method="get">
             @csrf
-            <button id="delete-button" formaction="{{ route('client.deleteCart') }}" formmethod="post"
-                onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning" style="display: none;">
-                Xóa tất cả
-            </button>
+            @if (session('check'))
+            <button type="submit" class="btn btn-primary" formaction="{{ route('client.removeCheck') }}" formmethod="post">Cập nhật lại</button>
+            @endif
             <table class="table">
                 <thead>
                     <tr>
@@ -68,7 +67,7 @@
                     @if (auth()->check())
                     <tr>
                         <th>
-                            <input type="checkbox" name="selectBox[]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" value="{{ $item }}"
+                            <input type="checkbox" name="selectBox[{{ $item->sku }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" value="{{ $item }}"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
                             disabled @endif
@@ -137,7 +136,7 @@
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" name="quantities[{{ $item->id }}]"
+                                <input type="text" id="quantity_{{$item->sku}}" name="quantities[{{ $item->id }}]"
                                     class="form-control form-control-sm text-center border-0"
                                     value="{{ $quantity }}">
                                 <input type="hidden" name="priceTotal[{{ $item->id }}]">
@@ -148,6 +147,7 @@
                                     </button>
                                 </div>
                             </div>
+
                         </td>
                         <td>
                             <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">
@@ -168,7 +168,6 @@
                                 @endif
                                 @endforeach
                                 @endif
-
                         </td>
                         <td>
                             <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}"
@@ -181,7 +180,7 @@
                     @else
                     <tr>
                         <th>
-                            <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[]" value="{{ $item }}"
+                            <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[{{ $item->attributes->sku }}]" value="{{ $item }}"
                                 @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                 @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
                             disabled @endif
@@ -233,7 +232,7 @@
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" name="quantities[{{ $item->id }}]"
+                                <input type="text" id="quantity_{{$item->attributes->sku}}" name="quantities[{{ $item->id }}]"
                                     class="form-control form-control-sm text-center border-0"
                                     value="{{ $item->quantity }}">
                                 <input type="hidden" name="priceTotal[{{ $item->id }}]">
@@ -248,7 +247,6 @@
                         <td>
                             <p class="mb-0 mt-4 text-primary" id="priceTotal-{{ $item->id }}">{{ number_format($item->price * $item->quantity) }}
                                 VNĐ</p>
-
                             @if (!empty($lowStockVariants))
                             @foreach ($lowStockVariants as $stock)
                             @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
@@ -256,6 +254,7 @@
                                 @endif
                                 @endforeach
                                 @endif
+
                         </td>
                         <td>
                             <button formaction="{{ route('client.removeCart', ['id' => $item->id]) }}"
@@ -274,7 +273,10 @@
                     @endif
                 </tbody>
             </table>
-
+            <button id="delete-button" formaction="{{ route('client.deleteCart') }}" formmethod="post"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm?')" class="btn btn-warning" style="display: none;">
+                Xóa tất cả
+            </button>
             <div class="mt-3 d-flex justify-content-sm-end">
                 {{ auth()->check() ? $cartItems->links() : '' }}
             </div>

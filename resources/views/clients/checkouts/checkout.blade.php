@@ -40,7 +40,7 @@
             @csrf
             @method('POST')
             <div class="row g-5 mt-5">
-                <div class="col-md-12 col-lg-8 col-xl-8 row">
+                <div class="col-md-12 col-lg-6 col-xl-6 row">
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
                             <label class="form-label my-3">Họ và tên <span class="text-danger">*</span></label>
@@ -59,20 +59,46 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Ghi chú (Nếu có)</label>
-                            <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)">{{ old('note') }}</textarea>
+                            <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú (Nếu có)">{{ old('note') }}</textarea>
                             <x-feedback name="note" />
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
                             <label for="province" class="form-label my-3">Thành phố <span class="text-danger">*</span></label>
-                            <select name="province" id="province" class="form-select" value="{{old('province')}}">
+                            <select name="province" id="province" class="form-select" value="{{ old('province') }}">
                                 <option value="">Chọn Thành phố</option>
-                                @foreach($provinces as $province)
-                                <option value="{{ $province['ProvinceID'] }}">{{ $province['ProvinceName'] }}</option>
+                                @php
+                                if(auth()->check()){
+                                if($userInfo->province && $userInfo->province !== null){
+                                $check = array_filter(array_column($provinces, 'ProvinceName'), function($provinceName) use ($userInfo) {
+                                return stripos($provinceName, $userInfo->province) !== false;
+                                });
+                                $check = array_values($check); // Đảm bảo mảng có chỉ mục liên tiếp
+                                }
+                                }
+                                @endphp
+                                @foreach ($provinces as $province)
+                                @if (auth()->check())
+                                <option value="{{ $province['ProvinceID'] }}"
+                                    @php
+                                    // Kiểm tra nếu có tỉnh đã chọn và so sánh
+                                    if($userInfo->province && $userInfo->province !== null){
+                                    // Kiểm tra nếu có tỉnh phù hợp và đánh dấu là selected
+                                    echo (!empty($check) && stripos($province['ProvinceName'], $check[0]) !== false) ? 'selected' : '';
+                                    }
+                                    @endphp
+                                    >
+                                    {{ $province['ProvinceName'] }}
+                                </option>
+                                @else
+                                <option value="{{ $province['ProvinceID'] }}">
+                                    {{ $province['ProvinceName'] }}
+                                </option>
+                                @endif
                                 @endforeach
-                            </select>
 
+                            </select>
                             <x-feedback name="province" />
                         </div>
                         <div class="form-item">
@@ -125,7 +151,7 @@
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4 col-xl-4">
+                <div class="col-md-12 col-lg-6 col-xl-6">
                     <div class="table-responsive">
                         <table class="table text-center align-middle">
                             <thead class="table-dark">
