@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\VariantGroup;
 use Illuminate\Http\Request;
 use Darryldecode\Cart\Facades\CartFacade as CartSession;
 use Illuminate\Support\Facades\Auth;
@@ -120,5 +122,68 @@ class CartController extends Controller
         }
 
         return redirect()->back()->with('success', 'Xóa sản phẩm thành công');
+    }
+
+    public function checkStock(Request $request)
+    {
+        $lowStockVariants = [];
+        $userId = Auth::check() ? Auth::id() : null;
+        if ($userId) {
+            $cartItems = Cart::where('user_id', $userId)->with('product')->get();
+            if ($cartItems) {
+                foreach ($cartItems as $item) {
+                    if ($item->product && $item->product->status == 1) {
+                        $variantGroups[$item->sku] = VariantGroup::with('variants')
+                            ->where('product_id', $item->product->id)
+                            ->where('sku', $item->sku)
+                            ->get();
+                        $variant = $variantGroups[$item->sku]->first();
+                        if ($variant && $variant->quantity < $request->quantity) {
+                            $lowStockVariants[] = [
+                                'sku' => $item->sku,
+                                'name' => $item->product->name,
+                                'stock' => $variant->quantity,
+                            ];
+                        }
+                    } elseif ($item->product && $item->product->status == 0) {
+                        if ($item->product->quantity < $request->quantity) {
+                            $lowStockVariants[] = [
+                                'sku' => $item->sku,
+                                'name' => $item->product->name,
+                                'stock' => $item->product->quantity,
+                            ];
+                        }
+                    }
+                }
+            }
+        } else {
+            $cartItems = CartSession::getContent();
+            foreach ($cartItems as $item) {
+                if ($item->attributes->status == 1) {
+                    $variantGroups[$item->attributes->sku] = VariantGroup::with('variants')
+                        ->where('product_id', $item->attributes->product_id)
+                        ->where('sku', $item->attributes->sku)
+                        ->get();
+                    $variant = $variantGroups[$item->attributes->sku]->first();
+                    if ($variant && $variant->quantity < $request->quantity) {
+                        $lowStockVariants[] = [
+                            'sku' => $item->attributes->sku,
+                            'name' => $item->name,
+                            'stock' => $variant->quantity,
+                        ];
+                    }
+                } elseif ($item->attributes->status == 0) {
+                    $product = Product::find($item->id);
+                    if ($product && $product->quantity < $request->quantity) {
+                        $lowStockVariants[] = [
+                            'sku' => $item->attributes->sku,
+                            'name' => $item->name,
+                            'stock' => $product->quantity,
+                        ];
+                    }
+                }
+            }
+        };
+        return response()->json(['lowStockVariants' => $lowStockVariants]);
     }
 }

@@ -18,21 +18,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         // Tìm tất cả các toast
-        const toastElements = document.querySelectorAll(".toast");
         const userId = @json($userId);
-
-        toastElements.forEach((toast) => {
-            // Hiển thị toast bằng Bootstrap
-            const bsToast = new bootstrap.Toast(toast, {
-                delay: 3000
-            }); // 3000ms = 3 giây
-            bsToast.show();
-
-            // Tự động ẩn toast sau 3 giây
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
-        });
         let updateTimer;
         $('.btn-minus, .btn-plus').click(function() {
             let button = $(this);
@@ -86,20 +72,46 @@
                     item_id: itemId,
                     quantity: quantity
                 },
-                success: function(response) {
-
-                },
+                success: function(response) {},
                 error: function(error) {
                     alert('Có lỗi xảy ra!');
                     console.error(error);
                 }
             });
+
+        };
+
+
+        const toastElements = document.querySelectorAll(".toast");
+        toastElements.forEach((toastElement) => {
+            const bsToast = new bootstrap.Toast(toastElement, {
+                delay: 5000
+            }); // 5 giây
+            bsToast.show();
+
+            // Ẩn toast sau 5 giây
+            setTimeout(() => {
+                toastElement.classList.remove("show");
+            }, 5000);
+        });
+
+        // Toast success (nếu có)
+        const toastSuccess = document.getElementById("toastSuccess");
+        if (toastSuccess) {
+            const toastOptions = {
+                autohide: true,
+                delay: 5000
+            }; // Hiển thị 5 giây
+            const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
+            bsToastSuccess.show();
         }
     });
+
     toastOptions = {
         autohide: true,
         delay: 5000 // Thời gian hiển thị (ms)
     };
+
     const toast = new bootstrap.Toast(toastSuccess, toastOptions);
     toast.show();
 </script>

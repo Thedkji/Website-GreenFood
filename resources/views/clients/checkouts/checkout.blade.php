@@ -40,7 +40,7 @@
             @csrf
             @method('POST')
             <div class="row g-5 mt-5">
-                <div class="col-md-12 col-lg-8 col-xl-8 row">
+                <div class="col-md-12 col-lg-6 col-xl-6 row">
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
                             <label class="form-label my-3">Họ và tên <span class="text-danger">*</span></label>
@@ -59,11 +59,10 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Ghi chú (Nếu có)</label>
-                            <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)">{{ old('note') }}</textarea>
+                            <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú (Nếu có)">{{ old('note') }}</textarea>
                             <x-feedback name="note" />
                         </div>
                     </div>
-
                     <div class="col-md-12 col-lg-6">
                         <div class="form-item">
                             <label for="province" class="form-label my-3">Thành phố <span class="text-danger">*</span></label>
@@ -152,7 +151,7 @@
                         <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Thanh toán</button>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4 col-xl-4">
+                <div class="col-md-12 col-lg-6 col-xl-6">
                     <div class="table-responsive">
                         <table class="table text-center align-middle">
                             <thead class="table-dark">

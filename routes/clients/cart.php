@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(CartController::class)
     ->group(function () {
         Route::get('cart', 'cart')->name('cart');
+        Route::post('checkStock', 'checkStock')->name('checkStock');
         Route::post('add-cart', 'addToCart')->name('addToCart');
         Route::get('showCart', 'showCart')->name('showCart');
         Route::post('deleteCart', 'deleteCart')->name('deleteCart');
