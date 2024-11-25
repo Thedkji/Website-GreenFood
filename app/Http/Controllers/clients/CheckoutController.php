@@ -25,12 +25,6 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
-    protected $ghnService;
-
-    public function __construct(GHNService $ghnService)
-    {
-        $this->ghnService = $ghnService;
-    }
 
     public function checkout(Request $request)
     {
@@ -176,8 +170,9 @@ class CheckoutController extends Controller
 
         $userInfo = auth()->user() ?? null;
         $provinces = app(GHNService::class)->getProvinces();
-
-        return view("clients.checkouts.checkout", compact('Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
+        $districtId = auth()->check() ? $userInfo->district : null;
+        $wardId = auth()->check() ? $userInfo->ward : null;
+        return view("clients.checkouts.checkout", compact('districtId', 'wardId', 'Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
     public function applyCoupon(Request $request)
     {
