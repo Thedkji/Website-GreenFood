@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use NumberFormatter;
 use App\Http\View\Composers\CartComposer;
+use App\Models\Category;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +34,9 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
         Blade::componentNamespace('App\\View\\Components', 'admins');
         view()->composer('*', CartComposer::class);
+
+        //Hàm lấy danh mục cho nav
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        view()->share('categories', $categories);
     }
 }
