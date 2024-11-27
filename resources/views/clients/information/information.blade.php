@@ -58,7 +58,7 @@
 
                             <div class="tab-pane fade" id="pass" role="tabpanel">
                                 <div class="myaccount-content">
-                                    đổi pass
+                                    @include('clients.information.pass')
                                 </div>
                             </div>
                         </div>
