@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="col-12 mb-3">
-                    <button class="btn btn-primary" type="button" id="btn-submit">Thêm mới</button>
+                    <button class="btn btn-success" type="button" id="btn-submit">Thêm mới</button>
                 </div>
             </div>
 

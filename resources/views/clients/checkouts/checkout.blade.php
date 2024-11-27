@@ -2,7 +2,12 @@
 
 @section('title', 'Fruitables - Thanh toán')
 
+@section('title_page', 'Thanh toán')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Thanh toán')
+
 @section('content')
+
 <div class="toast-container">
     @if (session('success'))
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">

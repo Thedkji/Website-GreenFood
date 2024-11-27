@@ -2,8 +2,11 @@
 
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
+@section('title_page', 'Đăng ký')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Đăng ký')
+
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
         <div class="shadow-lg p-4 w-50 m-auto rounded bg-light">
