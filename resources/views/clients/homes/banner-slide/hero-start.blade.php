@@ -3,7 +3,7 @@
         <div class="row align-items-center g-5">
             <div class="col-md-12 col-lg-6">
                 <h4 class="mb-3 text-success">100% Organic Foods</h4>
-                <h1 class="mb-5 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
+                <h1 class="mb-5 display-3 text-primary">GreenFood ăn ngon giáng thon</h1>
                 <div class="position-relative mx-auto">
                     <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number"
                         placeholder="Your Email">
@@ -16,11 +16,16 @@
                 <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active rounded">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/hero-img-1.png" class="img-fluid w-100 h-100 bg-success rounded"
+                            <img src="{{ env('VIEW_CLIENT') }}/img/hero-img-1(1).jpg" 
+                                class="img-fluid bg-success rounded" 
+                                style="width: 100%; max-height: 450px; object-fit: cover;" 
                                 alt="First slide">
                         </div>
                         <div class="carousel-item rounded">
-                            <img src="{{ env('VIEW_CLIENT') }}/img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                            <img src="{{ env('VIEW_CLIENT') }}/img/hero-img-2().jpg" 
+                                class="img-fluid rounded" 
+                                style="width: 100%; max-height: 450px; object-fit: cover;" 
+                                alt="Second slide">
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"

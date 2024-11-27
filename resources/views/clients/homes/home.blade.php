@@ -36,9 +36,8 @@
     <div class="container-fluid featurs py-5">
         <div class="container py-5">
             <div class="text-center mx-auto mb-5" style="max-width: 700px;">
-                <h1 class="display-4">Bestseller Products</h1>
-                <p>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which
-                    looks reasonable.</p>
+                <h1 class="display-4">Chính Sách</h1>
+                <p>Chính sách của chúng tôi luôn luôn đảm bảo quyền lợi của khách hàng lên hàng đầu</p>
             </div>
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
@@ -48,7 +47,7 @@
                         </div>
                         <div class="featurs-content text-center">
                             <h5>Free Shipping</h5>
-                            <p class="mb-0">Free on order over $300</p>
+                            <p class="mb-0">Miễn phí trong nội thành </p>
                         </div>
                     </div>
                 </div>
@@ -59,7 +58,7 @@
                         </div>
                         <div class="featurs-content text-center">
                             <h5>Security Payment</h5>
-                            <p class="mb-0">100% security payment</p>
+                            <p class="mb-0">Thanh toán bảo mật 100%</p>
                         </div>
                     </div>
                 </div>
@@ -69,8 +68,8 @@
                             <i class="fas fa-exchange-alt fa-3x text-white"></i>
                         </div>
                         <div class="featurs-content text-center">
-                            <h5>30 Day Return</h5>
-                            <p class="mb-0">30 day money guarantee</p>
+                            <h5>Return of food</h5>
+                            <p class="mb-0">Đổi trả miển phí khi sản phẩm lỗi</p>
                         </div>
                     </div>
                 </div>
@@ -81,7 +80,7 @@
                         </div>
                         <div class="featurs-content text-center">
                             <h5>24/7 Support</h5>
-                            <p class="mb-0">Support every time fast</p>
+                            <p class="mb-0">Hỗ trợ mọi lúc nhanh chóng</p>
                         </div>
                     </div>
                 </div>
