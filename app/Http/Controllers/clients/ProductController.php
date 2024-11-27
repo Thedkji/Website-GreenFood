@@ -51,6 +51,7 @@ class ProductController extends Controller
         return view('clients.homes.home', compact(
             'products', 'categories', 'productHot', 'bestSellingProducts', 'topRatedComments'
         ));
+        
     }   
 
 }
