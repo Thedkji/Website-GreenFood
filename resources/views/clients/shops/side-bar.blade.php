@@ -103,8 +103,8 @@
                 <form action="{{ route('client.shop') }}" method="get">
                     @csrf
                     <div class="input-group w-100 mx-auto d-flex">
-                        <input type="search" class="form-control p-3" name="search-product" placeholder="Tìm kiếm"
-                            aria-describedby="search-icon-1"
+                        <input type="search" class="form-control p-3" name="search-product"
+                            placeholder="Nhập tên sản phẩm" aria-describedby="search-icon-1"
                             value="{{ old('search-product', request('search-product')) }}">
                         <span id="search-icon-1" class="input-group-text p-3" onclick="this.closest('form').submit()"
                             style="cursor: pointer;">

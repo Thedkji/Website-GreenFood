@@ -78,10 +78,10 @@ class ShopController extends Controller
         } 
 
         // Lấy danh sách sản phẩm
-        $products = $query->paginate(12);
+        $products = $query->paginate(9);
 
         // Sản phẩm xem nhiều
-        $productHot = Product::orderByDesc('view')->limit(4)->get();
+        $productHot = Product::orderByDesc('view')->limit(6)->get();
 
         return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use NumberFormatter;
 use App\Http\View\Composers\CartComposer;
 use App\Models\Category;
+use App\Models\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
 
         //Hàm lấy danh mục cho nav
         $categories = Category::with('children')->whereNull('parent_id')->get();
+        $productHot2 = Product::with('categories', 'variantGroups')->orderByDesc('view')->limit(4)->get();
+
         view()->share('categories', $categories);
+        view()->share('productHot2', $productHot2);
     }
 }

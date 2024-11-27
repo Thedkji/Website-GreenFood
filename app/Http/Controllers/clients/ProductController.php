@@ -11,6 +11,7 @@ use App\Models\Rate;
 use App\Models\Variant;
 use App\Models\VariantGroup;
 use Illuminate\Http\Request;
+
 class ProductController extends Controller
 {
     public function home(Request $request)
@@ -21,6 +22,16 @@ class ProductController extends Controller
         // Lấy danh sách sản phẩm
         $products = $query->paginate(8);
         $productHot = Product::orderByDesc('view')->limit(6)->get();
-        return view("clients.homes.home", compact("products", 'categories','productHot' ));
+
+        if ($request->ajax() && $request->has('keySearch')) {
+            $productSearch = Product::with('categories', 'variantGroups')
+                ->where('name', 'like', '%' . $request->keySearch . '%')
+                ->limit(5)
+                ->orderByDesc('id')
+                ->get();
+            return response()->json($productSearch);
+        }
+
+        return view("clients.homes.home", compact("products", 'categories', 'productHot'));
     }
 }
