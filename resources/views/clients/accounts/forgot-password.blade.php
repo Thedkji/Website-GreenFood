@@ -2,8 +2,11 @@
 
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
+@section('title_page', 'Quên mật khẩu')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Quên mật khẩu')
+
 @section('content')
-    @include('clients.layouts.components.singer-page')
 
     <div class="container-fluid py-5">
 

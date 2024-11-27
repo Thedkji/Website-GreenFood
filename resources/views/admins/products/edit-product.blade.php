@@ -2,7 +2,7 @@
 
 @section('title', 'Product | Sửa sản phẩm')
 
-@section('start-page-title', "Sửa sản phẩm $product->name | ID: $product->id")
+@section('start-page-title', "Sản phẩm $product->name | ID: $product->id")
 
 @section('content')
 
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="col-12 mb-3">
-                    <button class="btn btn-primary" type="button" id="btn-submit">Sửa</button>
+                    <button class="btn btn-success" type="button" id="btn-submit">Sửa</button>
                 </div>
             </div>
 

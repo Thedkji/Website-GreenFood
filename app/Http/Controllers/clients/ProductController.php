@@ -10,17 +10,48 @@ use App\Models\Product;
 use App\Models\Rate;
 use App\Models\Variant;
 use App\Models\VariantGroup;
+use App\Models\Gallery;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+
 class ProductController extends Controller
 {
     public function home(Request $request)
     {
         $categories = Category::with('children')->where('parent_id', null)->get();
-        // Bắt đầu với một truy vấn chung
+        
         $query = Product::with(['categories', 'galleries', 'variantGroups']);
-        // Lấy danh sách sản phẩm
-        $products = $query->paginate(8);
+        $products = $query->limit(8)->get();
+        
         $productHot = Product::orderByDesc('view')->limit(6)->get();
-        return view("clients.homes.home", compact("products", 'categories','productHot' ));
-    }
+        
+        $bestSellingProducts = Product::with(['categories', 'galleries'])
+            ->withSum('orderDetails as total_sold', 'product_quantity')
+            ->orderByDesc('total_sold')
+            ->take(8)
+            ->get();
+        
+        $topRatedComments = Comment::with(['rates', 'product', 'user'])
+        ->whereHas('rates')  
+        ->get()
+        ->sortByDesc(function ($comment) {
+            return $comment->rates->avg('star');  
+        })
+        ->take(5);
+
+        if ($request->ajax() && $request->has('keySearch')) {
+            $productSearch = Product::with('categories', 'variantGroups')
+                ->where('name', 'like', '%' . $request->keySearch . '%')
+                ->limit(5)
+                ->orderByDesc('id')
+                ->get();
+            return response()->json($productSearch);
+        }
+        
+        return view('clients.homes.home', compact(
+            'products', 'categories', 'productHot', 'bestSellingProducts', 'topRatedComments'
+        ));
+        
+    }   
+
 }

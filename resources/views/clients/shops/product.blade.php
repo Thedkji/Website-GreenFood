@@ -1,4 +1,5 @@
 <style>
+    
     /* Đảm bảo rằng các thẻ sản phẩm chiếm toàn bộ chiều cao của cột */
     .fruite-item {
         display: flex;
@@ -16,7 +17,6 @@
         /* Đảm bảo góc bo tròn khớp với thẻ */
         border-top-right-radius: 0.25rem;
     }
-
     /* Định dạng nội dung thẻ sản phẩm */
     .card-body {
         display: flex;
@@ -90,6 +90,8 @@
 
 <div class="col-lg-9">
     <div class="row g-4 justify-content-center" id="shop-product">
+
+        @if($products->count() > 0)
 
         @foreach ($products as $product)
             <div class="col-md-6 col-lg-6 col-xl-4 d-flex">
@@ -167,6 +169,14 @@
                 </div>
             </div>
         @endforeach
+
+        @else
+
+        <div class="mt-5">
+            <h3 class="text-primary text-center">Không tìm thấy sản phẩm nào</h3>
+        </div>
+
+        @endif
 
         <!-- Pagination -->
         @include('clients.shops.paginate')

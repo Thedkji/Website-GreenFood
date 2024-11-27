@@ -25,7 +25,7 @@ class ProductdetailController extends Controller
         // session()->forget($sessionKey);
 
 
-        $productHot = Product::orderByDesc('view')->limit(4)->get();
+        $productHot = Product::orderByDesc('view')->limit(6)->get();
 
         $relatedProducts = Product::with(['variantGroups' => function ($query) {
             // Sắp xếp biến thể theo giá thấp nhất
@@ -36,8 +36,6 @@ class ProductdetailController extends Controller
             })
             ->limit(15)
             ->get();
-
-
 
 
         if ($request->variantGroupID) {
