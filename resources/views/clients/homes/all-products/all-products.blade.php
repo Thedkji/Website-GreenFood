@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-        @include('clients.shops.paginate')
+    
     </div>
 </div>
 
