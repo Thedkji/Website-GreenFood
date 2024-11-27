@@ -3,8 +3,6 @@
 @section('title', 'Fruitables - Thanh toán')
 
 @section('content')
-@include('clients.layouts.components.singer-page')
-
 <div class="toast-container">
     @if (session('success'))
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">

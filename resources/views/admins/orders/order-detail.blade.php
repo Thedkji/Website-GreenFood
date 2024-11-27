@@ -280,7 +280,7 @@
             <tr>
                 <td colspan="5"></td>
                 <td colspan="1">
-                    <p class="">Tổng tiền:</p>
+                    <p class="">Tổng tiền sản phẩm:</p>
                 </td>
                 <td colspan="3">
                     <h3 class="text-success">{{ app('formatPrice')($totalDiscount) }} VNĐ</h3>
@@ -309,7 +309,7 @@
             <tr>
                 <td colspan="5"></td>
                 <td colspan="1">
-                    <strong>Tiền sau giảm:</strong>
+                    <strong>Tỏng tiền:</strong>
                 </td>
                 <td colspan="3">
                     <h3 class="text-success">{{ app('formatPrice')($orders->total) }} VNĐ</h3>

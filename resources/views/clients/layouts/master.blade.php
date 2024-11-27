@@ -21,7 +21,7 @@
     @include('clients.layouts.components.offcanvas-cart')
     <!-- Offcanvas Cart End -->
     @include('clients.layouts.components.singer-page')
-    
+
     @yield('content')
     @include('clients.layouts.components.footer')
 </body>
