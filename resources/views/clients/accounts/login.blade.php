@@ -2,6 +2,10 @@
 
 @section('title', 'Fruitables - Đăng ký tài khoản')
 
+@section('title_page', 'Đăng nhập')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Đăng nhập')
+
 @section('content')
 
     <div class="container-fluid py-5">

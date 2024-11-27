@@ -31,7 +31,7 @@
             <div class="d-flex justify-content-sm-end">
                 <div class="search-box">
                     <input name="search" type="text" class="form-control search"
-                        value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
+                        value="{{ request()->input('search') }}" placeholder="Nhập tên sản phẩm" oninput="debounceSearch()">
                     <i class="ri-search-line search-icon"></i>
                 </div>
             </div>
@@ -81,44 +81,59 @@
                             onclick="toggleDeleteButton()" value="{{ $product->id }}">
                     </td>
                     <td>{{ $product->id }}</td>
-                    <td>
-                        <span class="text-success">{{ $product->sku }}</span>
+
+                    @php
+                        $minPriceVariantGroup = $product->variantGroups->sortBy('price_sale')->first();
+                    @endphp
+
+                    @if ($product->status == 0)
+                        <td>
+                            <span class="text-success fw-bold">{{ $product->sku }}</span>
+                        </td>
+                    @else
+                        <td>
+                            <span class="text-success fw-bold">{{ $minPriceVariantGroup->sku }}</span>
+                        </td>
+                    @endif
+
+                    <td class="truncate-text">
+                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-decoration-underline">
+                            {{ $product->name }}
+                        </a>
                     </td>
-                    <td class="truncate-text">{{ $product->name }}</td>
                     <td class="truncate-text">{{ $product->slug }}</td>
 
                     <td>
-                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
-                            style="width: 100px; height: 100px; object-fit: cover;">
-                    </td>
-
-                    <td>{{ app('formatPrice')($product->price_regular) }} VNĐ</td>
-                    <td class="text-success">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
-                    <td>{{ $product->quantity }}</td>
-
-                    <td>
-
-                        <a href="{{ route('admin.products.show', [
-                            'product' => $product->id,
-                            'showVariantproduct' => $product->status !== 0 ? 'true' : null,
-                        ]) }}"
-                            name="variantGroups">
-                            <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
-                                {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
-                            </span>
+                        <a href="{{ route('client.product-detail', $product->id) }}">
+                            <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                                style="width: 100px; height: 100px; object-fit: cover;">
                         </a>
+                    </td>
 
-
+                    @if ($product->status == 0)
+                        <td>{{ app('formatPrice')($product->price_regular) }} VNĐ</td>
+                        <td class="text-success fw-bold">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
+                        <td>{{ $product->quantity }}</td>
+                    @else
+                        <td>{{ app('formatPrice')($minPriceVariantGroup->price_regular) }} VNĐ</td>
+                        <td class="text-success fw-bold">{{ app('formatPrice')($minPriceVariantGroup->price_sale) }} VNĐ
+                        </td>
+                        <td>{{ $minPriceVariantGroup->quantity }}</td>
+                    @endif
+                    <td>
+                        <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
+                            {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
+                        </span>
 
                     </td>
 
-                    <td>{{ $product->created_at }}</td>
-                    <td>{{ $product->updated_at }}</td>
+                    <td>{{ $product->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ $product->updated_at->format('d-m-Y H:i:s') }}</td>
 
                     <td class="">
 
                         <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15"><i
-                                class="ri-edit-2-line"></i></a>
+                                class="ri-edit-2-line fs-4"></i></a>
 
                     </td>
 
@@ -130,7 +145,7 @@
                             <button
                                 onclick="return confirm('Xóa sản phẩm này cũng sẽ xóa các biến thể của sản phẩm , vẫn muốn xóa ?')"
                                 class="btn text-danger">
-                                <i class="ri-delete-bin-line"></i>
+                                <i class="ri-delete-bin-line fs-4"></i>
                             </button>
                         </form>
                     </td>
@@ -147,7 +162,7 @@
 
         <div class="col-sm">
             <div class="mt-3 d-flex justify-content-sm-end">
-                {{ $products->links() }}
+                {{ $products->appends(request()->query())->links() }}
             </div>
         </div>
     </div>

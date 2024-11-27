@@ -2,8 +2,11 @@
 
 @section('title', 'Fruitables - Thanh toán')
 
+@section('title_page', 'Thanh toán')
+@section('title_page_home', 'Trang chủ')
+@section('title_page_active', 'Thanh toán')
+
 @section('content')
-@include('clients.layouts.components.singer-page')
 
 <div class="toast-container">
     @if (session('success'))

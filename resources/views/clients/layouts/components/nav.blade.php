@@ -30,13 +30,17 @@
                     {{-- <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a> --}}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Danh mục</a>
-                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                            <a href="{{ route('client.cart') }}" class="dropdown-item">Cart</a>
-                            <a href="{{ route('client.checkout') }}" class="dropdown-item">Checkout</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
-                        </div>
+                        <ul class="dropdown-menu">
+                            @foreach ($categories as $category)
+                                <li class="dropdown-submenu">
+                                    <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="dropdown-item">
+                                        {{ $category->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
+
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Công Cụ</a>
@@ -52,6 +56,7 @@
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
+                            
                     <a href="#" class="position-relative me-4 my-auto" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa fa-shopping-bag fa-2x"></i>
