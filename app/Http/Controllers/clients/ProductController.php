@@ -37,13 +37,7 @@ class ProductController extends Controller
         ->sortByDesc(function ($comment) {
             return $comment->rates->avg('star');  
         })
-        ->take(5);;  
-        
-        return view('clients.homes.home', compact(
-            'products', 'categories', 'productHot', 'bestSellingProducts', 'topRatedComments'
-        ));
-    }   
-
+        ->take(5);
 
         if ($request->ajax() && $request->has('keySearch')) {
             $productSearch = Product::with('categories', 'variantGroups')
@@ -53,7 +47,11 @@ class ProductController extends Controller
                 ->get();
             return response()->json($productSearch);
         }
+        
+        return view('clients.homes.home', compact(
+            'products', 'categories', 'productHot', 'bestSellingProducts', 'topRatedComments'
+        ));
+        
+    }   
 
-        return view("clients.homes.home", compact("products", 'categories', 'productHot'));
-    }
 }
