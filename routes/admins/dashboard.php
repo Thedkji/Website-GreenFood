@@ -9,4 +9,5 @@ use Illuminate\Support\Facades\Route;
 Route::controller(DashboardController::class)
     ->group(function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/sales-report', 'salesReport')->name('salesReport');
     });
