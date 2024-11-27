@@ -103,8 +103,8 @@
                 <form action="{{ route('client.shop') }}" method="get">
                     @csrf
                     <div class="input-group w-100 mx-auto d-flex">
-                        <input type="search" class="form-control p-3" name="search-product" placeholder="Tìm kiếm"
-                            aria-describedby="search-icon-1"
+                        <input type="search" class="form-control p-3" name="search-product"
+                            placeholder="Nhập tên sản phẩm" aria-describedby="search-icon-1"
                             value="{{ old('search-product', request('search-product')) }}">
                         <span id="search-icon-1" class="input-group-text p-3" onclick="this.closest('form').submit()"
                             style="cursor: pointer;">
@@ -172,16 +172,18 @@
                     <div class="col-lg-12">
                         <div class="mb-3">
                             <h4>Danh mục</h4>
-                            <label for="Categories-1" class="mb-1">
-                                <a href="{{ route('client.shop') }}" class="filter-shop-cate" name="filter-shop-cate">
-                                    TẤT CẢ
-                                </a>
-                            </label>
-                            <form action="{{ route('client.shop') }}" method="get" id="form-filter-cate">
-                                @csrf
-                                @foreach ($categories as $category)
-                                    <div class="mb-2">
-                                        <label for="Categories-1">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="Categories-1" class="mb-1">
+                                        <a href="{{ route('client.shop') }}" class="filter-shop-cate"
+                                            name="filter-shop-cate">
+                                            TẤT CẢ
+                                        </a>
+                                    </label>
+                                </div>
+                                @foreach ($categories2 as $index => $category)
+                                    <div class="col-6">
+                                        <label for="Categories-{{ $category->id }}" class="mb-1">
                                             <a href="{{ route('client.shop', ['category_id' => $category->id]) }}"
                                                 class="filter-shop-cate" name="filter-shop-cate">
                                                 {{ $category->name }}
@@ -189,7 +191,8 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </form>
+                            </div>
+
 
                             <script>
                                 $('#filter-shop-cate').click(function() {

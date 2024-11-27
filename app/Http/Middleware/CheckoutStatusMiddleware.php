@@ -15,7 +15,7 @@ class CheckoutStatusMiddleware
                 return $next($request);
             }
             // Ngược lại, không cho phép truy cập
-            return redirect()->back()->with('error', 'Bạn phải bắt đầu thanh toán từ giỏ hàng.');
+            return redirect()->back()->with('error', 'Đơn hàng đã tồn tại');
         }
 
         return $next($request);

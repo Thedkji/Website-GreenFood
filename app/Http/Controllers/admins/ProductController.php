@@ -77,6 +77,11 @@ class ProductController extends Controller
             $products = Product::orderByDesc('id')->paginate(8);
         }
 
+        //Tìm kiếm sản phẩm
+        if (request()->input('search')) {
+            $products = Product::where('name', 'like', '%' . request()->input('search') . '%')->paginate(8);
+        }
+
         return view('admins.products.list-product', compact('products'));
     }
 

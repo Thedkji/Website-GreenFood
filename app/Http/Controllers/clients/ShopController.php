@@ -17,7 +17,7 @@ class ShopController extends Controller
 
     public function shop(Request $request)
     {
-        $categories = Category::with('children')->where('parent_id', null)->get();
+        $categories2 = Category::with('children')->whereNotNull('parent_id')->get();
 
         // Bắt đầu với một truy vấn chung
         $query = Product::with(['categories', 'galleries', 'variantGroups']);
@@ -78,11 +78,11 @@ class ShopController extends Controller
         } 
 
         // Lấy danh sách sản phẩm
-        $products = $query->paginate(12);
+        $products = $query->paginate(9);
 
         // Sản phẩm xem nhiều
-        $productHot = Product::orderByDesc('view')->limit(4)->get();
+        $productHot = Product::orderByDesc('view')->limit(6)->get();
 
-        return view("clients.shops.shop", compact("products", 'categories', 'productHot'));
+        return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }
 }
