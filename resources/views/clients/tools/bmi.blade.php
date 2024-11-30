@@ -52,7 +52,8 @@
                             {{-- <label for="" class="form-lable">Chiều cao</label> --}}
                         </div>
                         <div class="col-md-9 ">
-                            <input type="text" placeholder="Kết quả" class="form-control p-2 w-25 bg-white" readonly>
+                            <input type="text" placeholder="Kết quả" class="form-control p-2 w-25 bg-white"
+                                id="result_bmi" readonly>
                         </div>
                     </div>
 
@@ -61,7 +62,7 @@
                             {{-- <label for="" class="form-lable">Cân nặng</label> --}}
                         </div>
                         <div class="col-md-9 w-100 text-end  ">
-                            <button class="w-25 btn  border-secondary py-2 bg-white text-primary " type="button"
+                            <button class="w-25 btn  border-secondary py-2 bg-white text-primary" type="button"
                                 onclick="totalBMI()">Thực hiện
                                 tính</button>
                         </div>
@@ -308,13 +309,12 @@
     <script>
         let widthUser = document.querySelector('#height_user');
         let weightUser = document.querySelector('#weight_user');
-        let result = document.querySelector(
-            "body > div:nth-child(6) > div > div > form > div:nth-child(4) > div.col-md-9 > input");
+        let result = document.querySelector("#result_bmi");
 
         function totalBMI() {
             let heightInMeters = widthUser.value / 100;
             let bmi = weightUser.value / (heightInMeters ** 2);
-            
+
             result.value = bmi.toFixed(2);
         }
     </script>
