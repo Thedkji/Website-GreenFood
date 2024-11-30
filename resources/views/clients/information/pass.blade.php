@@ -1,12 +1,11 @@
 <h4 class="mb-5">Thay đổi mật khẩu</h4>
 @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-<form id="change-password-form" method="POST" action="{{ route('client.information.updatePass') }}">
+<form id="change-password-form" method="POST" action="{{ route('client.information.updatePass',$user->id)}}">
     @csrf
 
     <div class="col-md-12 col-12 mb-2">
@@ -32,19 +31,16 @@
         const errorDiv = document.getElementById('password-match-error');
         const submitBtn = document.getElementById('submit-btn');
 
-        // Hàm kiểm tra sự khớp của mật khẩu
         function checkPasswordsMatch() {
-            // Kiểm tra nếu cả 2 trường mật khẩu đã có giá trị và mật khẩu khớp nhau
             if (passwordInput.value !== confirmPasswordInput.value || passwordInput.value === '' || confirmPasswordInput.value === '') {
                 errorDiv.style.display = 'block';
-                submitBtn.disabled = true; // Vô hiệu hóa nút submit nếu mật khẩu không khớp hoặc thiếu một trong các trường
+                submitBtn.disabled = true; 
             } else {
                 errorDiv.style.display = 'none';
-                submitBtn.disabled = false; // Kích hoạt nút submit nếu mật khẩu khớp và cả 2 trường đã được điền
+                submitBtn.disabled = false; 
             }
         }
 
-        // Lắng nghe sự kiện khi người dùng nhập mật khẩu hoặc mật khẩu xác nhận
         passwordInput.addEventListener('input', checkPasswordsMatch);
         confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
     });

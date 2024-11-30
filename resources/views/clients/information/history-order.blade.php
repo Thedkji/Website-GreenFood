@@ -21,7 +21,7 @@
                 <td>June 12, 2017</td>
                 <td>On Hold</td>
                 <td>$99</td>
-                <td><a href="cart .html" class="btn">Chi tiết</a></td>
+                <td><a href="{{route('client.information.edit',$user->id)}}" class="btn">Chi tiết</a></td>
             </tr>
         </tbody>
     </table>
