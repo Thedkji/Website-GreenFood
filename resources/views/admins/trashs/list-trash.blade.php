@@ -1,8 +1,8 @@
 @extends('admins.layouts.master')
 
-@section('title', 'User | Danh sách người dùng')
+@section('title', 'Trash | Danh sách thùng rác')
 
-@section('start-page-title', 'Danh sách người dùng')
+@section('start-page-title', 'Danh sách thùng rác')
 
 @section('content')
     @if (session('success'))
@@ -16,65 +16,95 @@
         </div>
     @endif
 
-    <div class="row g-4 mb-3">
-        <div class="col-sm justify-content-between">
+    <form action="{{ route('admin.trashs.index') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
+        <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
-
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
+                <div class="search-box">
+                    <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}"
+                        placeholder="Nhập tên loại muốn xóa" oninput="debounceSearch()">
                     <i class="ri-search-line search-icon"></i>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
             </div>
-            {{-- <div class=""><a href="{{ route('admin.users.create') }}" class="btn btn-success">Thêm Mới</a></div> --}}
         </div>
-    </div>
-    <h2 class="text-primary">Danh sách người dùng</h2>
-    <table class="mb-3 table table-striped align-middle  mb-0">
+        <div class="col-sm">
+            <select id="statusTrash" name="statusTrash" class="form-select w-50" onchange="this.form.submit()">
+                <option value="allPro" {{ $statusTrash == 'allPro' ? 'selected' : '' }}>Tất cả</option>
+                <option value="User" {{ $statusTrash == 'User' ? 'selected' : '' }}>Người dùng</option>
+                <option value="Product" {{ $statusTrash == 'Product' ? 'selected' : '' }}>Sản phẩm</option>
+                <option value="Order" {{ $statusTrash == 'Order' ? 'selected' : '' }}>Đơn hàng</option>
+                <option value="Comment" {{ $statusTrash == 'Comment' ? 'selected' : '' }}>Bình luận</option>
+                <option value="Supplier" {{ $statusTrash == 'Supplier' ? 'selected' : '' }}>Nhà cung cấp</option>
+            </select>
+        </div>
+    </form>
+
+    <h2 class="text-primary">Danh sách Xóa</h2>
+    <table class="mb-3 table table-striped align-middle mb-0">
         <thead>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
+                <th scope="col">Stt</th>
+                <th scope="col">Loại</th>
+                <th scope="col">Tên</th>
                 <th scope="col">Ngày xóa</th>
-
-                <th scope="col">Thao Tác</th>
+                <th scope="col">Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @if (isset($users))
-                @foreach ($users as $value)
-                    <tr>
-                        <th scope="row">{{ $value->id }}</th>
-                        <th scope="row">{{ $value->name }}</th>
-                        {{-- <th scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:150px"></th> --}}
+            @php
+                $startIndex = ($trashedItems->currentPage() - 1) * $trashedItems->perPage(); // Tính chỉ số bắt đầu
+            @endphp
+            @forelse ($trashedItems as $items)
+                <tr>
+                    <td>{{ $startIndex + $loop->iteration }}</td>
+                    <td>
+                        @if ($items instanceof App\Models\User)
+                            Người dùng
+                        @elseif ($items instanceof App\Models\Product)
+                            Sản phẩm
+                        @elseif ($items instanceof App\Models\Order)
+                            Đơn hàng
+                        @elseif ($items instanceof App\Models\Comment)
+                            Bình luận
+                        @elseif ($items instanceof App\Models\Supplier)
+                            Nhà cung cấp
+                        @endif
+                    </td>
+                    <td>{{ $items->name ?? ($items->title ?? 'Không có tên') }}</td>
+                    <td>{{ $items->deleted_at }}</td>
+                    <td>
+                        <div class="hstack gap-3 flex-wrap">
+                            <form action="{{ route('admin.trashs.restore', ['type' => class_basename($items), $items->id]) }}" method="post">
+                                @csrf
+                                @method('POST') <!-- Sử dụng method POST để khôi phục -->
+                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Bạn có chắc chắn muốn khôi phục?');">Khôi phục</button>
+                            </form>
+                            <form
+                                action="{{ route('admin.trashs.destroy', ['type' => class_basename($items), $items->id]) }}"
+                                method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn?');">
+                                    Xóa vĩnh viễn
+                                </button>
+                            </form>
+                        </div>
 
-                        <td scope="row">{{ $value->deleted_at }}</td>
-
-                        <th scope="row">
-                            <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.trashs.restoreUser', $value->id) }}"
-                                    style="background-color: transparent;"  onclick="return confirmRestore();" class="link-success fs-15"><i
-                                        class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.trashs.destroyUser', $value->id) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        style="background-color: transparent; border: none; color: inherit;"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </th>
-
-                    </tr>
-                @endforeach
-            @elseif(!isset($users) && $users == null)
-                <p>Chưa có tài khoản nào</p>
-            @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">Không có mục nào đã bị xóa.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
+
+    <!-- Hiển thị phân trang -->
+    {{ $trashedItems->links() }}
+
+
+
     {{-- <h2 class="text-primary">Danh sách danh mục</h2>
     <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
@@ -110,8 +140,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table> --}}
-    <h2 class="text-primary">Danh sách sản phẩm</h2>
+    </table>
+    --}}
+    {{-- <h2 class="text-primary">Danh sách sản phẩm</h2>
     <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
@@ -128,9 +159,7 @@
                     <tr>
                         <th scope="row">{{ $product->id }}</th>
                         <td>{{ $product->name }}</td>
-                        {{-- <td>
-                            <img src="{{ env('VIEW_IMG') . '/' . $product->img }}" alt="Ảnh sản phẩm" style="width:150px">
-                        </td> --}}
+
                         <td scope="col">{{ $product->deleted_at }}</td>
 
                         <td>
@@ -156,8 +185,8 @@
                 <p>Chưa có sản phẩm nào</p>
             @endif
         </tbody>
-    </table>
-    <h2 class="text-primary">Danh sách bình luận</h2>
+    </table> --}}
+    {{-- <h2 class="text-primary">Danh sách bình luận</h2>
     <div class="table-responsive">
         <table class="mb-3 table table-striped align-middle  mb-0">
             <thead>
@@ -165,9 +194,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Tên sản phẩm</th>
                     <th scope="col">Khách hàng </th>
-                    {{-- <th scope="col">Bình luận</th>
-                    <th scope="col">Ảnh</th>
-                    <th scope="col">Sao</th> --}}
+
                     <th scope="col">Ngày xóa</th>
 
                     <th scope="col">Thao tác</th>
@@ -179,23 +206,6 @@
                         <th scope="row">{{ $comment->id }}</th>
                         <td>{{ $comment->product->name }}</td>
                         <td>{{ $comment->user->name ?? 'Anonymous' }}</td>
-                        {{-- <td>{{ $comment->content }}</td>
-                        <td>
-                            @if ($comment->img)
-                                <img src="{{ asset('storage/' . $comment->img) }}" alt="Image" width="150">
-                            @else
-                                No Image
-                            @endif
-                        </td>
-                        <td>
-                            <div class="stars" id="stars-{{ $comment->id }}">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <span class="star"
-                                        style="color: {{ $i <= ($comment->rates()->avg('star') ?? 0) ? 'gold' : 'gray' }}">★</span>
-                                @endfor
-                            </div>
-                        </td>
-                        <td>{{ $comment->created_at }}</td> --}}
                         <td scope="col">{{ $comment->deleted_at }}</td>
 
                         <td>
@@ -216,8 +226,8 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    <h2 class="text-primary">Danh sách mua hàng</h2>
+    </div> --}}
+    {{-- <h2 class="text-primary">Danh sách mua hàng</h2>
     <table class="mb-3 table table-striped align-middle  mb-0">
         <thead>
             <tr>
@@ -250,18 +260,18 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
 
     <!-- Pagination -->
-    <div class="d-flex justify-content-end mt-3">
+    {{-- <div class="d-flex justify-content-end mt-3">
         {{ $users->links('pagination::bootstrap-4') }}
-    </div>
+    </div> --}}
 @endsection
 @push('scripts')
-<script>
-    function confirmRestore() {
-        return confirm('Bạn có chắc chắn muốn khôi phục?');
-    }
-</script>
+    <script>
+        function confirmRestore() {
+            return confirm('Bạn có chắc chắn muốn khôi phục?');
+        }
+    </script>
 @endpush
