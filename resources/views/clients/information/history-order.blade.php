@@ -1,4 +1,4 @@
-<h3>Lịch sử đơn hàng</h3>
+<h4 class="mb-5">Lịch sử đơn hàng</h4>
 
 <div class="myaccount-table table-responsive text-center">
     <table class="table table-bordered">
@@ -6,7 +6,6 @@
             <tr>
                 <th>Tên</th>
                 <th>Địa chỉ</th>
-                <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Chi tiết</th>
@@ -15,14 +14,31 @@
         </thead>
 
         <tbody>
-            <tr>
-                <td>3</td>
-                <td>Murikhete Paris</td>
-                <td>June 12, 2017</td>
-                <td>On Hold</td>
-                <td>$99</td>
-                <td><a href="{{route('client.information.edit',$user->id)}}" class="btn">Chi tiết</a></td>
-            </tr>
+            @foreach ($oders as $order)
+                <tr>
+                    <td>{{ $order->user->name }}</td>
+                    <td>{{ $order->address }}</td>
+                    <td>{{ $order->phone }}</td>
+                    <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND</td>
+                    <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}">Xem</a></td>
+                    <td>
+                        @switch($order->status)
+                            @case(3)
+                                <span class="badge bg-success" style="padding: 10px;">Giao hàng thành công</span>
+                            @break
+
+                            @case(4)
+                                <span class="badge bg-info" style="padding: 10px;" >Giao hàng không thành công</span>
+                            @break
+
+                            @case(5)
+                                <span class="badge bg-danger" style="padding: 10px;">Hủy đơn</span>
+                            @break
+                        @endswitch
+                    </td>
+
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
