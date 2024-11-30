@@ -11,19 +11,26 @@
                     <tbody>
                         <tr>
                             <th>Giá trị muốn giảm giá </th>
-                            <td>{{ number_format($coupon->coupon_amount, 0, ',', '.') }} </td>
-                        </tr>
+                            <td>
+                                @if ($coupon->discount_type == 0)
+                                    {{ $coupon->coupon_amount }} %
+                                @elseif ($coupon->discount_type == 1)
+                                    {{ number_format($coupon->coupon_amount, 0, ',', '.') }} VNĐ
+                                @else
+                                    Không xác định
+                                @endif
+                            </td>                        </tr>
                         <tr>
                             <th>Loại giảm giá</th>
                             <td>{{ $coupon->discount_type == 0 ? 'Giảm theo phần trăm' : 'Giảm theo giá tiền' }}</td>
                         </tr>
                         <tr>
                             <th>Giá trị của giỏ hàng thấp nhất</th>
-                            <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} đ</td>
+                            <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} VNĐ</td>
                         </tr>
                         <tr>
                             <th>Giá trị của giỏ hàng cao nhất</th>
-                            <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} đ</td>
+                            <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} VNĐ</td>
                         </tr>
                         <tr>
                             <th>Số lượng</th>
@@ -31,11 +38,11 @@
                         </tr>
                         <tr>
                             <th>Ngày bắt đầu</th>
-                            <td>{{ \Carbon\Carbon::parse($coupon->start_date)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($coupon->start_date)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <th>Ngày hết hạn</th>
-                            <td>{{ \Carbon\Carbon::parse($coupon->expiration_date)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($coupon->expiration_date)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <th>Kiểu mã giảm giá áp dụng</th>
@@ -64,7 +71,8 @@
                         </tr>
                         <tr>
                             <th>Mô tả</th>
-                            <td>{{ $coupon->description ?? 'Không có mô tả' }}</td>
+                            <td>{!! $coupon->description ?: 'Không có mô tả' !!}</td>
+
                         </tr>
                         <tr>
                             <th>Danh mục</th>

@@ -32,11 +32,11 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Danh mục</a>
                         <ul class="dropdown-menu">
                             @foreach ($categories as $category)
-                            <li class="dropdown-submenu">
-                                <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="dropdown-item">
-                                    {{ $category->name }}
-                                </a>
-                            </li>
+                                <li class="dropdown-submenu">
+                                    <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="dropdown-item">
+                                        {{ $category->name }}
+                                    </a>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
@@ -49,14 +49,13 @@
                             <a href="{{ route('client.bmr') }}" class="dropdown-item">Tính BMR và TDEE</a>
                         </div>
                     </div>
-
                     <a href="{{ route('client.contact.index') }}" class="nav-item nav-link">Liên Hệ</a>
                 </div>
                 <div class="d-flex m-3 me-0">
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
-
+                            
                     <a href="#" class="position-relative me-4 my-auto" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa fa-shopping-bag fa-2x"></i>
