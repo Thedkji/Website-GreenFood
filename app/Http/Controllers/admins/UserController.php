@@ -55,7 +55,7 @@ class UserController extends Controller
             if ($request->hasFile('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
                 $data['avatar'] = $avatarPath;
             }
 
@@ -105,7 +105,7 @@ class UserController extends Controller
                 }
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '_' . $avatar->getClientOriginalName();
-                $avatarPath = $avatar->storeAs('users/avatars', $avatarName);
+                $avatarPath = $avatar->storeAs('users/avatars', $avatarName, 'public');
                 $data['avatar'] = $avatarPath;
             }
 
@@ -131,10 +131,10 @@ class UserController extends Controller
         try {
 
             $user = User::findOrFail($id);
-            $user->delete();
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
+            // $user->delete();
+            // if ($user->avatar) {
+            //     Storage::disk('public')->delete($user->avatar);
+            // }
             // $user->galleries()->delete();
             $user->delete();
             DB::commit();
