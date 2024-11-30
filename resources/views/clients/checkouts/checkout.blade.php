@@ -7,7 +7,6 @@
 @section('title_page_active', 'Thanh toán')
 
 @section('content')
-
 <div class="toast-container">
     @if (session('success'))
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">

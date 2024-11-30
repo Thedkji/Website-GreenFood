@@ -32,11 +32,11 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Danh mục</a>
                         <ul class="dropdown-menu">
                             @foreach ($categories as $category)
-                                <li class="dropdown-submenu">
-                                    <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="dropdown-item">
-                                        {{ $category->name }}
-                                    </a>
-                                </li>
+                            <li class="dropdown-submenu">
+                                <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="dropdown-item">
+                                    {{ $category->name }}
+                                </a>
+                            </li>
                             @endforeach
                         </ul>
                     </div>
@@ -56,7 +56,7 @@
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
-                            
+
                     <a href="#" class="position-relative me-4 my-auto" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa fa-shopping-bag fa-2x"></i>
@@ -68,38 +68,38 @@
                     </a>
                     <div class="nav-item  dropdown">
                         @guest
-                            <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
-                            <a href="{{ route('client.login') }}" class="nav-link">
-                                <i class="fas fa-user fa-2x"></i>
-                            </a>
-                            <div class="dropdown-menu bg-secondary rounded-0">
-                                <a href="{{ route('client.login') }}" class="dropdown-item">Đăng Nhập</a>
-                                <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
-                            </div>
+                        <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
+                        <a href="{{ route('client.login') }}" class="nav-link">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                        <div class="dropdown-menu bg-secondary rounded-0">
+                            <a href="{{ route('client.login') }}" class="dropdown-item">Đăng Nhập</a>
+                            <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
+                        </div>
                         @else
-                            <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
-                            <a href="" class="nav-link">
-                                <i class="fas fa-user fa-2x"></i>
+                        <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
+                        <a href="" class="nav-link">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                        <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
+                            <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
+
+
+                            <a href="{{ route('client.information.index') }}" class="dropdown-item nav-item nav-link">
+                                Thông tin
                             </a>
-                            <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
-                                <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
+                            <!-- Kiểm tra nếu người dùng là admin -->
+                            @if (Auth::user()->role === 0)
+                            <a href="{{ route('admin.dashboard') }}" class="dropdown-item nav-item nav-link">
+                                Quản trị
+                            </a>
+                            @endif
 
 
-                                <a href="{{ route('client.information.index') }}" class="dropdown-item nav-item nav-link">
-                                    Thông tin
-                                </a>
-                                <!-- Kiểm tra nếu người dùng là admin -->
-                                @if (Auth::user()->role === 0)
-                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item nav-item nav-link">
-                                        Quản trị
-                                    </a>
-                                @endif
-
-
-                                <a href="{{ route('client.logout') }}" class="dropdown-item nav-item nav-link">
-                                    Đăng Xuất
-                                </a>
-                            </div>
+                            <a href="{{ route('client.logout') }}" class="dropdown-item nav-item nav-link">
+                                Đăng Xuất
+                            </a>
+                        </div>
                         @endguest
 
                     </div>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 /* Viết route ở đây */
 
 Route::controller(CheckoutController::class)
+    ->middleware('checkoutStatus')
     ->group(function () {
         Route::get('thanh-toan', 'checkout')->name('checkout');
         Route::post('removeCheck', 'removeCheck')->name('removeCheck');

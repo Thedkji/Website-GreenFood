@@ -29,6 +29,9 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
+        if (!session()->has('checkoutStatus')) {
+            return redirect()->route('client.home')->with('error', 'Đơn hàng không tồn tại');
+        }
         $datas = $request->selectBox;
         if (!$datas) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm');
@@ -272,8 +275,6 @@ class CheckoutController extends Controller
         }
         return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
     }
-
-
     public function getCheckOut(OrderRequest $request)
     {
         DB::beginTransaction();
@@ -302,7 +303,6 @@ class CheckoutController extends Controller
                 return $this->VnPayCheckOut($request, $order);
             }
             $this->finalizeOrder($order, $request->data[0], $coupon);
-
             return redirect()->route('client.showSuccessCheckOut')->with('success', 'Đơn hàng đã được đặt thành công!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -495,6 +495,7 @@ class CheckoutController extends Controller
         $this->removeCartItems($cartItems);
         Mail::to($order->email)->send(new MailCheckOut($order));
         session(['check' => true]);
+        session()->forget('checkoutStatus');
     }
 
 

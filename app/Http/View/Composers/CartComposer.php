@@ -19,7 +19,7 @@ class CartComposer
         $cartItems = [];
         $lowStockVariants = [];
         if ($userId) {
-            $cartItems = Cart::where('user_id', $userId)->with('product')->paginate('7');
+            $cartItems = Cart::where('user_id', $userId)->with('product')->get();
             if ($cartItems) {
                 foreach ($cartItems as $item) {
                     if ($item->product && $item->product->status == 1) {
