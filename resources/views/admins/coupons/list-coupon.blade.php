@@ -109,7 +109,8 @@
 
 
 <script>
-    document.getElementById('deleteButton-{{ $item->id }}').addEventListener('click', function(e) {
+    $(document).ready(function () {
+        document.getElementById('deleteButton-{{ $item->id }}').addEventListener('click', function(e) {
         e.preventDefault(); // Ngừng hành động mặc định của nút submit
 
         // Hiển thị SweetAlert2 xác nhận
@@ -152,6 +153,7 @@
     };
     const toast = new bootstrap.Toast(toastSuccess, toastOptions);
     toast.show();
+    });
 </script>
 
                         </div>
