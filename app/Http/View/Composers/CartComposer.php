@@ -85,7 +85,6 @@ class CartComposer
         });
 
         $cartQuantity = $cartItems->sum('quantity');
-
         $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId', 'lowStockVariants'));
     }
 }
