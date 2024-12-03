@@ -4,7 +4,7 @@
             {{ session('success') }}
         </div>
     @endif
-    <form id="edit-info-form" action="{{ route('client.information.update') }}" method="POST">
+    <form id="edit-info-form" action="{{ route('client.information.update',$user->id) }}" method="POST">
         @csrf
         @method('PUT')
 
