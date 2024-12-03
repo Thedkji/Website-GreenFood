@@ -1,11 +1,11 @@
 @extends('admins.layouts.master')
 
-@section('title', 'Dashboard | Velzon - Admin - Danh sách sản phẩm')
+@section('title', 'Dashboard | Velzon - Admin - sản phẩm')
 
 @section('start-page-title', 'Danh sách sản phẩm')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Sản phẩm</a></li>
     <li class="breadcrumb-item active">Danh sách sản phẩm</li>
 @endsection
 
