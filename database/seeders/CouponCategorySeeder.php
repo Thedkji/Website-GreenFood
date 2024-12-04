@@ -13,9 +13,14 @@ class CouponCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
-            $coupon = Coupon::find($i);
-            $coupon->categories()->attach(mt_rand(1, 10));
+        $coupon_category = array(
+            array('coupon_id' => '3', 'category_id' => '5'),
+            array('coupon_id' => '3', 'category_id' => '6'),
+            array('coupon_id' => '3', 'category_id' => '7')
+        );
+
+        foreach ($coupon_category as $item) {
+            Coupon::find($item['coupon_id'])->categories()->attach($item['category_id']);
         }
     }
 }

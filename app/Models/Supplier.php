@@ -17,8 +17,8 @@ class Supplier extends Model
         "address",
     ];
 
-    public function depots()
+    public function products()
     {
-        return $this->hasMany(Depot::class);
+        return $this->hasMany(Product::class);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Supplier;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Supplier::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('sku', 30)->comment('Mã đơn hàng')->unique()->nullable();
             $table->string('name')->unique();
             $table->string('slug')->unique();
@@ -23,6 +25,8 @@ return new class extends Migration
             $table->text('description_short')->nullable();
             $table->integer('quantity')->default(0)->nullable();
             $table->integer('view')->default(0)->nullable();
+            $table->date('manufacture_date')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->integer('status')
                 ->default(0)
                 ->comment('[0 : Không có biến thể , 1 : Có biến thể]');

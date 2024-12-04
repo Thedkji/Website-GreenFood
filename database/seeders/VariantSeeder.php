@@ -31,7 +31,9 @@ class VariantSeeder extends Seeder
             array('id' => '16', 'name' => 'Trọng Lượng', 'parent_id' => NULL, 'created_at' => '2024-11-22 10:50:29', 'updated_at' => '2024-11-22 10:50:29'),
             array('id' => '17', 'name' => '1 hộp', 'parent_id' => '16', 'created_at' => '2024-11-22 10:50:46', 'updated_at' => '2024-11-22 10:50:46'),
             array('id' => '18', 'name' => '1 chiếc(ăn thử)', 'parent_id' => '16', 'created_at' => '2024-11-22 10:51:05', 'updated_at' => '2024-11-22 10:51:05'),
-            array('id' => '19', 'name' => '2 hộp', 'parent_id' => '16', 'created_at' => '2024-11-22 10:51:13', 'updated_at' => '2024-11-22 10:51:13')
+            array('id' => '19', 'name' => '2 hộp', 'parent_id' => '16', 'created_at' => '2024-11-22 10:51:13', 'updated_at' => '2024-11-22 10:51:13'),
+            array('id' => '20', 'name' => '160gram', 'parent_id' => '1', 'created_at' => '2024-12-03 12:03:35', 'updated_at' => '2024-12-03 12:03:35'),
+            array('id' => '21', 'name' => '330gram', 'parent_id' => '1', 'created_at' => '2024-12-03 12:03:42', 'updated_at' => '2024-12-03 12:03:42')
         );
 
         foreach ($variants as $variant) {

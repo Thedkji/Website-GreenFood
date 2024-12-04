@@ -14,40 +14,16 @@ class CartSeeder extends Seeder
      */
     public function run(): void
     {
-        // Lấy tất cả sản phẩm có SKU không rỗng
-        $productsWithSku = Product::whereNotNull('sku')->where('sku', '!=', '')->get();
+        $carts = array(
+            array('id' => '21', 'product_id' => '2', 'user_id' => '1', 'sku' => 'SPBT800530', 'quantity' => '3', 'created_at' => '2024-12-03 11:40:58', 'updated_at' => '2024-12-03 11:40:58'),
+            array('id' => '22', 'product_id' => '9', 'user_id' => '1', 'sku' => 'SPBT945718', 'quantity' => '3', 'created_at' => '2024-12-03 11:41:06', 'updated_at' => '2024-12-03 11:41:06'),
+            array('id' => '23', 'product_id' => '8', 'user_id' => '1', 'sku' => 'SP160564', 'quantity' => '2', 'created_at' => '2024-12-03 11:41:15', 'updated_at' => '2024-12-03 11:41:15'),
+            array('id' => '28', 'product_id' => '15', 'user_id' => '2', 'sku' => 'SPBT660996', 'quantity' => '1', 'created_at' => '2024-12-04 13:54:54', 'updated_at' => '2024-12-04 13:54:54'),
+            array('id' => '29', 'product_id' => '15', 'user_id' => '2', 'sku' => 'SPBT814589', 'quantity' => '1', 'created_at' => '2024-12-04 13:54:58', 'updated_at' => '2024-12-04 13:54:58')
+        );
 
-        // Nếu không có sản phẩm nào có SKU
-        if ($productsWithSku->isEmpty()) {
-            return; // Kết thúc hàm nếu không có sản phẩm hợp lệ
-        }
-
-        // Lưu trữ SKU đã tồn tại
-        $existingSkus = Cart::pluck('sku')->toArray();
-
-        // Lặp để tạo ra 10 cart
-        for ($i = 1; $i <= 10; $i++) {
-            // Lấy một sản phẩm ngẫu nhiên từ danh sách đã lọc
-            $product = $productsWithSku->random();
-
-            // Tạo SKU ngẫu nhiên theo định dạng "SP" + số ngẫu nhiên từ 0 đến 1000
-            $sku = "SP" . mt_rand(0, 1000);
-
-            // Kiểm tra xem SKU đã tồn tại trong cơ sở dữ liệu chưa
-            while (in_array($sku, $existingSkus) || Cart::where('sku', $sku)->exists()) {
-                $sku = "SP" . mt_rand(0, 1000); // Tạo lại SKU nếu đã tồn tại
-            }
-
-            // Tạo một cart mới
-            Cart::create([
-                "product_id" => $product->id,
-                "user_id" => mt_rand(1, 10), // Lấy user_id ngẫu nhiên
-                "sku" => $sku, // Sử dụng SKU đã kiểm tra
-                "quantity" => mt_rand(1, 20), // Số lượng ngẫu nhiên
-            ]);
-
-            // Thêm SKU mới vào danh sách đã tồn tại
-            $existingSkus[] = $sku; // Cập nhật danh sách SKU đã tồn tại
+        foreach ($carts as $cart) {
+            Cart::create($cart);
         }
     }
 }
