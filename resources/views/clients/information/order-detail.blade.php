@@ -16,7 +16,7 @@
                         <th>Tên sản phẩm</th>
                         <th>Đơn giá</th>
                         <th>Số lượng</th>
-                        <th>Mã giảm giá</th>
+                        <th>Voucher giảm giá</th>
                         <th>Tổng tiền</th>
                     </tr>
                 </thead>
