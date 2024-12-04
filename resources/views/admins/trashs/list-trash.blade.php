@@ -70,7 +70,7 @@
                         @endif
                     </td>
                     <td>{{ $items->name ?? ($items->title ?? 'Không có tên') }}</td>
-                    <td>{{ $items->deleted_at }}</td>
+                    <td>{{ $items->deleted_at->format('d-m-Y H:i:s') }}</td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
                             <form action="{{ route('admin.trashs.restore', ['type' => class_basename($items), $items->id]) }}" method="post">

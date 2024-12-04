@@ -62,7 +62,7 @@
                 {{-- <option value="{{ $provinces->name }}">  </option> --}}
                 @foreach ($provinces as $province)
                 <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
-                    {{ $province->name }}
+                    {{ $user->province }}
                 </option>
                 @endforeach
             </select>
@@ -74,7 +74,7 @@
             <select name="district" id="district" class="form-control" required disabled>
                 @foreach ($districts as $district)
                     <option value="{{ $district->code }}" {{ $district->code == $user->district ? 'selected' : '' }}>
-                        {{ $district->name }}
+                        {{ $user->district }}
                     </option>
                 @endforeach
             </select>
