@@ -14,7 +14,6 @@
         let childVariantContainer = $('#childVariantContainer');
         let selectedVariantValuesContainer = $('#selectedVariantValuesContainer');
         let variantValuesTableBody = $('#variantValuesTableBody');
-        let supplier_id = $('#supplier_id');
         // Đối tượng toàn cục để lưu trữ các giá trị biến thể
         let variantValues = {};
 
@@ -23,10 +22,7 @@
             placeholder: 'Chọn danh mục',
             allowClear: true
         });
-        supplier_id.select2({
-            placeholder: 'Chọn nhà cung cấp',
-            allowClear: true
-        });
+
         childCategory.select2({
             placeholder: 'Chọn danh mục con',
             allowClear: true

@@ -210,33 +210,6 @@ class ProductController extends Controller
         }
     }
 
-    public function show(Product $product)
-    {
-
-        if (request('showVariantproduct') == true) {
-            $product = Product::findOrFail($product->id);
-
-            $variantGroups = $product->variantGroups()->orderByDesc('id')->get();
-
-            return view('admins.products.list-product-variant', compact('product', 'variantGroups'));
-        } else {
-            $product = Product::with('categories', 'galleries')->orderByDesc('id')->findOrFail($product->id);
-            $variantGroup = VariantGroup::with('variants.parent')->where('sku', request('sku'))->first();
-
-            $variant = null;
-            $parentName = ''; // Mặc định nếu không có giá trị
-            if ($product->status == 1 && $variantGroup) {
-                // Lấy biến thể duy nhất của SKU sản phẩm
-                $variant = $variantGroup->variants->first(); // Chỉ lấy một giá trị đầu tiên
-
-                if ($variant && $variant->parent) {
-                    $parentName = $variant->parent->name ?? 'Không có giá trị';
-                }
-            }
-
-            return view('admins.products.detai-product', compact('product', 'variant', 'parentName'));
-        }
-    }
 
     public function edit(Product $product, Request $request)
     {
@@ -246,6 +219,7 @@ class ProductController extends Controller
         $allCategories = Category::whereNotNull('parent_id')->get();
         $productVariant = Product::with(['variantGroups.variants'])->find($product->id);
         $allVariants = Variant::all();
+        $suppliers = Supplier::orderByDesc('id')->get();
 
         $variantGroups = $product->variantGroups()->with('variants')->orderByDesc('id')->get();
 
@@ -276,6 +250,7 @@ class ProductController extends Controller
             'allVariants',
             'product',
             'parentIds',
+            'suppliers'
         ));
     }
 

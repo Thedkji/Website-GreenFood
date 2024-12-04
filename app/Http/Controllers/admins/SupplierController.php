@@ -71,4 +71,15 @@ class SupplierController extends Controller
         $supplier->delete();
         return redirect()->route('admin.suppliers.index')->with('success', 'Xóa nhà cung cấp thành công!');
     }
+
+    public function supplierDetail($id)
+    {
+        $supplier = Supplier::with('products','products.variantGroups')->find($id);
+        return view('admins.suppliers.detail-product-supplier', compact('supplier'));
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        dd($request->all());
+    }
 }

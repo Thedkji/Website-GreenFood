@@ -159,7 +159,7 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-Token': '{{ csrf_token() }}' // Đảm bảo điều này được sử dụng trong Blade template
                         },
-
+                        
                         body: JSON.stringify({
                             ids: selectedIds
                         })
