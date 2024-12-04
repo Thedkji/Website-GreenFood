@@ -7,11 +7,33 @@
 @endsection
 
 @section('content')
+<div class="toast-container">
     @if (session('success'))
-        <div class="alert alert-success ">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Thông báo</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
             {{ session('success') }}
         </div>
+        <div class="toast-progress bg-success"></div>
+    </div>
     @endif
+
+    @if (session('error'))
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Lỗi</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white text-dark">
+            {{ session('error') }}
+        </div>
+        <div class="toast-progress bg-danger"></div>
+    </div>
+    @endif
+</div>
 
     <form action="{{ route('admin.coupons.store') }}" method="POST">
         @csrf
@@ -224,6 +246,29 @@
             }
 
         });
+        document.addEventListener("DOMContentLoaded", function() {
+        // Tìm tất cả các toast
+        const toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach((toast) => {
+            // Hiển thị toast bằng Bootstrap
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            }); // 3000ms = 3 giây
+            bsToast.show();
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        });
+    });
+    toastOptions = {
+        autohide: true,
+        delay: 5000 // Thời gian hiển thị (ms)
+    };
+    const toast = new bootstrap.Toast(toastSuccess, toastOptions);
+    toast.show();
     </script>
     @include('admins.products.script')
 @endsection

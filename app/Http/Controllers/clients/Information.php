@@ -20,14 +20,22 @@ class Information extends Controller
 
     public function index()
     {
-        $user = auth()->user();
-        // Lọc đơn hàng theo các trạng thái 0, 1, 2, 5
-        $orders = Order::whereIn('status', [0, 1, 2])->with('user')->get();
-        $oders = Order::whereIn('status', [3, 4, 5, 6])->with('user')->get();
-
+        $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
+    
+        $orders = Order::where('user_id', $user->id)
+                       ->whereIn('status', [0, 1, 2])
+                       ->with('user')
+                       ->get();
+    
+        $oders = Order::where('user_id', $user->id)
+                      ->whereIn('status', [3, 4, 5, 6])
+                      ->with('user')
+                      ->get();
+    
+        // Trả dữ liệu về view
         return view('clients.information.information', compact('user', 'orders', 'oders'));
     }
-
+    
 
     public function editPass($id)
     {
