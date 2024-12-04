@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\OrderRequest;
 use App\Mail\MailCheckOut;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\VariantGroup;
 use Illuminate\Http\Request;
@@ -29,10 +30,12 @@ class OrderController extends Controller
                 });
         }
         $statusFilter = $request->input('statusFilter');
-        $orders = $query->sortable()
+        $orders = $query->with('orderDetails') // Lấy kèm orderDetails
+            ->sortable() // Sắp xếp theo cột
             ->when($statusFilter !== null, function ($query) use ($statusFilter) {
-                $query->where('status', $statusFilter);
+                $query->where('status', $statusFilter); // Lọc theo trạng thái nếu có
             })
+            ->whereHas('orderDetails') // Chỉ lấy các đơn hàng có orderDetails
             ->paginate(8);
         return view("admins.orders.order", compact('orders', 'statusFilter'));
     }
@@ -42,19 +45,6 @@ class OrderController extends Controller
         $orders = Order::find($id);
         $orderDetails = $orders->orderDetails()->get();
         $user = $orders->user()->firstOr();
-        // Duyệt qua từng order detail để lấy ảnh sản phẩm
-        // $orderDetails->each(function ($orderDetail) {
-        //     // Lấy SKU từ order detail
-        //     $sku = $orderDetail->product_sku;
-        //     // Kiểm tra xem SKU có trong bảng Product hay VariantGroup
-        //     $product = Product::where('sku', $sku)->first();
-        //     if ($product) {
-        //         $orderDetail->product_img = $product->img; // Gán ảnh từ bảng Product
-        //     } else {
-        //         $variant = VariantGroup::where('sku', $sku)->first();
-        //         $orderDetail->product_img = $variant ? $variant->img : null; // Gán ảnh từ VariantGroup (nếu có)
-        //     }
-        // });
         return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
     }
 
