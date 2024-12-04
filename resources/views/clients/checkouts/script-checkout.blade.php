@@ -357,7 +357,8 @@
                             let totalDiscount = 0;
                             let totalPriceCoupon = 0;
                             let finalPrice = 0;
-                            decodedItems.forEach(item => {
+                            const decodedArray = Array.isArray(decodedItems) ? decodedItems : Object.values(decodedItems);
+                            decodedArray.forEach(item => {
                                 let itemPrice;
                                 if (userInfo ? item.product.status === 0 : item.attributes.status === 0) {
                                     itemPrice = userInfo ? item.product.price_sale : item.price;
@@ -448,7 +449,6 @@
             total = total + shippingFee - finalCoupon; // Cộng phí ship vào tổng tiền
             $('input[name="total"]').val(total.toFixed(2)); // Cập nhật giá trị vào input "total"
             $('#totalPrice').text(total.toLocaleString('vi-VN') + ' VNĐ');
-            console.log('shippingFee:' + shippingFee + ' - ' + 'finalCoupon:' + finalCoupon + ' - ' + total);
 
         }
     });

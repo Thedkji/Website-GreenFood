@@ -10,7 +10,7 @@ class Rate extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillables = [
+    protected $fillable = [
         "comment_id",
         "star",
     ];
