@@ -94,10 +94,10 @@ class TrashController extends Controller
                     $item = Product::withTrashed()->findOrFail($id);
                     $item->restore(); // Khôi phục sản phẩm
 
-                    // Khôi phục depots (hasMany)
-                    $item->depots()->withTrashed()->get()->each(function ($depot) {
-                        $depot->restore();
-                    });
+                    // // Khôi phục depots (hasMany)
+                    // $item->depots()->withTrashed()->get()->each(function ($depot) {
+                    //     $depot->restore();
+                    // });
 
                     // Khôi phục variantGroups (hasMany)
                     $item->variantGroups()->withTrashed()->get()->each(function ($variantGroup) {

@@ -14,9 +14,11 @@ class DashboardController extends Controller
     public function dashboard()
     {
 
-        $totalEarnings = Order::whereHas('orderDetails')->sum('total');
-        $orderCounts = Order::whereHas('orderDetails')->count();
-        $orderCountCompleted = Order::whereHas('orderDetails')->where('status', 'completed')->count();
+
+        $totalEarnings = Order::sum('total');
+        $orderCounts = Order::where('status','3')->count();
+        $orderCountCompleted = Order::where('status', 'completed')->count();
+
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
             ->where('status', 'completed')
@@ -27,7 +29,7 @@ class DashboardController extends Controller
         $orderCountsByMonthJson = $orderCountsByMonth->pluck('order_count')->toJson();
 
 
-        $userCounts = User::where('role', 'user')->count();
+        $userCounts = User::where('role', '1')->count();
 
         $bestSellerProducts = Order::where('status', 5)
             ->with(['orderDetails.product'])  // Eager load orderDetails và product
