@@ -11,4 +11,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('information/update/{id}', [Information::class, 'update'])->name('information.update');
     Route::delete('information/{id}', [Information::class, 'cancel'])->name('orders.cancel');
     Route::get('information/detail/{id}', [Information::class, 'show'])->name('orders.details');
+    Route::post('/rate-order', [Information::class, 'store'])->name('rate.order');
 });
