@@ -59,7 +59,7 @@ class CouponController extends Controller
     //     $coupon->categories()->attach($request->childCategory);
     // }
 
-    return redirect()->route('admin.coupons.showCoupon')->with('success', 'Thêm mới mã giảm giá thành công.');
+    return back()->with('success', 'Thêm mới mã giảm giá thành công.');
 }
 
 

@@ -16,8 +16,6 @@
                         <th>Tên sản phẩm</th>
                         <th>Đơn giá</th>
                         <th>Số lượng</th>
-                        <th>Voucher giảm giá</th>
-                        <th>Tổng tiền</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,12 +28,18 @@
                         <td>{{ $detail->product_name }}</td>
                         <td>{{ number_format($detail->product_price) }} VNĐ</td>
                         <td>{{ $detail->product_quantity }}</td>
-                        <td>{{ $detail->coupon_name }}</td>
-                        <td>{{ number_format($detail->order->total) }} VNĐ</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Thêm Tổng tiền trong khung -->
+            <div class="card mt-3">
+                <div class="card-body text-right" style="font-size: 18px;">
+                    <strong>Tổng tiền: </strong>
+                    <span style="color: #4CAF50;">{{ number_format($order->total) }} VNĐ</span>
+                </div>
+            </div>
         </div>
         
         <div class="col-md-4">
