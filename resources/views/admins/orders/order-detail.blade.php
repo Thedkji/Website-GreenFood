@@ -292,7 +292,7 @@
                     <p>Phí ship:</p>
                 </td>
                 <td colspan="3">
-                    <h3 class="text-danger" id="feeShip">Không có</h3>
+                    <h3 class="text-danger" id="feeShip">{{ app('formatPrice')($orders->deliveryFee)}} VNĐ</h3>
                 </td>
             </tr>
             <tr>
@@ -302,7 +302,7 @@
                 </td>
                 @if($orderDetails->pluck('coupon_name')[0] && $orderDetails->pluck('coupon_name')[0] != null)
                 <td colspan="3">
-                    <h3 class="text-success" id="coupon-fee">Không có</h3>
+                    <h3 class="text-success" id="coupon-fee">{{ app('formatPrice')($orderDetails->pluck('coupon_price')[0])}} VNĐ</h3>
                 </td>
                 @endif
             </tr>

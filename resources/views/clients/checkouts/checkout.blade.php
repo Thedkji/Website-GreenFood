@@ -244,6 +244,8 @@
                         @endif
                     </div>
                     <input type="hidden" name="coupon[]" value="">
+                    <input type="hidden" name="deliveryFee" value="">
+                    <input type="hidden" name="couponFee" value="">
                     <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
 

@@ -85,63 +85,6 @@
             }
         });
 
-
-
-
-        $.ajax({
-            url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
-            type: 'POST',
-            headers: {
-                'token': ghnKey,
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({
-                "shop_id": parseInt(ghnShop, 10),
-                "from_district": 3440, // Quận Nam từ Liêm
-                "to_district": parseInt(data['district'], 10),
-            }),
-            success: function(response) {
-                let service = response.data[0];
-                calculateShippingFee(service.service_id, data['district'], data['ward']);
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-
-        function calculateShippingFee(serviceId, districtId, wardCode) {
-            $.ajax({
-                url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
-                type: 'POST',
-                headers: {
-                    'token': ghnKey,
-                    'shop_id': ghnShop,
-                    'Content-Type': 'application/json'
-                },
-                data: JSON.stringify({
-                    "service_id": parseInt(serviceId, 10), // Phương tiện giao hàng
-                    "insurance_value": parseInt(data['total'], 10), // Tổng tiền để tính toán giá ship
-                    "from_district_id": 3440, // Quận Nam từ Liêm
-                    "to_district_id": parseInt(data['district'], 10),
-                    "to_ward_code": data['ward'],
-                    "weight": 1000 // Cân nặng (Chưa xử lý)
-                }),
-                success: function(response) {
-                    if (response.data) {
-                        let fee = response.data;
-                        $('#feeShip').empty();
-                        $('#feeShip').text(new Intl.NumberFormat('vi-VN').format(fee.total) + ' VNĐ');
-                        $('#coupon-fee').text(new Intl.NumberFormat('vi-VN').format(totalDiscount + fee.total - data['total']) + ' VNĐ');
-                    } else {
-                        console.log('Không thể tính phí vận chuyển.');
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        }
-
     });
     toastOptions = {
         autohide: true,
