@@ -84,8 +84,11 @@ class DashboardController extends Controller
 
     public function salesReport(Request $request)
     {
+        // Tổng doanh thu
         $totalEarnings = Order::sum('total');
+        // Số lượng đơn hàng
         $orderCounts = Order::count();
+        // Số lượng đơn hàng hoàn thành
         $orderCountCompleted = Order::where('status', 'completed')->count();
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
@@ -94,11 +97,24 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get();
 
-        $orderCountsByMonthJson = $orderCountsByMonth->pluck('order_count')->toJson();
+        $earningsByMonth = Order::selectRaw('MONTH(created_at) as month, SUM(total) as total_earnings')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
+        // $refundsByMonth = Refund::selectRaw('MONTH(created_at) as month, COUNT(*) as refund_count') // Assuming Refund model
+        //     ->groupBy('month')
+        //     ->orderBy('month')
+        //     ->get();
 
+        $orderCountsByMonthJson = $orderCountsByMonth->pluck('order_count')->toArray();
+        $earningsByMonthJson = $earningsByMonth->pluck('total_earnings')->toArray();
+        // $refundsByMonthJson = $refundsByMonth->pluck('refund_count')->toArray();
 
-        $userCounts = User::where('role', 'user')->count();
+        // Dữ liệu JSON để sử dụng trong biểu đồ
+        $months = range(1, 12);
+        $orderCountsByMonthArray = $orderCountsByMonth->pluck('order_count', 'month')->toArray();
+        $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
 
         $bestSellerProducts = Order::where('status', 5)
             ->with(['orderDetails.product'])  // Eager load orderDetails và product
@@ -131,8 +147,10 @@ class DashboardController extends Controller
             'orderCounts',
             'orderCountCompleted',
             'orderCountsByMonthJson',
-            'userCounts',
-            'bestSellerProducts'
+            'earningsByMonthJson',
+            // 'refundsByMonthJson',
+            // 'userCounts',
+            'bestSellerProducts' // Dữ liệu cho biểu đồ
         ));
     }
 }

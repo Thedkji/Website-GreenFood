@@ -6,75 +6,76 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-header border-0 align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Doanh thu</h4>
-                <div>
-                    <button type="button" class="btn btn-soft-secondary btn-sm">
-                        ALL
-                    </button>
-                    <button type="button" class="btn btn-soft-secondary btn-sm">
-                        1M
-                    </button>
-                    <button type="button" class="btn btn-soft-secondary btn-sm">
-                        6M
-                    </button>
-                    <button type="button" class="btn btn-soft-primary btn-sm">
-                        1Y
-                    </button>
-                </div>
-            </div><!-- end card header -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0 align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Doanh thu</h4>
+                    <div>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            ALL
+                        </button>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            1M
+                        </button>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            6M
+                        </button>
+                        <button type="button" class="btn btn-soft-primary btn-sm">
+                            1Y
+                        </button>
+                    </div>
+                </div><!-- end card header -->
 
-            <div class="card-header p-0 border-0 bg-light-subtle">
-                <div class="row g-0 text-center">
-                    <div class="col-6 col-sm-3">
-                        <div class="p-3 border border-dashed border-start-0">
-                            <h5 class="mb-1"><span class="counter-value" data-target="7585">{{ $orderCountCompleted }}</span>
-                            </h5>
-                            <p class="text-muted mb-0">Đơn hàng</p>
+                <div class="card-header p-0 border-0 bg-light-subtle">
+                    <div class="row g-0 text-center">
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1"><span class="counter-value"
+                                        data-target="7585">{{ $orderCountCompleted }}</span>
+                                </h5>
+                                <p class="text-muted mb-0">Đơn hàng</p>
+                            </div>
                         </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-6 col-sm-3">
-                        <div class="p-3 border border-dashed border-start-0">
-                            <h5 class="mb-1"><span class="counter-value" data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">{{ number_format($totalEarnings, 0, ',', '.') }}</span>VNĐ
-                            </h5>
-                            <p class="text-muted mb-0">Doanh thu</p>
+                        <!--end col-->
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1"><span class="counter-value"
+                                        data-target="{{ number_format($totalEarnings, 0, ',', '.') }}">{{ number_format($totalEarnings, 0, ',', '.') }}</span>VNĐ
+                                </h5>
+                                <p class="text-muted mb-0">Doanh thu</p>
+                            </div>
                         </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-6 col-sm-3">
-                        <div class="p-3 border border-dashed border-start-0">
-                            <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
-                            </h5>
-                            <p class="text-muted mb-0">Hoàn tiền</p>
+                        <!--end col-->
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
+                                </h5>
+                                <p class="text-muted mb-0">Hoàn tiền</p>
+                            </div>
                         </div>
-                    </div>
-                    <!--end col-->
-                    {{-- <div class="col-6 col-sm-3">
+                        <!--end col-->
+                        {{-- <div class="col-6 col-sm-3">
                         <div class="p-3 border border-dashed border-start-0 border-end-0">
                             <h5 class="mb-1 text-success"><span class="counter-value"
                                     data-target="18.92">0</span>%</h5>
                             <p class="text-muted mb-0">Conversation Ratio</p>
                         </div>
                     </div> --}}
-                    <!--end col-->
-                </div>
-            </div><!-- end card header -->
+                        <!--end col-->
+                    </div>
+                </div><!-- end card header -->
 
-            <div class="card-body p-0 pb-2">
-                <div class="w-100">
-                    <div id="customer_impression_charts"
-                        data-colors='["--vz-primary", "--vz-success", "--vz-danger"]' class="apex-charts"
-                        dir="ltr"></div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div><!-- end col -->
+                <div class="card-body p-0 pb-2">
+                    <div class="w-100">
+                        <div id="customer_impression_charts" data-colors='["--vz-primary", "--vz-success", "--vz-danger"]'
+                            class="apex-charts" dir="ltr"></div>>
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
 
-    {{-- <div class="col-xl-4">
+        {{-- <div class="col-xl-4">
         <!-- card -->
         <div class="card card-height-100">
             <div class="card-header align-items-center d-flex">
@@ -121,81 +122,79 @@
         </div>
         <!-- end card -->
     </div> --}}
-    <!-- end col -->
-</div>
+        <!-- end col -->
+    </div>
 
-<div class="row">
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Sản phẩm bán chạy nhất
-                </h4>
-                <div class="flex-shrink-0">
-                    <div class="dropdown card-header-dropdown">
-                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <span class="fw-semibold text-uppercase fs-12">Xắp sếp theo:
-                            </span><span class="text-muted">Hôm nay<i
-                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Hôm nay</a>
-                            <a class="dropdown-item" href="#">Hôm qua</a>
-                            <a class="dropdown-item" href="#">7 ngày qua</a>
-                            <a class="dropdown-item" href="#">30 ngày qua</a>
-                            <a class="dropdown-item" href="#">Tháng này </a>
-                            <a class="dropdown-item" href="#">tháng trước</a>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Sản phẩm bán chạy nhất
+                    </h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <span class="fw-semibold text-uppercase fs-12">Xắp sếp theo:
+                                </span><span class="text-muted">Hôm nay<i class="mdi mdi-chevron-down ms-1"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Hôm nay</a>
+                                <a class="dropdown-item" href="#">Hôm qua</a>
+                                <a class="dropdown-item" href="#">7 ngày qua</a>
+                                <a class="dropdown-item" href="#">30 ngày qua</a>
+                                <a class="dropdown-item" href="#">Tháng này </a>
+                                <a class="dropdown-item" href="#">tháng trước</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- end card header -->
+                </div><!-- end card header -->
 
-            <div class="card-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                        <tbody>
-                            @foreach ($bestSellerProducts as $product)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                <img src="{{ Storage::url($product['img']) }}"
-                                                    alt="{{ $product['name'] }}"
-                                                    class="img-fluid d-block" />
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                            <tbody>
+                                @foreach ($bestSellerProducts as $product)
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                    <img src="{{ Storage::url($product['img']) }}"
+                                                        alt="{{ $product['name'] }}" class="img-fluid d-block" />
+                                                </div>
+                                                <div>
+                                                    <h5 class="fs-14 my-1">
+                                                        <a href="{{ route('product.details', $product['id']) }}"
+                                                            class="text-reset">{{ $product['name'] }}</a>
+                                                    </h5>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h5 class="fs-14 my-1">
-                                                    <a href="{{ route('product.details', $product['id']) }}"
-                                                        class="text-reset">{{ $product['name'] }}</a>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 my-1 fw-normal">
-                                            {{ number_format($product['price']) }}đ</h5>
-                                        <span class="text-muted">Price</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 my-1 fw-normal">{{ $product['total_sold'] }}</h5>
-                                        <span class="text-muted">Sold</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 my-1 fw-normal">{{ $product['stock_left'] }}</h5>
-                                        <span class="text-muted">Stock Left</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 my-1 fw-normal">
-                                            {{ number_format($product['total_revenue']) }}đ</h5>
-                                        <span class="text-muted">Revenue</span>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </td>
+                                        <td>
+                                            <h5 class="fs-14 my-1 fw-normal">
+                                                {{ number_format($product['price']) }}đ</h5>
+                                            <span class="text-muted">Price</span>
+                                        </td>
+                                        <td>
+                                            <h5 class="fs-14 my-1 fw-normal">{{ $product['total_sold'] }}</h5>
+                                            <span class="text-muted">Sold</span>
+                                        </td>
+                                        <td>
+                                            <h5 class="fs-14 my-1 fw-normal">{{ $product['stock_left'] }}</h5>
+                                            <span class="text-muted">Stock Left</span>
+                                        </td>
+                                        <td>
+                                            <h5 class="fs-14 my-1 fw-normal">
+                                                {{ number_format($product['total_revenue']) }}đ</h5>
+                                            <span class="text-muted">Revenue</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
 
 
 
-                            {{-- <tr>
+                                {{-- <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar-sm bg-light rounded p-1 me-2">
@@ -335,485 +334,571 @@
                                     <span class="text-muted">Amount</span>
                                 </td>
                             </tr> --}}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div
-                    class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
-                    <div class="col-sm">
-                        <div class="text-muted">
-                            Showing <span class="fw-semibold">5</span> of <span
-                                class="fw-semibold">25</span> Results
+                    <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
+                        <div class="col-sm">
+                            <div class="text-muted">
+                                Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
+                            </div>
+                        </div>
+                        <div class="col-sm-auto  mt-3 mt-sm-0">
+                            <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
+                                <li class="page-item disabled">
+                                    <a href="#" class="page-link">←</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">1</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="#" class="page-link">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">→</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-sm-auto  mt-3 mt-sm-0">
-                        <ul
-                            class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
-                            <li class="page-item disabled">
-                                <a href="#" class="page-link">←</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a href="#" class="page-link">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">→</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xl-6">
-        <div class="card card-height-100">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Top Sellers</h4>
-                <div class="flex-shrink-0">
-                    <div class="dropdown card-header-dropdown">
-                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted">Report<i
-                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Download
-                                Report</a>
-                            <a class="dropdown-item" href="#">Export</a>
-                            <a class="dropdown-item" href="#">Import</a>
+        <div class="col-xl-6">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Top Sellers</h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Download
+                                    Report</a>
+                                <a class="dropdown-item" href="#">Export</a>
+                                <a class="dropdown-item" href="#">Import</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- end card header -->
+                </div><!-- end card header -->
 
-            <div class="card-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-centered table-hover align-middle table-nowrap mb-0">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-1.png"
-                                                alt="" class="avatar-sm p-2" />
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table table-centered table-hover align-middle table-nowrap mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-1.png"
+                                                    alt="" class="avatar-sm p-2" />
+                                            </div>
+                                            <div>
+                                                <h5 class="fs-14 my-1 fw-medium">
+                                                    <a href="apps-ecommerce-seller-details.html" class="text-reset">iTest
+                                                        Factory</a>
+                                                </h5>
+                                                <span class="text-muted">Oliver
+                                                    Tyler</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h5 class="fs-14 my-1 fw-medium">
-                                                <a href="apps-ecommerce-seller-details.html"
-                                                    class="text-reset">iTest
-                                                    Factory</a>
-                                            </h5>
-                                            <span class="text-muted">Oliver
-                                                Tyler</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">Bags and Wallets</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">8547</p>
+                                        <span class="text-muted">Stock</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">$541200</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 mb-0">32%<i
+                                                class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
+                                        </h5>
+                                    </td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-2.png"
+                                                    alt="" class="avatar-sm p-2" />
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fs-14 my-1 fw-medium"><a
+                                                        href="apps-ecommerce-seller-details.html"
+                                                        class="text-reset">Digitech
+                                                        Galaxy</a></h5>
+                                                <span class="text-muted">John
+                                                    Roberts</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">Bags and Wallets</span>
-                                </td>
-                                <td>
-                                    <p class="mb-0">8547</p>
-                                    <span class="text-muted">Stock</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted">$541200</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 mb-0">32%<i
-                                            class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
-                                    </h5>
-                                </td>
-                            </tr><!-- end -->
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-2.png"
-                                                alt="" class="avatar-sm p-2" />
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">Watches</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">895</p>
+                                        <span class="text-muted">Stock</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">$75030</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 mb-0">79%<i
+                                                class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
+                                        </h5>
+                                    </td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-3.png"
+                                                    alt="" class="avatar-sm p-2" />
+                                            </div>
+                                            <div class="flex-gow-1">
+                                                <h5 class="fs-14 my-1 fw-medium"><a
+                                                        href="apps-ecommerce-seller-details.html" class="text-reset">Nesta
+                                                        Technologies</a></h5>
+                                                <span class="text-muted">Harley
+                                                    Fuller</span>
+                                            </div>
                                         </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-14 my-1 fw-medium"><a
-                                                    href="apps-ecommerce-seller-details.html"
-                                                    class="text-reset">Digitech
-                                                    Galaxy</a></h5>
-                                            <span class="text-muted">John
-                                                Roberts</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">Bike Accessories</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">3470</p>
+                                        <span class="text-muted">Stock</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">$45600</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 mb-0">90%<i
+                                                class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
+                                        </h5>
+                                    </td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-8.png"
+                                                    alt="" class="avatar-sm p-2" />
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fs-14 my-1 fw-medium"><a
+                                                        href="apps-ecommerce-seller-details.html"
+                                                        class="text-reset">Zoetic
+                                                        Fashion</a></h5>
+                                                <span class="text-muted">James
+                                                    Bowen</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">Watches</span>
-                                </td>
-                                <td>
-                                    <p class="mb-0">895</p>
-                                    <span class="text-muted">Stock</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted">$75030</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 mb-0">79%<i
-                                            class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
-                                    </h5>
-                                </td>
-                            </tr><!-- end -->
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-3.png"
-                                                alt="" class="avatar-sm p-2" />
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">Clothes</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">5488</p>
+                                        <span class="text-muted">Stock</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">$29456</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 mb-0">40%<i
+                                                class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
+                                        </h5>
+                                    </td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-5.png"
+                                                    alt="" class="avatar-sm p-2" />
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fs-14 my-1 fw-medium">
+                                                    <a href="apps-ecommerce-seller-details.html"
+                                                        class="text-reset">Meta4Systems</a>
+                                                </h5>
+                                                <span class="text-muted">Zoe Dennis</span>
+                                            </div>
                                         </div>
-                                        <div class="flex-gow-1">
-                                            <h5 class="fs-14 my-1 fw-medium"><a
-                                                    href="apps-ecommerce-seller-details.html"
-                                                    class="text-reset">Nesta
-                                                    Technologies</a></h5>
-                                            <span class="text-muted">Harley
-                                                Fuller</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">Bike Accessories</span>
-                                </td>
-                                <td>
-                                    <p class="mb-0">3470</p>
-                                    <span class="text-muted">Stock</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted">$45600</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 mb-0">90%<i
-                                            class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
-                                    </h5>
-                                </td>
-                            </tr><!-- end -->
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-8.png"
-                                                alt="" class="avatar-sm p-2" />
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-14 my-1 fw-medium"><a
-                                                    href="apps-ecommerce-seller-details.html"
-                                                    class="text-reset">Zoetic
-                                                    Fashion</a></h5>
-                                            <span class="text-muted">James
-                                                Bowen</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">Clothes</span>
-                                </td>
-                                <td>
-                                    <p class="mb-0">5488</p>
-                                    <span class="text-muted">Stock</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted">$29456</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 mb-0">40%<i
-                                            class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
-                                    </h5>
-                                </td>
-                            </tr><!-- end -->
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/companies/img-5.png"
-                                                alt="" class="avatar-sm p-2" />
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-14 my-1 fw-medium">
-                                                <a href="apps-ecommerce-seller-details.html"
-                                                    class="text-reset">Meta4Systems</a>
-                                            </h5>
-                                            <span class="text-muted">Zoe Dennis</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">Furniture</span>
-                                </td>
-                                <td>
-                                    <p class="mb-0">4100</p>
-                                    <span class="text-muted">Stock</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted">$11260</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 mb-0">57%<i
-                                            class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
-                                    </h5>
-                                </td>
-                            </tr><!-- end -->
-                        </tbody>
-                    </table><!-- end table -->
-                </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">Furniture</span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">4100</p>
+                                        <span class="text-muted">Stock</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">$11260</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 mb-0">57%<i
+                                                class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i>
+                                        </h5>
+                                    </td>
+                                </tr><!-- end -->
+                            </tbody>
+                        </table><!-- end table -->
+                    </div>
 
-                <div
-                    class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
-                    <div class="col-sm">
-                        <div class="text-muted">
-                            Showing <span class="fw-semibold">5</span> of <span
-                                class="fw-semibold">25</span> Results
+                    <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
+                        <div class="col-sm">
+                            <div class="text-muted">
+                                Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
+                            </div>
+                        </div>
+                        <div class="col-sm-auto  mt-3 mt-sm-0">
+                            <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
+                                <li class="page-item disabled">
+                                    <a href="#" class="page-link">←</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">1</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="#" class="page-link">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">→</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-sm-auto  mt-3 mt-sm-0">
-                        <ul
-                            class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
-                            <li class="page-item disabled">
-                                <a href="#" class="page-link">←</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a href="#" class="page-link">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">→</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
 
-            </div> <!-- .card-body-->
-        </div> <!-- .card-->
-    </div> <!-- .col-->
-</div> <!-- end row-->
+                </div> <!-- .card-body-->
+            </div> <!-- .card-->
+        </div> <!-- .col-->
+    </div> <!-- end row-->
 
-<div class="row">
-    <div class="col-xl-4">
-        <div class="card card-height-100">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
-                <div class="flex-shrink-0">
-                    <div class="dropdown card-header-dropdown">
-                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted">Report<i
-                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Download
-                                Report</a>
-                            <a class="dropdown-item" href="#">Export</a>
-                            <a class="dropdown-item" href="#">Import</a>
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Download
+                                    Report</a>
+                                <a class="dropdown-item" href="#">Export</a>
+                                <a class="dropdown-item" href="#">Import</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- end card header -->
+                </div><!-- end card header -->
 
-            <div class="card-body">
-                <div id="store-visits-source"
-                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                    class="apex-charts" dir="ltr"></div>
-            </div>
-        </div> <!-- .card-->
-    </div> <!-- .col-->
-
-    <div class="col-xl-8">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
-                <div class="flex-shrink-0">
-                    <button type="button" class="btn btn-soft-info btn-sm">
-                        <i class="ri-file-list-3-line align-middle"></i> Generate
-                        Report
-                    </button>
+                <div class="card-body">
+                    <div id="store-visits-source" data-colors='["#0d6efd", "#198754", "#ffc107", "#dc3545", "#20c997"]'
+                        class="apex-charts" dir="ltr"></div>
                 </div>
-            </div><!-- end card header -->
+            </div> <!-- .card-->
+        </div> <!-- .col-->
 
-            <div class="card-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                        <thead class="text-muted table-light">
-                            <tr>
-                                <th scope="col">Order ID</th>
-                                <th scope="col">Customer</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Vendor</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <a href="apps-ecommerce-order-details.html"
-                                        class="fw-medium link-primary">#VZ2112</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg"
-                                                alt="" class="avatar-xs rounded-circle" />
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
+                    <div class="flex-shrink-0">
+                        <button type="button" class="btn btn-soft-info btn-sm">
+                            <i class="ri-file-list-3-line align-middle"></i> Generate
+                            Report
+                        </button>
+                    </div>
+                </div><!-- end card header -->
+
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                            <thead class="text-muted table-light">
+                                <tr>
+                                    <th scope="col">Order ID</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Vendor</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="apps-ecommerce-order-details.html"
+                                            class="fw-medium link-primary">#VZ2112</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg"
+                                                    alt="" class="avatar-xs rounded-circle" />
+                                            </div>
+                                            <div class="flex-grow-1">Alex Smith</div>
                                         </div>
-                                        <div class="flex-grow-1">Alex Smith</div>
-                                    </div>
-                                </td>
-                                <td>Clothes</td>
-                                <td>
-                                    <span class="text-success">$109.00</span>
-                                </td>
-                                <td>Zoetic Fashion</td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 fw-medium mb-0">5.0<span
-                                            class="text-muted fs-11 ms-1">(61
-                                            votes)</span></h5>
-                                </td>
-                            </tr><!-- end tr -->
-                            <tr>
-                                <td>
-                                    <a href="apps-ecommerce-order-details.html"
-                                        class="fw-medium link-primary">#VZ2111</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-2.jpg"
-                                                alt="" class="avatar-xs rounded-circle" />
+                                    </td>
+                                    <td>Clothes</td>
+                                    <td>
+                                        <span class="text-success">$109.00</span>
+                                    </td>
+                                    <td>Zoetic Fashion</td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success">Paid</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 fw-medium mb-0">5.0<span class="text-muted fs-11 ms-1">(61
+                                                votes)</span></h5>
+                                    </td>
+                                </tr><!-- end tr -->
+                                <tr>
+                                    <td>
+                                        <a href="apps-ecommerce-order-details.html"
+                                            class="fw-medium link-primary">#VZ2111</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-2.jpg"
+                                                    alt="" class="avatar-xs rounded-circle" />
+                                            </div>
+                                            <div class="flex-grow-1">Jansh Brown</div>
                                         </div>
-                                        <div class="flex-grow-1">Jansh Brown</div>
-                                    </div>
-                                </td>
-                                <td>Kitchen Storage</td>
-                                <td>
-                                    <span class="text-success">$149.00</span>
-                                </td>
-                                <td>Micro Design</td>
-                                <td>
-                                    <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 fw-medium mb-0">4.5<span
-                                            class="text-muted fs-11 ms-1">(61
-                                            votes)</span></h5>
-                                </td>
-                            </tr><!-- end tr -->
-                            <tr>
-                                <td>
-                                    <a href="apps-ecommerce-order-details.html"
-                                        class="fw-medium link-primary">#VZ2109</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-3.jpg"
-                                                alt="" class="avatar-xs rounded-circle" />
+                                    </td>
+                                    <td>Kitchen Storage</td>
+                                    <td>
+                                        <span class="text-success">$149.00</span>
+                                    </td>
+                                    <td>Micro Design</td>
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-warning">Pending</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 fw-medium mb-0">4.5<span class="text-muted fs-11 ms-1">(61
+                                                votes)</span></h5>
+                                    </td>
+                                </tr><!-- end tr -->
+                                <tr>
+                                    <td>
+                                        <a href="apps-ecommerce-order-details.html"
+                                            class="fw-medium link-primary">#VZ2109</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-3.jpg"
+                                                    alt="" class="avatar-xs rounded-circle" />
+                                            </div>
+                                            <div class="flex-grow-1">Ayaan Bowen</div>
                                         </div>
-                                        <div class="flex-grow-1">Ayaan Bowen</div>
-                                    </div>
-                                </td>
-                                <td>Bike Accessories</td>
-                                <td>
-                                    <span class="text-success">$215.00</span>
-                                </td>
-                                <td>Nesta Technologies</td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 fw-medium mb-0">4.9<span
-                                            class="text-muted fs-11 ms-1">(89
-                                            votes)</span></h5>
-                                </td>
-                            </tr><!-- end tr -->
-                            <tr>
-                                <td>
-                                    <a href="apps-ecommerce-order-details.html"
-                                        class="fw-medium link-primary">#VZ2108</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-4.jpg"
-                                                alt="" class="avatar-xs rounded-circle" />
+                                    </td>
+                                    <td>Bike Accessories</td>
+                                    <td>
+                                        <span class="text-success">$215.00</span>
+                                    </td>
+                                    <td>Nesta Technologies</td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success">Paid</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 fw-medium mb-0">4.9<span class="text-muted fs-11 ms-1">(89
+                                                votes)</span></h5>
+                                    </td>
+                                </tr><!-- end tr -->
+                                <tr>
+                                    <td>
+                                        <a href="apps-ecommerce-order-details.html"
+                                            class="fw-medium link-primary">#VZ2108</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-4.jpg"
+                                                    alt="" class="avatar-xs rounded-circle" />
+                                            </div>
+                                            <div class="flex-grow-1">Prezy Mark</div>
                                         </div>
-                                        <div class="flex-grow-1">Prezy Mark</div>
-                                    </div>
-                                </td>
-                                <td>Furniture</td>
-                                <td>
-                                    <span class="text-success">$199.00</span>
-                                </td>
-                                <td>Syntyce Solutions</td>
-                                <td>
-                                    <span class="badge bg-danger-subtle text-danger">Unpaid</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 fw-medium mb-0">4.3<span
-                                            class="text-muted fs-11 ms-1">(47
-                                            votes)</span></h5>
-                                </td>
-                            </tr><!-- end tr -->
-                            <tr>
-                                <td>
-                                    <a href="apps-ecommerce-order-details.html"
-                                        class="fw-medium link-primary">#VZ2107</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-6.jpg"
-                                                alt="" class="avatar-xs rounded-circle" />
+                                    </td>
+                                    <td>Furniture</td>
+                                    <td>
+                                        <span class="text-success">$199.00</span>
+                                    </td>
+                                    <td>Syntyce Solutions</td>
+                                    <td>
+                                        <span class="badge bg-danger-subtle text-danger">Unpaid</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 fw-medium mb-0">4.3<span class="text-muted fs-11 ms-1">(47
+                                                votes)</span></h5>
+                                    </td>
+                                </tr><!-- end tr -->
+                                <tr>
+                                    <td>
+                                        <a href="apps-ecommerce-order-details.html"
+                                            class="fw-medium link-primary">#VZ2107</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-6.jpg"
+                                                    alt="" class="avatar-xs rounded-circle" />
+                                            </div>
+                                            <div class="flex-grow-1">Vihan Hudda</div>
                                         </div>
-                                        <div class="flex-grow-1">Vihan Hudda</div>
-                                    </div>
-                                </td>
-                                <td>Bags and Wallets</td>
-                                <td>
-                                    <span class="text-success">$330.00</span>
-                                </td>
-                                <td>iTest Factory</td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                </td>
-                                <td>
-                                    <h5 class="fs-14 fw-medium mb-0">4.7<span
-                                            class="text-muted fs-11 ms-1">(161
-                                            votes)</span></h5>
-                                </td>
-                            </tr><!-- end tr -->
-                        </tbody><!-- end tbody -->
-                    </table><!-- end table -->
+                                    </td>
+                                    <td>Bags and Wallets</td>
+                                    <td>
+                                        <span class="text-success">$330.00</span>
+                                    </td>
+                                    <td>iTest Factory</td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success">Paid</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="fs-14 fw-medium mb-0">4.7<span class="text-muted fs-11 ms-1">(161
+                                                votes)</span></h5>
+                                    </td>
+                                </tr><!-- end tr -->
+                            </tbody><!-- end tbody -->
+                        </table><!-- end table -->
+                    </div>
                 </div>
-            </div>
-        </div> <!-- .card-->
-    </div> <!-- .col-->
-</div> <!-- end row-->
+            </div> <!-- .card-->
+        </div> <!-- .col-->
+    </div> <!-- end row-->
 @endsection
 
 @push('scripts')
-<script>
-    const orderCountsByMonth = @json($orderCountsByMonthJson);
-    const totalEarnings = @json($totalEarnings);
-    const userCounts = @json($userCounts);
-    const bestSellerProducts = @json($bestSellerProducts);
-</script>
+    <script>
+        // Hàm lấy màu từ CSS
+        document.addEventListener("DOMContentLoaded", function() {
+            const orderData = @json($orderCountsByMonthJson);
+            const revenueData = @json($earningsByMonthJson);
 
+
+            const colorsArray = getChartColorsArray("customer_impression_charts");
+
+            const options = {
+                series: [{
+                        name: "Đơn hàng",
+                        type: "area",
+                        data: orderData
+                    },
+                    {
+                        name: "Doanh thu",
+                        type: "bar",
+                        data: revenueData
+                    },
+                    {
+                        name: "Hoàn tiền",
+                        type: "line",
+                        data: refundData
+                    },
+                ],
+                chart: {
+                    height: 370,
+                    type: "line",
+                    toolbar: {
+                        show: false
+                    }
+                },
+                stroke: {
+                    curve: "straight",
+                    width: [2, 0, 2.2]
+                },
+                fill: {
+                    opacity: [0.1, 0.9, 1]
+                },
+                markers: {
+                    size: [0, 0, 0],
+                    strokeWidth: 2
+                },
+                xaxis: {
+                    categories: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+                    ],
+                    axisTicks: {
+                        show: false
+                    },
+                    axisBorder: {
+                        show: false
+                    },
+                },
+                grid: {
+                    show: true,
+                    xaxis: {
+                        lines: {
+                            show: true
+                        }
+                    },
+                    yaxis: {
+                        lines: {
+                            show: false
+                        }
+                    },
+                },
+                legend: {
+                    show: true,
+                    horizontalAlign: "center",
+                    offsetX: 0,
+                    offsetY: -5,
+                    markers: {
+                        width: 9,
+                        height: 9,
+                        radius: 6
+                    },
+                    itemMargin: {
+                        horizontal: 10,
+                        vertical: 0
+                    },
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: "30%",
+                        barHeight: "70%"
+                    },
+                },
+                colors: colorsArray,
+                tooltip: {
+                    shared: true,
+                    y: [{
+                            formatter: (val) => val ? `${val}` : val
+                        },
+                        {
+                            formatter: (val) => val ? `$${val.toFixed(2)}k` : val
+                        },
+                        {
+                            formatter: (val) => val ? `${val} Refunds` : val
+                        },
+                    ]
+                },
+            };
+
+            const chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
+            chart.render();
+        });
+    </script>
 @endpush
