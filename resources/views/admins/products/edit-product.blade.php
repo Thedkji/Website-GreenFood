@@ -22,7 +22,7 @@
         id="form-add-product">
         @csrf
         @method('PUT')
-        
+
         <div class="row">
             <div class="col-lg-8">
                 <!-- Các trường nhập liệu sản phẩm -->
@@ -98,6 +98,30 @@
 
 
                 <div id="err_galleries" class="my-3 text-danger">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description_short">Ngày sản xuất</label>
+                    <input type="date" name="manufacture_date" id="" class="form-control"
+                        value="{{ old('manufacture_date', $product->manufacture_date) }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description_short">Ngày hết hạn</label>
+                    <input type="date" name="expiry_date" id="" class="form-control"
+                        value="{{ old('expiry_date', $product->expiry_date) }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="description_short">Nhà cung cấp</label>
+                    <select name="supplier_id" id="supplier_id" class="form-select" style="padding: 15px">
+                        <option value="">Chọn nhà cung cấp</option>
+                        @foreach ($suppliers as $supplier)
+                            <option
+                                value="{{ $supplier->id }}"{{ $supplier->id == $product->supplier_id ? 'selected' : '' }}>
+                                {{ $supplier->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <!-- Danh mục -->
