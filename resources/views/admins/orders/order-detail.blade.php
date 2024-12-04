@@ -267,7 +267,7 @@
                 <td class="text-success">{{ app('formatPrice')($orderDetail->product_price) }} VNĐ</td>
                 <td> x {{ $orderDetail->product_quantity }}</td>
                 @php
-                $total = ($orderDetail->product_quantity * $orderDetail->product_price) - $orderDetail->coupon_price;
+                $total = ($orderDetail->product_quantity * $orderDetail->product_price);
                 @endphp
                 <td class="text-success">
                     {{ app('formatPrice')($total) }} VNĐ

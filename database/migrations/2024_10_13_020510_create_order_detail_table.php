@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('product_price');
             $table->integer('product_quantity');
             $table->string('coupon_name')->nullable();
-            $table->integer('coupon_quantity')->nullable();
             $table->integer('coupon_price')->nullable()
                 ->comment('Số tiền của mã giảm giá');
             $table->timestamps();

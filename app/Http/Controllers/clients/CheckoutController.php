@@ -433,13 +433,14 @@ class CheckoutController extends Controller
             if (is_array($decodedCoupon) && isset($decodedCoupon['id'])) {
                 $couponId = $decodedCoupon['id'];
                 $couponName = $decodedCoupon['name'];
-
+                $couponAmount = $decodedCoupon['amount'];
                 // Giảm số lượng mã giảm giá
                 Coupon::where('id', $couponId)->decrement('quantity', 1);
             }
         } else {
             // Không có mã giảm giá
             $couponName = null;
+            $couponAmount = null;
         }
         foreach ($cartItems as $item) {
             $productSku = auth()->check() ? $item['sku'] : $item['attributes']['sku'];
@@ -481,6 +482,7 @@ class CheckoutController extends Controller
                 'product_quantity' => $productQuantity,
                 'product_img' => $productImg,
                 'coupon_name' => $couponName,
+                'coupon_price' => $couponAmount,
             ]);
 
             // Cập nhật số lượng sản phẩm trong kho
