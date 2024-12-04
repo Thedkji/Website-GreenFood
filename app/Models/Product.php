@@ -11,6 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'supplier_id',
         "sku",
         "name",
         "slug",
@@ -21,6 +22,8 @@ class Product extends Model
         "description_short",
         "quantity",
         "view",
+        'manufacture_date',
+        'expiry_date',
         "status",
     ];
 
@@ -29,9 +32,9 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function depots()
+    public function supplier()
     {
-        return $this->hasMany(Depot::class);
+        return $this->belongsTo(Supplier::class);
     }
 
     public function variantGroups()

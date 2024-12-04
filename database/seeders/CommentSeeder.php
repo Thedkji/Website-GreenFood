@@ -41,6 +41,7 @@ class CommentSeeder extends Seeder
             Comment::create([
                 "id" => $i,
                 "product_id" => mt_rand(1, 20),
+                "parent_id" => Null,
                 "user_id" => mt_rand(1, 10),
                 "content" => Arr::random($healthy_food_comments),
                 "img" => "https://via.placeholder.com/300x200",

@@ -8,6 +8,7 @@ use App\Http\Requests\admins\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Gallery;
 use App\Models\Product;
+use App\Models\Supplier;
 use App\Models\Variant;
 use App\Models\VariantGroup;
 use Illuminate\Support\Str;
@@ -89,7 +90,7 @@ class ProductController extends Controller
     {
         $categories = Category::with('children')->whereNull('parent_id')->orderByDesc('id')->get();;
         $variants = Variant::with('children')->whereNull('parent_id')->orderByDesc('id')->get();
-
+        $suppliers = Supplier::orderByDesc('id')->get();
 
 
         if ($request->category_id) {
@@ -106,7 +107,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('admins.products.add-product', compact('categories', 'variants'));
+        return view('admins.products.add-product', compact('categories', 'variants', 'suppliers'));
     }
 
     public function store(Request $request)

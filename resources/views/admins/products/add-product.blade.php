@@ -81,6 +81,25 @@
                 <div id="err_galleries" class="my-3 text-danger">
                 </div>
 
+                <div class="mb-3">
+                    <label for="description_short">Ngày sản xuất</label>
+                    <input type="date" name="manufacture_date" id="" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description_short">Ngày hết hạn</label>
+                    <input type="date" name="expiry_date" id="" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description_short">Nhà cung cấp</label>
+                    <select name="supplier_id" id="supplier_id">
+                        @foreach ($suppliers as $supplier)
+                            <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Danh mục -->
                 <div class="mb-3">
                     <label for="category">Danh mục</label>
@@ -127,7 +146,8 @@
                     </div>
 
                     <div class="col-lg-6 mb-3">
-                        <label for="price_sale" class="form-label">Giá bán - VNĐ <span class="text-danger">*</span></label>
+                        <label for="price_sale" class="form-label">Giá bán - VNĐ <span
+                                class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="price_sale" id="price_sale"
                             value="{{ old('price_sale') }}" placeholder="nhập giá bán">
 
@@ -190,5 +210,5 @@
 
     @include('admins.products.script')
     @include('admins.products.validate')
-    
+
 @endsection
