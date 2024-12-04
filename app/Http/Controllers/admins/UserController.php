@@ -77,7 +77,7 @@ class UserController extends Controller
         $districts = DB::table('districts')->get();
         $wards = DB::table('wards')->get();
         $user = User::findOrFail($id);
-        return view('admins.users.edit-users', compact('user','provinces','districts','wards'));
+        return view('admins.users.edit-users', compact('user', 'provinces', 'districts', 'wards'));
     }
 
     public function update($id, UserUpdateRequest $request)
@@ -118,30 +118,44 @@ class UserController extends Controller
         }
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         $provinces = DB::table('provinces')->get();
         $districts = DB::table('districts')->get();
         $wards = DB::table('wards')->get();
         $user = User::findOrFail($id);
-        return view('admins.users.detail-users', compact('user','provinces','districts','wards'));
+        return view('admins.users.detail-users', compact('user', 'provinces', 'districts', 'wards'));
     }
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-        try {
+    // public function destroy($id)
+    // {
+    //     DB::beginTransaction();
+    //     try {
 
-            $user = User::findOrFail($id);
-            // $user->delete();
-            // if ($user->avatar) {
-            //     Storage::disk('public')->delete($user->avatar);
-            // }
-            // $user->galleries()->delete();
-            $user->delete();
-            DB::commit();
-            return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
+    //         $user = User::findOrFail($id);
+    //         // $user->delete();
+    //         // if ($user->avatar) {
+    //         //     Storage::disk('public')->delete($user->avatar);
+    //         // }
+    //         // $user->galleries()->delete();
+    //         $user->delete();
+    //         DB::commit();
+    //         return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
+    //     }
+    // }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        if (is_array($ids) && count($ids) > 0) {
+            User::whereIn('id', $ids)->delete();
+
+            return redirect()->route('admin.users.index')->with('success', 'Xóa thành công các tài khoản đã chọn.');
         }
+
+        return redirect()->route('admin.users.index')->with('error', 'Không có tài khoản nào được chọn để xóa.');
     }
 }
