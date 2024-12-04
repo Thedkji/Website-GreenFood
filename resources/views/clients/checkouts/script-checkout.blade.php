@@ -312,6 +312,8 @@
                         let couponJson = JSON.stringify(coupon);
                         // Cập nhật giá trị vào trường input type="hidden"
                         hiddenInput.value = couponJson;
+                        console.log(couponJson);
+
                         let couponDetail = `
                             <div class="border rounded p-3 bg-light" id="coupon-detail">
                                 <h5 class="text-primary">Chi tiết mã giảm giá</h5>
@@ -431,8 +433,6 @@
 
                         // Cập nhật tổng tiền sau khi giảm giá
                         updateTotalPrice(); // Gọi updateTotalPrice sau khi tính toán xong
-
-
                     }
                 },
 
