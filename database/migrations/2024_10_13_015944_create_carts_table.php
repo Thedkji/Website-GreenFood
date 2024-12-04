@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('sku', 30)->comment('Mã đơn hàng')->unique();
+            $table->string('sku', 30)->comment('Mã đơn hàng');
             $table->integer('quantity')->comment('Số lượng sản phẩm đang có trong giỏ hàng');
             $table->timestamps();
         });

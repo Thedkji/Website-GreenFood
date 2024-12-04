@@ -15,11 +15,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('name');
             $table->string('province', 50);
             $table->string('district', 50);
             $table->string('ward', 50);
             $table->string('address');
             $table->string('email');
+            $table->string('deliveryFee');
             $table->string('phone', 10);
             $table->string('total')->comment('Tổng toàn bộ hóa đơn');
             $table->string('note')->comment('Ghi chú đơn hàng')->nullable();

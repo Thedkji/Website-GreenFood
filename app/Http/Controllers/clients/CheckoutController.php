@@ -239,7 +239,7 @@ class CheckoutController extends Controller
                         ];
                     }
                 } elseif ($item['attributes']['status'] == 0) {
-                    $product = Product::find($item->id);
+                    $product = Product::find($item['attributes']['product_id']);
                     if ($product && $product->quantity < $item['quantity']) {
                         $lowStockVariants[] = [
                             'sku' => $item['attributes']['sku'],
@@ -285,14 +285,17 @@ class CheckoutController extends Controller
                 return redirect()->back()->with('error', 'Vui lòng chọn phương thức thanh toán');
             }
             $coupon = $request->coupon;
+
             $order = Order::create([
-                'user_id' => auth()->check() ? auth()->id() : 0,
+                'user_id' => auth()->check() ? auth()->id() : null,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'name' => $request->fullName,
                 'province' => $request->province,
                 'district' => $request->district,
                 'ward' => $request->ward,
                 'address' => $request->address,
+                'deliveryFee' => $request->deliveryFee,
                 'note' => $request->note,
                 'total' => $request->total,
             ]);
@@ -302,6 +305,10 @@ class CheckoutController extends Controller
                 session(['cart_items' => $request->data[0]]);
                 return $this->VnPayCheckOut($request, $order);
             }
+            if (!empty($request->couponFee)) {
+                $coupon['couponFee'] = $request->couponFee;
+            }
+
             $this->finalizeOrder($order, $request->data[0], $coupon);
             return redirect()->route('client.showSuccessCheckOut')->with('success', 'Đơn hàng đã được đặt thành công!');
         } catch (\Exception $e) {
@@ -433,7 +440,7 @@ class CheckoutController extends Controller
             if (is_array($decodedCoupon) && isset($decodedCoupon['id'])) {
                 $couponId = $decodedCoupon['id'];
                 $couponName = $decodedCoupon['name'];
-                $couponAmount = $decodedCoupon['amount'];
+                $couponAmount = $coupon['couponFee'];
                 // Giảm số lượng mã giảm giá
                 Coupon::where('id', $couponId)->decrement('quantity', 1);
             }

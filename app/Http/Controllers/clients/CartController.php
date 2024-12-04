@@ -30,7 +30,6 @@ class CartController extends Controller
                 ->where('product_id', $productId)
                 ->where('sku', $sku)
                 ->first();
-
             if ($existingCartItem) {
                 $existingCartItem->quantity += $quantity;
                 $existingCartItem->save();
