@@ -22,7 +22,7 @@
                     @foreach ($orderDetails as $detail)
                     <tr>
                         <td>
-                            <img src="{{ asset('storage/' . $detail->product_img) }}" alt="" width="80" class="rounded-circle">
+                            <img src="{{ env('VIEW_IMG') }}/{{ $detail->product_img }}" alt="" width="80" class="rounded-circle">
                         </td>
                         <td>{{ $detail->product_sku }}</td>
                         <td>{{ $detail->product_name }}</td>
