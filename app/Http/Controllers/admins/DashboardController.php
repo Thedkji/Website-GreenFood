@@ -14,9 +14,11 @@ class DashboardController extends Controller
     public function dashboard()
     {
 
+
         $totalEarnings = Order::sum('total');
         $orderCounts = Order::where('status','3')->count();
         $orderCountCompleted = Order::where('status', 'completed')->count();
+
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
             ->where('status', 'completed')

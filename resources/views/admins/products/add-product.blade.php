@@ -93,13 +93,13 @@
 
                 <div class="mb-3">
                     <label for="description_short">Nhà cung cấp</label>
-                    <select name="supplier_id" id="supplier_id">
+                    <select name="supplier_id" id="supplier_id" class="form-select">
+                        <option value="">Chọn nhà cung cấp</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
                     </select>
                 </div>
-
                 <!-- Danh mục -->
                 <div class="mb-3">
                     <label for="category">Danh mục</label>

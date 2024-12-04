@@ -91,7 +91,7 @@
                 @if(isset($orders) && $orders->isNotEmpty())
                 @foreach ($orders as $order)
                 <tr>
-                    <td scope="col">{{ $order->user->name }}</td>
+                    <td scope="col">{{ $order->user->name ??  $order->name.'(Khách)' }}</td>
                     <td scope="col">{{ $order->address }}</td>
                     <td scope="col">{{ $order->email }}</td>
                     <td scope="col">{{ $order->phone }}</td>

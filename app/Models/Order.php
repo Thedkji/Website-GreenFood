@@ -19,6 +19,8 @@ class Order extends Model
         "user_id",
         "address",
         "province",
+        "name",
+        "deliveryFee",
         "district",
         "ward",
         "email",

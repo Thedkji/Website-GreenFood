@@ -239,6 +239,7 @@
                     "weight": 1000 // Cân nặng (Chưa xử lý)
                 }),
                 success: function(response) {
+                    var deliveryFee = document.querySelector('input[name="deliveryFee"]');
                     if (response.data) {
                         let fee = response.data;
                         if (fee && fee.total) {
@@ -252,7 +253,7 @@
                         }
                         $('#feeShip').empty();
                         $('#feeShip').text(new Intl.NumberFormat('vi-VN').format(fee.total) + ' VNĐ');
-
+                        deliveryFee.value = JSON.stringify(fee.total);
                     } else {
                         console.log('Không thể tính phí vận chuyển.');
                     }
@@ -293,6 +294,7 @@
         $('#coupon_id').change(function() {
             var couponId = $(this).val();
             var hiddenInput = document.querySelector('input[name="coupon[]"]');
+            var couponFee = document.querySelector('input[name="couponFee"]');
             // Nếu không chọn coupon thì không gửi AJAX
             if (couponId === "") {
                 return;
@@ -312,8 +314,6 @@
                         let couponJson = JSON.stringify(coupon);
                         // Cập nhật giá trị vào trường input type="hidden"
                         hiddenInput.value = couponJson;
-                        console.log(couponJson);
-
                         let couponDetail = `
                             <div class="border rounded p-3 bg-light" id="coupon-detail">
                                 <h5 class="text-primary">Chi tiết mã giảm giá</h5>
@@ -336,6 +336,7 @@
                                 <td colspan="2" class="text-end"><strong>Giảm giá:</strong></td>
                                 <td><strong class="text-danger">${new Intl.NumberFormat('vi-VN').format(coupon.amount)} VNĐ</strong></td>
                             `;
+                                couponFee.value = JSON.stringify(coupon.amount);
                             } else if (coupon.discount_type == 0) { // Giảm giá theo phần trăm
                                 let discountAmount = totalPrice * coupon.amount / 100;
                                 let totalPriceCoupon = totalPrice - discountAmount;
@@ -345,6 +346,7 @@
                                     <td colspan="2" class="text-end"><strong>Giảm giá:</strong></td>
                                     <td><strong class="text-danger">${new Intl.NumberFormat('vi-VN').format(parseInt(discountAmount))} VNĐ</strong></td>
                                 `;
+                                couponFee.value = JSON.stringify(discountAmount);
                             }
                         }
                         // Nếu là mã giảm giá áp dụng cho một số sản phẩm
@@ -416,6 +418,7 @@
                                     <span class="text-danger">${new Intl.NumberFormat('vi-VN').format(parseInt(totalDiscount))} VNĐ</span>
                                 </div>
                             `;
+                            couponFee.value = JSON.stringify(totalDiscount);
                             final = totalPriceCoupon; // Cập nhật final sau khi tính toán xong
                             finalCoupon = totalDiscount;
                             couponDetailHtml += `
