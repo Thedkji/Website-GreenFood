@@ -8,3 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('suppliers', SupplierController::class);
+Route::post('bulk-delete', [SupplierController::class, 'bulkDelete'])->name('suppliers.bulkDelete');
+
+Route::get('suppliers-detail/{id}', [SupplierController::class, 'supplierDetail'])->name('suppliers.detail');
+
+
