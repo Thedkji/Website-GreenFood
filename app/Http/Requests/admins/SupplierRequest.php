@@ -23,7 +23,7 @@ class SupplierRequest extends FormRequest
     {
         return [
             "name" => "required",
-            "email" => "nullable|email|unique:suppliers",
+            "email" => "nullable",
             "phone" => "required|digits:10",
             "address" => "required"
         ];
@@ -33,8 +33,6 @@ class SupplierRequest extends FormRequest
     {
         return [
             "name.required" => "Bạn cần nhập tên nhà cung cấp",
-            "email.email" => "Bạn cần nhập đúng định dạng email",
-            "email.unique" => "Bạn không được nhập trùng email",
             "phone.required" => "Bạn cần nhập số điện thoại",
             "phone.digits" => "Số điện thoại phải là 10 số ",
             "address.required" => "Bạn phải nhập địa chỉ"

@@ -10,7 +10,7 @@
                 <th>Tổng tiền</th>
                 <th>Chi tiết</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>  <!-- Cột Hành động cho nút hủy -->
+                <th>Hành động</th> <!-- Cột Hành động cho nút hủy -->
             </tr>
         </thead>
 
@@ -20,32 +20,39 @@
                     <td>{{ $order->user->name }}</td>
                     <td>{{ $order->address }}</td>
                     <td>{{ $order->phone }}</td>
-                    <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND</td>
-                    <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}" >Xem</a></td>
+                    <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND
+                    </td>
+                    <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}">Xem</a></td>
                     <td>
                         @switch($order->status)
                             @case(0)
                                 <span class="badge bg-warning" style="padding: 10px;">Chờ xác nhận</span>
-                                @break
+                            @break
+
                             @case(1)
                                 <span class="badge bg-info" style="padding: 10px;">Đã xác nhận và đang xử lý</span>
-                                @break
+                            @break
+
                             @case(2)
                                 <span class="badge bg-primary" style="padding: 10px;">Đang giao hàng</span>
-                                @break
+                            @break
                         @endswitch
                     </td>
                     <td>
-                        <form action="{{ route('admin.orders.cancelOrder', $order->id) }}" method="post" style="display: inline;">
+                        <form action="{{ route('admin.orders.cancelOrder', $order->id) }}" method="post"
+                            style="display: inline;">
                             @csrf
                             @method('PUT')
 
                             @if ($order->status == 0)
-                                <button type="button" class="badge bg-danger" style=" padding: 8px 15px;"data-bs-toggle="modal" data-bs-target="#cancelOrderModal{{ $order->id }}">
+                                <button type="button" class="badge bg-danger"
+                                    style=" padding: 8px 15px;"data-bs-toggle="modal"
+                                    data-bs-target="#cancelOrderModal{{ $order->id }}">
                                     Hủy
                                 </button>
                             @else
-                                <button type="button" class="btn btn-dark" style=" padding: 8px 15px;" disabled>Hủy</button>
+                                <button type="button" class="btn btn-dark" style=" padding: 8px 15px;"
+                                    disabled>Hủy</button>
                             @endif
                         </form>
                     </td>
@@ -57,7 +64,8 @@
 
 <!-- hủy đơn hàng -->
 @foreach ($orders as $order)
-    <div class="modal fade" id="cancelOrderModal{{ $order->id }}" tabindex="-1" aria-labelledby="cancelOrderModalLabel{{ $order->id }}" aria-hidden="true">
+    <div class="modal fade" id="cancelOrderModal{{ $order->id }}" tabindex="-1"
+        aria-labelledby="cancelOrderModalLabel{{ $order->id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -67,9 +75,9 @@
                 <form action="{{ route('admin.orders.cancelOrder', $order->id) }}" method="post">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="status" value="5"> 
+                    <input type="hidden" name="status" value="5">
                     <div class="modal-body">
-                        <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="4" placeholder="Nhập lý do hủy..."></textarea>
+                        <textarea class="form-control" name="cancel_reason" rows="4" placeholder="Nhập lý do hủy..."></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>

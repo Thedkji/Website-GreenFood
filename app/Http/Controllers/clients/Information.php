@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\VariantGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class Information extends Controller
@@ -21,6 +22,21 @@ class Information extends Controller
     public function index()
     {
         $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
+        $provinces = DB::table('provinces')->get();
+
+        if (request()->ajax() && request('province_code')) {
+            $districts = DB::table('districts')
+                ->where('province_code', request('province_code'))
+                ->get();
+            return response()->json($districts);
+        }
+
+        if (request()->ajax() && request('district_code')) {
+            $wards = DB::table('wards')
+                ->where('district_code', request('district_code'))
+                ->get();
+            return response()->json($wards);
+        }
 
         $orders = Order::where('user_id', $user->id)
             ->whereIn('status', [0, 1, 2])
@@ -28,12 +44,12 @@ class Information extends Controller
             ->get();
 
         $oders = Order::where('user_id', $user->id)
-            ->whereIn('status', [3, 4, 5, 6, 7])
+            ->whereIn('status', [3, 4, 5, 6])
             ->with('user')
             ->get();
 
         // Trả dữ liệu về view
-        return view('clients.information.information', compact('user', 'orders', 'oders'));
+        return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces'));
     }
 
 
@@ -64,21 +80,16 @@ class Information extends Controller
     {
         // Kiểm tra dữ liệu
 
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|max:10',
-            'address' => 'nullable|max:255',
-        ]);
-        // dd($request->all());
-        // Cập nhật thông tin người dùng
         $user = User::findOrFail($id);
-        $user->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-        ]);
+
+        // if ($request->hasFile('avatar')) {
+        //     $img = $request->file('avatar');
+        //     $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+        //     $request->avatar = $img->storeAs('avatars', $filename);
+        // }
+        dd($request->all());
+
+        $user->update($request->all());
 
         // Chuyển hướng với thông báo thành công
         // return redirect()->route('clients.information.index')->with('success', 'Thông tin đã được cập nhật!');

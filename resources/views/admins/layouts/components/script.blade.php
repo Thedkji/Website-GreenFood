@@ -37,7 +37,7 @@
 
     // Description
     CKEDITOR.replace('product-ckeditor2', {
-        height: 500 
+        height: 500
     });
 </script>
 
@@ -95,3 +95,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- App js (Gặp lỗi xung đội với xử lý laravel , đã fix nhưng nếu gặp xung đột tiếp thì nên đóng lại)-->
 {{-- <script src="{{ env('VIEW_ADMIN') }}/js/app.js?time={{ time() }}"></script> --}}
+
+<!-- Thêm SweetAlert2 CDN vào trong phần <head> của trang -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
