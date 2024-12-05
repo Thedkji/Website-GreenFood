@@ -84,6 +84,8 @@
                         @if ($cartItems->isNotEmpty())
                         @foreach ($cartItems as $item)
                         <input type="hidden" name="item_ids" id="itemIds">
+
+                        @if (auth()->check())
                         @php
                         $price = 0;
                         $quantity = $item->quantity;
@@ -95,7 +97,6 @@
                         }
                         }
                         @endphp
-                        @if (auth()->check())
                         <tr>
                             <th>
                                 <input type="checkbox" name="selectBox[{{ $item->id }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" data-item-id="{{ $item->id }}" style="width: 20px;height: 20px;" value="{{ $item }}" data-price="{{$price}}"
@@ -217,6 +218,10 @@
                             </td>
                         </tr>
                         @else
+                        @php
+                        $quantity = $item->quantity;
+                        $price = $item->price * $quantity;
+                        @endphp
                         <tr>
                             <th>
                                 <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[{{ $item->id }}]" value="{{ $item }}" data-price="{{$price}}"
@@ -249,9 +254,8 @@
                             </th>
                             <td>
                                 <a href="{{ route('client.product-detail', $item->attributes->product_id) }}">
-                                    <p class="mb-0 mt-4">
+                                    <p class="mb-0 mt-4 truncate-text">
                                         {{ $item->name }}
-
                                     </p>
                                 </a>
                             </td>
@@ -329,7 +333,7 @@
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
-                            <p class="mb-0 pe-4 text-primary" id="grandTotal">{{ number_format($cartTotal) }} VNĐ</p>
+                            <p class="mb-0 pe-4 text-primary" id="grandTotal">0 VNĐ</p>
                         </div>
                         <button
                             class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"

@@ -111,56 +111,48 @@ class Information extends Controller
 
     public function show($id)
     {
+        $user = auth()->user();
         $order = Order::with('user')->findOrFail($id);
         $orderDetails = OrderDetail::with('order')->where('order_id', $id)->get();
-
+        $oders = Order::where('user_id', $user->id)
+            ->whereIn('status', [0, 1, 2, 3, 4, 5, 6])
+            ->with('user')
+            ->get();
         return view('clients.information.order-detail', compact('order', 'orderDetails'));
     }
 
     public function store(Request $request)
     {
+        
+        $product = Product::find($request->product_id);
 
-        $product_sku = OrderDetail::where('order_id', $request->order_id)->pluck('product_sku')->toArray();
-
-        // Lấy sản phẩm từ bảng Product (sử dụng `id`)
-        $productsFromProductTable = Product::whereIn('sku', $product_sku)
-            ->get()
-            ->map(function ($item) {
-                $item->product_id = $item->id; // Thêm cột `product_id` cho đồng nhất
-                return $item;
-            });
-
-        // Lấy sản phẩm từ bảng variant_groups (sử dụng `product_id`)
-        $productsFromVariantGroups = VariantGroup::whereIn('sku', $product_sku)->get();
-
-        // Hợp nhất kết quả
-        $allProducts = $productsFromProductTable->concat($productsFromVariantGroups)
-            ->unique('product_id') // Loại bỏ trùng lặp theo `product_id`
-            ->pluck('product_id');
-
-        foreach ($allProducts as $pro) {
-            $commentsData = [];
-            if ($request->hasFile('image')) {
-                $img = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension(); // Thay đổi này để sử dụng getClientOriginalExtension()
-                $commentsData['img'] = $img->storeAs('comments', $filename);
-            }
-
-            $commentsData['product_id'] = $pro;
-            $commentsData['user_id'] = Auth::id();
-            $commentsData['content'] = $request->comment;
-
-            $comments = Comment::create($commentsData);
-
-            Rate::create([
-                'comment_id' => $comments->id,
-                'star' => $request->star,
-            ]);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Sản phẩm không tồn tại!');
         }
 
+        $commentsData = [
+            'product_id' => $request->product_id,
+            'user_id' => Auth::id(),
+            'content' => $request->comment,
+        ];
+
+        if ($request->hasFile('image')) {
+            $img = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+            $commentsData['img'] = $img->storeAs('comments', $filename);
+        }
+
+        $comment = Comment::create($commentsData);
+
+        Rate::create([
+            'comment_id' => $comment->id,
+            'star' => $request->star,
+        ]);
+        Order::where('id', $request->order_id)
+        ->where('user_id', Auth::id())
+        ->update(['status' => 7]);
 
 
-
-        return redirect()->back()->with('success', 'Đánh giá của bạn đã được lưu!');
+        return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi!');
     }
 }
