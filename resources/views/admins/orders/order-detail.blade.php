@@ -92,7 +92,7 @@
         @endif
         @endif
 
-        @if ($orders->status != 6)
+        @if ($orders->status != 7)
         <!-- Giao hàng không thành công -->
         @if($orders->status >= 4)
         <div class="progress-bar bg-secondary" role="progressbar"
@@ -115,11 +115,23 @@
             <i class="fa fa-star" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đánh giá" -->
             <div class="status-label">Đánh giá</div>
         </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
+        @endif
+
+        @if($orders->status >= 7)
+        <div class="progress-bar bg-info" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-star" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đánh giá" -->
+            <div class="status-label">Hoàn Thành</div>
+        </div>
         @endif
 
         @endif
 
-        @if ($orders->status != 6)
+        @if ($orders->status != 7)
         <!-- Hủy đơn -->
         @if($orders->status >= 5)
         <div class="progress-bar bg-danger" role="progressbar"
