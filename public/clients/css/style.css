@@ -9,7 +9,21 @@
     max-width: 150px;
     /* Điều chỉnh độ rộng tối đa */
 }
-.truncate-text-300{
+
+.truncate:hover::after {
+    content: attr(data-fulltext);
+    position: absolute;
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-top: 5px;
+    display: block; /* Ẩn tooltip mặc định */
+}
+
+.truncate-text-300 {
     overflow: hidden;
     /* Ẩn phần nội dung tràn */
     text-overflow: ellipsis;
@@ -20,7 +34,7 @@
     /* Điều chỉnh độ rộng tối đa */
 }
 
-.truncate-text-50{
+.truncate-text-50 {
     overflow: hidden;
     /* Ẩn phần nội dung tràn */
     text-overflow: ellipsis;
@@ -86,7 +100,6 @@
         width: 0%;
     }
 }
-
 
 #spinner {
     opacity: 0;

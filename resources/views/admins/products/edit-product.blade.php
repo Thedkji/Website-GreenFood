@@ -126,6 +126,7 @@
 
                 <!-- Danh mục -->
                 <div class="mb-3">
+                    <label for="category">Danh mục</label>
                     <select name="categories[]" id="category" multiple="multiple">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"

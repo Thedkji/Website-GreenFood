@@ -15,7 +15,12 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::orderByDesc('id')->paginate(8);
+
+        $suppliers = Supplier::with('products', 'products.variantGroups')->orderByDesc('id')->paginate(8);
+
+        if (request()->has('search')) {
+            $suppliers = Supplier::where('name', 'like', '%' . request('search') . '%')->orderByDesc('id')->paginate(8);
+        }
         return view('admins.suppliers.list-supplier', compact('suppliers'));
     }
 
@@ -56,7 +61,7 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(SupplierUpdateRequest $request, Supplier $supplier)
+    public function update(SupplierRequest $request, Supplier $supplier)
     {
 
         $supplier->update($request->all());
@@ -74,12 +79,14 @@ class SupplierController extends Controller
 
     public function supplierDetail($id)
     {
-        $supplier = Supplier::with('products','products.variantGroups')->find($id);
+        $supplier = Supplier::with('products', 'products.variantGroups')->find($id);
         return view('admins.suppliers.detail-product-supplier', compact('supplier'));
     }
 
     public function bulkDelete(Request $request)
     {
-        dd($request->all());
+        $ids = $request->ids;
+        Supplier::whereIn('id', $ids)->delete();
+        return response()->json(['success' => "Xóa nhà cung cấp thành công!"]);
     }
 }

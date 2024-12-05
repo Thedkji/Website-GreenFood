@@ -10,28 +10,28 @@
 
         <div class="row">
             <div class="col-md-12 col-12 mb-5">
-                <label>Họ và tên*</label>
+                <label>Họ và tên</label>
                 <input type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Họ và tên">
                 @error('name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-12 col-12 mb-5">
-                <label>Email Address*</label>
+                <label>Email Address</label>
                 <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email">
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-12 col-12 mb-5">
-                <label>Phone no*</label>
+                <label>Phone no</label>
                 <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="Số điện thoại">
                 @error('phone')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-12 mb-5">
-                <label>Address*</label>
+                <label>Address</label>
                 <input type="text" name="address" value="{{ old('address', $user->address) }}" placeholder="Nhập địa chỉ">
                 @error('address')
                     <div class="text-danger">{{ $message }}</div>
