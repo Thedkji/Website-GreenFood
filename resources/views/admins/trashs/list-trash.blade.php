@@ -34,6 +34,7 @@
                 <option value="Order" {{ $statusTrash == 'Order' ? 'selected' : '' }}>Đơn hàng</option>
                 <option value="Comment" {{ $statusTrash == 'Comment' ? 'selected' : '' }}>Bình luận</option>
                 <option value="Supplier" {{ $statusTrash == 'Supplier' ? 'selected' : '' }}>Nhà cung cấp</option>
+                <option value="Coupon" {{ $statusTrash == 'Coupon' ? 'selected' : '' }}>Mã giảm giá</option>
             </select>
         </div>
     </form>
@@ -56,6 +57,7 @@
             @forelse ($trashedItems as $items)
                 <tr>
                     <td>{{ $startIndex + $loop->iteration }}</td>
+
                     <td>
                         @if ($items instanceof App\Models\User)
                             Người dùng
@@ -67,16 +69,22 @@
                             Bình luận
                         @elseif ($items instanceof App\Models\Supplier)
                             Nhà cung cấp
+                        @elseif ($items instanceof App\Models\Coupon)
+                            Mã giảm giá
                         @endif
+
                     </td>
-                    <td>{{ $items->name ?? ($items->title ?? 'Không có tên') }}</td>
+                    <td>{{ $items->name ?? ($items->title ?? 'Không có tên') }} </td>
                     <td>{{ $items->deleted_at->format('d-m-Y H:i:s') }}</td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <form action="{{ route('admin.trashs.restore', ['type' => class_basename($items), $items->id]) }}" method="post">
+                            <form
+                                action="{{ route('admin.trashs.restore', ['type' => class_basename($items), $items->id]) }}"
+                                method="post">
                                 @csrf
                                 @method('POST') <!-- Sử dụng method POST để khôi phục -->
-                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Bạn có chắc chắn muốn khôi phục?');">Khôi phục</button>
+                                <button type="submit" class="btn btn-success btn-sm"
+                                    onclick="return confirm('Bạn có chắc chắn muốn khôi phục?');">Khôi phục</button>
                             </form>
                             <form
                                 action="{{ route('admin.trashs.destroy', ['type' => class_basename($items), $items->id]) }}"

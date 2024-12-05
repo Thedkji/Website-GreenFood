@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -29,6 +30,7 @@ class TrashController extends Controller
         $orders = Order::onlyTrashed()->get(['id', 'user_id', 'deleted_at']);
         $comments = Comment::onlyTrashed()->get(['id', 'product_id', 'deleted_at']);
         $suppliers = Supplier::onlyTrashed()->get(['id', 'name', 'deleted_at']);
+        $coupons = Coupon::onlyTrashed()->get(['id', 'name', 'deleted_at']);
 
         // Gán thêm thông tin loại (type) để phân biệt trong bảng
         $users->map(function ($item) {
@@ -51,12 +53,18 @@ class TrashController extends Controller
             $item->type = 'Supplier';
             return $item;
         });
+        $coupons->map(function ($item) {
+            $item->type = 'Coupon';
+            return $item;
+        });
 
         // Kết hợp tất cả dữ liệu
-        $allItems = $users->merge($products)
+        $allItems = $users
+            ->merge($products)
             ->merge($orders)
             ->merge($comments)
             ->merge($suppliers)
+            ->merge($coupons)
             ->sortByDesc('deleted_at'); // Sắp xếp theo thời gian xóa giảm dần
 
         // Nếu có bộ lọc, chỉ lấy các mục tương ứng với loại được chọn
@@ -94,14 +102,14 @@ class TrashController extends Controller
                     $item = Product::withTrashed()->findOrFail($id);
                     $item->restore(); // Khôi phục sản phẩm
 
-                    // // Khôi phục depots (hasMany)
-                    // $item->depots()->withTrashed()->get()->each(function ($depot) {
-                    //     $depot->restore();
-                    // });
-
-                    // Khôi phục variantGroups (hasMany)
+                    // Khôi phục các variantGroups (hasMany)
                     $item->variantGroups()->withTrashed()->get()->each(function ($variantGroup) {
                         $variantGroup->restore();
+
+                        // Khôi phục các variantGroupVariant (hasMany) liên quan đến variantGroup
+                        // $variantGroup->variantGroupVariants()->withTrashed()->get()->each(function ($variantGroupVariant) {
+                        //     $variantGroupVariant->restore();
+                        // });
                     });
 
                     // Khôi phục galleries (hasMany)
@@ -138,6 +146,10 @@ class TrashController extends Controller
                     $item = Supplier::withTrashed()->findOrFail($id);
                     $item->restore();
                     return redirect()->back()->with('success', 'Nhà cung cấp đã được khôi phục thành công.');
+                case 'Coupon':
+                    $item = Coupon::withTrashed()->findOrFail($id);
+                    $item->restore();
+                    return redirect()->back()->with('success', 'Mã giảm giá đã được khôi phục thành công.');
                 default:
                     return redirect()->back()->with('error', 'Không thể khôi phục mục này.');
             }

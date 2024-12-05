@@ -71,6 +71,7 @@
                         <div id="customer_impression_charts" data-colors='["--vz-primary", "--vz-success", "--vz-danger"]'
                             class="apex-charts" dir="ltr"></div>
                     </div>
+
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -613,10 +614,11 @@
                     </div>
                 </div><!-- end card header -->
 
-                <div class="card-body">
-                    <div id="store-visits-source" data-colors='["#0d6efd", "#198754", "#ffc107", "#dc3545", "#20c997"]'
+                {{-- <div class="card-body">
+                    <div id="category-products-chart"
+                        data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
                         class="apex-charts" dir="ltr"></div>
-                </div>
+                </div> --}}
             </div> <!-- .card-->
         </div> <!-- .col-->
 
@@ -791,114 +793,134 @@
     </div> <!-- end row-->
 @endsection
 
-@push('scripts')
-    <script>
-        // Hàm lấy màu từ CSS
-        document.addEventListener("DOMContentLoaded", function() {
-            const orderData = @json($orderCountsByMonthJson);
-            const revenueData = @json($earningsByMonthJson);
+<script>
+    // Hàm lấy màu từ CSS
+    document.addEventListener("DOMContentLoaded", function() {
+        const orderData = @json($orderCountsForChart);
+        const revenueData = @json($earningsByMonthJson);
+        const refundData = Array(12).fill(0); // Dữ liệu hoàn tiền mặc định là 0
 
+        const colorsArray = getChartColorsArray("customer_impression_charts");
 
-            const colorsArray = getChartColorsArray("customer_impression_charts");
-
-            const options = {
-                series: [{
-                        name: "Đơn hàng",
-                        type: "area",
-                        data: orderData
+        const options = {
+            series: [{
+                    name: "Đơn hàng", // Để Đơn hàng lên trên
+                    type: "area", // Dạng đường vùng
+                    data: orderData,
+                },
+                {
+                    name: "Doanh thu", // Để Doanh thu nằm dưới Đơn hàng
+                    type: "bar", // Dạng cột
+                    data: revenueData,
+                },
+                {
+                    name: "Hoàn tiền",
+                    type: "line",
+                    data: refundData
+                },
+            ],
+            chart: {
+                height: 370,
+                type: "line", // Biểu đồ chính
+                toolbar: {
+                    show: false,
+                },
+            },
+            stroke: {
+                curve: "smooth", // Đường mượt mà
+                width: [3, 0], // Đơn hàng: 3px, Doanh thu: không có nét
+            },
+            fill: {
+                opacity: [0.2, 0.8], // Đơn hàng: trong suốt hơn, Doanh thu: rõ ràng
+            },
+            markers: {
+                size: [4, 0], // Đơn hàng: có điểm, Doanh thu: không có
+                strokeWidth: 2,
+            },
+            xaxis: {
+                categories: [
+                    "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                    "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
+                ],
+                axisTicks: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false
+                },
+            },
+            yaxis: [{
+                    title: {
+                        text: "Đơn hàng",
+                    },
+                },
+                {
+                    opposite: true,
+                    title: {
+                        text: "Doanh thu",
+                    },
+                },
+            ],
+            grid: {
+                show: true,
+                xaxis: {
+                    lines: {
+                        show: true,
+                    },
+                },
+                yaxis: {
+                    lines: {
+                        show: false,
+                    },
+                },
+            },
+            legend: {
+                show: true,
+                horizontalAlign: "center",
+                offsetX: 0,
+                offsetY: -5,
+                markers: {
+                    width: 9,
+                    height: 9,
+                    radius: 6,
+                },
+                itemMargin: {
+                    horizontal: 10,
+                    vertical: 0,
+                },
+            },
+            colors: colorsArray,
+            tooltip: {
+                shared: true,
+                y: [{
+                        formatter: (val) => (val ? `${val} Đơn hàng` : val),
                     },
                     {
-                        name: "Doanh thu",
-                        type: "bar",
-                        data: revenueData
-                    },
-                    {
-                        name: "Hoàn tiền",
-                        type: "line",
-                        data: refundData
+                        formatter: (val) =>
+                            val ?
+                            `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` :
+                            val,
                     },
                 ],
-                chart: {
-                    height: 370,
-                    type: "line",
-                    toolbar: {
-                        show: false
-                    }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: "40%", // Giảm kích thước cột xuống còn 15% (hoặc tùy chỉnh để giảm xuống một nửa)
+                    barHeight: "70%",
                 },
-                stroke: {
-                    curve: "straight",
-                    width: [2, 0, 2.2]
-                },
-                fill: {
-                    opacity: [0.1, 0.9, 1]
-                },
-                markers: {
-                    size: [0, 0, 0],
-                    strokeWidth: 2
-                },
-                xaxis: {
-                    categories: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-                        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
-                    ],
-                    axisTicks: {
-                        show: false
-                    },
-                    axisBorder: {
-                        show: false
-                    },
-                },
-                grid: {
-                    show: true,
-                    xaxis: {
-                        lines: {
-                            show: true
-                        }
-                    },
-                    yaxis: {
-                        lines: {
-                            show: false
-                        }
-                    },
-                },
-                legend: {
-                    show: true,
-                    horizontalAlign: "center",
-                    offsetX: 0,
-                    offsetY: -5,
-                    markers: {
-                        width: 9,
-                        height: 9,
-                        radius: 6
-                    },
-                    itemMargin: {
-                        horizontal: 10,
-                        vertical: 0
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: "30%",
-                        barHeight: "70%"
-                    },
-                },
-                colors: colorsArray,
-                tooltip: {
-                    shared: true,
-                    y: [{
-                            formatter: (val) => val ? `${val}` : val
-                        },
-                        {
-                            formatter: (val) => val ? `$${val.toFixed(2)}k` : val
-                        },
-                        {
-                            formatter: (val) => val ? `${val} Refunds` : val
-                        },
-                    ]
-                },
-            };
+            },
+        };
 
-            const chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
-            chart.render();
-        });
-    </script>
-@endpush
+        const chart = new ApexCharts(
+            document.querySelector("#customer_impression_charts"),
+            options
+        );
+        chart.render();
+    });
+
+
+
+
+</script>
+{{-- @push('scripts')
+@endpush --}}
