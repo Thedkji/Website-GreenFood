@@ -11,19 +11,21 @@ use App\Http\Controllers\Controller;
 class CommentController extends Controller
 {
     public function showComment(Request $request)
-    {
-        $searchTerm = $request->get('search');
-    
+{
+    $searchTerm = $request->input('search');
+
+    if ($searchTerm) {
         $comments = Comment::with(['rates', 'product', 'user'])
-            ->when($searchTerm, function ($query) use ($searchTerm) {
-                return $query->whereHas('product', function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', '%' . $searchTerm . '%');
-                });
+            ->whereHas('product', function ($query) use ($searchTerm) {
+                $query->where('name', 'like', '%' . $searchTerm . '%');
             })
             ->paginate(6);
-    
-        return view('admins.comments.comment', compact('comments', 'searchTerm'));
+    } else {
+        $comments = Comment::with(['rates', 'product', 'user'])->paginate(6);
     }
+
+    return view('admins.comments.comment', compact('comments', 'searchTerm'));
+}
 
     public function create($id)
     {
@@ -84,5 +86,24 @@ public function detail($id)
     {
         $comment->delete();
         return redirect()->route('admin.comments.comment')->with('success', 'Bạn đã xóa thành công.');
+    }
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids'); // Lấy danh sách ID từ request
+    
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không có bình luận nào được chọn.'
+            ], 400);
+        }
+    
+        // Xóa các bình luận dựa trên danh sách ID
+        Comment::whereIn('id', $ids)->delete();
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã xóa các bình luận được chọn thành công.'
+        ]);
     }
 }
