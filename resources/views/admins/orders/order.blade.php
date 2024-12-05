@@ -121,6 +121,9 @@
                         @case(6)
                         <span class="badge bg-info p-2">Đánh giá</span>
                         @break
+                        @case(7)
+                        <span class="badge bg-primary p-2">Hoàn thành</span>
+                        @break
                         @default
                         <span class="badge bg-secondary p-2">Không xác định</span>
                         @endswitch
