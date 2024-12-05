@@ -72,13 +72,28 @@ class UserController extends Controller
 
 
     public function show($id)
-    {
-        $provinces = DB::table('provinces')->get();
-        $districts = DB::table('districts')->get();
-        $wards = DB::table('wards')->get();
-        $user = User::findOrFail($id);
-        return view('admins.users.edit-users', compact('user', 'provinces', 'districts', 'wards'));
-    }
+{
+    $user = User::findOrFail($id);
+    $provinces = DB::table('provinces')->get();
+    $districts = DB::table('districts')->get();
+    $wards = DB::table('wards')->get();
+
+    // Lấy mã code của ward, district và province từ user để hiển thị selected
+    $selectedWard = DB::table('wards')->where('name', $user->ward)->first();
+    $selectedDistrict = DB::table('districts')->where('name', $user->district)->first();
+    $selectedProvince = DB::table('provinces')->where('name', $user->province)->first();
+
+    return view('admins.users.edit-users', compact(
+        'user',
+        'provinces',
+        'districts',
+        'wards',
+        'selectedWard',
+        'selectedDistrict',
+        'selectedProvince'
+    ));
+}
+
 
     public function update($id, UserUpdateRequest $request)
     {

@@ -1,16 +1,16 @@
 <div class="container-fluid service py-5">
     <div class="container py-5">
-        <h1 class="mb-5">Fresh Organic Vegetables</h1>
         <div class="row g-4 justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <a href="#">
                     <div class="service-item bg-success rounded border border-success">
-                        <img src="{{ env('VIEW_CLIENT') }}/img/featur-1.jpg" class=" img-fluid rounded-top w-100"
-                            alt="">
+                        <img src="{{ env('VIEW_CLIENT') }}/img/che-do-an-giam-can-1%20(1).png" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-primary text-center p-4 rounded">
-                                <h5 class="text-white">Fresh Apples</h5>
-                                <h3 class="mb-0">20% OFF</h3>
+                                <h5 class="text-white">Công cụ </h5>
+                                <a href="{{ route('client.shop') }}" class=" border-white border-success rounded-pill text-white ">
+                                    <h3 class=" border-white border-success rounded-pill text-white ">Tính BMI</h3>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -19,12 +19,13 @@
             <div class="col-md-6 col-lg-4">
                 <a href="#">
                     <div class="service-item bg-dark rounded border border-dark">
-                        <img src="{{ env('VIEW_CLIENT') }}/img/featur-2.jpg" class=" img-fluid rounded-top w-100"
-                            alt="">
+                        <img src="{{ env('VIEW_CLIENT') }}/img/1732270675_67405a5326b00.jpg" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-light text-center p-4 rounded">
-                                <h5 class="text-primary">Tasty Fruits</h5>
-                                <h3 class="mb-0">Free delivery</h3>
+                                <h5 class="text-primary">Sản phẩm </h5>
+                                <a href="{{ route('client.shop') }}" class=" border-Black border-success rounded-pill text-Black ">
+                                    <h3 class=" border-Black border-success rounded-pill text-Black ">Hạt </h3>
+                                    </a>
                             </div>
                         </div>
                     </div>
@@ -33,12 +34,13 @@
             <div class="col-md-6 col-lg-4">
                 <a href="#">
                     <div class="service-item bg-primary rounded border border-primary">
-                        <img src="{{ env('VIEW_CLIENT') }}/img/featur-3.jpg" class=" img-fluid rounded-top w-100"
-                            alt="">
+                        <img src="{{ env('VIEW_CLIENT') }}/img/123.jpg" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-success text-center p-4 rounded">
-                                <h5 class="text-white">Exotic Vegitable</h5>
-                                <h3 class="mb-0 text-primary">Discount 30$</h3>
+                                <h5 class="text-white">Mọi thắc mắc</h5>
+                                <a href="{{ route('client.contact.index') }}" class=" border-white border-success rounded-pill text-primary " >
+                                   <h3 class=" border-white border-success rounded-pill text-primary "> Liên hệ chúng tôi</h3>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -53,85 +55,82 @@
     <div class="container py-5">
         <h1 class="mb-5">Sản phẩm bán chạy</h1>
         <div class="owl-carousel vegetable-carousel justify-content-center">
-            @foreach ($bestSellingProducts as $product)
-                <div class="border border-primary rounded position-relative vesitable-item">
-                    <!-- Image Section -->
-                    <div class="vesitable-img">
-                        <a href="{{ route('client.product-detail', $product->id) }}">
-                            <img src="{{ $product->img && $product->img !== 'https://via.placeholder.com/300x200' ? env('VIEW_IMG') . '/' . $product->img : 'https://via.placeholder.com/300x200' }}"
-                                class="card-img-top" alt="{{ $product->name }}">
+            @foreach($bestSellingProducts as $product)
+            <div class="border border-primary rounded position-relative vesitable-item">
+                <!-- Image Section -->
+                <div class="vesitable-img">
+                    <a href="{{ route('client.product-detail', $product->id) }}">
+                        <img src="{{ $product->img && $product->img !== 'https://via.placeholder.com/300x200' ? env('VIEW_IMG') . '/' . $product->img : 'https://via.placeholder.com/300x200' }}"
+                            class="card-img-top" alt="{{ $product->name }}">
+                    </a>
+                </div>
+
+                <!-- Category Label -->
+                <div class="category-label text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">
+                    {{ $product->categories->first()->name ?? 'Sản phẩm' }}
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info card-body d-flex flex-column">
+                    <!-- Product Title -->
+                    <h5 class="card-title">
+                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-decoration-none text-dark">
+                            {{ Str::limit(strip_tags($product->name), 150, '...') }}
                         </a>
-                    </div>
+                    </h5>
 
-                    <!-- Category Label -->
-                    <div class="category-label text-white bg-primary px-3 py-1 rounded position-absolute"
-                        style="top: 10px; right: 10px;">
-                        {{ $product->categories->first()->name ?? 'Sản phẩm' }}
-                    </div>
+                    <!-- Short Description -->
+                    <p class="card-text">
+                        {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
+                    </p>
 
-                    <!-- Product Info -->
-                    <div class="product-info card-body d-flex flex-column">
-                        <!-- Product Title -->
-                        <h5 class="card-title">
-                            <a href="{{ route('client.product-detail', $product->id) }}"
-                                class="text-decoration-none text-dark">
-                                {{ Str::limit(strip_tags($product->name), 150, '...') }}
-                            </a>
-                        </h5>
-
-                        <!-- Short Description -->
-                        <p class="card-text">
-                            {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
+                    <!-- Pricing -->
+                    <div class="pricing mt-auto">
+                        @if ($product->status == 0)
+                        <!-- Sản phẩm không có biến thể -->
+                        @if ($product->price_sale)
+                        <span class="text-muted text-decoration-line-through">
+                            {{ app('formatPrice')($product->price_regular) }} VNĐ
+                        </span>
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            {{ app('formatPrice')($product->price_sale) }} VNĐ
                         </p>
-
-                        <!-- Pricing -->
-                        <div class="pricing mt-auto">
-                            @if ($product->status == 0)
-                                <!-- Sản phẩm không có biến thể -->
-                                @if ($product->price_sale)
-                                    <span class="text-muted text-decoration-line-through">
-                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                    </span>
-                                    <p class="fw-bold text-primary" style="font-size: 20px;">
-                                        {{ app('formatPrice')($product->price_sale) }} VNĐ
-                                    </p>
-                                @else
-                                    <p class="fw-bold text-primary" style="font-size: 20px;">
-                                        {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                    </p>
-                                @endif
-                            @elseif ($product->status == 1)
-                                <!-- Sản phẩm có biến thể -->
-                                @php
-                                    $variantGroup = $product->variantGroups->sortBy('price_sale')->first();
-                                @endphp
-                                @if ($variantGroup)
-                                    @if ($variantGroup->price_sale)
-                                        <span class="text-muted text-decoration-line-through"
-                                            style="font-size:14px; opacity:75%;">
-                                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
-                                        </span>
-                                        <p class="fw-bold text-primary" style="font-size: 20px;">
-                                            {{ app('formatPrice')($variantGroup->price_sale) }} VNĐ
-                                        </p>
-                                    @else
-                                        <p class="fw-bold text-primary" style="font-size: 20px;">
-                                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
-                                        </p>
-                                    @endif
-                                @else
-                                    <p class="fw-bold text-primary" style="font-size: 20px;">
-                                        Giá liên hệ
-                                    </p>
-                                @endif
-                            @else
-                                <p class="fw-bold text-primary" style="font-size: 20px;">
-                                    Giá liên hệ
-                                </p>
-                            @endif
-                        </div>
+                        @else
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            {{ app('formatPrice')($product->price_regular) }} VNĐ
+                        </p>
+                        @endif
+                        @elseif ($product->status == 1)
+                        <!-- Sản phẩm có biến thể -->
+                        @php
+                        $variantGroup = $product->variantGroups->sortBy('price_sale')->first();
+                        @endphp
+                        @if ($variantGroup)
+                        @if ($variantGroup->price_sale)
+                        <span class="text-muted text-decoration-line-through" style="font-size:14px; opacity:75%;">
+                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
+                        </span>
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            {{ app('formatPrice')($variantGroup->price_sale) }} VNĐ
+                        </p>
+                        @else
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            {{ app('formatPrice')($variantGroup->price_regular) }} VNĐ
+                        </p>
+                        @endif
+                        @else
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            Giá liên hệ
+                        </p>
+                        @endif
+                        @else
+                        <p class="fw-bold text-primary" style="font-size: 20px;">
+                            Giá liên hệ
+                        </p>
+                        @endif
                     </div>
                 </div>
+            </div>
             @endforeach
         </div>
     </div>

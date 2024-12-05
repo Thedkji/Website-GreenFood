@@ -65,42 +65,51 @@
             <x-feedback name="phone" />
 
         </div>
-        <div class="mt-3">
-            <label for="province">Thành phố/Tỉnh</label>
-            <select name="province" id="province" class="form-control" value="{{ $user->province }}" required>
-                @foreach ($provinces as $province)
-                    <option value="{{ $province->code }}" {{ $province->code == $user->province ? 'selected' : '' }}>
-                        {{ $province->name }}
-                    </option>
-                @endforeach
-            </select>
-            <x-feedback name="province" />
+        <div class="form-group d-flex justify-content-between mt-3">
+            <div style="flex: 1; margin-right: 10px;">
+                <label for="province">Thành phố/Tỉnh</label>
+                <select name="province" id="province" class="form-control" required>
+                    <option value="">-- Chọn tỉnh/thành phố --</option>
+                    @foreach ($provinces as $province)
+                        <option value="{{ $province->code }}"
+                            {{ isset($selectedProvince) && $province->code == $selectedProvince->code ? 'selected' : '' }}>
+                            {{ $province->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-feedback name="province" />
+            </div>
 
-        </div>
-        <div class="mt-3">
-            <label for="district">Quận/Huyện</label>
-            <select name="district" id="district" class="form-control" value="{{ $user->district }}" required>
-                @foreach ($districts as $district)
-                    <option value="{{ $district->code }}" {{ $district->code == $user->district ? 'selected' : '' }}>
-                        {{ $district->name }}
-                    </option>
-                @endforeach
-            </select>
-            <x-feedback name="district" />
+            <div style="flex: 1; margin-right: 10px;">
+                <label for="district">Quận/Huyện</label>
+                <select name="district" id="district" class="form-control" required>
+                    <option value="">-- Chọn quận/huyện --</option>
+                    @foreach ($districts as $district)
+                        <option value="{{ $district->code }}"
+                            {{ isset($selectedDistrict) && $district->code == $selectedDistrict->code ? 'selected' : '' }}>
+                            {{ $district->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-feedback name="district" />
+            </div>
 
-        </div>
-        <div class="mt-3">
-            <label for="ward">Phường/Xã</label>
-            <select name="ward" id="ward" class="form-control" value="{{ $user->ward }}" required>
-                @foreach ($wards as $ward)
-                    <option value="{{ $ward->code }}" {{ $ward->code == $user->ward ? 'selected' : '' }}>
-                        {{ $ward->name }}
-                    </option>
-                @endforeach
-            </select>
-            <x-feedback name="ward" />
+            <div style="flex: 1;">
+                <label for="ward">Phường/Xã</label>
+                <select name="ward" id="ward" class="form-control" required>
+                    <option value="">-- Chọn phường/xã --</option>
+                    @foreach ($wards as $ward)
+                        <option value="{{ $ward->code }}"
+                            {{ isset($selectedWard) && $ward->code == $selectedWard->code ? 'selected' : '' }}>
+                            {{ $ward->name }}
+                        </option>
+                    @endforeach
+                </select>
 
+                <x-feedback name="ward" />
+            </div>
         </div>
+
         <div class="mt-3">
             <label for="address">Địa chỉ</label>
             <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" required>
