@@ -252,6 +252,10 @@
         </form>
         <form id="couponForm" action="{{ route('client.applyCoupon') }}" method="post">
             @csrf
+            <div class="d-flex mt-5 justify-content-around">
+                <input type="text" name="coupon_name" id="" class="form-control " placeholder="Nhập mã giảm giá">
+                <button class="btn border-secondary w-50 text-primary">Áp dụng mã</button>
+            </div>
             <div class="mt-5 row">
                 <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
                     <option value="" disabled {{ !session('coupon') ? 'selected' : '' }}>Chọn mã giảm giá</option>

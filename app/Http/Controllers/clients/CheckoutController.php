@@ -502,7 +502,7 @@ class CheckoutController extends Controller
         }
         // Xóa giỏ hàng và gửi email xác nhận
         $this->removeCartItems($cartItems);
-        Mail::to($order->email)->send(new MailCheckOut($order));
+        Mail::to($order->email)->queue(new MailCheckOut($order));
         session(['check' => true]);
         session()->forget('checkoutStatus');
     }
