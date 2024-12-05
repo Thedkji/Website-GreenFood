@@ -2,17 +2,26 @@
     function toggleSelectAll(source) {
         const checkboxes = document.querySelectorAll('.cart-checkbox');
         let totalPrice = 0;
+        let isAnyChecked = false;
         checkboxes.forEach(checkbox => {
             // Kiểm tra nếu checkbox không bị disable
             if (!checkbox.disabled) {
                 checkbox.checked = source.checked;
-                const price = parseFloat(checkbox.dataset.price) || 0;
-                totalPrice += price;
+                if (source.checked) {
+                    // Nếu chọn tất cả, tính tổng giá
+                    const price = parseFloat(checkbox.dataset.price) || 0;
+                    totalPrice += price;
+                    isAnyChecked = true; // Đánh dấu rằng có ít nhất một ô được chọn
+                }
             }
         });
+
+        // Nếu không có ô nào được chọn, totalPrice sẽ là 0
         document.getElementById('grandTotal').textContent = `${totalPrice.toLocaleString()} VNĐ`;
+        // Xử lý nút xóa (nếu có logic toggleDeleteButton)
         toggleDeleteButton();
     }
+
 
     function updateSelectAll() {
         const checkboxes = document.querySelectorAll('.cart-checkbox:not(:disabled)'); // Chỉ checkbox không bị disable

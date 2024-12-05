@@ -250,29 +250,29 @@
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
 
         </form>
-        <form id="couponForm" action="{{ route('client.applyCoupon') }}" method="post">
-            @csrf
-            <div class="d-flex mt-5 justify-content-around">
-                <input type="text" name="coupon_name" id="" class="form-control " placeholder="Nhập mã giảm giá">
-                <button class="btn border-secondary w-50 text-primary">Áp dụng mã</button>
-            </div>
-            <div class="mt-5 row">
-                <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
-                    <option value="" disabled {{ !session('coupon') ? 'selected' : '' }}>Chọn mã giảm giá</option>
-                    @if ($availableCoupons->isEmpty())
-                    <option value="" disabled>Không có mã giảm giá</option>
-                    @else
-                    @foreach ($availableCoupons as $coupon)
-                    <option value="{{ $coupon->id }}"
-                        data-discount="{{ $coupon->maximum_spend }}"
-                        {{ session('coupon') && session('coupon.id') == $coupon->id ? 'selected' : '' }}>
-                        {{ $coupon->name }}
-                    </option>
-                    @endforeach
-                    @endif
-                </select>
-            </div>
-        </form>
+
+        <div class="d-flex mt-5 justify-content-around" id="form-coupon">
+            <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
+            <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
+            <input type="text" name="coupon_name" id="" class="form-control " placeholder="Nhập mã giảm giá">
+            <button class="btn border-secondary w-50 text-primary" id="applyCouponBtn">Áp dụng mã</button>
+        </div>
+        <div class="mt-5 row">
+            <select class="form-select col" aria-label="Coupon selection" name="coupon_id" id="coupon_id">
+                <option value="" disabled {{ !session('coupon') ? 'selected' : '' }}>Chọn mã giảm giá</option>
+                @if ($availableCoupons->isEmpty())
+                <option value="" disabled>Không có mã giảm giá</option>
+                @else
+                @foreach ($availableCoupons as $coupon)
+                <option value="{{ $coupon->id }}"
+                    data-discount="{{ $coupon->maximum_spend }}"
+                    {{ session('coupon') && session('coupon.id') == $coupon->id ? 'selected' : '' }}>
+                    {{ $coupon->name }}
+                </option>
+                @endforeach
+                @endif
+            </select>
+        </div>
     </div>
 </div>
 </div>
