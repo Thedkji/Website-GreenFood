@@ -3,14 +3,14 @@
         <div class="row align-items-center g-5">
             <div class="col-md-12 col-lg-6">
                 <h4 class="mb-3 text-success">100% Organic Foods</h4>
-                <h1 class="mb-5 display-3 text-primary">GreenFood ăn ngon giáng thon</h1>
-                <div class="position-relative mx-auto">
+                <h1 class="mb-5 display-3 text-primary">GreenFood ăn ngon dáng thon</h1>
+                <!-- <div class="position-relative mx-auto">
                     <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number"
                         placeholder="Your Email">
                     <button type="submit"
                         class="btn btn-primary border-success border-0 py-3 px-4 position-absolute rounded-pill text-white"
                         style="top: 0; right: 0;">Subscribe Now</button>
-                </div>
+                </div> -->
             </div>
             <div class="col-md-12 col-lg-6">
                 <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">

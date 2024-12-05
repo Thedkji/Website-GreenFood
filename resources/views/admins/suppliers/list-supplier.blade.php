@@ -34,10 +34,7 @@
     </div>
     <table class="table table-striped align-middle text-center mb-0">
         <thead>
-            <tr>
-                <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
-                </th>
+           
                 <th scope="col">Id</th>
                 <th scope="col">Tên nhà cung cấp</th>
                 <th scope="col">Email</th>
