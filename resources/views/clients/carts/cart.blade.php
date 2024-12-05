@@ -329,7 +329,7 @@
                     <div class="bg-light rounded">
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng tiền </h5>
-                            <p class="mb-0 pe-4 text-primary" id="grandTotal">{{ number_format($cartTotal) }} VNĐ</p>
+                            <p class="mb-0 pe-4 text-primary" id="grandTotal">0 VNĐ</p>
                         </div>
                         <button
                             class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
