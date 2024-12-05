@@ -10,33 +10,41 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    <div class="row g-4 mb-3">
-        <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
+    <div class="toast-container">
+        @if (session('success'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
             </div>
-        </div>
+        @endif
+
+        @if (session('error'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
+            </div>
+        @endif
     </div>
-    <form class="" action="{{ route('admin.suppliers.store') }}" method="post" enctype="multipart/form-data">
+
+    <form class="w-50" action="{{ route('admin.suppliers.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('POST')
         <div class="mb-3">
-            <label for="" class="form-label">Tên nhà cung cấp</label>
+            <label for="" class="form-label">Tên nhà cung cấp <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="" name="name" value="{{ old('name') }}"
                 placeholder="Nhập tên nhà cung cấp">
         </div>
@@ -59,7 +67,7 @@
         </div>
 
         <div>
-            <label class="form-label">Số điện thoại</label>
+            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="phone" value="{{ old('phone') }}"
                 placeholder="Nhập số điện thoại">
         </div>
@@ -71,7 +79,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="validationCustom03" class="form-label">Địa chỉ</label>
+            <label for="validationCustom03" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="address" value="{{ old('address') }}"
                 placeholder="Nhập địa chỉ">
         </div>
@@ -83,7 +91,15 @@
         </div>
 
         <div class="col-12 mb-3">
-            <button class="btn btn-secondary" type="submit">Thêm mới</button>
+            <button class="btn btn-success" type="submit">Thêm mới</button>
+        </div>
+        <div class="col-12 mb-3">
+            <button class="btn btn-primary">
+                <a href="{{ route('admin.suppliers.index') }}" class="text-white">Quay lại</a>
+            </button>
         </div>
     </form>
+
+    @include('admins.layouts.components.toast')
+
 @endsection

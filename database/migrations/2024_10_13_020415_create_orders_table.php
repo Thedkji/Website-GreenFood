@@ -36,7 +36,7 @@ return new class extends Migration
                                 2: Đang giao hàng ,
                                 3: Giao hàng thành công ,
                                 4: Giao hàng không thành công ,
-                                5: Hủy đơn  
+                                5: Hủy đơn                       
                             '
                 )
                 ->default(0);

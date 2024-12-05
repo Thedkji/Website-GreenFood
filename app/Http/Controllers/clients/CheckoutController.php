@@ -255,25 +255,98 @@ class CheckoutController extends Controller
     public function applyCoupon(Request $request)
     {
         $couponId = $request->coupon_id;
-        $couponInfo = Coupon::find($couponId);
+        $couponName = $request->coupon_name;
+        if ($couponName && $couponName != null) {
+            $couponInfo = Coupon::where('name', 'LIKE', "{$couponName}")->first();
+            $totalPrice = $request->total;
+            $decodedItems = json_decode($request->data, true);
+            $couponsAll = Coupon::with(['categories.children', 'products'])->get();
+            // Lấy các product_id từ $decodedItems
+            $productIds = auth()->check()
+                ? array_column($decodedItems, 'product_id')
+                : array_map(fn($item) => $item['attributes']['product_id'], $decodedItems);
 
-        if ($couponInfo) {
-            $coupon = [
-                'id' => $couponInfo->id,
-                'discount_type' => $couponInfo->discount_type,
-                'type' => $couponInfo->type,
-                'amount' => $couponInfo->coupon_amount,
-                'name' => $couponInfo->name,
-                'discount' => $couponInfo->maximum_spend,
-                'product_id' => $couponInfo->products?->pluck('id')->toArray(),
-                'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
-            ];
-            return response()->json([
-                'success' => true,
-                'coupon' => $coupon,
-            ]);
+            // Lấy các sản phẩm và danh mục liên kết
+            $Products = Product::with('categories')->whereIn('id', $productIds)->get();
+            $categoryIds = $Products->flatMap(fn($product) => $product->categories->pluck('id'))->unique();
+            $available = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds, $totalPrice) {
+                // Kiểm tra trạng thái phát hành có phải cho vài người dùng không
+                if ($coupon->status != 2 && $coupon->status != 0) {
+                    return false;
+                }
+                // Không hiển thị mã nếu giá trị tối thiểu lớn hơn tổng giá trị đơn hàng
+                if ($coupon->minimum_spend > $totalPrice || $totalPrice > $coupon->maximum_spend) {
+                    return false;
+                }
+                // Kiểm tra số lượng còn đủ không
+                if ($coupon->quantity == 0) {
+                    return false;
+                }
+
+                // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
+                if ($coupon->type == 0) {
+                    return true;
+                }
+                // Nếu không có thì xét điều kiện
+                $isProductMatch = false;
+                $isCategoryMatch = false;
+                // Kiểm tra sản phẩm liên kết với coupon
+                foreach ($coupon->products as $product) {
+                    if (in_array($product->id, $productIds)) {
+                        $isProductMatch = true;
+                        break;
+                    }
+                }
+                // Kiểm tra danh mục liên kết với coupon
+                foreach ($coupon->categories as $category) {
+                    if (in_array($category->id, $categoryIds->toArray())) {
+                        $isCategoryMatch = true;
+                        break;
+                    }
+                }
+
+                // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
+                return $isProductMatch || $isCategoryMatch;
+            });
+            if (in_array($couponInfo->id, $available->pluck('id')->toArray())) {
+                $coupon = [
+                    'id' => $couponInfo->id,
+                    'discount_type' => $couponInfo->discount_type,
+                    'type' => $couponInfo->type,
+                    'amount' => $couponInfo->coupon_amount,
+                    'name' => $couponInfo->name,
+                    'discount' => $couponInfo->maximum_spend,
+                    'product_id' => $couponInfo->products?->pluck('id')->toArray(),
+                    'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
+                ];
+                return response()->json([
+                    'success' => true,
+                    'coupon' => $coupon,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ vui lòng kiểm tra lại');
+            }
+        } elseif ($couponId && $couponId != null) {
+            $couponInfo = Coupon::find($couponId);
+            if ($couponInfo) {
+                $coupon = [
+                    'id' => $couponInfo->id,
+                    'discount_type' => $couponInfo->discount_type,
+                    'type' => $couponInfo->type,
+                    'amount' => $couponInfo->coupon_amount,
+                    'name' => $couponInfo->name,
+                    'discount' => $couponInfo->maximum_spend,
+                    'product_id' => $couponInfo->products?->pluck('id')->toArray(),
+                    'category_id' => $couponInfo->categories?->pluck('id')->toArray(),
+                ];
+                return response()->json([
+                    'success' => true,
+                    'coupon' => $coupon,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ vui lòng kiểm tra lại');
+            }
         }
-        return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ');
     }
     public function getCheckOut(OrderRequest $request)
     {
@@ -502,7 +575,7 @@ class CheckoutController extends Controller
         }
         // Xóa giỏ hàng và gửi email xác nhận
         $this->removeCartItems($cartItems);
-        Mail::to($order->email)->send(new MailCheckOut($order));
+        Mail::to($order->email)->queue(new MailCheckOut($order));
         session(['check' => true]);
         session()->forget('checkoutStatus');
     }

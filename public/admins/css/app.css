@@ -15,8 +15,24 @@ File: Main Css File
     white-space: nowrap;
     /* Giữ nội dung trên 1 dòng, không xuống dòng */
     max-width: 130px;
-    /* Điều chỉnh độ rộng tối đa */
+    /* cursor: pointer; */
 }
+/* .truncate{
+    cursor: pointer;
+} */
+.truncate:hover::after {
+    content: attr(data-fulltext);
+    position: absolute;
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-top: 5px;
+    display: block; /* Ẩn tooltip mặc định */
+}
+
 .toast-container {
     position: fixed;
     top: 20px;
@@ -73,7 +89,9 @@ File: Main Css File
 }
 
 /* Tùy chỉnh màu sắc cho mỗi lựa chọn đã chọn trong chế độ multiple */
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
     background-color: #007bff !important; /* Màu nền cho lựa chọn đã chọn */
     color: white; /* Màu chữ */
     border-radius: 0.2rem; /* Bo tròn góc */
@@ -85,7 +103,9 @@ File: Main Css File
 }
 
 /* Tùy chỉnh màu sắc cho nút xóa mỗi lựa chọn đã chọn */
-.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice__remove {
     color: #e4dfdf !important; /* Màu chữ cho nút xóa */
     font-size: 12px; /* Kích thước chữ của nút xóa */
 }
@@ -103,11 +123,11 @@ File: Main Css File
 }
 
 /* Tùy chỉnh cho placeholder trong trường hợp không có lựa chọn */
-.select2-container--default .select2-selection--single .select2-selection__placeholder {
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__placeholder {
     color: #6c757d; /* Màu chữ cho placeholder */
 }
-
-
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 @font-face {

@@ -36,25 +36,29 @@
                 }
                 }
                 @endphp
-                <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                <a href="{{ route('client.product-detail', auth()->check() ? $item->product->id : $item->attributes->product_id) }}">
+                    <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                </a>
                 <div class="item-details ms-3 w-100">
-                    <h6 class="mb-1">
-                        @if (isset($userId))
-                        {{ $item->product->name }}
-                        @if (!empty($variantGroups[$item->sku]))
-                        @foreach ($variantGroups[$item->sku] as $variant)
-                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                        @endforeach
-                        @endif
-                        @else
-                        {{ $item->name }}
-                        @if (!empty($variantGroups[$item->attributes->sku]))
-                        @foreach ($variantGroups[$item->attributes->sku] as $variant)
-                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                        @endforeach
-                        @endif
-                        @endif
-                    </h6>
+                    <a href="{{ route('client.product-detail', auth()->check() ? $item->product->id : $item->attributes->product_id) }}">
+                        <h6 class="mb-1">
+                            @if (isset($userId))
+                            {{ $item->product->name }}
+                            @if (!empty($variantGroups[$item->sku]))
+                            @foreach ($variantGroups[$item->sku] as $variant)
+                            | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                            @endforeach
+                            @endif
+                            @else
+                            {{ $item->name }}
+                            @if (!empty($variantGroups[$item->attributes->sku]))
+                            @foreach ($variantGroups[$item->attributes->sku] as $variant)
+                            | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                            @endforeach
+                            @endif
+                            @endif
+                        </h6>
+                    </a>
                     <div class="d-flex flex-row gap-2 p-3 border rounded mb-3 bg-light justify-content-between">
                         <div class="d-flex flex-column">
                             <span>Số lượng: <strong>x{{ $item->quantity }}</strong></span>

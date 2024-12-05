@@ -90,43 +90,6 @@
     <!-- Featurs Section End -->
 
   <!-- Testimonial Section -->
-  <div class="container-fluid testimonial py-5">
-        <div class="container py-5">
-            <div class="testimonial-header text-center">
-                <h4 class="text-primary">Our Testimonial</h4>
-                <h1 class="display-5 mb-5 text-dark">Đánh giá nổi bật</h1>
-            </div>
-            <div class="owl-carousel testimonial-carousel">
-                @foreach($topRatedComments as $topRatedComments)
-                    <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                        <div class="position-relative">
-                            <i class="fa fa-quote-right fa-2x text-success position-absolute" style="bottom: 30px; right: 0;"></i>
-                            <div class="mb-4 pb-4 border-bottom border-success">
-                                <p class="mb-0">{{ $topRatedComments->content }}</p>
-                            </div>
-                            <div class="d-flex align-items-center flex-nowrap">
-                                <div class="bg-success rounded">
-                                    <!-- Hiển thị avatar của người dùng -->
-                                    <img src="{{ asset('storage/' . $topRatedComments->user->avatar) }}" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
-                                </div>
-                                <div class="ms-4 d-block">
-                                    <!-- Hiển thị tên và profession (nếu có) -->
-                                    <h4 class="text-dark">{{ $topRatedComments->user->name }}</h4>
-                                    <p class="m-0 pb-3">{{ 'Khách hàng' }}</p>
-                                    
-                                    <!-- Hiển thị sao đánh giá -->
-                                    <div class="d-flex pe-5">
-                                        @for ($i = 0; $i < 5; $i++)
-                                            <i class="fas fa-star {{ $i < $topRatedComments->rates->avg('star') ? 'text-primary' : '' }}"></i>
-                                        @endfor
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
+    
 <!-- Testimonial End -->
 @endsection

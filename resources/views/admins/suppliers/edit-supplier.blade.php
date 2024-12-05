@@ -10,29 +10,36 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    <div class="row g-4 mb-3">
-        <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
+    <div class="toast-container">
+        @if (session('success'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
                 </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
             </div>
-        </div>
+        @endif
+
+        @if (session('error'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
+            </div>
+        @endif
     </div>
-    <form class="" action="{{ route('admin.suppliers.update', $supplier) }}" method="post"
+    <form class="w-50" action="{{ route('admin.suppliers.update', $supplier) }}" method="post"
         enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -85,7 +92,16 @@
         </div>
 
         <div class="col-12 mb-3">
-            <button class="btn btn-secondary" type="submit">Cập nhật</button>
+            <button class="btn btn-success" type="submit">Cập nhật</button>
+        </div>
+
+        <div class="col-12 mb-3">
+            <button class="btn btn-primary">
+                <a href="{{ route('admin.suppliers.index') }}" class="text-white">Quay lại</a>
+            </button>
         </div>
     </form>
+
+    @include('admins.layouts.components.toast')
+
 @endsection

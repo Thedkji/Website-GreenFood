@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('discount_type')->default(0)->comment('
+            $table->integer('discount_type')->default(0)->comment(
+                '
                 0: Giảm theo phần trăm ,
                 1: Giảm theo giá tiền , 
                 [Kiểu mã giảm giá muốn áp dụng cho toàn bộ hoặc mặt hàng nhất định]
@@ -42,7 +43,7 @@ return new class extends Migration
                     '
                                 0: Phát hành , 
                                 1: Chưa phát hành ,
-                                2: Chờ phát hành ,
+                                2: Phát hành cho 1 số người dùng ,
                                 3: Hết hạn
                             '
                 );

@@ -10,43 +10,68 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="toast-container">
+        @if (session('success'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
+            </div>
+        @endif
 
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    <div class="row g-4 mb-3">
+        @if (session('error'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
+            </div>
+        @endif
+    </div>
+    <div class="row g-4">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control search" placeholder="Search...">
-                    <i class="ri-search-line search-icon"></i>
-                </div>
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                <form action="" method="get" id="search-form">
+                    <div class="search-box">
+                        <input name="search" type="text" class="form-control search"
+                            value="{{ request()->input('search') }}" placeholder="Nhập tên nhà cung cấp"
+                            oninput="debounceSearch()">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+    <div class="my-3">
+        <button class="btn btn-success">
+            <a href="{{ route('admin.suppliers.create') }}" class="text-white">Thêm</a>
+        </button>
+    </div>
     <table class="table table-striped align-middle text-center mb-0">
         <thead>
-            <tr>
-                <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
-                </th>
-                <th scope="col">Id</th>
-                <th scope="col">Tên nhà cung cấp</th>
-                <th scope="col">Email</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Sản phẩm</th>
-                <th scope="col">Ngày tạo</th>
-                <th scope="col">Ngày cập nhật</th>
-                <th scope="col">Thao tác</th>
+            <th scope="col">
+                <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+            </th>
+            <th scope="col">Id</th>
+            <th scope="col">Tên nhà cung cấp</th>
+            <th scope="col">Email</th>
+            <th scope="col">Số điện thoại</th>
+            <th scope="col">Địa chỉ</th>
+            <th scope="col">Sản phẩm</th>
+            <th scope="col">Tổng sản phẩm</th>
+            <th scope="col">Ngày tạo</th>
+            <th scope="col">Thao tác</th>
             </tr>
         </thead>
         <tbody>
@@ -58,27 +83,35 @@
                                 onclick="toggleDeleteButton()" value="{{ $supplier->id }}">
                         </td>
                         <th scope="row">{{ $supplier->id }}</th>
-                        <td class="truncate-text">{{ $supplier->name }}</td>
+                        <td class="truncate truncate-text" data-fulltext="{{ $supplier->name }}">{{ $supplier->name }}</td>
                         <td>{{ $supplier->email }}</td>
                         <td>{{ $supplier->phone }}</td>
-                        <td class="truncate-text">{{ $supplier->address }}</td>
+                        <td class="truncate truncate-text" data-fulltext="{{ $supplier->address }}">
+                            {{ $supplier->address }}</td>
                         <td>
                             <a href="{{ route('admin.suppliers.detail', $supplier->id) }}"
                                 class="text-decoration-underline">Xem chi tiết</a>
                         </td>
+
+                        <td class="fw-bold text-success">
+                            @php
+                                $totalProducts = $supplier->products->count();
+                            @endphp
+                            {{ $totalProducts }}
+                        </td>
                         <td>{{ $supplier->created_at->format('d-m-Y H:i:s') }}</td>
-                        <td>{{ $supplier->updated_at->format('d-m-Y H:i:s') }}</td>
                         <td>
                             <div class="hstack gap-3 flex-wrap">
                                 <a href="{{ route('admin.suppliers.edit', $supplier) }}"
                                     style="background-color: transparent;" class="link-success fs-15"><i
                                         class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.suppliers.destroy', $supplier) }}" method="post">
+                                <form action="{{ route('admin.suppliers.destroy', $supplier) }}" method="post"
+                                    id="delete-form-{{ $supplier->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
+                                    <button type="submit" id="deleteButton-{{ $supplier->id }}"
                                         style="background-color: transparent; border: none; color: inherit;"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
+                                        class="link-danger fs-15">
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
@@ -108,6 +141,13 @@
     <script>
         let debounceTimeout;
 
+        function debounceSearch() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                document.getElementById("search-form").submit();
+            }, 600);
+        }
+
         function toggleSelectAll(source) {
             const checkboxes = document.querySelectorAll('.supplier-checkbox');
             checkboxes.forEach(checkbox => checkbox.checked = source.checked);
@@ -126,29 +166,89 @@
                 .map(checkbox => checkbox.value);
 
             if (selectedIds.length === 0) {
-                alert("Vui lòng chọn ít nhất một mục để xóa.");
+                // Thay thế alert bằng SweetAlert2
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Chưa chọn mục',
+                    text: 'Vui lòng chọn ít nhất một mục để xóa.',
+                    confirmButtonText: 'OK',
+                });
                 return;
             }
 
-            if (confirm("Bạn có chắc chắn muốn xóa các mục đã chọn?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.suppliers.bulkDelete') }}",
-                    data: {
-                        ids: selectedIds,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    dataType: "dataType",
-                    success: function(response) {
-                        window.location.reload();
-                        console.log(selectedIds);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-
+            // Sử dụng SweetAlert2 thay vì confirm
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa các mục đã chọn?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu người dùng chọn "Xóa", thực hiện AJAX để xóa
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('admin.suppliers.bulkDelete') }}",
+                        data: {
+                            'ids': selectedIds,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Thông báo thành công bằng SweetAlert2
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Xóa thành công!',
+                                    text: 'Các mục đã được xóa thành công.',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location
+                                        .reload(); // Reload trang sau khi xóa thành công
+                                });
+                            } else {
+                                // Thông báo lỗi bằng SweetAlert2
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Đã xảy ra lỗi. Vui lòng thử lại.',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Lỗi: ", error);
+                            // Thông báo lỗi bằng SweetAlert2
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Đã xảy ra lỗi trong quá trình xóa. Vui lòng thử lại.',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
+
+
+    {{-- Hiển thị Thông báo --}}
+    @include('admins.layouts.components.toast')
+
+    @include('admins.layouts.components.alert2')
+
+    <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+    @push('scripts')
+        {{-- Thêm đoạn này vào form xóa id="delete-form-{{ $supplier->id }}" --}}
+        {{-- Thêm đoạn này vào nút(button) xóa id="deleteButton-{{ $supplier->id }}" --}}
+        <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+        <script>
+            @foreach ($suppliers as $item)
+                alert2({{ $item->id }});
+            @endforeach
+        </script>
+    @endpush
 @endsection
