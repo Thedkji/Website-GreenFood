@@ -84,10 +84,21 @@
                         @if ($cartItems->isNotEmpty())
                         @foreach ($cartItems as $item)
                         <input type="hidden" name="item_ids" id="itemIds">
+                        @php
+                        $price = 0;
+                        $quantity = $item->quantity;
+                        if ($item->product->status === 0) {
+                        $price = $item->product->price_sale * $quantity;
+                        } elseif (isset($variantGroups[$item->sku]) && $variantGroups[$item->sku]->isNotEmpty()) {
+                        foreach ($variantGroups[$item->sku] as $variant) {
+                        $price = $variant->price_sale * $quantity;
+                        }
+                        }
+                        @endphp
                         @if (auth()->check())
                         <tr>
                             <th>
-                                <input type="checkbox" name="selectBox[{{ $item->sku }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" value="{{ $item }}"
+                                <input type="checkbox" name="selectBox[{{ $item->id }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" data-item-id="{{ $item->id }}" style="width: 20px;height: 20px;" value="{{ $item }}" data-price="{{$price}}"
                                     @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                     @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
                                 disabled @endif
@@ -109,20 +120,23 @@
                                     }
                                     $imageSrc .= $variantImg ?? $item->product->img;
                                     }
-                                    $quantity = $item->quantity;
                                     @endphp
-                                    <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    <a href="{{ route('client.product-detail', $item->product->id) }}">
+                                        <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </a>
                                 </div>
                             </th>
                             <td>
-                                <p class="mb-0 mt-4">
-                                    {{ $item->product->name }}
-                                    @if (!empty($variantGroups[$item->sku]))
-                                    @foreach ($variantGroups[$item->sku] as $variant)
-                                    | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                                    @endforeach
-                                    @endif
-                                </p>
+                                <a href="{{ route('client.product-detail', $item->product->id) }}">
+                                    <p class="mb-0 mt-4 truncate-text">
+                                        {{ $item->product->name }}
+                                        @if (!empty($variantGroups[$item->sku]))
+                                        @foreach ($variantGroups[$item->sku] as $variant)
+                                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                        @endforeach
+                                        @endif
+                                    </p>
+                                </a>
                             </td>
                             <td>
                                 <p class="mb-0 mt-4">
@@ -131,6 +145,11 @@
                                     @else
                                     @foreach ($variantGroups[$item->sku] ?? [] as $variant)
                                     {{ $variant->sku }}
+                                    @endforeach
+                                    @endif
+                                    @if (!empty($variantGroups[$item->sku]))
+                                    @foreach ($variantGroups[$item->sku] as $variant)
+                                    | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                                     @endforeach
                                     @endif
                                 </p>
@@ -200,7 +219,7 @@
                         @else
                         <tr>
                             <th>
-                                <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[{{ $item->attributes->sku }}]" value="{{ $item }}"
+                                <input type="checkbox" class="form-check-input bg-primary border-0 cart-checkbox" style="width: 20px;height: 20px;" name="selectBox[{{ $item->id }}]" value="{{ $item }}" data-price="{{$price}}"
                                     @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                     @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->attributes->sku)
                                 disabled @endif
@@ -223,22 +242,26 @@
                                     $imageSrc .= $variantImg ?? $item->attributes->img;
                                     }
                                     @endphp
-                                    <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    <a href="{{ route('client.product-detail', $item->attributes->product_id) }}">
+                                        <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </a>
                                 </div>
                             </th>
                             <td>
-                                <p class="mb-0 mt-4">
-                                    {{ $item->name }}
-                                    @if (!empty($variantGroups[$item->attributes->sku]))
-                                    @foreach ($variantGroups[$item->attributes->sku] as $variant)
-                                    | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                                    @endforeach
-                                    @endif
-                                </p>
+                                <a href="{{ route('client.product-detail', $item->attributes->product_id) }}">
+                                    <p class="mb-0 mt-4">
+                                        {{ $item->name }}
+
+                                    </p>
+                                </a>
                             </td>
 
                             <td>
-                                <p class="mb-0 mt-4">{{ $item->attributes->sku }}</p>
+                                <p class="mb-0 mt-4">{{ $item->attributes->sku }}@if (!empty($variantGroups[$item->attributes->sku]))
+                                    @foreach ($variantGroups[$item->attributes->sku] as $variant)
+                                    | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                                    @endforeach
+                                    @endif</p>
                             </td>
 
                             <td>
