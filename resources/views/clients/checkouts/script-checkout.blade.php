@@ -270,28 +270,17 @@
 
         // Xử lý thông báo -------------------------------------------------
         // Toast xử lý
-        const toastElements = document.querySelectorAll(".toast");
-        toastElements.forEach((toastElement) => {
-            const bsToast = new bootstrap.Toast(toastElement, {
-                delay: 5000
-            }); // 5 giây
-            bsToast.show();
-
-            // Ẩn toast sau 5 giây
-            setTimeout(() => {
-                toastElement.classList.remove("show");
-            }, 5000);
-        });
-
-        // Toast success (nếu có)
-        const toastSuccess = document.getElementById("toastSuccess");
+        var toastSuccess = document.getElementById('toastSuccess');
         if (toastSuccess) {
-            const toastOptions = {
-                autohide: true,
-                delay: 5000
-            }; // Hiển thị 5 giây
-            const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
-            bsToastSuccess.show();
+            var toast = new bootstrap.Toast(toastSuccess); // Bootstrap 5 Toast
+            toast.show(); // Hiển thị Toast
+        }
+
+        // Kiểm tra Toast error
+        var toastError = document.getElementById('toastError');
+        if (toastError) {
+            var toast = new bootstrap.Toast(toastError); // Bootstrap 5 Toast
+            toast.show(); // Hiển thị Toast
         }
         // Áp mã giảm giá -------------------------------------------------------------
         $('#applyCouponBtn').click(function(e) {
@@ -436,12 +425,19 @@
 
                         // Cập nhật tổng tiền mới
                         document.getElementById('totalPrice').textContent = `${new Intl.NumberFormat('vi-VN').format(final)} VNĐ`;
-
                         // Cập nhật tổng tiền sau khi giảm giá
                         updateTotalPrice(); // Gọi updateTotalPrice sau khi tính toán xong
+                        if (response.status == 1) {
+                            toastr.success('Áp mã thành công');
+                        } else {
+                            toastr.error('Áp mã không thành công');
+                        }
+                    } else {
+                        toastr.error('Áp mã không thành công, vui lòng kiểm tra lại');
                     }
                 },
                 error: function(xhr, status, error) {
+                    toastr.error('Áp mã không thành công');
                     console.error('Error applying coupon:', error);
                 }
             });
@@ -594,11 +590,19 @@
 
                         // Cập nhật tổng tiền sau khi giảm giá
                         updateTotalPrice(); // Gọi updateTotalPrice sau khi tính toán xong
+                        if (response.status == 1) {
+                            toastr.success('Áp mã thành công');
+                        } else {
+                            toastr.error('Áp mã không thành công');
+                        }
+                    } else {
+                        toastr.error('Áp mã không thành công, vui lòng kiểm tra lại');
                     }
                 },
 
                 error: function(xhr, status, error) {
-                    console.error('Error applying coupon:', error);
+                    toastr.error('Áp mã không thành công');
+                    showToast('error', 'Đã xảy ra lỗi. Vui lòng thử lại!');
                 }
             });
         });

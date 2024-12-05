@@ -1,6 +1,6 @@
 @extends('admins.layouts.master')
 @section('title', 'Dashboard | Velzon - Admin - Danh sách đơn hàng')
-@section('start-page-title', 'Chi tiết đơn hàng -' . ($user->name))
+@section('start-page-title', 'Chi tiết đơn hàng -' . ($user->name ?? $orders->name))
 @section('link')
 <li class="breadcrumb-item"><a href="{{ route('admin.orders.showOder') }}">Đơn hàng</a></li>
 <li class="breadcrumb-item"><a href="{{ route('admin.orders.showOder') }}">Danh sách đơn hàng</a></li>
@@ -234,7 +234,7 @@
     <div class="row">
         <div class="col-lg-6">
             <p class="mb-2 text-muted">Họ và tên:</p>
-            <p class="text-dark">{{ $user->name }}</p>
+            <p class="text-dark">{{ $user->name ?? $orders->name }}</p>
             <p class="mb-2 text-muted">SĐT:</p>
             <p class="text-dark">{{ $orders->phone }}</p>
             <p class="mb-2 text-muted">Ghi chú:</p>
@@ -271,7 +271,22 @@
             @foreach ($orderDetails as $orderDetail)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td><strong>{{ $orderDetail->product_name }}</strong></td>
+                @php
+                // Kiểm tra Product trước
+                $pro = \App\Models\Product::where('sku', $orderDetail->product_sku)->first();
+                if ($pro) {
+                $id = $pro->id;
+                } else {
+                // Nếu không tìm thấy, kiểm tra VariantGroup
+                $variant = \App\Models\VariantGroup::where('sku', $orderDetail->product_sku)->first();
+                $id = optional($variant)->product_id; // Lấy product_id từ VariantGroup
+                }
+                @endphp
+                <td>
+                    <a href="{{ route('client.product-detail', $id ?? '#') }}"> <!-- Đảm bảo $id không null -->
+                        <strong>{{ $orderDetail->product_name }}</strong>
+                    </a>
+                </td>
                 <td><strong>{{ $orderDetail->product_sku }}</strong></td>
                 <td>
                     <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="Product Image" style="max-width: 100px;">

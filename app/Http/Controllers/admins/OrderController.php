@@ -44,7 +44,11 @@ class OrderController extends Controller
     {
         $orders = Order::find($id);
         $orderDetails = $orders->orderDetails()->get();
-        $user = $orders->user()->firstOr();
+        if (!empty($orders->user_id)) {
+            $user = $orders->user()->firstOr();
+        } else {
+            $user = null;
+        }
         return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
     }
 
