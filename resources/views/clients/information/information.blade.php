@@ -27,18 +27,11 @@
                             <!-- Single Tab Content Start -->
                             <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
 
-                                <form action="#" class="checkout-form">
-                                    <div class="row row-40">
+                                <div class="row row-40">
 
-                                        <div class="col-lg-7">
+                                    @include('clients.information.infor-user')
 
-                                            @include('clients.information.infor-user')
-
-                                        </div>
-
-
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                             <!-- Single Tab Content End -->
 
