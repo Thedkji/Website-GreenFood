@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admins;
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Category;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class DashboardController extends Controller
 
 
         $totalEarnings = Order::sum('total');
-        $orderCounts = Order::where('status','3')->count();
+        $orderCounts = Order::where('status', '6')->count();
         $orderCountCompleted = Order::where('status', 'completed')->count();
 
 
@@ -94,10 +95,11 @@ class DashboardController extends Controller
         $orderCountCompleted = Order::where('status', 'completed')->count();
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
-            ->where('status', 'completed')
+            ->where('status', 'completed') // Chỉ lấy đơn hàng đã hoàn thành
             ->groupBy('month')
             ->orderBy('month')
             ->get();
+
 
         $earningsByMonth = Order::selectRaw('MONTH(created_at) as month, SUM(total) as total_earnings')
             ->groupBy('month')
@@ -110,13 +112,14 @@ class DashboardController extends Controller
         //     ->get();
 
         $orderCountsByMonthJson = $orderCountsByMonth->pluck('order_count')->toArray();
-        $earningsByMonthJson = $earningsByMonth->pluck('total_earnings')->toArray();
+        $earningsByMonthArray = $earningsByMonth->pluck('total_earnings', 'month')->toArray();
         // $refundsByMonthJson = $refundsByMonth->pluck('refund_count')->toArray();
 
         // Dữ liệu JSON để sử dụng trong biểu đồ
         $months = range(1, 12);
         $orderCountsByMonthArray = $orderCountsByMonth->pluck('order_count', 'month')->toArray();
         $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
+        $earningsByMonthJson = array_map(fn($month) => $earningsByMonthArray[$month] ?? 0, $months);
 
         $bestSellerProducts = Order::where('status', 5)
             ->with(['orderDetails.product'])  // Eager load orderDetails và product
@@ -150,9 +153,21 @@ class DashboardController extends Controller
             'orderCountCompleted',
             'orderCountsByMonthJson',
             'earningsByMonthJson',
-            // 'refundsByMonthJson',
+            'orderCountsForChart',
             // 'userCounts',
             'bestSellerProducts' // Dữ liệu cho biểu đồ
         ));
+    }
+
+    public function getProductStatistics()
+    {
+        $categories = Category::withCount('products')->get();
+
+        $data = [
+            'labels' => $categories->pluck('name'), // Lấy tên danh mục
+            'series' => $categories->pluck('products_count'), // Lấy số lượng sản phẩm
+        ];
+
+        return response()->json($data);
     }
 }
