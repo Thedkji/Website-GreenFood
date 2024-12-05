@@ -18,8 +18,8 @@
                     <label>Ảnh đại diện</label>
                     <input type="file" name="img" class="form-control bg-white mt-2">
                     @if ($user->avatar)
-                        <img src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}" alt="Avatar" width="150"
-                            height="150" class="rounded-circle mt-3" style="object-fit: cover;">
+                        <img src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}" alt="Avatar" width="120"
+                            height="120" class="rounded-circle mt-3" style="object-fit: cover;">
                     @endif
                 </div>
 
@@ -30,7 +30,7 @@
                         placeholder="Email">
                 </div>
 
-                
+
                 <!-- Số điện thoại -->
                 <div class="mb-4">
                     <label>Số điện thoại</label>
@@ -98,65 +98,73 @@
 
 <script>
     $(document).ready(function() {
-        $('#province').change((e) => {
-            e.preventDefault();
-
-            let province_code = e.target.value;
-
+        // Hàm load districts khi trang được tải
+        function loadDistricts(provinceCode, selectedDistrict = null) {
             $.ajax({
                 type: "GET",
                 url: "{{ route('client.information.index') }}",
                 data: {
-                    'province_code': province_code
+                    'province_code': provinceCode
                 },
                 dataType: "json",
                 success: function(response) {
                     $('#district').empty();
+                    $('#district').append(
+                        `<option value="">Chọn Quận/Huyện</option>`); // Thêm option mặc định
                     response.forEach(element => {
                         $('#district').append(
-                            `<option value="${element.code}">${element.name}</option>`
+                            `<option value="${element.code}" ${element.name == selectedDistrict ? 'selected' : ''}>${element.name}</option>`
+                        );
+                    });
+
+                    // Tự động tải wards nếu có district đã chọn
+                    if (selectedDistrict) {
+                        loadWards($('#district').val(), "{{ $user->ward }}");
+                    }
+                }
+            });
+        }
+
+        // Hàm load wards
+        function loadWards(districtCode, selectedWard = null) {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('client.information.index') }}",
+                data: {
+                    'district_code': districtCode
+                },
+                dataType: "json",
+                success: function(response) {
+                    $('#ward').empty();
+                    $('#ward').append(
+                        `<option value="">Chọn Phường/Xã</option>`); // Thêm option mặc định
+                    response.forEach(element => {
+                        $('#ward').append(
+                            `<option value="${element.code}" ${element.name == selectedWard ? 'selected' : ''}>${element.name}</option>`
                         );
                     });
                 }
             });
+        }
 
-            $('#district').change(e => {
-                e.preventDefault();
-                let district_code = e.target.value;
+        // Khi trang được tải, tự động load districts và wards nếu province đã chọn
+        let initialProvinceCode = $('#province').val();
+        if (initialProvinceCode) {
+            loadDistricts(initialProvinceCode, "{{ $user->district }}");
+        }
 
-
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('client.information.index') }}",
-                    data: {
-                        'district_code': district_code
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        $('#ward').empty();
-                        response.forEach(element => {
-                            $('#ward').append(
-                                `<option value="${element.code}">${element.name}</option>`
-                            );
-                        });
-                    }
-                });
-            })
+        // Khi province thay đổi
+        $('#province').change((e) => {
+            e.preventDefault();
+            let provinceCode = e.target.value;
+            loadDistricts(provinceCode);
         });
 
-        // $('#btn-userInfo-submit').click(e => {
-        //     e.preventDefault();
-        //     $.ajax({
-        //         type: "PÓ",
-        //         url: "{{ route('client.information.update', $user->id) }}",
-        //         data: {
-        //             _token: '{{ csrf_token() }}',
-        //         },
-        //         dataType: "dataType",
-        //         success: function(response) {
-        //             console.log(response);
-        //         }
-        //     });
-        // })
+        // Khi district thay đổi
+        $('#district').change((e) => {
+            e.preventDefault();
+            let districtCode = e.target.value;
+            loadWards(districtCode);
+        });
     });
 </script>
