@@ -60,16 +60,18 @@
     </div>
     <table class="table table-striped align-middle text-center mb-0">
         <thead>
-           
-                <th scope="col">Id</th>
-                <th scope="col">Tên nhà cung cấp</th>
-                <th scope="col">Email</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Sản phẩm</th>
-                <th scope="col">Tổng sản phẩm</th>
-                <th scope="col">Ngày tạo</th>
-                <th scope="col">Thao tác</th>
+            <th scope="col">
+                <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+            </th>
+            <th scope="col">Id</th>
+            <th scope="col">Tên nhà cung cấp</th>
+            <th scope="col">Email</th>
+            <th scope="col">Số điện thoại</th>
+            <th scope="col">Địa chỉ</th>
+            <th scope="col">Sản phẩm</th>
+            <th scope="col">Tổng sản phẩm</th>
+            <th scope="col">Ngày tạo</th>
+            <th scope="col">Thao tác</th>
             </tr>
         </thead>
         <tbody>
