@@ -49,17 +49,20 @@
                             valid = false;
                         } else {
                             errFalse('#old_password_err');
+
+                            // Nếu tất cả hợp lệ, submit form tại đây
+                            if (valid) {
+                                $('#change-password-form').submit();
+                            }
                         }
                     },
                     error: function() {
                         alert("Có lỗi xảy ra khi kiểm tra mật khẩu cũ.");
                     }
                 });
+
             }
 
-            if (valid) {
-                $('#change-password-form').submit();
-            }
         });
 
         function errTrue(idErr, nameFocus, message) {
