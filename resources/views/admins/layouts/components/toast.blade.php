@@ -19,7 +19,7 @@
         });
         toastOptions = {
             autohide: true,
-            delay: 5000 // Thời gian hiển thị (ms)
+            delay: 3000 // Thời gian hiển thị (ms)
         };
         const toast = new bootstrap.Toast(toastSuccess, toastOptions);
         toast.show();
