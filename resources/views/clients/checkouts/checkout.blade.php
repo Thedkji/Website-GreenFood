@@ -250,7 +250,6 @@
                     <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
 
         </form>
-
         <div class="d-flex mt-5 justify-content-around" id="form-coupon">
             <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
             <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">

@@ -265,7 +265,8 @@
                                     @foreach ($variantGroups[$item->attributes->sku] as $variant)
                                     | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
                                     @endforeach
-                                    @endif</p>
+                                    @endif
+                                </p>
                             </td>
 
                             <td>
