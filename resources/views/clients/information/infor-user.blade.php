@@ -61,7 +61,7 @@
                 <div class="my-2">
                     <label class="fw-bold mb-2">Địa chỉ Email</label>
                     <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control"
-                        placeholder="Email">
+                        placeholder="Email" disabled>
                 </div>
 
                 <div class="my-3 text-danger err-email"></div>
