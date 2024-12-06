@@ -1,23 +1,4 @@
-<style>
-    .rating-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        font-size: 2rem;
-        cursor: pointer;
-    }
-
-    .star {
-        color: gray;
-        transition: color 0.2s;
-    }
-
-    .star.hovered,
-    .star.selected {
-        color: gold;
-    }
-</style>
+@include('clients.information.order-css')
 @extends('clients.layouts.master')
 @section('title', 'Chi tiết đơn hàng')
 @section('title_page_home', 'Trang chủ')
@@ -81,13 +62,48 @@
                             <tr>
                                 <td>
                                     <img src="{{ env('VIEW_IMG') }}/{{ $detail->product_img }}" alt=""
-                                        width="80" class="rounded-circle">
+                                        width="80" height="80" class="rounded-circle">
                                 </td>
                                 <td>{{ $detail->product_sku }}</td>
-                                <td>{{ $detail->product_name }}</td>
+                                <td>
+                                    @php
+                                        $sku = $detail->product_sku;
+                                        $product_name = null;
+                                        $variant_info = null;
+                                        $error_message = null;
+
+                                        if (Str::startsWith($sku, 'SPBT')) {
+                                            $variantGroup = App\Models\VariantGroup::with('product', 'variants')
+                                                ->where('sku', $sku)
+                                                ->first();
+
+                                            if ($variantGroup) {
+                                                $product_name = $variantGroup->product->name;
+                                                $variant_info = $variantGroup->variants->pluck('name')->implode(', ');
+                                            } else {
+                                                $error_message = 'Không tìm thấy sản phẩm hoặc biến thể!';
+                                            }
+                                        } elseif (Str::startsWith($sku, 'SP')) {
+                                            $product_name = $detail->product_name;
+                                        } else {
+                                        }
+                                    @endphp
+
+                                    @if (!empty($product_name))
+                                        <p>{{ $product_name }}
+                                            @if (!empty($variant_info))
+                                                ({{ $variant_info }})
+                                            @endif
+                                        </p>
+                                    @else
+                                        <span class="text-danger">{{ $error_message ?? '' }}</span>
+                                    @endif
+                                </td>
+
+
                                 <td>{{ number_format($detail->product_price) }} VNĐ</td>
                                 <td>{{ $detail->product_quantity }}</td>
-                                <td>{{ number_format($productTotal) }} VNĐ</td>
+                                <td style="color: #4CAF50; font-weight:bolder">{{ number_format($productTotal) }} VNĐ</td>
                                 <td> @switch($order->status)
                                         @case(0)
                                             <span class="badge bg-warning" style="padding: 10px;">Chờ xác nhận</span>
@@ -114,11 +130,47 @@
                                         @break
 
                                         @case(6)
+                                            {{-- @php
+                                                $orderDetail_id = $order->orderDetails
+                                                    ->map(function ($orderDetail) {
+                                                        return $orderDetail->id;
+                                                    })
+                                                    ->toArray();
 
-                                            <button class="btn btn-primary btn-sm p-2 text-white" data-bs-toggle="modal"
-                                                data-bs-target="#rateModal-{{ $order->id }}" style="font-size: 12px;">
-                                                Đánh giá
-                                            </button>
+                                                $user_id = $order->user_id;
+
+
+                                                $sku = $detail->product_sku; // Mã SKU bạn muốn kiểm tra
+
+                                                if (Str::startsWith($sku, 'SPBT')) {
+                                                    $variantGroup = App\Models\VariantGroup::with('product')
+                                                        ->where('sku', $sku)
+                                                        ->pluck('id');
+
+                                                    $product_id = $variantGroup->product_id;
+                                                } elseif (Str::startsWith($sku, 'SP')) {
+                                                    $product_id = App\Models\Product::with('variantGroups')
+                                                        ->where('sku', $sku)
+                                                        ->pluck('id')
+                                                        ;
+                                                } else {
+                                                    echo 'Mã SKU không hợp lệ';
+                                                }
+
+
+                                            @endphp
+                                            @dd($product_id) --}}
+
+                                            {{-- @if ($orderDetail_id && $user_id && !) --}}
+                                            <button class="btn btn-primary btn-sm p-2 text-white" id="review-button"
+                                            data-bs-toggle="modal" data-bs-target="#rateModal-{{ $order->id }}"
+                                            style="font-size: 12px;">
+                                            Đánh giá
+                                        </button>
+                                            {{-- @endif --}}
+
+
+
 
 
                                             <div class="modal fade" id="rateModal-{{ $order->id }}" tabindex="-1"
@@ -151,7 +203,7 @@
 
                                                                 <div class="form-group">
                                                                     <label for="comment">Bình luận:</label>
-                                                                    <textarea name="comment" id="comment" class="form-control" rows="6"></textarea>
+                                                                    <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
                                                                 </div>
 
                                                                 <div class="form-group">
@@ -200,122 +252,12 @@
                                         @break
 
                                         @case(7)
-                                            <span class="badge bg-success" style="padding: 10px;">Đã đánh giá</span>
+                                            <span class="badge bg-danger" style="padding: 10px;">Hủy đơn</span>
                                         @break
                                     @endswitch
                                 </td>
 
-                                <script>
-                                    document.querySelectorAll('.rating-container').forEach(container => {
-                                        const stars = container.querySelectorAll('.star');
-
-                                        stars.forEach(star => {
-                                            // Khi di chuột vào sao
-                                            star.addEventListener('mouseover', () => {
-                                                const value = parseInt(star.getAttribute('data-value'));
-
-                                                // Đổi màu tất cả các sao từ đầu đến sao hiện tại
-                                                stars.forEach(s => {
-                                                    if (parseInt(s.getAttribute('data-value')) <= value) {
-                                                        s.classList.add('hovered');
-                                                    } else {
-                                                        s.classList.remove('hovered');
-                                                    }
-                                                });
-                                            });
-
-                                            // Khi chuột rời khỏi sao
-                                            star.addEventListener('mouseout', () => {
-                                                stars.forEach(s => s.classList.remove('hovered'));
-                                            });
-
-                                            // Khi nhấp vào sao
-                                            star.addEventListener('click', () => {
-                                                const value = parseInt(star.getAttribute('data-value'));
-                                                const ratingInput = document.getElementById('star-value-' + container.id
-                                                    .replace('rating-stars-', ''));
-
-                                                ratingInput.value = value; // Lưu giá trị vào input hidden
-
-                                                // Cập nhật sao đã chọn
-                                                stars.forEach(s => {
-                                                    if (parseInt(s.getAttribute('data-value')) <= value) {
-                                                        s.classList.add('selected');
-                                                    } else {
-                                                        s.classList.remove('selected');
-                                                    }
-                                                });
-                                            });
-                                        });
-                                    });
-                                    document.querySelectorAll('.rating-container').forEach(container => {
-                                        const stars = container.querySelectorAll('.star');
-                                        const ratingInput = document.getElementById('star-value-' + container.id.replace('rating-stars-', ''));
-
-                                        // Kiểm tra khi form được gửi
-                                        const form = container.closest('form');
-                                        form.addEventListener('submit', function(e) {
-                                            let isValid = true;
-
-                                            // Kiểm tra xem sao đã được chọn chưa
-                                            if (!ratingInput.value) {
-                                                isValid = false;
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Lỗi!',
-                                                    text: 'Vui lòng chọn sao để đánh giá!',
-                                                });
-                                            }
-
-                                            // Kiểm tra nội dung bình luận có trống không
-                                            const commentTextarea = form.querySelector('#comment');
-                                            if (commentTextarea.value.trim() === '') {
-                                                isValid = false;
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Lỗi!',
-                                                    text: 'Vui lòng nhập bình luận!',
-                                                });
-                                            }
-
-                                            // Nếu không hợp lệ, ngừng gửi form
-                                            if (!isValid) {
-                                                e.preventDefault();
-                                            }
-                                        });
-
-                                        stars.forEach(star => {
-                                            star.addEventListener('mouseover', () => {
-                                                const value = parseInt(star.getAttribute('data-value'));
-
-                                                stars.forEach(s => {
-                                                    if (parseInt(s.getAttribute('data-value')) <= value) {
-                                                        s.classList.add('hovered');
-                                                    } else {
-                                                        s.classList.remove('hovered');
-                                                    }
-                                                });
-                                            });
-
-                                            star.addEventListener('mouseout', () => {
-                                                stars.forEach(s => s.classList.remove('hovered'));
-                                            });
-
-                                            star.addEventListener('click', () => {
-                                                const value = parseInt(star.getAttribute('data-value'));
-                                                ratingInput.value = value; // Lưu giá trị vào input hidden
-
-                                                stars.forEach(s => {
-                                                    if (parseInt(s.getAttribute('data-value')) <= value) {
-                                                        s.classList.add('selected');
-                                                    } else {
-                                                        s.classList.remove('selected');
-                                                    }
-                                                });
-                                            });
-                                        });
-                                    });
-                                </script>
+                                @include('clients.information.orderjs')
                             </tr>
                         @endforeach
                     </tbody>
@@ -389,26 +331,7 @@
                 style="padding: 12px 30px; font-size: 16px; border-radius: 8px;">Quay lại</a>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const toastElements = document.querySelectorAll(".toast");
-            toastElements.forEach((toast) => {
-                const bsToast = new bootstrap.Toast(toast, {
-                    delay: 3000
-                }); 
-                bsToast.show();
-                setTimeout(() => {
-                    toast.classList.remove("show");
-                }, 3000);
-            });
-        });
-        toastOptions = {
-            autohide: true,
-            delay: 5000 
-        };
-        const toast = new bootstrap.Toast(toastSuccess, toastOptions);
-        toast.show();
-    </script>
+    @include('admins.layouts.components.toast')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @endsection
