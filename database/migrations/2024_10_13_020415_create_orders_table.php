@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('ward', 50);
             $table->string('address');
             $table->string('email');
-            $table->string('deliveryFee');
+            $table->string('deliveryFee')->comment('Phí ship');
             $table->string('phone', 10);
             $table->string('total')->comment('Tổng toàn bộ hóa đơn');
             $table->string('note')->comment('Ghi chú đơn hàng')->nullable();
@@ -32,11 +32,13 @@ return new class extends Migration
                 ->comment(
                     '
                                 0: Chờ xác nhận ,
-                                1: Đã xác nhận và đang xử lý đơn hàng, 
+                                1: Đã xác nhận và đang xử lý đơn hàng,
                                 2: Đang giao hàng ,
                                 3: Giao hàng thành công ,
                                 4: Giao hàng không thành công ,
-                                5: Hủy đơn                       
+                                5: Hủy đơn ,
+                                6: Đánh giá,
+                                7: Hoàn thành
                             '
                 )
                 ->default(0);

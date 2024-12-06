@@ -53,29 +53,29 @@
                                     placeholder="Nhập Email">
                                 <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" name="message" placeholder="Nhập nội dung"></textarea>
                                 <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
-                                    type="submit">Submit</button>
+                                    type="submit">Gửi</button>
                             </form>
                         </div>
                         <div class="col-lg-5">
                             <div class="d-flex p-4 rounded mb-4 bg-white">
                                 <i class="fas fa-map-marker-alt fa-2x text-primary me-4"></i>
                                 <div>
-                                    <h4>Address</h4>
-                                    <p class="mb-2">123 Street New York.USA</p>
+                                    <h4>Địa chỉ</h4>
+                                    <p class="mb-2">123, Mỹ Đình, Hà Nội</p>
                                 </div>
                             </div>
                             <div class="d-flex p-4 rounded mb-4 bg-white">
                                 <i class="fas fa-envelope fa-2x text-primary me-4"></i>
                                 <div>
-                                    <h4>Mail Us</h4>
-                                    <p class="mb-2">info@example.com</p>
+                                    <h4>Email</h4>
+                                    <p class="mb-2">greenfood8386@gmail.com</p>
                                 </div>
                             </div>
                             <div class="d-flex p-4 rounded bg-white">
                                 <i class="fa fa-phone-alt fa-2x text-primary me-4"></i>
                                 <div>
-                                    <h4>Telephone</h4>
-                                    <p class="mb-2">(+012) 3456 7890</p>
+                                    <h4>Số điện thoại</h4>
+                                    <p class="mb-2">0369 868 999</p>
                                 </div>
                             </div>
                         </div>
