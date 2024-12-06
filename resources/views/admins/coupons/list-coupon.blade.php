@@ -38,17 +38,21 @@
     </div>
     <div class="row g-4 mb-3">
         <div class="col-sm">
-            <form action="{{ route('admin.coupons.showCoupon') }}" method="get">
-                @csrf
-                <div class="d-flex justify-content-sm-end">
-                    <div class="search-box ms-2 w-25">
-                        <input type="text" class="form-control search" name="search" placeholder="Tìm kiếm">
+            <div class="d-flex justify-content-sm-end">
+                <form action="" method="get" id="search-form">
+                    <div class="search-box">
+                        <input name="search" type="text" class="form-control search"
+                            value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                         <i class="ri-search-line search-icon"></i>
                     </div>
-                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
+    </div>
+    <div class="my-3">
+        <button class="btn btn-success">
+            <a href="{{ route('admin.coupons.addCoupon') }}" class="text-white">Thêm</a>
+        </button>
     </div>
     <table class="table">
         <thead>
@@ -138,5 +142,15 @@
             </script>
         @endpush
 
+        <script>
+            let debounceTimeout;
+
+            function debounceSearch() {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    document.getElementById("search-form").submit();
+                }, 600);
+            }
+        </script>
 
     @endsection
