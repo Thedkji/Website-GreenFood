@@ -121,7 +121,7 @@ class DashboardController extends Controller
         $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
         $earningsByMonthJson = array_map(fn($month) => $earningsByMonthArray[$month] ?? 0, $months);
 
-        $bestSellerProducts = Order::where('status', 5)
+        $bestSellerProducts = Order::where('status', '5')
             ->with(['orderDetails.product'])  // Eager load orderDetails và product
             ->get()
             ->flatMap(function ($order) {
