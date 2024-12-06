@@ -254,55 +254,7 @@
                                 </div>
                                 <div class="tab-pane" id="nav-mission" role="tabpanel"
                                     aria-labelledby="nav-mission-tab">
-                                    @foreach ($product->comments as $comment)
-                                        <div class="d-flex mb-4">
-                                            {{-- Avatar người bình luận --}}
-                                            @if ($comment->user)
-                                                <img src="{{ env('VIEW_IMG') }}/{{ $comment->user->avatar }}"
-                                                    class="img-fluid rounded-circle p-3"
-                                                    style="width: 100px; height: 100px;" alt="Avatar">
-                                            @endif
-
-                                            <div>
-                                                {{-- Tên người bình luận và ngày tạo --}}
-                                                <h5>{{ $comment->user->name ?? 'Unknown' }}</h5>
-                                                <p class="mb-2" style="font-size: 14px;">
-                                                    Đã bình luận vào: {{ $comment->created_at->format('d-m-Y') }}
-                                                </p>
-
-                                                {{-- Nội dung bình luận --}}
-                                                <p>{{ $comment->content }}</p>
-
-                                                {{-- Hiển thị thời gian sửa --}}
-                                                @if ($comment->created_at != $comment->updated_at)
-                                                    <p class="text-muted" style="font-size: 12px;">
-                                                        Đã sửa:
-                                                        @if ($comment->updated_at->diffInHours(now()) < 24)
-                                                            {{ $comment->updated_at->diffForHumans() }}
-                                                        @elseif ($comment->updated_at->diffInDays(now()) < 7)
-                                                            {{ $comment->updated_at->format('d-m-Y') }}
-                                                        @else
-                                                            {{ $comment->updated_at->diffInWeeks(now()) }} tuần trước
-                                                        @endif
-                                                    </p>
-                                                @endif
-
-
-                                                {{-- Thông tin người trả lời nếu có --}}
-                                                @if ($comment->parentUser)
-                                                    <div class="d-flex mt-3">
-                                                        <img src="{{ env('VIEW_IMG') }}/{{ $comment->parentUser->avatar }}"
-                                                            class="img-fluid rounded-circle p-3"
-                                                            style="width: 80px; height: 80px;" alt="Avatar">
-                                                        <div class="ms-3">
-                                                            <h6>{{ $comment->parentUser->name ?? 'Unknown' }}</h6>
-                                                            <p>{{ $comment->content }}</p>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                    @include('clients.product-detail.comment')
                                 </div>
 
                             </div>
