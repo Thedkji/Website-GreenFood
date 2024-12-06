@@ -25,7 +25,7 @@
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
-                    <a href="{{ route('client.home') }}" class="nav-item nav-link active">Trang chủ</a>
+                    <a href="{{ route('client.introduce.index') }}" class="nav-item nav-link">Giới Thiệu</a>
                     <a href="{{ route('client.shop') }}" class="nav-item nav-link">Sản phẩm</a>
                     {{-- <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a> --}}
                     <div class="nav-item dropdown">
@@ -50,12 +50,14 @@
                         </div>
                     </div>
                     <a href="{{ route('client.contact.index') }}" class="nav-item nav-link">Liên Hệ</a>
+
+
                 </div>
                 <div class="d-flex m-3 me-0">
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
-                            
+
                     <a href="#" class="position-relative me-4 my-auto" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa fa-shopping-bag fa-2x"></i>
