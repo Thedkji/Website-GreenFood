@@ -45,7 +45,7 @@ class Information extends Controller
             ->get();
 
         $oders = Order::where('user_id', $user->id)
-            ->whereIn('status', [3, 4, 5, 6])
+            ->whereIn('status', [3, 4, 5, 6,7])
             ->with('user')
             ->get();
 
@@ -160,36 +160,36 @@ class Information extends Controller
 
     public function store(Request $request)
     {
-
         $product = Product::find($request->product_id);
-
+    
         if (!$product) {
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại!');
         }
-
+    
+    
+        // Thêm đánh giá mới
         $commentsData = [
             'product_id' => $request->product_id,
             'user_id' => Auth::id(),
             'content' => $request->comment,
         ];
-
+    
         if ($request->hasFile('image')) {
             $img = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
             $commentsData['img'] = $img->storeAs('comments', $filename);
         }
 
+    
         $comment = Comment::create($commentsData);
-
+    
         Rate::create([
             'comment_id' => $comment->id,
             'star' => $request->star,
         ]);
-        Order::where('id', $request->order_id)
-            ->where('user_id', Auth::id())
-            ->update(['status' => 7]);
 
-
+       
         return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi!');
     }
+    
 }
