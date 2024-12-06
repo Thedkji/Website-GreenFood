@@ -26,10 +26,10 @@ class VariantGroup extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function depots()
-    {
-        return $this->hasMany(Depot::class);
-    }
+    // public function depots()
+    // {
+    //     return $this->hasMany(Depot::class);
+    // }
 
     public function carts()
     {

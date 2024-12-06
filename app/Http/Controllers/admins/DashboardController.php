@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admins;
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -32,32 +33,6 @@ class DashboardController extends Controller
 
         $userCounts = User::where('role', '1')->count();
 
-        $bestSellerProducts = Order::where('status', 5)
-            ->with(['orderDetails.product'])  // Eager load orderDetails và product
-            ->get()
-            ->flatMap(function ($order) {
-                return $order->orderDetails;  // Trả về tất cả các chi tiết đơn hàng của mỗi đơn
-            })
-            ->groupBy('product_id')  // Nhóm theo product_id để tính tổng
-            ->map(function ($group) {
-                $product = $group->first()->product;  // Lấy sản phẩm từ group (vì tất cả đều cùng sản phẩm)
-                $totalSold = $group->sum('product_quantity');  // Tính tổng số lượng đã bán
-                $totalRevenue = $group->sum(function ($item) use ($product) {
-                    return $item->product_quantity * $product->price_sale;  // Tính tổng doanh thu
-                });
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'img' => $product->img,
-                    'price' => $product->price_sale,
-                    'stock_left' => $product->quantity - $totalSold,  // Số lượng còn lại = Số lượng ban đầu - Số lượng đã bán
-                    'total_sold' => $totalSold,
-                    'total_revenue' => $totalRevenue
-                ];
-            })
-            ->sortByDesc('total_sold')  // Sắp xếp theo số lượng bán được từ cao xuống thấp
-            ->take(5);  // Lấy 5 sản phẩm bán chạy nhất
-
 
         // Doanh thu hôm nay
         $todayEarnings = Order::whereDate('created_at', now()->toDateString())->sum('total');
@@ -78,7 +53,7 @@ class DashboardController extends Controller
             'orderCountCompleted',
             'orderCountsByMonthJson',
             'userCounts',
-            'bestSellerProducts',
+            // 'bestSellerProducts',
             'todayEarnings',
             'yesterdayEarnings',
             'percentChange'
@@ -121,31 +96,21 @@ class DashboardController extends Controller
         $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
         $earningsByMonthJson = array_map(fn($month) => $earningsByMonthArray[$month] ?? 0, $months);
 
-        $bestSellerProducts = Order::where('status', '5')
-            ->with(['orderDetails.product'])  // Eager load orderDetails và product
+        // Lấy danh sách sản phẩm bán chạy, sắp xếp theo số lượng bán
+
+        $bestSellerProducts = Product::with(['variantGroups', 'orderDetails'])
+
             ->get()
-            ->flatMap(function ($order) {
-                return $order->orderDetails;  // Trả về tất cả các chi tiết đơn hàng của mỗi đơn
+            ->filter(function ($product) {
+                return $product->total_sold > 0; // Chỉ lấy sản phẩm đã bán
             })
-            ->groupBy('product_id')  // Nhóm theo product_id để tính tổng
-            ->map(function ($group) {
-                $product = $group->first()->product;  // Lấy sản phẩm từ group (vì tất cả đều cùng sản phẩm)
-                $totalSold = $group->sum('product_quantity');  // Tính tổng số lượng đã bán
-                $totalRevenue = $group->sum(function ($item) use ($product) {
-                    return $item->product_quantity * $product->price_sale;  // Tính tổng doanh thu
-                });
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'img' => $product->img,
-                    'price' => $product->price_sale,
-                    'stock_left' => $product->quantity - $totalSold,  // Số lượng còn lại = Số lượng ban đầu - Số lượng đã bán
-                    'total_sold' => $totalSold,
-                    'total_revenue' => $totalRevenue
-                ];
+            ->sortByDesc(function ($product) {
+                return $product->total_sold; // Sắp xếp theo số lượng bán
             })
-            ->sortByDesc('total_sold')  // Sắp xếp theo số lượng bán được từ cao xuống thấp
-            ->take(5);  // Lấy 5 sản phẩm bán chạy nhất
+            ->take(5); // Lấy 5 sản phẩm bán chạy nhất
+
+
+        // dd($bestSellerProducts);
 
         return view("admins.dashboards.sales-report", compact(
             'totalEarnings',
