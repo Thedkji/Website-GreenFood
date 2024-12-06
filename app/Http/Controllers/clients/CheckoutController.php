@@ -243,7 +243,7 @@ class CheckoutController extends Controller
                     if ($product && $product->quantity < $item['quantity']) {
                         $lowStockVariants[] = [
                             'sku' => $item['attributes']['sku'],
-                            'name' => $item['attributes']['name'],
+                            'name' => $item['name'],
                             'stock' => $product->quantity,
                         ];
                     }

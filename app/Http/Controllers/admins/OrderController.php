@@ -49,7 +49,7 @@ class OrderController extends Controller
         } else {
             $user = null;
         }
-        return view("admins.orders.order-detail", compact('orders', 'orderDetails', 'user'));
+        return view("admins.orders.order-detail", compact('orders',  'orderDetails', 'user'));
     }
 
 
@@ -70,6 +70,16 @@ class OrderController extends Controller
         $order = Order::find($id);
         if ($order) {
             $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
+            $orderDetails = $order->orderDetails()->get();
+            foreach ($orderDetails as $detail) {
+                $product = Product::where('sku', $detail->product_sku)->first();
+                if ($product) {
+                    $product->increment('quantity', $detail->product_quantity);
+                } else {
+                    $variant = VariantGroup::where('sku', $detail->product_sku)->first();
+                    $variant->increment('quantity', $detail->product_quantity);
+                }
+            }
             Mail::to($order->email)->queue(new MailCheckOut($order));
         }
         return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
