@@ -128,6 +128,16 @@ class Information extends Controller
 
         if ($order->status == 0) {
             $order->status = 5;
+            $orderDetails = $order->orderDetails()->get();
+            foreach ($orderDetails as $detail) {
+                $product = Product::where('sku', $detail->product_sku)->first();
+                if ($product) {
+                    $product->increment('quantity', $detail->product_quantity);
+                } else {
+                    $variant = VariantGroup::where('sku', $detail->product_sku)->first();
+                    $variant->increment('quantity', $detail->product_quantity);
+                }
+            }
             $order->save();
             return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
         }

@@ -224,7 +224,10 @@
 
             @default
             <span class="badge bg-secondary p-2">
-                Không thể thay đổi trạng thái : {{$orders->status === 5 ? $orders->cancel_reson : ''}}
+                Không thể thay đổi trạng thái :
+            </span>
+            <span class=" p-2">
+                {{$orders->status === 5 ? $orders->cancel_reson : ''}}
             </span>
             @endswitch
     </div>
@@ -287,7 +290,23 @@
                         <strong>{{ $orderDetail->product_name }}</strong>
                     </a>
                 </td>
-                <td><strong>{{ $orderDetail->product_sku }}</strong></td>
+                <td><strong>{{ $orderDetail->product_sku }}
+                        @php
+                        $check = \App\Models\VariantGroup::with('variants')
+                        ->where('sku', $orderDetail->product_sku)
+                        ->get();
+                        if ($check) {
+                        $variantGroups[$orderDetail->product_sku] = $check;
+                        } else {
+                        $variantGroups[$orderDetail->product_sku] = null;
+                        }
+                        @endphp
+                        @if (!empty($variantGroups[$orderDetail->product_sku]))
+                        @foreach ($variantGroups[$orderDetail->product_sku] as $variant)
+                        | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
+                        @endforeach
+                        @endif
+                    </strong></td>
                 <td>
                     <img src="{{ env('VIEW_IMG') }}/{{ $orderDetail->product_img }}" alt="Product Image" style="max-width: 100px;">
                 </td>
