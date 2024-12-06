@@ -21,6 +21,7 @@ class Information extends Controller
 
     public function index()
     {
+        $user = Auth::user();
         $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
         $provinces = DB::table('provinces')->get();
 
@@ -55,20 +56,35 @@ class Information extends Controller
 
     public function editPass($id)
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
+
         return view('clients.information.pass', compact('user'));
     }
 
-    public function updatePass(PassRequest $request, $id)
+    public function updatePass(Request $request, $id)
     {
-        $user = $request->validated();
         $user = User::findOrFail($id);
-        if (!Hash::check($request->old_password, $user->password)) {
-            return back()->withErrors(['old_password' => 'Mật khẩu cũ không chính xác']);
+
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+
+        $user->update($data);
+
+        return redirect()->route('client.information.index')->with('success', 'Mật khẩu đã được cập nhật!')
+            ->header('Cache-Control', 'no-store');
+    }
+
+    public function checkPass(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->ajax() && $request->old_password) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response()->json(['valid' => false, 'message' => 'Mật khẩu cũ không chính xác']);
+            } else {
+                return response()->json(['valid' => true]);
+            }
         }
-        $user->password = Hash::make($request->password);
-        $user->save();
-        return back()->with('success', 'Mật khẩu đã được thay đổi thành công.');
     }
 
     public function edit($id)
@@ -81,18 +97,29 @@ class Information extends Controller
         // Kiểm tra dữ liệu
 
         $user = User::findOrFail($id);
+        $data = $request->all();
+        if ($request->province) {
+            $data['province'] = DB::table('provinces')->where('code', $request->province)->first()->name;
+        }
+        if ($request->district) {
+            $data['district'] = DB::table('districts')->where('code', $request->district)->first()->name;
+        }
+        if ($request->ward) {
+            $data['ward'] = DB::table('wards')->where('code', $request->ward)->first()->name;
+        }
 
-        // if ($request->hasFile('avatar')) {
-        //     $img = $request->file('avatar');
-        //     $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-        //     $request->avatar = $img->storeAs('avatars', $filename);
-        // }
-        dd($request->all());
+        if ($request->hasFile('img')) {
+            $img = $request->file('img');
+            $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+            $data['avatar'] = $img->storeAs('avatars', $filename);
+        }
 
-        $user->update($request->all());
+
+        $user->update($data);
 
         // Chuyển hướng với thông báo thành công
-        // return redirect()->route('clients.information.index')->with('success', 'Thông tin đã được cập nhật!');
+        return redirect()->route('client.information.index')->with('success', 'Thông tin đã được cập nhật!')
+            ->header('Cache-Control', 'no-store');
     }
 
     public function cancel($id)
@@ -123,7 +150,7 @@ class Information extends Controller
 
     public function store(Request $request)
     {
-        
+
         $product = Product::find($request->product_id);
 
         if (!$product) {
@@ -149,8 +176,8 @@ class Information extends Controller
             'star' => $request->star,
         ]);
         Order::where('id', $request->order_id)
-        ->where('user_id', Auth::id())
-        ->update(['status' => 7]);
+            ->where('user_id', Auth::id())
+            ->update(['status' => 7]);
 
 
         return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi!');
