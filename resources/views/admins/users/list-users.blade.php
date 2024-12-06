@@ -15,26 +15,22 @@
         </div>
     @endif
 
+
     <div class="row g-4 mb-3">
-        <div class="col-sm justify-content-between">
+        <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
-
-                <div class="search-box ms-2">
-                    <form action="{{ route('admin.users.index') }}" method="GET">
-                        <input type="text" name="search" class="form-control search"
-                            value = "{{ request()->input('search') }}" placeholder="Tìm kiếm...">
+                <form action="" method="get" id="search-form">
+                    <div class="search-box">
+                        <input name="search" type="text" class="form-control search"
+                            value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                         <i class="ri-search-line search-icon"></i>
-                        {{-- <button class="btn btn-primary" type="submit">Tìm kiếm</button> --}}
-                    </form>
-                </div>
-
+                    </div>
+                </form>
             </div>
-
-            <div class=""><a href="{{ route('admin.users.create') }}" class="btn btn-success">Thêm Mới</a></div>
         </div>
     </div>
-
-
+    <div class="d-flex justify-content-sm-start"><a href="{{ route('admin.users.create') }}" class="btn btn-success">Thêm
+            Mới</a></div>
     <table class="table table-striped text-center align-middle">
         <thead>
             <tr>
@@ -57,45 +53,48 @@
             @if (isset($users))
                 @foreach ($users as $value)
                     <tr>
-                        <td>
+                        <td scope="row">
                             <input type="checkbox" class="user-checkbox" name="user-checkbox" onclick="toggleDeleteButton()"
                                 value="{{ $value->id }}">
                         </td>
                         <td scope="row">{{ $value->id }}</td>
                         <td scope="row">{{ $value->name }}</td>
                         <td scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:100px;height:100%;object-fit: cover"></td>
+                                style="width:70px;height:100%;object-fit: cover"></td>
                         <td scope="row">{{ $value->user_name }}</td>
                         {{-- <td scope="row">{{ $value->password }}</td> --}}
-                        <td scope="row">{{ $value->email }}</td>
+                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $value->email }}">
+                            {{ $value->email }}</td>
                         <td scope="row">{{ $value->phone }}</td>
                         {{-- <td scope="row">{{ $value->province }}</td>
                         <td scope="row">{{ $value->district }}</td>
                         <td scope="row">{{ $value->ward }}</td> --}}
-                        <td scope="row">{{ $value->address }}</td>
+                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $value->address }}">
+                            {{ $value->address }}</td>
                         <td scope="row">{{ $value->role === 0 ? 'Admin' : 'User' }}</td>
-                        <td scope="row">
+
+                        <td >
                             <div class="hstack gap-3 flex-wrap">
-                                {{-- <a href="{{ route('admin.users.detail', $value->id) }}">
-                                    <i class="fa-regular fa-eye"></i>
-                                </a> --}}
                                 <a href="{{ route('admin.users.show', $value->id) }}"
-                                    style="background-color: transparent;" class="link-success fs-15"><i
-                                        class="ri-edit-2-line"></i></a>
-                                <form action="{{ route('admin.users.destroy', $value->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            style="background-color: transparent; border: none; color: inherit;"
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa?');"
-                                            class="link-danger fs-15">
-                                            <i class="ri-delete-bin-line"></i>
-                                        </button>
-                                    </form>
+                                    style="background-color: transparent;" class="link-success fs-15">
+                                    <i class="ri-edit-2-line"></i>
+                                </a>
+
+                                <form action="{{ route('admin.users.destroy', $value->id) }}" method="post"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        style="background-color: transparent; border: none; color: inherit;"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
 
                     </tr>
+
                 @endforeach
             @elseif(!isset($users) && $users == null)
                 <p>Chưa có tài khoản nào</p>
@@ -113,6 +112,15 @@
 @endsection
 
 <script>
+    let debounceTimeout;
+
+    function debounceSearch() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            document.getElementById("search-form").submit();
+        }, 600);
+    }
+
     function toggleSelectAll(source) {
         const checkboxes = document.querySelectorAll('.user-checkbox');
         checkboxes.forEach(checkbox => checkbox.checked = source.checked);
@@ -158,5 +166,7 @@
 
             form.submit();
         }
+
+
     }
 </script>

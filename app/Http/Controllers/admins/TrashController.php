@@ -99,7 +99,7 @@ class TrashController extends Controller
                     $item->restore();
                     return redirect()->back()->with('success', 'Tài khoản đã được khôi phục thành công.');
                 case 'Product':
-                    $item = Product::withTrashed()->findOrFail($id);
+                    $item = Product::with(['categories', 'galleries', 'variantGroups', 'variantGroups.variants'])->withTrashed()->findOrFail($id);
                     $item->restore(); // Khôi phục sản phẩm
 
                     // Khôi phục các variantGroups (hasMany)
@@ -128,7 +128,7 @@ class TrashController extends Controller
                             $category->restore();
                         }
                     });
-
+                    dd($item);
                     // Nếu cần, xử lý tương tự cho các quan hệ khác như coupons()
 
                     return redirect()->back()->with('success', 'Sản phẩm và các dữ liệu liên quan đã được khôi phục thành công.');

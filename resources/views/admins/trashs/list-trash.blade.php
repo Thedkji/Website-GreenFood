@@ -16,28 +16,30 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.trashs.index') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
-        <div class="col-sm">
-            <div class="d-flex justify-content-sm-end">
+    <div class="col-sm">
+        <div class="d-flex justify-content-sm-end">
+            <form action="" method="get" id="search-form">
                 <div class="search-box">
-                    <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}"
-                        placeholder="Nhập tên loại muốn xóa" oninput="debounceSearch()">
+                    <input name="search" type="text" class="form-control search"
+                        value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
                     <i class="ri-search-line search-icon"></i>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class="col-sm">
-            <select id="statusTrash" name="statusTrash" class="form-select w-50" onchange="this.form.submit()">
-                <option value="allPro" {{ $statusTrash == 'allPro' ? 'selected' : '' }}>Tất cả</option>
-                <option value="User" {{ $statusTrash == 'User' ? 'selected' : '' }}>Người dùng</option>
-                <option value="Product" {{ $statusTrash == 'Product' ? 'selected' : '' }}>Sản phẩm</option>
-                <option value="Order" {{ $statusTrash == 'Order' ? 'selected' : '' }}>Đơn hàng</option>
-                <option value="Comment" {{ $statusTrash == 'Comment' ? 'selected' : '' }}>Bình luận</option>
-                <option value="Supplier" {{ $statusTrash == 'Supplier' ? 'selected' : '' }}>Nhà cung cấp</option>
-                <option value="Coupon" {{ $statusTrash == 'Coupon' ? 'selected' : '' }}>Mã giảm giá</option>
-            </select>
-        </div>
-    </form>
+    </div>
+    <form action="{{ route('admin.trashs.index') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
+    <div class="col-sm">
+        <select id="statusTrash" name="statusTrash" class="form-select w-25" onchange="this.form.submit()">
+            <option value="allPro" {{ $statusTrash == 'allPro' ? 'selected' : '' }}>Tất cả</option>
+            <option value="User" {{ $statusTrash == 'User' ? 'selected' : '' }}>Người dùng</option>
+            <option value="Product" {{ $statusTrash == 'Product' ? 'selected' : '' }}>Sản phẩm</option>
+            <option value="Order" {{ $statusTrash == 'Order' ? 'selected' : '' }}>Đơn hàng</option>
+            <option value="Comment" {{ $statusTrash == 'Comment' ? 'selected' : '' }}>Bình luận</option>
+            <option value="Supplier" {{ $statusTrash == 'Supplier' ? 'selected' : '' }}>Nhà cung cấp</option>
+            <option value="Coupon" {{ $statusTrash == 'Coupon' ? 'selected' : '' }}>Mã giảm giá</option>
+        </select>
+    </div>
+</form>
 
     <h2 class="text-primary">Danh sách Xóa</h2>
     <table class="mb-3 table table-striped align-middle mb-0">

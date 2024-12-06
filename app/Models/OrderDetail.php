@@ -28,4 +28,5 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Order::class);
     }
+/******  26a680e3-2ccc-4e35-ac88-e5fc30deec9b  *******/
 }
