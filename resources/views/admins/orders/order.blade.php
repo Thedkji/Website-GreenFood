@@ -35,15 +35,22 @@
 </div>
 <form action="{{ route('admin.orders.showOder') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
     <div class="col-sm">
-        <div class="d-flex justify-content-sm-end">
-            <div class="search-box">
-                <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
-                <i class="ri-search-line search-icon"></i>
-            </div>
-
+        <label for="">Tìm kiếm</label>
+        <div class="search-box">
+            <input name="search" type="text" class="form-control search" value="{{ request()->input('search') }}" placeholder="Nhập tìm kiếm" oninput="debounceSearch()">
+            <i class="ri-search-line search-icon"></i>
         </div>
     </div>
     <div class="col-sm">
+        <label for="">Ngày kết thúc</label>
+        <input type="date" name="endDate" class="form-control" id="endDate" value="{{request()->input('endDate')}}">
+    </div>
+    <div class="col-sm">
+        <label for="">Ngày bắt đầu</label>
+        <input type="date" name="startDate" class="form-control" id="startDate" value="{{request()->input('startDate')}}">
+    </div>
+    <div class="col-sm">
+        <label for="">Trạng thái đơn hàng</label>
         <select id="statusFilter" name="statusFilter" class="form-select" onchange="this.form.submit()">
             <option value="">Tất cả trạng thái</option>
             <option value="0" {{ request('statusFilter') === '0' ? 'selected' : '' }}>Chờ xác nhận</option>
@@ -178,6 +185,23 @@
                 toast.classList.remove("show");
             }, 3000);
         });
+        $('#startDate, #endDate').on('change', function() {
+            // Lấy giá trị từ các input
+            let startDate = $('#startDate').val();
+            let endDate = $('#endDate').val();
+            if (startDate) {
+                $('#endDate').attr('min', startDate);
+            }
+            if (startDate && endDate) {
+                // Kiểm tra xem endDate có hợp lệ không
+                if (new Date(endDate) >= new Date(startDate)) {
+                    document.getElementById("search-form").submit();
+                } else {
+                    alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu!");
+                }
+            }
+        });
+
     });
     toastOptions = {
         autohide: true,
