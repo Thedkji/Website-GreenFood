@@ -13,9 +13,27 @@ class CouponProductSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
-            $coupon = Coupon::find($i);
-            $coupon->products()->attach(mt_rand(1, 20));
+        $coupon_product = [
+            [
+                'coupon_id' => '4',
+                'product_id' => '5'
+            ],
+            [
+                'coupon_id' => '4',
+                'product_id' => '6'
+            ],
+            [
+                'coupon_id' => '4',
+                'product_id' => '9'
+            ],
+            [
+                'coupon_id' => '6',
+                'product_id' => '2'
+            ]
+        ];
+
+        foreach ($coupon_product as $item) {
+            Coupon::find($item['coupon_id'])->products()->attach($item['product_id']);
         }
     }
 }

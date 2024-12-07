@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Comment;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -37,12 +39,15 @@ class CommentSeeder extends Seeder
             "Ăn đồ healthy giúp tôi có nhiều năng lượng hơn mà vẫn giữ dáng."
         ];
 
-        for ($i = 1; $i <= 10; $i++) {
+        $product_id = Product::pluck("id")->toArray();
+        $user_id = User::pluck("id")->toArray();
+
+        for ($i = 1; $i <= 17; $i++) {
             Comment::create([
                 "id" => $i,
-                "product_id" => mt_rand(1, 20),
-                "parent_id" => Null,
-                "user_id" => mt_rand(1, 10),
+                "product_id" => Arr::random($product_id),
+                "parent_user_id" => null,
+                "user_id" => Arr::random($user_id),
                 "content" => Arr::random($healthy_food_comments),
                 "img" => "https://via.placeholder.com/300x200",
             ]);
