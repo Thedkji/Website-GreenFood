@@ -32,8 +32,8 @@ class ShopController extends Controller
             $query->whereHas('categories', function ($q) use ($categoryId) {
                 $q->where('categories.id', $categoryId);
             });
-        }else{
-            $products = $query->paginate(12);
+        } else {
+            $products = $query->paginate(12)->appends(request()->query());
         }
 
         // Lọc theo khoảng giá nếu có
@@ -75,13 +75,13 @@ class ShopController extends Controller
                 // Sắp xếp mặc định
                 $query->orderBy('id', 'desc');
             }
-        } 
+        }
 
         // Lấy danh sách sản phẩm
         $products = $query->orderByDesc('id')->paginate(9)->appends(request()->query());
 
         // Sản phẩm xem nhiều
-        $productHot = Product::orderByDesc('view')->limit(6)->get();
+        $productHot = Product::orderByDesc('view')->paginate(6)->appends(request()->query());
 
         return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }
