@@ -122,28 +122,57 @@ class Information extends Controller
             ->header('Cache-Control', 'no-store');
     }
 
-    public function cancel($id)
+    public function checkStatus($id)
     {
         $order = Order::findOrFail($id);
-
+    
+        // Kiểm tra nếu trạng thái là "Chờ xác nhận"
         if ($order->status == 0) {
-            $order->status = 5;
-            $orderDetails = $order->orderDetails()->get();
-            foreach ($orderDetails as $detail) {
-                $product = Product::where('sku', $detail->product_sku)->first();
-                if ($product) {
-                    $product->increment('quantity', $detail->product_quantity);
-                } else {
-                    $variant = VariantGroup::where('sku', $detail->product_sku)->first();
-                    $variant->increment('quantity', $detail->product_quantity);
-                }
-            }
-            $order->save();
-            return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
+            // Chuyển trạng thái đơn hàng sang "Đã xác nhận" (status = 1)
+    
+            // Trả về trạng thái thành công
+            return response()->json(['status' => 'allowed', 'message' => 'Đơn hàng đã được xác nhận!']);
         }
-
-        return redirect()->back()->with('error', 'Không thể hủy đơn hàng này!');
+    
+        // Nếu không phải trạng thái "Chờ xác nhận", trả về trạng thái không hợp lệ
+        return response()->json(['status' => 'not_allowed']);
     }
+    
+    public function cancel(Request $request ,$id)
+{
+    $order = Order::findOrFail($id);
+
+    // Kiểm tra trạng thái đơn hàng
+    if ($order->status != 0) {
+        // Trả về thông báo lỗi nếu trạng thái đơn hàng không phải "Chờ xác nhận"
+        return redirect()->back()->with('error', 'Đơn hàng này không thể hủy vì đã được xác nhận hoặc đang giao.');
+    }
+
+    // Tiến hành hủy đơn hàng nếu trạng thái là "Chờ xác nhận"
+    $order->status = 5; // Trạng thái "Đã hủy"
+    
+    // Cập nhật lại số lượng sản phẩm trong kho
+    $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
+    $orderDetails = $order->orderDetails()->get();
+    foreach ($orderDetails as $detail) {
+        $product = Product::where('sku', $detail->product_sku)->first();
+        if ($product) {
+            $product->increment('quantity', $detail->product_quantity);
+        } else {
+            $variant = VariantGroup::where('sku', $detail->product_sku)->first();
+            if ($variant) {
+                $variant->increment('quantity', $detail->product_quantity);
+            }
+        }
+    }
+
+    $order->save();
+
+    return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
+}
+
+
+
 
 
     public function show($id)

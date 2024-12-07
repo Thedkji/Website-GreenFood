@@ -133,7 +133,7 @@
                         <option value="#" hidden>--Chọn--</option>
                         <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Phát hành</option>
                         <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Chưa phát hành</option>
-                        <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Chờ phát hành</option>
+                        <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Cho một số người dùng</option>
                         <option value="3" {{ old('status') == '3' ? 'selected' : '' }}>Hết hạn</option>
                     </select>
                     @error('status')
