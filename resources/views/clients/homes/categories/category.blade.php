@@ -6,10 +6,10 @@
                     <div class="service-item bg-success rounded border border-success">
                         <img src="{{ env('VIEW_CLIENT') }}/img/che-do-an-giam-can-1%20(1).png" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
-                            <div class="service-content bg-primary text-center p-4 rounded">
-                                <h5 class="text-white">Công cụ </h5>
-                                <a href="{{ route('client.shop') }}" class=" border-white border-success rounded-pill text-white ">
-                                    <h3 class=" border-white border-success rounded-pill text-white ">Tính BMI</h3>
+                            <div class="service-content bg-light text-center p-4 rounded">
+                                <h5 class="text-primary">Công cụ </h5>
+                                <a href="{{ route('client.shop') }}" class=" border-Black border-success rounded-pill text-Black ">
+                                    <h3 class=" border-Black border-success rounded-pill text-Black  ">Tính BMI</h3>
                                 </a>
                             </div>
                         </div>
@@ -36,10 +36,10 @@
                     <div class="service-item bg-primary rounded border border-primary">
                         <img src="{{ env('VIEW_CLIENT') }}/img/123.jpg" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
-                            <div class="service-content bg-success text-center p-4 rounded">
-                                <h5 class="text-white">Mọi thắc mắc</h5>
-                                <a href="{{ route('client.contact.index') }}" class=" border-white border-success rounded-pill text-primary " >
-                                   <h3 class=" border-white border-success rounded-pill text-primary "> Liên hệ chúng tôi</h3>
+                            <div class="service-content bg-light text-center p-4 rounded">
+                                <h5 class="text-primary">Mọi thắc mắc</h5>
+                                <a href="{{ route('client.contact.index') }}" class=" border-Black border-success rounded-pill text-Black" >
+                                   <h3 class=" border-Black border-success rounded-pill text-Black  "> Liên hệ chúng tôi</h3>
                                 </a>
                             </div>
                         </div>
@@ -246,4 +246,23 @@
             /* Giảm padding trên các thiết bị nhỏ */
         }
     }
+    .service-img-wrapper {
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+}
+
+.service-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.service-item {
+    position: relative;
+}
+
+.service-item .service-content {
+    background-color: #f8f9fa;
+}
 </style>
