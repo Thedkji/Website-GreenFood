@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name',150);
             $table->string('parent_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
