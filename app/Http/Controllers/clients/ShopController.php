@@ -104,7 +104,9 @@ class ShopController extends Controller
             ->sortByDesc(function ($product) {
                 // Kết hợp 2 tiêu chí: đánh giá trung bình và lượt xem
                 return $product->avg_rating * 100 + $product->views;  // Tỉ lệ có thể điều chỉnh tùy mục tiêu
-            });
+            })
+            ->take(5)
+            ;
 
         return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }

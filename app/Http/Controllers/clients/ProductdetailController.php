@@ -25,11 +25,32 @@ class ProductdetailController extends Controller
         // session()->forget($sessionKey);
 
 
-        $productHot = Product::orderByDesc('view')->limit(6)->get();
+
+        $productHot = Product::with(['comments.rates'])
+            ->get()
+            ->map(function ($product) {
+                // Tính toán trung bình đánh giá của sản phẩm
+                $avgRating = $product->comments->flatMap(function ($comment) {
+                    return $comment->rates;
+                })->avg('star');  // Tính trung bình của trường 'star'
+
+                // Sử dụng setAttribute để gán thuộc tính tạm thời
+                $product->setAttribute('avg_rating', $avgRating);
+
+                // Gán số lượt xem của sản phẩm
+                $product->setAttribute('views', $product->view);
+
+                return $product;
+            })
+            ->sortByDesc(function ($product) {
+                // Kết hợp 2 tiêu chí: đánh giá trung bình và lượt xem
+                return $product->avg_rating * 100 + $product->views;  // Tỉ lệ có thể điều chỉnh tùy mục tiêu
+            })
+            ->take(5);
 
         $relatedProducts = Product::with(['variantGroups' => function ($query) {
             // Sắp xếp biến thể theo giá thấp nhất
-            $query->orderBy('price_sale','asc')->get();
+            $query->orderBy('price_sale', 'asc')->get();
         }])
             ->whereHas('categories', function ($query) use ($product) {
                 $query->whereIn('categories.id', $product->categories->pluck('id'));
