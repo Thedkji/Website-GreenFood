@@ -285,8 +285,8 @@
                 $id = optional($variant)->product_id; // Lấy product_id từ VariantGroup
                 }
                 @endphp
-                <td class=" truncate-text">
-                    <a href="{{ route('client.product-detail', $id ?? '#') }}"> <!-- Đảm bảo $id không null -->
+                <td class="truncate-text">
+                    <a href="{{ route('client.product-detail', $id ?? '#') }}" class="truncate" data-fulltext="{{ $orderDetail->product_name }}"> <!-- Đảm bảo $id không null -->
                         <strong>{{ $orderDetail->product_name }}</strong>
                     </a>
                 </td>

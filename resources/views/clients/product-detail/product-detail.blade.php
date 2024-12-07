@@ -7,200 +7,202 @@
 @section('title_page_home', 'Trang chủ')
 @section('title_page_active', 'Chi tiết sản phẩm')
 
-@section('content')
-@include('clients.product-detail.css')
 
-<!-- Single Product Start -->
-<div class="container-fluid py-5 mt-5">
+
+@section('content')
+    @include('clients.product-detail.css')
     <div class="toast-container">
         @if (session('success'))
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
-            <div class="toast-header bg-success text-white">
-                <p class="me-auto">Thông báo</p>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
             </div>
-            <div class="toast-body bg-white text-dark">
-                {{ session('success') }}
-            </div>
-            <div class="toast-progress bg-success"></div>
-        </div>
         @endif
 
         @if (session('error'))
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
-            <div class="toast-header bg-danger text-white">
-                <p class="me-auto">Lỗi</p>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
             </div>
-            <div class="toast-body bg-white text-dark">
-                {{ session('error') }}
-            </div>
-            <div class="toast-progress bg-danger"></div>
-        </div>
         @endif
     </div>
-    <div class="container py-5">
-        <div class="row g-4 mb-5">
-            <div class="col-lg-8 col-xl-9">
-                <div class="row g-4">
-                    <div class="col-lg-6">
-                        <div id="productCarousel" class="carousel slide border rounded" data-bs-interval="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                        class="d-block w-100 img-fluid rounded" alt="Image" style="height: 550px">
+    <!-- Single Product Start -->
+    <div class="container-fluid py-5 mt-5">
+        <div class="container py-5">
+            <div class="row g-4 mb-5">
+                <div class="col-lg-8 col-xl-9">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div id="productCarousel" class="carousel slide border rounded" data-bs-interval="false">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                            class="d-block w-100 img-fluid rounded" alt="Image" style="height: 550px">
+                                    </div>
+                                    @foreach ($product->galleries as $gallery)
+                                        <div class="carousel-item">
+                                            <img src="{{ env('VIEW_IMG') }}/{{ $gallery->path }}"
+                                                class="d-block w-100 img-fluid rounded" alt="Image"
+                                                style="height: 550px">
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @foreach ($product->galleries as $gallery)
-                                <div class="carousel-item">
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $gallery->path }}"
-                                        class="d-block w-100 img-fluid rounded" alt="Image"
-                                        style="height: 550px">
-                                </div>
-                                @endforeach
-                            </div>
-                            <a class="carousel-control-prev" href="#productCarousel" role="button"
-                                data-bs-slide="prev">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black"
-                                    viewBox="0 0 16 16">
-                                    <path d="M11 1L4 8l7 7" stroke="black" stroke-width="2" fill="none" />
-                                </svg>
-                            </a>
-                            <a class="carousel-control-next" href="#productCarousel" role="button"
-                                data-bs-slide="next">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black"
-                                    viewBox="0 0 16 16">
-                                    <path d="M5 1l7 7-7 7" stroke="black" stroke-width="2" fill="none" />
-                                </svg>
-                            </a>
+                                <a class="carousel-control-prev" href="#productCarousel" role="button"
+                                    data-bs-slide="prev">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black"
+                                        viewBox="0 0 16 16">
+                                        <path d="M11 1L4 8l7 7" stroke="black" stroke-width="2" fill="none" />
+                                    </svg>
+                                </a>
+                                <a class="carousel-control-next" href="#productCarousel" role="button"
+                                    data-bs-slide="next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black"
+                                        viewBox="0 0 16 16">
+                                        <path d="M5 1l7 7-7 7" stroke="black" stroke-width="2" fill="none" />
+                                    </svg>
+                                </a>
 
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-lg-6">
-                        <form action="{{ route('client.addToCart') }}" method="post">
-                            @csrf
-                            <h4 class="fw-bold mb-3" style="width: 400px; overflow-wrap: break-word">
-                                {{ $product->name }}
-                            </h4>
-                            <p class="mb-3"><span class="fw-bold text-dark">DANH MỤC:</span>
-                                @foreach ($product->categories as $category)
-                                <a href="{{ route('client.shop', ['category_id' => $category->id]) }}"
-                                    class="filter-shop-cate" name="filter-shop-cate">
-                                    {{ $category->name }} |
-                                </a>
-                                @endforeach
-                            </p>
-
-
-                            @if ($product->status == 0)
-                            <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
-                            <div id="price_variantGroup">
-                                <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                    {{ app('formatPrice')($product->price_regular) }} VNĐ
-                                </h6>
-                                <h4 class="fw-bold mb-3 text-primary">
-                                    {{ app('formatPrice')($product->price_sale) }} VNĐ
+                        <div class="col-lg-6">
+                            <form action="{{ route('client.addToCart') }}" method="post">
+                                @csrf
+                                <h4 class="fw-bold mb-3" style="width: 400px; overflow-wrap: break-word">
+                                    {{ $product->name }}
                                 </h4>
-                            </div>
+                                <p class="mb-3"><span class="fw-bold text-dark">DANH MỤC:</span>
+                                    @foreach ($product->categories as $category)
+                                        <a href="{{ route('client.shop', ['category_id' => $category->id]) }}"
+                                            class="filter-shop-cate" name="filter-shop-cate">
+                                            {{ $category->name }} |
+                                        </a>
+                                    @endforeach
+                                </p>
 
-                            <input type="hidden" name="price" value="{{ $product->price_sale ?? 1 }}">
-                            <input type="hidden" name="name" value="{{ $product->name }}">
-                            <input type="hidden" name="sku" value="{{ $product->sku }}">
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="img" value="{{ $product->img }}">
-                            <input type="hidden" name="status" value="{{ $product->status }}">
-                            @else
-                            <!-- Trường hợp có biến thể, lấy giá thấp nhất từ variantGroup -->
-                            @php
-                            $variant = $product->variantGroups->sortBy('price_sale')->first();
-                            @endphp
 
-                            @if ($variant)
-                            <div id="price_variantGroup">
-                                <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
-                                    {{ app('formatPrice')($variant->price_regular) }} VNĐ
-                                </h6>
-                                <h4 class="fw-bold mb-3 text-primary">
-                                    {{ app('formatPrice')($variant->price_sale) }} VNĐ
-                                </h4>
-                            </div>
-                            <input type="hidden" name="img" value="{{ $product->img }}">
-                            @else
-                            <!-- Nếu không có biến thể nào khả dụng, hiển thị thông báo hoặc giá mặc định -->
-                            <h6 class="fw-bold mb-3 text-muted">Không có giá khả dụng</h6>
-                            @endif
-                            @endif
+                                @if ($product->status == 0)
+                                    <!-- Trường hợp không có biến thể, hiển thị giá sản phẩm -->
+                                    <div id="price_variantGroup">
+                                        <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                                            {{ app('formatPrice')($product->price_regular) }} VNĐ
+                                        </h6>
+                                        <h4 class="fw-bold mb-3 text-primary">
+                                            {{ app('formatPrice')($product->price_sale) }} VNĐ
+                                        </h4>
+                                    </div>
 
-                            @if ($product->status == 1)
-                            @php
-                            $displayedParents = []; // Mảng tạm để lưu các parent đã hiển thị
-                            $lowestPrice = null; // Biến lưu giá thấp nhất
-                            $lowestPriceVariantGroup = null; // Biến lưu group có giá thấp nhất
-
-                            // Tìm giá thấp nhất trong tất cả variantGroups
-                            foreach ($product->variantGroups as $variantGroup) {
-                            if ($lowestPrice === null || $variantGroup->price_sale < $lowestPrice) {
-                                $lowestPrice=$variantGroup->price_sale;
-                                $lowestPriceVariantGroup = $variantGroup; // Lưu lại group có giá thấp nhất
-                                }
-                                }
-
-                                // Sắp xếp các variantGroups theo giá, nhóm có giá thấp nhất sẽ nằm đầu
-                                $sortedVariantGroups = $product->variantGroups->sortBy('price_sale');
-                                @endphp
-
-                                @foreach ($sortedVariantGroups as $variantGroup)
-                                @if ($variantGroup == $lowestPriceVariantGroup)
-                                <!-- Kiểm tra xem variantGroup có giá thấp nhất hay không -->
-                                @foreach ($variantGroup->variants as $variant)
-                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
-                                <strong
-                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
-                                @php
-                                $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
-                                @endphp
-                                @endif
-
-                                <!-- Hiển thị biến thể có giá thấp nhất đầu tiên và thêm class 'active' -->
-                                <a href="###" class="variant-option active"
-                                    data-id="{{ $variantGroup->id }}">
-                                    @if ($variantGroup->img)
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
-                                        alt="" class="variant-img">
-                                    @else
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                        alt="" class="variant-img">
-                                    @endif
-                                    <span>{{ $variant->name }}</span>
-                                </a>
-                                @endforeach
+                                    <input type="hidden" name="price" value="{{ $product->price_sale ?? 1 }}">
+                                    <input type="hidden" name="name" value="{{ $product->name }}">
+                                    <input type="hidden" name="sku" value="{{ $product->sku }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="img" value="{{ $product->img }}">
+                                    <input type="hidden" name="status" value="{{ $product->status }}">
                                 @else
-                                <!-- Hiển thị các variantGroup còn lại -->
-                                @foreach ($variantGroup->variants as $variant)
-                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
-                                <strong
-                                    class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
-                                @php
-                                $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
-                                @endphp
+                                    <!-- Trường hợp có biến thể, lấy giá thấp nhất từ variantGroup -->
+                                    @php
+                                        $variant = $product->variantGroups->sortBy('price_sale')->first();
+                                    @endphp
+
+                                    @if ($variant)
+                                        <div id="price_variantGroup">
+                                            <h6 class="fw-bold mb-3 text-muted text-decoration-line-through">
+                                                {{ app('formatPrice')($variant->price_regular) }} VNĐ
+                                            </h6>
+                                            <h4 class="fw-bold mb-3 text-primary">
+                                                {{ app('formatPrice')($variant->price_sale) }} VNĐ
+                                            </h4>
+                                        </div>
+                                        <input type="hidden" name="img" value="{{ $product->img }}">
+                                    @else
+                                        <!-- Nếu không có biến thể nào khả dụng, hiển thị thông báo hoặc giá mặc định -->
+                                        <h6 class="fw-bold mb-3 text-muted">Không có giá khả dụng</h6>
+                                    @endif
                                 @endif
 
-                                <!-- Hiển thị các biến thể khác, không có class 'active' -->
-                                <a href="###" class="variant-option" data-id="{{ $variantGroup->id }}">
-                                    @if ($variantGroup->img)
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
-                                        alt="" class="variant-img">
-                                    @else
-                                    <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
-                                        alt="" class="variant-img">
-                                    @endif
-                                    <span>{{ $variant->name }}</span>
-                                </a>
-                                @endforeach
-                                @endif
-                                @endforeach
+                                @if ($product->status == 1)
+                                    @php
+                                        $displayedParents = []; // Mảng tạm để lưu các parent đã hiển thị
+                                        $lowestPrice = null; // Biến lưu giá thấp nhất
+                                        $lowestPriceVariantGroup = null; // Biến lưu group có giá thấp nhất
+
+                                        // Tìm giá thấp nhất trong tất cả variantGroups
+                                        foreach ($product->variantGroups as $variantGroup) {
+                                            if ($lowestPrice === null || $variantGroup->price_sale < $lowestPrice) {
+                                                $lowestPrice = $variantGroup->price_sale;
+                                                $lowestPriceVariantGroup = $variantGroup; // Lưu lại group có giá thấp nhất
+                                            }
+                                        }
+
+                                        // Sắp xếp các variantGroups theo giá, nhóm có giá thấp nhất sẽ nằm đầu
+                                        $sortedVariantGroups = $product->variantGroups->sortBy('price_sale');
+                                    @endphp
+
+                                    @foreach ($sortedVariantGroups as $variantGroup)
+                                        @if ($variantGroup == $lowestPriceVariantGroup)
+                                            <!-- Kiểm tra xem variantGroup có giá thấp nhất hay không -->
+                                            @foreach ($variantGroup->variants as $variant)
+                                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                    <strong
+                                                        class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                    @php
+                                                        $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                    @endphp
+                                                @endif
+
+                                                <!-- Hiển thị biến thể có giá thấp nhất đầu tiên và thêm class 'active' -->
+                                                <a href="###" class="variant-option active"
+                                                    data-id="{{ $variantGroup->id }}">
+                                                    @if ($variantGroup->img)
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                            alt="" class="variant-img">
+                                                    @else
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                            alt="" class="variant-img">
+                                                    @endif
+                                                    <span>{{ $variant->name }}</span>
+                                                </a>
+                                            @endforeach
+                                        @else
+                                            <!-- Hiển thị các variantGroup còn lại -->
+                                            @foreach ($variantGroup->variants as $variant)
+                                                @if ($variant->parent && !in_array($variant->parent->id, $displayedParents))
+                                                    <strong
+                                                        class="variant-parent mb-3 fs-6">{{ $variant->parent->name }}</strong>
+                                                    @php
+                                                        $displayedParents[] = $variant->parent->id; // Thêm id parent vào mảng đã hiển thị
+                                                    @endphp
+                                                @endif
+
+                                                <!-- Hiển thị các biến thể khác, không có class 'active' -->
+                                                <a href="###" class="variant-option"
+                                                    data-id="{{ $variantGroup->id }}">
+                                                    @if ($variantGroup->img)
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
+                                                            alt="" class="variant-img">
+                                                    @else
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}"
+                                                            alt="" class="variant-img">
+                                                    @endif
+                                                    <span>{{ $variant->name }}</span>
+                                                </a>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
 
 
                                 @endif
@@ -209,13 +211,13 @@
                                 <p class="mb-4">{!! $product->description_short !!}</p>
 
                                 @if ($product->status == 0)
-                                <p id="quantity_variantGroup">
-                                    Số lượng : {{ $product->quantity }}
-                                </p>
+                                    <p id="quantity_variantGroup">
+                                        Số lượng : {{ $product->quantity }}
+                                    </p>
                                 @else
-                                <p id="quantity_variantGroup">
-                                    Số lượng : {{ $variantGroup->quantity }}
-                                </p>
+                                    <p id="quantity_variantGroup">
+                                        Số lượng : {{ $variantGroup->quantity }}
+                                    </p>
                                 @endif
 
                                 <p style="font-size: 13px ; color: rgb(162, 160, 160)">
@@ -249,91 +251,60 @@
                                 </button>
 
 
-                        </form>
-                    </div>
-                    <div class="col-lg-12">
-                        <nav>
-                            <div class="nav nav-tabs mb-3">
-                                <button class="nav-link active border-white border-bottom-0" type="button"
-                                    role="tab" id="nav-about-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-about" aria-controls="nav-about" aria-selected="true">Mô
-                                    tả</button>
-                                <button class="nav-link border-white border-bottom-0" type="button" role="tab"
-                                    id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
-                                    aria-controls="nav-mission" aria-selected="false">Đánh giá</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content mb-5">
-                            <div class="tab-pane active" id="nav-about" role="tabpanel"
-                                aria-labelledby="nav-about-tab">
-                                @php
-                                use Illuminate\Support\Str;
-                                @endphp
+                            </form>
+                        </div>
+                        <div class="col-lg-12">
+                            <nav>
+                                <div class="nav nav-tabs mb-3">
+                                    <button class="nav-link active border-white border-bottom-0" type="button"
+                                        role="tab" id="nav-about-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-about" aria-controls="nav-about" aria-selected="true">Mô
+                                        tả</button>
+                                    <button class="nav-link border-white border-bottom-0" type="button" role="tab"
+                                        id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                        aria-controls="nav-mission" aria-selected="false">Đánh giá</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content mb-5">
+                                <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                    aria-labelledby="nav-about-tab">
+                                    @php
+                                        use Illuminate\Support\Str;
+                                    @endphp
 
-                                <div id="description" class="position-relative">
-                                    <div class="content" id="description-content">
-                                        {!! $product->description !!}
+                                    <div id="description" class="position-relative">
+                                        <div class="content" id="description-content">
+                                            {!! $product->description !!}
+                                        </div>
+                                        <div class="overlay" id="description-overlay"></div>
+                                        <a href="javascript:void(0);" id="read-more"
+                                            class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary position-absolute">Đọc
+                                            thêm</a>
                                     </div>
-                                    <div class="overlay" id="description-overlay"></div>
-                                    <a href="javascript:void(0);" id="read-more"
-                                        class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary position-absolute">Đọc
-                                        thêm</a>
+
+                                </div>
+                                <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                    aria-labelledby="nav-mission-tab">
+                                    @include('clients.product-detail.comment')
                                 </div>
 
                             </div>
-                            <div class="tab-pane" id="nav-mission" role="tabpanel"
-                                aria-labelledby="nav-mission-tab">
-                                @include('clients.product-detail.comment')
-                            </div>
 
                         </div>
-
                     </div>
                 </div>
-            </div>
 
-            <div class="col-lg-4 col-xl-3">
-                @include('clients.product-detail.product-hot')
+                <div class="col-lg-4 col-xl-3">
+                    @include('clients.product-detail.product-hot')
+                </div>
             </div>
+            <h1 class="fw-bold mb-0">Sản phẩm cùng loại</h1>
+            @include('clients.product-detail.product-related')
         </div>
-        <h1 class="fw-bold mb-0">Sản phẩm cùng loại</h1>
-        @include('clients.product-detail.product-related')
     </div>
-</div>
 
-@include('clients.product-detail.script')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const toastElements = document.querySelectorAll(".toast");
-        toastElements.forEach((toastElement) => {
-            const bsToast = new bootstrap.Toast(toastElement, {
-                delay: 5000
-            }); // 5 giây
-            bsToast.show();
+    @include('clients.product-detail.script')
 
-            // Ẩn toast sau 5 giây
-            setTimeout(() => {
-                toastElement.classList.remove("show");
-            }, 5000);
-        });
 
-        // Toast success (nếu có)
-        const toastSuccess = document.getElementById("toastSuccess");
-        if (toastSuccess) {
-            const toastOptions = {
-                autohide: true,
-                delay: 5000
-            }; // Hiển thị 5 giây
-            const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
-            bsToastSuccess.show();
-        }
-        toastOptions = {
-            autohide: true,
-            delay: 5000 // Thời gian hiển thị (ms)
-        };
-
-        const toast = new bootstrap.Toast(toastSuccess, toastOptions);
-        toast.show();
-    });
-</script>
+    @include('admins.layouts.components.toast')
 @endsection
