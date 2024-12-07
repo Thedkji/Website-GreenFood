@@ -34,6 +34,7 @@
             const price = parseFloat(checkbox.dataset.price) || 0;
             totalPrice += price;
         });
+
         document.getElementById('grandTotal').textContent = `${totalPrice.toLocaleString()} VNĐ`;
         // Cập nhật trạng thái của checkbox "Select All"
         selectAllCheckbox.checked = allChecked;
@@ -88,41 +89,8 @@
             updateTimer = setTimeout(function() {
                 updateQuantity(itemId, quantity);
             }, 500);
-            updateGrandTotal();
+            updateSelectAll();
         });
-
-        function updateGrandTotal() {
-            let grandTotal = 0;
-            let anySelected = false;
-            $("[id^=priceTotal-]").each(function() {
-                let itemId;
-                if (userId) {
-                    // Nếu có userId, lấy itemId từ name của input (chỉ giữ lại các ký tự số)
-                    itemId = input.attr('name').replace(/[^0-9]/g, '');
-                } else {
-                    // Nếu không có userId, itemId là tên của input
-                    itemId = input.attr('name').match(/\[(.*?)\]/)[1];
-                }
-                let checkbox = $('input.cart-checkbox[name="selectBox[' + itemId + ']"]'); // Tìm checkbox tương ứng
-                // Nếu checkbox được chọn, tính giá trị của nó
-                if (checkbox.prop('checked')) {
-                    let price = $(this).text().replace(/[^\d.-]/g, ''); // Lọc số và dấu
-                    let number = parseInt(price.replace(/\./g, ''), 10); // Chuyển sang số nguyên
-                    grandTotal += number; // Cộng dồn giá trị
-                    anySelected = true; // Đánh dấu là có checkbox được chọn
-                }
-            });
-            // Lặp qua tất cả các phần tử `priceTotal`
-            if (!anySelected) {
-                $("[id^=priceTotal-]").each(function() {
-                    let price = $(this).text().replace(/[^\d.-]/g, ''); // Lọc số và dấu
-                    let number = parseInt(price.replace(/\./g, ''), 10); // Chuyển sang số nguyên
-                    grandTotal += number; // Cộng dồn giá trị
-                });
-            }
-            // Hiển thị giá trị tổng hợp
-            $("#grandTotal").text(grandTotal.toLocaleString() + " VNĐ");
-        }
 
         function updateQuantity(itemId, quantity) {
             $.ajax({
@@ -141,8 +109,6 @@
             });
 
         };
-
-
         const toastElements = document.querySelectorAll(".toast");
         toastElements.forEach((toastElement) => {
             const bsToast = new bootstrap.Toast(toastElement, {

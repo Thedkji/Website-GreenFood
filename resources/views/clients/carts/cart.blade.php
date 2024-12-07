@@ -99,7 +99,7 @@
                         @endphp
                         <tr>
                             <th>
-                                <input type="checkbox" name="selectBox[{{ $item->id }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" data-item-id="{{ $item->id }}" style="width: 20px;height: 20px;" value="{{ $item }}" data-price="{{$price}}"
+                                <input type="checkbox" name="selectBox[{{ $item->id }}]" onclick="toggleDeleteButton()" class="form-check-input bg-primary border-0 cart-checkbox" data-item-id="{{ $item->id }}" data-price="{{$price}}" style=" width: 20px;height: 20px;" value="{{ $item }}"
                                     @if (!empty($lowStockVariants)) @foreach ($lowStockVariants as $stock)
                                     @if ($stock['stock'] < $item->quantity && $stock['sku'] == $item->sku)
                                 disabled @endif
@@ -107,7 +107,7 @@
                                 @endif
                                 >
                             </th>
-                            <th scope="row">
+                            <th scope=" row">
                                 <div class="d-flex align-items-center">
                                     @php
                                     $imageSrc = env('VIEW_IMG') . '/';

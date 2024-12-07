@@ -223,7 +223,6 @@
             }
         });
 
-
         function calculateShippingFee(serviceId, districtId, wardCode) {
             $.ajax({
                 url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
@@ -266,8 +265,6 @@
                 }
             });
         }
-
-
         // Xử lý thông báo -------------------------------------------------
         // Toast xử lý
         var toastSuccess = document.getElementById('toastSuccess');
@@ -303,7 +300,6 @@
                         // Chuyển coupon thành chuỗi JSON
                         let couponJson = JSON.stringify(coupon);
                         // Khi người dùng chọn mã từ danh sách
-                        couponInput.value = ''; // Reset ô nhập
                         // Cập nhật giá trị vào trường input type="hidden"
                         hiddenInput.value = couponJson;
                         let couponDetail = `
