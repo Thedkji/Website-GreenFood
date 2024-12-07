@@ -398,7 +398,10 @@ class CheckoutController extends Controller
             }
 
             $this->finalizeOrder($order, $request->data[0], $coupon);
-            return redirect()->route('client.showSuccessCheckOut')->with('success', 'Đơn hàng đã được đặt thành công!');
+            session()->forget('checkoutStatus');
+            return redirect()->route('client.showSuccessCheckOut')
+                ->with('success', 'Đơn hàng đã được đặt thành công!')
+                ->with('order', $order);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Lỗi đặt hàng: ' . $e->getMessage());
@@ -592,7 +595,6 @@ class CheckoutController extends Controller
         $this->removeCartItems($cartItems);
         Mail::to($order->email)->queue(new MailCheckOut($order));
         session(['check' => true]);
-        session()->forget('checkoutStatus');
     }
 
 
