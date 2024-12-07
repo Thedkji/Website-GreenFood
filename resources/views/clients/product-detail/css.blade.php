@@ -208,14 +208,17 @@
     }
 
     #description-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px; /* Điều chỉnh chiều cao phù hợp */
-    background: linear-gradient(transparent, rgba(255, 255, 255, 1)); /* Hiệu ứng mờ dần */
-    z-index: 10; /* Đảm bảo overlay nằm trên nội dung */
-}
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        /* Điều chỉnh chiều cao phù hợp */
+        background: linear-gradient(transparent, rgba(255, 255, 255, 1));
+        /* Hiệu ứng mờ dần */
+        z-index: 10;
+        /* Đảm bảo overlay nằm trên nội dung */
+    }
 
 
     #description.collapsed #description-overlay {
@@ -278,5 +281,13 @@
     .product-item p {
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .filled-star {
+        color: gold !important;
+    }
+
+    .empty-star {
+        color: lightgray !important;
     }
 </style>
