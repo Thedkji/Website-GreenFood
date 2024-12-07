@@ -58,7 +58,7 @@ class CartController extends Controller
             $uniqueId = $productId . '-' . $sku;
             $existingItem = CartSession::get($uniqueId);
             if ($existingItem) {
-                if ($quantity > $stock) {
+                if (($existingItem->quantity + $quantity) > $stock) {
                     return back()->with('error', 'Số lượng sản phẩm trong giỏ vượt quá');
                 }
                 // Nếu đã tồn tại, cập nhật số lượng
