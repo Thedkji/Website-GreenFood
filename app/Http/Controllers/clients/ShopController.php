@@ -85,11 +85,7 @@ class ShopController extends Controller
 
         // Sản phẩm xem nhiều
 
-
-
-
-        $productHot = Product::where('created_at', '>=', Carbon::now()->subWeek())  // Lọc sản phẩm trong tuần qua
-            ->with(['comments.rates'])  // Eager load comments và rates
+        $productHot = Product::with(['comments.rates'])
             ->get()
             ->map(function ($product) {
                 // Tính toán trung bình đánh giá của sản phẩm
@@ -97,14 +93,18 @@ class ShopController extends Controller
                     return $comment->rates;
                 })->avg('star');  // Tính trung bình của trường 'star'
 
-                $product->avg_rating = $avgRating;  // Gán giá trị trung bình vào sản phẩm
+                // Sử dụng setAttribute để gán thuộc tính tạm thời
+                $product->setAttribute('avg_rating', $avgRating);
+
+                // Gán số lượt xem của sản phẩm
+                $product->setAttribute('views', $product->view);
+
                 return $product;
             })
             ->sortByDesc(function ($product) {
-                // Sắp xếp theo đánh giá trung bình và lượt xem
-                return $product->avg_rating * 100 + $product->view;  // Kết hợp 2 tiêu chí, có thể điều chỉnh tỉ lệ cho phù hợp
+                // Kết hợp 2 tiêu chí: đánh giá trung bình và lượt xem
+                return $product->avg_rating * 100 + $product->views;  // Tỉ lệ có thể điều chỉnh tùy mục tiêu
             });
-
 
         return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }
