@@ -84,7 +84,7 @@ class CartComposer
             }
         });
         if (!empty($lowStockVariants)) {
-            session()->put('check', 'value'); // Khởi tạo và thêm giá trị đầu tiên
+            session()->put('check', 'value');
         }
         $cartQuantity = $cartItems->sum('quantity');
         $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId', 'lowStockVariants'));

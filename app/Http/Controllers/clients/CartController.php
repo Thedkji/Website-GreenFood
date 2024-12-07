@@ -25,15 +25,28 @@ class CartController extends Controller
         $sku = $request->sku;
         $quantity = $request->input('quantity', 1);
 
+        $pro = Product::where('sku', $sku)->first();
+        if ($pro) {
+            $stock = $pro->quantity;
+        } else {
+            $variant = VariantGroup::where('sku', $sku)->first();
+            $stock = $variant->quantity;
+        }
         if (auth()->check()) {
             $existingCartItem = Cart::where('user_id', auth()->id())
                 ->where('product_id', $productId)
                 ->where('sku', $sku)
                 ->first();
             if ($existingCartItem) {
+                if (($existingCartItem->quantity + $quantity) > $stock) {
+                    return back()->with('error', 'Số lượng sản phẩm trong giỏ vượt quá');
+                }
                 $existingCartItem->quantity += $quantity;
                 $existingCartItem->save();
             } else {
+                if ($quantity > $stock) {
+                    return back()->with('error', 'Số lượng sản phẩm trong giỏ vượt quá');
+                }
                 Cart::create([
                     'user_id' => auth()->id(),
                     'product_id' => $productId,
@@ -45,6 +58,9 @@ class CartController extends Controller
             $uniqueId = $productId . '-' . $sku;
             $existingItem = CartSession::get($uniqueId);
             if ($existingItem) {
+                if ($quantity > $stock) {
+                    return back()->with('error', 'Số lượng sản phẩm trong giỏ vượt quá');
+                }
                 // Nếu đã tồn tại, cập nhật số lượng
                 CartSession::update($uniqueId, [
                     'quantity' => [
@@ -53,6 +69,9 @@ class CartController extends Controller
                     ],
                 ]);
             } else {
+                if ($quantity > $stock) {
+                    return back()->with('error', 'Số lượng sản phẩm trong giỏ vượt quá');
+                }
                 // Nếu chưa tồn tại, thêm sản phẩm vào giỏ
                 CartSession::add([
                     'id' => $uniqueId,
