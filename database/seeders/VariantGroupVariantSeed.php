@@ -33,9 +33,14 @@ class VariantGroupVariantSeed extends Seeder
             array('variant_group_id' => '19', 'variant_id' => '20'),
             array('variant_group_id' => '20', 'variant_id' => '21')
         );
-
         foreach ($variant_group_variant as $item) {
-            VariantGroup::find($item['variant_group_id'])->variants()->attach($item['variant_id']);
+            // Tìm VariantGroup với variant_group_id
+            $variantGroup = VariantGroup::find($item['variant_group_id']);
+
+            if ($variantGroup) {
+                // Nếu VariantGroup tồn tại, tiếp tục gắn kết (attach)
+                $variantGroup->variants()->attach($item['variant_id']);
+            }
         }
     }
 }

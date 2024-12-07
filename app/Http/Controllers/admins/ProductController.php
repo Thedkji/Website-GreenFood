@@ -377,20 +377,20 @@ class ProductController extends Controller
                 $variantGroups = VariantGroup::where('product_id', $product->id)->get();
                 // dd($variantGroups);
 
-                foreach ($variantGroups as $variantGroup) {
-                    $variantGroup->variants()->sync([]);
+                // foreach ($variantGroups as $variantGroup) {
+                //     $variantGroup->variants()->sync([]);
 
-                    // if ($variantGroup->img) {
-                    //     Storage::delete($variantGroup->img);
-                    // }
-                }
+                //     // if ($variantGroup->img) {
+                //     //     Storage::delete($variantGroup->img);
+                //     // }
+                // }
 
                 $product->variantGroups()->delete();
             }
 
-            if ($product->categories) {
-                $product->categories()->sync([]);
-            }
+            // if ($product->categories) {
+            //     $product->categories()->sync([]);
+            // }
             $product->carts()->delete();
             $product->delete();
 
