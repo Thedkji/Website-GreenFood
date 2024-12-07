@@ -10,7 +10,9 @@ use App\Models\Product;
 use App\Models\Rate;
 use App\Models\Variant;
 use App\Models\VariantGroup;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
@@ -20,7 +22,8 @@ class ShopController extends Controller
         $categories2 = Category::with('children')->whereNotNull('parent_id')->get();
 
         // Bắt đầu với một truy vấn chung
-        $query = Product::with(['categories', 'galleries', 'variantGroups']);
+        $query = Product::with(['categories', 'galleries', 'variantGroups', 'comments.rates']);
+
 
         // Lọc theo tên sản phẩm nếu có
         if ($search = $request->input('search-product')) {
@@ -32,8 +35,8 @@ class ShopController extends Controller
             $query->whereHas('categories', function ($q) use ($categoryId) {
                 $q->where('categories.id', $categoryId);
             });
-        }else{
-            $products = $query->paginate(12);
+        } else {
+            $products = $query->paginate(12)->appends(request()->query());
         }
 
         // Lọc theo khoảng giá nếu có
@@ -75,13 +78,32 @@ class ShopController extends Controller
                 // Sắp xếp mặc định
                 $query->orderBy('id', 'desc');
             }
-        } 
+        }
 
         // Lấy danh sách sản phẩm
         $products = $query->orderByDesc('id')->paginate(9)->appends(request()->query());
 
         // Sản phẩm xem nhiều
-        $productHot = Product::orderByDesc('view')->limit(6)->get();
+        $productHot = Product::with(['comments.rates'])
+            ->get()
+            ->map(function ($product) {
+                $avgRating = $product->comments->flatMap(function ($comment) {
+                    return $comment->rates;
+                })->avg('star');
+
+                $daysSinceCreated = Carbon::now()->diffInDays($product->created_at); //Tính số ngày từ khi sản phẩm được tạo (created_at) đến hôm nay.
+                $freshnessScore = max(0, 30 - $daysSinceCreated); // Sản phẩm mới có điểm cao hơn
+
+                $product->setAttribute('avg_rating', $avgRating);
+                $product->setAttribute('views', $product->view);
+                // Tính điểm cho sản phẩm dựa trên trung bình rating, số lượt xem và freshness score
+                // 50 điểm cho mỗi sao, 50 điểm cho số lượt xem, 20 điểm cho freshness score
+                $product->setAttribute('score', ($avgRating * 50) + ($product->view * 30) + ($freshnessScore * 20));
+
+                return $product;
+            })
+            ->sortByDesc('score')
+            ->take(5);
 
         return view("clients.shops.shop", compact("products", 'categories2', 'productHot'));
     }

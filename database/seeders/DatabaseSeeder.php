@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             CouponSeeder::class,
             UserSeeder::class,
             CartSeeder::class,
-            // CommentSeeder::class,
-            // RateSeeder::class,
+            CommentSeeder::class,
+            RateSeeder::class,
             OrderSeeder::class,
             OrderDetailSeeder::class,
 
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             CouponCategorySeeder::class,
 
 
-            // CouponProductSeeder::class,
+            CouponProductSeeder::class,
             VariantGroupVariantSeed::class,
         ]);
     }

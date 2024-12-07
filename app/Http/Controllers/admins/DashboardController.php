@@ -17,7 +17,7 @@ class DashboardController extends Controller
     {
 
 
-        $totalEarnings = Order::sum('total');
+        $totalEarnings = Order::where('status', '6')->sum('total');
         $orderCounts = Order::where('status', '6')->count();
         $orderCountCompleted = Order::where('status', 'completed')->count();
 
@@ -35,7 +35,10 @@ class DashboardController extends Controller
 
 
         // Doanh thu hôm nay
-        $todayEarnings = Order::whereDate('created_at', now()->toDateString())->sum('total');
+        $todayEarnings = Order::whereDate('created_at', now()->toDateString())
+
+            ->sum('total');
+
 
         // Doanh thu hôm qua
         $yesterdayEarnings = Order::whereDate('created_at', now()->subDay()->toDateString())->sum('total');

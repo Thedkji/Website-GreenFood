@@ -11,5 +11,5 @@
 @section('content-message',
 'Kiểm tra thông tin đơn hàng ở email đã đăng ký')
 @section('link')
-<a href="{{route('client.home')}}" class="btn btn-success mt-3">Tiếp tục mua sắm</a>
+<a href="{{ route('client.orders.details', ['id' =>  session('order')->id]) }}" class="btn btn-success mt-3">Xem chi tiết đơn hàng</a>
 @endsection

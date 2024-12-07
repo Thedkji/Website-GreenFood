@@ -7,9 +7,39 @@
 @section('title_page_home', 'Trang chủ')
 @section('title_page_active', 'Chi tiết sản phẩm')
 
+
+
 @section('content')
     @include('clients.product-detail.css')
+    <div class="toast-container">
+        @if (session('success'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
+            </div>
+        @endif
 
+        @if (session('error'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
+            </div>
+        @endif
+    </div>
     <!-- Single Product Start -->
     <div class="container-fluid py-5 mt-5">
         <div class="container py-5">
@@ -159,7 +189,8 @@
                                                 @endif
 
                                                 <!-- Hiển thị các biến thể khác, không có class 'active' -->
-                                                <a href="###" class="variant-option" data-id="{{ $variantGroup->id }}">
+                                                <a href="###" class="variant-option"
+                                                    data-id="{{ $variantGroup->id }}">
                                                     @if ($variantGroup->img)
                                                         <img src="{{ env('VIEW_IMG') }}/{{ $variantGroup->img }}"
                                                             alt="" class="variant-img">
@@ -273,4 +304,7 @@
     </div>
 
     @include('clients.product-detail.script')
+
+
+    @include('admins.layouts.components.toast')
 @endsection

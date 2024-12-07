@@ -30,12 +30,20 @@ class OrderController extends Controller
                 });
         }
         $statusFilter = $request->input('statusFilter');
+        if ($request->has('startDate') && $request->input('startDate') !== null) {
+            $query->whereDate('created_at', '>=', $request->input('startDate'));
+        }
+
+        if ($request->has('endDate') && $request->input('endDate') !== null) {
+            $query->whereDate('created_at', '<=', $request->input('endDate'));
+        }
         $orders = $query->with('orderDetails') // Lấy kèm orderDetails
             ->sortable() // Sắp xếp theo cột
             ->when($statusFilter !== null, function ($query) use ($statusFilter) {
                 $query->where('status', $statusFilter); // Lọc theo trạng thái nếu có
             })
             ->whereHas('orderDetails') // Chỉ lấy các đơn hàng có orderDetails
+            ->orderBy('id', 'desc')
             ->paginate(8);
         return view("admins.orders.order", compact('orders', 'statusFilter'));
     }
