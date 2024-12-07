@@ -253,7 +253,7 @@
         <div class="d-flex mt-5 justify-content-around" id="form-coupon">
             <input type="hidden" name="total" value="{{session('coupon') ? $totalPriceCoupon : $totalPrice}}">
             <input type="hidden" name="data[]" value="{{ json_encode($decodedItems)}}">
-            <input type="text" name="coupon_name" id="" class="form-control " placeholder="Nhập mã giảm giá">
+            <input type="text" name="coupon_name" id="" class="form-control " placeholder="Nhập mã giảm giá" value="{{request()->input('coupon_name')}}">
             <button class="btn border-secondary w-50 text-primary" id="applyCouponBtn">Áp dụng mã</button>
         </div>
         <div class="mt-5 row">

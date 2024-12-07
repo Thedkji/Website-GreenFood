@@ -28,10 +28,10 @@ class GallerySeeder extends Seeder
             array('id' => '17', 'product_id' => '2', 'path' => 'galleries/1732270675_67405a5325cdc.jpg', 'created_at' => '2024-11-22 10:17:55', 'updated_at' => '2024-11-22 10:17:55', 'deleted_at' => NULL),
             array('id' => '18', 'product_id' => '2', 'path' => 'galleries/1732270675_67405a5326b00.jpg', 'created_at' => '2024-11-22 10:17:55', 'updated_at' => '2024-11-22 10:17:55', 'deleted_at' => NULL),
             array('id' => '19', 'product_id' => '2', 'path' => 'galleries/1732270675_67405a5327d06.jpg', 'created_at' => '2024-11-22 10:17:55', 'updated_at' => '2024-11-22 10:17:55', 'deleted_at' => NULL),
-            array('id' => '20', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39e4e2.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-11-22 10:20:03', 'deleted_at' => NULL),
-            array('id' => '21', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39ef99.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-11-22 10:20:03', 'deleted_at' => NULL),
-            array('id' => '22', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39fa3f.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-11-22 10:20:03', 'deleted_at' => NULL),
-            array('id' => '23', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad3a026c.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-11-22 10:20:03', 'deleted_at' => NULL),
+            array('id' => '20', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39e4e2.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-12-07 13:02:42', 'deleted_at' => '2024-12-07 13:02:42'),
+            array('id' => '21', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39ef99.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-12-07 13:02:42', 'deleted_at' => '2024-12-07 13:02:42'),
+            array('id' => '22', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad39fa3f.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-12-07 13:02:42', 'deleted_at' => '2024-12-07 13:02:42'),
+            array('id' => '23', 'product_id' => '1', 'path' => 'galleries/1732270803_67405ad3a026c.jpg', 'created_at' => '2024-11-22 10:20:03', 'updated_at' => '2024-12-07 13:02:42', 'deleted_at' => '2024-12-07 13:02:42'),
             array('id' => '29', 'product_id' => '4', 'path' => 'galleries/1732271480_67405d785dff3.jpg', 'created_at' => '2024-11-22 10:31:20', 'updated_at' => '2024-11-22 10:31:20', 'deleted_at' => NULL),
             array('id' => '30', 'product_id' => '4', 'path' => 'galleries/1732271480_67405d7860fc1.jpg', 'created_at' => '2024-11-22 10:31:20', 'updated_at' => '2024-11-22 10:31:20', 'deleted_at' => NULL),
             array('id' => '31', 'product_id' => '4', 'path' => 'galleries/1732271480_67405d7862217.jpg', 'created_at' => '2024-11-22 10:31:20', 'updated_at' => '2024-11-22 10:31:20', 'deleted_at' => NULL),
@@ -64,7 +64,14 @@ class GallerySeeder extends Seeder
             array('id' => '58', 'product_id' => '14', 'path' => 'galleries/1733202914_674e93e225ab8.jpg', 'created_at' => '2024-12-03 12:15:14', 'updated_at' => '2024-12-03 12:15:14', 'deleted_at' => NULL),
             array('id' => '59', 'product_id' => '15', 'path' => 'galleries/1733203543_674e96578e27d.jpg', 'created_at' => '2024-12-03 12:25:43', 'updated_at' => '2024-12-03 12:25:43', 'deleted_at' => NULL),
             array('id' => '60', 'product_id' => '15', 'path' => 'galleries/1733203543_674e96578ed51.jpg', 'created_at' => '2024-12-03 12:25:43', 'updated_at' => '2024-12-03 12:25:43', 'deleted_at' => NULL),
-            array('id' => '61', 'product_id' => '15', 'path' => 'galleries/1733203543_674e96578f4e8.jpg', 'created_at' => '2024-12-03 12:25:43', 'updated_at' => '2024-12-03 12:25:43', 'deleted_at' => NULL)
+            array('id' => '61', 'product_id' => '15', 'path' => 'galleries/1733203543_674e96578f4e8.jpg', 'created_at' => '2024-12-03 12:25:43', 'updated_at' => '2024-12-03 12:25:43', 'deleted_at' => NULL),
+            array('id' => '62', 'product_id' => '16', 'path' => 'galleries/1733551826_6753e6d2cb1cd.jpg', 'created_at' => '2024-12-07 13:10:26', 'updated_at' => '2024-12-07 13:10:26', 'deleted_at' => NULL),
+            array('id' => '63', 'product_id' => '16', 'path' => 'galleries/1733551826_6753e6d2cbc1c.jpg', 'created_at' => '2024-12-07 13:10:26', 'updated_at' => '2024-12-07 13:10:26', 'deleted_at' => NULL),
+            array('id' => '64', 'product_id' => '16', 'path' => 'galleries/1733551826_6753e6d2cca39.jpg', 'created_at' => '2024-12-07 13:10:26', 'updated_at' => '2024-12-07 13:10:26', 'deleted_at' => NULL),
+            array('id' => '65', 'product_id' => '17', 'path' => 'galleries/1733552350_6753e8ded73f8.jpg', 'created_at' => '2024-12-07 13:19:10', 'updated_at' => '2024-12-07 13:19:10', 'deleted_at' => NULL),
+            array('id' => '66', 'product_id' => '17', 'path' => 'galleries/1733552350_6753e8ded7d2f.jpg', 'created_at' => '2024-12-07 13:19:10', 'updated_at' => '2024-12-07 13:19:10', 'deleted_at' => NULL),
+            array('id' => '67', 'product_id' => '17', 'path' => 'galleries/1733552350_6753e8ded8442.jpg', 'created_at' => '2024-12-07 13:19:10', 'updated_at' => '2024-12-07 13:19:10', 'deleted_at' => NULL),
+            array('id' => '68', 'product_id' => '17', 'path' => 'galleries/1733552350_6753e8ded90c8.jpg', 'created_at' => '2024-12-07 13:19:10', 'updated_at' => '2024-12-07 13:19:10', 'deleted_at' => NULL)
         );
 
         foreach ($galleries as $gallery) {

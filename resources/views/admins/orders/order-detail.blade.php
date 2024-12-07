@@ -124,7 +124,9 @@
         <div class="progress-bar bg-info" role="progressbar"
             style="width: 16.66%; margin-right: 10px;"
             aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">
-            <span class="checkmark" style="font-size: 1.5rem; color: rgb(255, 255, 255);">&#10003;</span>            <div class="status-label">Hoàn Thành</div>
+
+            <span class="checkmark" style="font-size: 1.5rem; color: rgb(255, 255, 255);">&#10003;</span>
+            <div class="status-label">Hoàn Thành</div>
         </div>
         @endif
 
@@ -284,7 +286,7 @@
                 $id = optional($variant)->product_id; // Lấy product_id từ VariantGroup
                 }
                 @endphp
-                <td>
+                <td class=" truncate-text">
                     <a href="{{ route('client.product-detail', $id ?? '#') }}"> <!-- Đảm bảo $id không null -->
                         <strong>{{ $orderDetail->product_name }}</strong>
                     </a>

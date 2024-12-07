@@ -53,7 +53,7 @@
                     <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}">
                         <i class="ri-dashboard-line"></i> <span data-key="t-dashboards">Bảng điều khiển</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                    {{-- <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="dashboard" class="nav-link" data-key="t-analytics">
@@ -80,7 +80,7 @@
                                 <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </li> <!-- end Dashboard Menu -->
 
                 <!-- end Dashboard Menu -->
