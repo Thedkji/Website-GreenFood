@@ -63,7 +63,15 @@
     pointer-events: none;
     opacity: 0.6; /* Giảm độ sáng khi không thể click */
 }
+.filled-star {
+    color: gold !important;
+    /* Màu vàng cho sao đầy */
+}
 
+.empty-star {
+    color: lightgray !important;
+    /* Màu xám cho sao trống */
+}
 .toast-container {
     position: fixed;
     top: 20px;

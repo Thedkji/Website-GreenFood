@@ -21,7 +21,7 @@ class ProductController extends Controller
         $categories = Category::with('children')->where('parent_id', null)->get();
         
         $query = Product::with(['categories', 'galleries', 'variantGroups']);
-        $products = $query->limit(8)->get();
+        $products = $query->limit(15)->get();
         
         $productHot = Product::orderByDesc('view')->limit(6)->get();
         
