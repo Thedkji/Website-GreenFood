@@ -25,8 +25,7 @@
                     <strong class="text-secondary">Nội dung:</strong>
                     <p class="mb-1">{{ $comment->content }}</p>
                 </div>
-
-
+                
                 {{-- Hiển thị sao đánh giá --}}
                 @if ($comment->rates->count() > 0)
                     <div class="mt-2">
