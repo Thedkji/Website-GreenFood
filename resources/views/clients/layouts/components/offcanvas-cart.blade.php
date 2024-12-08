@@ -37,25 +37,15 @@
                 }
                 @endphp
                 <a href="{{ route('client.product-detail', auth()->check() ? $item->product->id : $item->attributes->product_id) }}">
-                    <img src="{{ $imageSrc }}" class="img-fluid rounded" style="width:80px; height:80px;" alt="Sản phẩm">
+                    <img src="{{ $imageSrc }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="Sản phẩm">
                 </a>
                 <div class="item-details ms-3 w-100">
                     <a href="{{ route('client.product-detail', auth()->check() ? $item->product->id : $item->attributes->product_id) }}">
-                        <h6 class="mb-1">
+                        <h6 class="mb-1 truncate-text truncate" data-fulltext="{{$userId ? $item->product->name : $item->name }}">
                             @if (isset($userId))
                             {{ $item->product->name }}
-                            @if (!empty($variantGroups[$item->sku]))
-                            @foreach ($variantGroups[$item->sku] as $variant)
-                            | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                            @endforeach
-                            @endif
                             @else
                             {{ $item->name }}
-                            @if (!empty($variantGroups[$item->attributes->sku]))
-                            @foreach ($variantGroups[$item->attributes->sku] as $variant)
-                            | {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} - {{ $variant->variants[0]['name'] }}
-                            @endforeach
-                            @endif
                             @endif
                         </h6>
                     </a>
@@ -65,19 +55,26 @@
                             <span>
                                 Mã :
                                 @if (isset($userId))
-                                @if ($item->product->status == 0)
-                                <strong>{{ $item->product->sku }}</strong>
-                                @else
-                                @if (isset($variantGroups[$item->sku]))
-                                @foreach ($variantGroups[$item->sku] as $variant)
-                                <strong>{{ $variant->sku }}</strong>
-                                @endforeach
-                                @else
-                                <span class="text-muted">Không xác định</span>
-                                @endif
-                                @endif
+                                <strong>{{ $item->sku }}</strong>
                                 @else
                                 <strong>{{ $item->attributes->sku }}</strong>
+                                @endif
+                            </span>
+                            <span>
+                                @if (isset($userId))
+                                @if (!empty($variantGroups[$item->sku]))
+                                @foreach ($variantGroups[$item->sku] as $variant)
+                                <!-- {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} :  -->
+                                <strong>{{ $variant->variants[0]['name'] }}</strong>
+                                @endforeach
+                                @endif
+                                @else
+                                @if (!empty($variantGroups[$item->attributes->sku]))
+                                @foreach ($variantGroups[$item->attributes->sku] as $variant)
+                                <!-- {{ optional(\App\Models\Variant::find($variant->variants[0]['parent_id']))->name }} :  -->
+                                <strong>{{ $variant->variants[0]['name'] }}</strong>
+                                @endforeach
+                                @endif
                                 @endif
                             </span>
                             <span>

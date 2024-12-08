@@ -257,7 +257,7 @@ class CheckoutController extends Controller
         $couponId = $request->coupon_id;
         $couponName = $request->coupon_name;
         if ($couponName && $couponName != null) {
-            $couponInfo = Coupon::where('name', 'LIKE', "{$couponName}")->first();
+            $couponInfo = Coupon::where('name', "{$couponName}")->first();
             if ($couponInfo) {
                 $totalPrice = $request->total;
                 $decodedItems = json_decode($request->data, true);

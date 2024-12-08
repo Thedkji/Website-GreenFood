@@ -101,7 +101,12 @@
                     item_id: itemId,
                     quantity: quantity
                 },
-                success: function(response) {},
+                success: function(response) {
+                    if (response.error) {
+                        alert(response.msg);
+                        location.reload();
+                    }
+                },
                 error: function(error) {
                     alert('Có lỗi xảy ra!');
                     console.error(error);

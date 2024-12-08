@@ -69,21 +69,20 @@
                     @endif
                 @endif
 
-                @if ($orders->status != 7)
-                    <!-- Giao hàng không thành công -->
-                    @if ($orders->status >= 4)
-                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 16.66%; margin-right: 10px;"
-                            aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">
-                            <i class="fa fa-x-circle" style="font-size: 1.5rem;"></i>
-                            <!-- Biểu tượng "giao không thành công" -->
-                            <div class="status-label">Giao hàng không thành công</div>
-                        </div>
-                        <div class="progress-bar bg-transparent">
-                            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i>
-                            <!-- Mũi tên đến trạng thái kế tiếp -->
-                        </div>
-                    @endif
-                @endif
+        @if ($orders->status != 7 && $orders->status != 6)
+        <!-- Giao hàng không thành công -->
+        @if($orders->status >= 4)
+        <div class="progress-bar bg-secondary" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa-regular fa-circle-xmark" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao không thành công" -->
+            <div class="status-label">Giao hàng không thành công</div>
+        </div>
+        <div class="progress-bar bg-transparent">
+            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
+        </div>
+        @endif
+        @endif
 
                 <!-- Đánh giá -->
                 @if ($orders->status >= 6)
@@ -109,52 +108,48 @@
 
             @endif
 
-            @if ($orders->status != 7)
-                <!-- Hủy đơn -->
-                @if ($orders->status >= 5)
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 16.66%; margin-right: 10px;"
-                        aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">
-                        <i class="fa fa-trash" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "hủy đơn" -->
-                        <div class="status-label">Hủy đơn</div>
-                    </div>
-                @endif
-            @endif
+        @if ($orders->status != 7 && $orders->status != 6)
+        <!-- Hủy đơn -->
+        @if($orders->status >= 5)
+        <div class="progress-bar bg-danger" role="progressbar"
+            style="width: 16.66%; margin-right: 10px;"
+            aria-valuenow="5" aria-valuemin="0" aria-valuemax="6">
+            <i class="fa fa-trash" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "hủy đơn" -->
+            <div class="status-label">Hủy đơn</div>
         </div>
+        @endif
+        @endif
     </div>
-    <div class="mb-3 border p-3 border-success rounded bg-white">
-        <h5 class="fs-4 text-uppercase text-success mb-4">Chỉnh sửa trạng thái đơn hàng</h5>
-        <div class="d-flex">
-            @if ($orders->status <= 1)
-                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal"
-                    data-bs-target="#cancelOrderModal">
-                    Hủy đơn hàng
-                </button>
-                <form action="{{ route('admin.orders.cancelOrder', $orders->id) }}" method="post" id="updateStatusForm">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="cancelOrderModalLabel">Lý do hủy đơn</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <input type="hidden" name="status" value="5">
-                                <div class="modal-body">
-                                    <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="4"
-                                        placeholder="Nhập lý do hủy..."></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" name="status" class="btn btn-danger">Hủy đơn</button>
-                                </div>
+</div>
+<div class="mb-3 border p-3 border-success rounded bg-white">
+    <h5 class="fs-4 text-uppercase text-success mb-4">Chỉnh sửa trạng thái đơn hàng</h5>
+    <div class="d-flex">
+        @if ($orders->status <= 1)
+            <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+            Hủy đơn hàng
+            </button>
+            <form action="{{ route('admin.orders.cancelOrder', $orders->id) }}" method="post" id="updateStatusForm">
+                @csrf
+                @method('PUT')
+                <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="cancelOrderModalLabel">Lý do hủy đơn</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <input type="hidden" name="status" value="5">
+                            <div class="modal-body">
+                                <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="4" placeholder="Nhập lý do hủy..."></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" name="status" class="btn btn-danger">Hủy đơn</button>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
+            </form>
             @endif
 
             @switch($orders->status)
