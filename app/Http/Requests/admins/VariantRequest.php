@@ -26,15 +26,6 @@ class VariantRequest extends FormRequest
             'name' => ['required'],
         ];
 
-        $variantId = $this->route('variant'); // Lấy id của biến thể hiện tại nếu đang cập nhật
-
-        // Kiểm tra uniqueness cho 'name' chỉ khi `parent_id` là `null`
-        $rules['name'][] = Rule::unique('variants')
-            ->where(function ($query) {
-                return $query->whereNull('parent_id'); // Chỉ kiểm tra unique khi parent_id là null
-            })
-            ->ignore($variantId); // Bỏ qua id hiện tại nếu là cập nhật
-
         return $rules;
     }
 
@@ -43,7 +34,6 @@ class VariantRequest extends FormRequest
     {
         return [
             'name.required' => 'Bạn cần nhập tên biến thể',
-            'name.unique' => 'Tên biến thể này đã tồn tại',
         ];
     }
 }

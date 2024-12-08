@@ -10,17 +10,8 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
     <form method="post" action="{{ route('admin.variants.store') }}">
         @csrf
         @method('POST')
@@ -57,7 +48,7 @@
 
                 <div class="col-12 my-3">
                     <button class="btn btn-primary " type="button">
-                        <a class="text-white" href="{{route('admin.variants.index')}}">Quay lại</a>
+                        <a class="text-white" href="{{ route('admin.variants.index') }}">Quay lại</a>
                     </button>
                 </div>
 
@@ -65,6 +56,8 @@
         </div>
     </form>
 @endsection
+
+@include('admins.layouts.components.toast')
 
 <script>
     function variantChange() {

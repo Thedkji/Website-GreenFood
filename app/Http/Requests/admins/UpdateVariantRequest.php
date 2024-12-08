@@ -26,7 +26,7 @@ class UpdateVariantRequest extends FormRequest
         $parentVariants = Variant::where("parent_id", $id)->get(); // Lấy các biến thể con của variant hiện tại
 
         $validate = [
-            'name' => 'required|unique:variants,name,' . $id,
+            'name' => 'required',
             'parent_id' => 'nullable', // Trường hợp `parent_id` chính có thể bỏ trống
         ];
 
@@ -47,7 +47,6 @@ class UpdateVariantRequest extends FormRequest
     {
         $messages = [
             'name.required' => 'Tên biến thể không được để trống',
-            'name.unique' => 'Tên biến thể đã tồn tại',
         ];
 
         $id = $this->route("variant")->id;

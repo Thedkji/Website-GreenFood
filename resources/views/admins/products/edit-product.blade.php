@@ -6,17 +6,7 @@
 
 @section('content')
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
     <form action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data"
         id="form-add-product">
@@ -237,8 +227,9 @@
         </div>
     </form>
 
+    @include('admins.layouts.components.toast')
     @include('admins.products.script-edit')
-    @include('admins.products.validate-edit')
+    @include('admins.products.validate')
 
     <script>
         // Hàm để xem trước ảnh được chọn

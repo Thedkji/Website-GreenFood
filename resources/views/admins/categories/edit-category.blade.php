@@ -8,20 +8,10 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
     <div class="col-12 mb-3">
         <button class="btn btn-primary " type="button">
-            <a class="text-white" href="{{route('admin.categories.index')}}">Quay lại</a>
+            <a class="text-white" href="{{ route('admin.categories.index') }}">Quay lại</a>
         </button>
     </div>
 
@@ -65,46 +55,80 @@
                 </div>
 
                 <div class="text-end">
-                    <button class="btn btn-success" type="button" onclick="createValueCategory()">
+                    <button class="btn btn-primary" type="button" onclick="createValueCategory()">
                         Thêm giá trị mới
                     </button>
                 </div>
 
                 <div class="my-3 text-end">
-                    <button class="btn btn-primary" type="submit">Cập nhật</button>
+                    <button class="btn btn-success" type="submit">Cập nhật</button>
                 </div>
             </div>
         </div>
     </form>
 
+    @include('admins.layouts.components.toast')
+
     <script>
         // Tạo form khi nhấn nút xóa bằng js
         function confirmDelete(childId) {
-            if (confirm("Xóa giá trị này ?")) {
-                // Tạo form mới
-                var form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '{{ route('admin.categories.destroy', ':id') }}'.replace(':id', childId) +
-                    '?delete-children=true';
+            // Sử dụng SweetAlert2 thay cho confirm
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa giá trị này?',
+                text: 'Hành động này không thể hoàn tác.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tạo form mới khi xác nhận xóa
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route('admin.categories.destroy', ':id') }}'.replace(':id', childId) +
+                        '?delete-children=true';
 
-                // Thêm CSRF token
-                var csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
+                    // Thêm CSRF token
+                    var csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfToken);
 
-                // Thêm method DELETE
-                var methodField = document.createElement('input');
-                methodField.type = 'hidden';
-                methodField.name = '_method';
-                methodField.value = 'DELETE';
-                form.appendChild(methodField);
+                    // Thêm method DELETE
+                    var methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'DELETE';
+                    form.appendChild(methodField);
 
-                // Thêm form vào body và submit
-                document.body.appendChild(form);
-                form.submit();
-            }
+                    // Thêm form vào body và submit
+                    document.body.appendChild(form);
+
+                    // Hiển thị thông báo xóa thành công ngay sau khi gửi form
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Xóa thành công!',
+                        text: 'Mục đã được xóa thành công.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => {
+                        // Sau khi người dùng nhấn "OK", submit form để xóa
+                        form.submit();
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+                // Thông báo lỗi nếu có sự cố
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Đã xảy ra lỗi. Vui lòng thử lại.',
+                    confirmButtonText: 'OK'
+                });
+            });
         }
 
         function createValueCategory() {
@@ -140,4 +164,6 @@
             valueContainer.appendChild(inputWrapper);
         }
     </script>
+
+
 @endsection

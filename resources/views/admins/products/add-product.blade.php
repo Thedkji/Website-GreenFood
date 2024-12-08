@@ -6,17 +6,7 @@
 
 @section('content')
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
     <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data" id="form-add-product">
         @csrf
@@ -207,7 +197,7 @@
             </div>
         </div>
     </form>
-
+    @include('admins.layouts.components.toast')
     @include('admins.products.script')
     @include('admins.products.validate')
 

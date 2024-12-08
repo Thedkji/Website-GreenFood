@@ -26,15 +26,6 @@ class CategoryRequest extends FormRequest
             'name' => ['required'],
         ];
 
-        $categoryId = $this->route('category'); // Lấy id của danh mục hiện tại nếu đang cập nhật
-
-        // Kiểm tra uniqueness cho 'name' chỉ khi `parent_id` là `null`
-        $rules['name'][] = Rule::unique('categories')
-            ->where(function ($query) {
-                return $query->whereNull('parent_id'); // Chỉ kiểm tra unique khi parent_id là null
-            })
-            ->ignore($categoryId); // Bỏ qua id hiện tại nếu là cập nhật
-
         return $rules;
     }
 
@@ -43,7 +34,6 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'Bạn cần nhập tên danh mục',
-            'name.unique' => 'Tên danh mục này đã tồn tại',
         ];
     }
 }

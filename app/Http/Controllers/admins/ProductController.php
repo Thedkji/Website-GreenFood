@@ -22,38 +22,6 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // Xử lý xóa nhiều sản phẩm
-        if (request('ids')) {
-            // Lấy danh sách sản phẩm với các mối quan hệ cần thiết
-            $products = Product::whereIn('id', request('ids'))->get();
-
-            DB::transaction(function () use ($products) {
-                foreach ($products as $product) {
-                    if ($product->status == 1) {
-                        $variantGroups = VariantGroup::where('product_id', $product->id)->get();
-
-                        foreach ($variantGroups as $variantGroup) {
-                            $variantGroup->variants()->sync([]);
-                        }
-
-                        $product->variantGroups()->delete();
-                    }
-
-                    if ($product->categories) {
-                        $product->categories()->sync([]);
-                    }
-
-                    $product->carts()->delete();
-                    $product->delete();
-
-                    $product->galleries()->delete();
-                }
-            });
-
-            return response([
-                'message' => 'Xóa sản phẩm thành công',
-            ]);
-        }
 
         // Lấy giá trị bộ lọc từ query string
         $status = request()->input('statusProduct');
@@ -409,5 +377,41 @@ class ProductController extends Controller
         });
 
         return back()->with('success', 'Xóa sản phẩm thành công');
+    }
+
+    public function bulkDelete()
+    {
+        // Xử lý xóa nhiều sản phẩm
+        if (request('ids')) {
+            // Lấy danh sách sản phẩm với các mối quan hệ cần thiết
+            $products = Product::whereIn('id', request('ids'))->get();
+
+            DB::transaction(function () use ($products) {
+                foreach ($products as $product) {
+                    if ($product->status == 1) {
+                        // $variantGroups = VariantGroup::where('product_id', $product->id)->get();
+
+                        // foreach ($variantGroups as $variantGroup) {
+                        //     $variantGroup->variants()->sync([]);
+                        // }
+
+                        $product->variantGroups()->delete();
+                    }
+
+                    // if ($product->categories) {
+                    //     $product->categories()->sync([]);
+                    // }
+
+                    $product->carts()->delete();
+                    $product->delete();
+
+                    $product->galleries()->delete();
+                }
+            });
+
+            return response([
+                'success' => 'Xóa sản phẩm thành công',
+            ]);
+        }
     }
 }

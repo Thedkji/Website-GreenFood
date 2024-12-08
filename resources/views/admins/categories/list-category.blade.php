@@ -7,35 +7,7 @@
 @endsection
 
 @section('content')
-    <div class="toast-container">
-        @if (session('success'))
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
-                <div class="toast-header bg-success text-white">
-                    <strong class="me-auto">Thông báo</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-                <div class="toast-body bg-white text-dark">
-                    {{ session('success') }}
-                </div>
-                <div class="toast-progress bg-success"></div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
-                <div class="toast-header bg-danger text-white">
-                    <strong class="me-auto">Lỗi</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-                <div class="toast-body bg-white text-dark">
-                    {{ session('error') }}
-                </div>
-                <div class="toast-progress bg-danger"></div>
-            </div>
-        @endif
-    </div>
+    @include('admins.layouts.components.toast-container')
     <div class="row g-4 mb-3">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
@@ -62,7 +34,7 @@
         <thead>
             <tr>
                 <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.category-checkbox')">
                 </th>
                 <th scope="col">Id</th>
                 <th scope="col">Tên danh mục</th>
@@ -76,26 +48,29 @@
             @foreach ($categories as $category)
                 <tr>
                     <td>
-                        <input type="checkbox" class="category-checkbox" name="category_id[]" onclick="toggleDeleteButton()"
-                            value="{{ $category->id }}">
+                        <input type="checkbox" class="category-checkbox" name="category_id[]"
+                            onclick="toggleDeleteButton('.category-checkbox')" value="{{ $category->id }}">
                     </td>
                     <td>{{ $category->id }}</td>
-                    <td>
-                        @if ($category->parent_id == null)
+                    <td class="">
+                        <a href="{{ route('client.shop', ['category_id' => $category->id]) }}">
                             {{ $category->name }}
-                        @endif
+                        </a>
                     </td>
                     <td>
                         @if ($category->children->isNotEmpty())
                             @foreach ($category->children as $child)
-                                <a href="">{{ $child->name }}</a><br>
+                                <a href="{{ route('client.shop', ['category_id' => $category->id]) }}" class="">
+                                    - {{ $child->name }}
+                                </a>
+                                <br>
                             @endforeach
                         @else
                             <span colspan="2" class="text-danger">Không có danh mục con nào</span>
                         @endif
                     </td>
-                    <td>{{ $category->created_at }}</td>
-                    <td>{{ $category->updated_at }}</td>
+                    <td>{{ $category->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ $category->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
                             <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}"
@@ -103,13 +78,13 @@
                                 <i class="ri-edit-2-line"></i>
                             </a>
 
-                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post"
-                                style="display:inline;">
+                            <!-- Nút xóa -->
+                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
+                                style="display:inline;" id="delete-form-{{ $category->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" style="background-color: transparent; border: none; color: inherit;"
-                                    onclick="return confirm('Việc này có thể xóa danh mục cùng với toàn bộ danh mục con của danh mục, vẫn chấp nhận xóa?');"
-                                    class="link-danger fs-15">
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent"
+                                    id="deleteButton-{{ $category->id }}">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
@@ -119,10 +94,12 @@
             @endforeach
         </tbody>
     </table>
+
     <div class="row my-3">
         <div class="col-sm">
             <button type="button" class="btn btn-danger" id="delete-button" name="category-delete-checkbox"
-                style="display: none;" onclick="deleteSelected()">Xóa</button>
+                style="display: none;"
+                onclick="deleteSelected('.category-checkbox:checked', '{{ route('admin.categories.bulkDelete') }}')">Xóa</button>
         </div>
 
         <div class="col-sm">
@@ -131,108 +108,29 @@
             </div>
         </div>
     </div>
-    <script>
-        let debounceTimeout;
 
-        function debounceSearch() {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                document.getElementById("search-form").submit();
-            }, 600);
-        }
+    {{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+    @include('admins.layouts.components.search-time')
 
-        function toggleSelectAll(source) {
-            const checkboxes = document.querySelectorAll('.category-checkbox');
-            checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-            toggleDeleteButton();
-        }
+    {{-- Thực thi xóa nhiều --}}
+    @include('admins.layouts.components.toggleDelete')
 
-        function toggleDeleteButton() {
-            const checkboxes = document.querySelectorAll('.category-checkbox');
-            const deleteButton = document.getElementById('delete-button');
-            deleteButton.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline-block' :
-                'none';
-        }
+    {{-- Thực thi xóa từng phần tử và thay alert --}}
+    @include('admins.layouts.components.deleteSelected')
 
-        function confirmDelete(id) {
-            if (confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
-                deletecategory(id);
-            }
-        }
-
-        function deleteSelected() {
-            const selectedIds = Array.from(document.querySelectorAll('.category-checkbox:checked'))
-
-                .map(checkbox => checkbox.value);
-
-            if (selectedIds.length === 0) {
-                // Thay thế alert bằng SweetAlert2
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Chưa chọn mục',
-                    text: 'Vui lòng chọn ít nhất một mục để xóa.',
-                    confirmButtonText: 'OK',
-                });
-                return;
-            }
-
-            // Sử dụng SweetAlert2 thay vì confirm
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: 'Bạn có chắc chắn muốn xóa các mục đã chọn?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Xóa',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Nếu người dùng chọn "Xóa", thực hiện AJAX để xóa
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('admin.categories.bulkDelete') }}",
-                        data: {
-                            'ids': selectedIds,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                // Thông báo thành công bằng SweetAlert2
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Xóa thành công!',
-                                    text: 'Các mục đã được xóa thành công.',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location
-                                        .reload(); // Reload trang sau khi xóa thành công
-                                });
-                            } else {
-                                // Thông báo lỗi bằng SweetAlert2
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Đã xảy ra lỗi. Vui lòng thử lại.',
-                                    confirmButtonText: 'OK'
-                                });
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Lỗi: ", error);
-                            // Thông báo lỗi bằng SweetAlert2
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi',
-                                text: 'Đã xảy ra lỗi trong quá trình xóa. Vui lòng thử lại.',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    </script>
-
+    {{-- Hiển thị toast khi hoàn thành --}}
     @include('admins.layouts.components.toast')
+
+    <!-- Bao gồm file alert2.blade.php từ thư mục components -->
+    @include('admins.layouts.components.alert2')
+
+    <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+    @push('scripts')
+        <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+        <script>
+            @foreach ($categories as $item)
+                alert2({{ $item->id }});
+            @endforeach
+        </script>
+    @endpush
 @endsection

@@ -11,22 +11,9 @@
 
 @section('content')
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session('success') }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>{{ session('error') }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <form action="{{ route('admin.products.index') }}" id="search-form" method="GET"
-        class="row mb-3 d-flex flex-row-reverse">
+    <form action="{{ route('admin.products.index') }}" id="search-form" method="GET" class="row mb-3 d-flex flex-row-reverse">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
                 <div class="search-box">
@@ -57,7 +44,7 @@
         <thead>
             <tr>
                 <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.product-checkbox')">
                 </th>
                 <th scope="col">ID</th>
                 <th scope="col">Mã sản phẩm</th>
@@ -68,6 +55,7 @@
                 <th scope="col">Giá bán</th>
                 <th scope="col">Số lượng</th>
                 <th scope="col">Trạng thái</th>
+                <th scope="col">Lượt xem</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Ngày cập nhật</th>
                 <th scope="col" colspan="3">Thao tác</th>
@@ -78,7 +66,7 @@
                 <tr>
                     <td>
                         <input type="checkbox" class="product-checkbox" name="product-checkbox"
-                            onclick="toggleDeleteButton()" value="{{ $product->id }}">
+                            onclick="toggleDeleteButton('.product-checkbox')" value="{{ $product->id }}">
                     </td>
                     <td>{{ $product->id }}</td>
 
@@ -97,11 +85,14 @@
                     @endif
 
                     <td class="truncate-text">
-                        <a href="{{ route('client.product-detail', $product->id) }}" class="text-decoration-underline">
+                        <a href="{{ route('client.product-detail', $product->id) }}" class="truncate"
+                            data-fulltext="{{ $product->name }}">
                             {{ $product->name }}
                         </a>
                     </td>
-                    <td class="truncate-text">{{ $product->slug }}</td>
+                    <td class="truncate-text">
+                        <span class="truncate" data-fulltext="{{ $product->slug }}">{{ $product->slug }}</span>
+                    </td>
 
                     <td>
                         <a href="{{ route('client.product-detail', $product->id) }}">
@@ -127,6 +118,8 @@
 
                     </td>
 
+                    <td>{{ app('formatPrice')($product->view) }}</td>
+
                     <td>{{ $product->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $product->updated_at->format('d-m-Y H:i:s') }}</td>
 
@@ -139,13 +132,12 @@
 
                     <td>
                         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                            style="display:inline;">
+                            style="display:inline;" id="delete-form-{{ $product->id }}">
                             @csrf
                             @method('DELETE')
-                            <button
-                                onclick="return confirm('Xóa sản phẩm này cũng sẽ xóa các biến thể của sản phẩm , vẫn muốn xóa ?')"
-                                class="btn text-danger">
-                                <i class="ri-delete-bin-line fs-4"></i>
+                            <button type="button" class="link-danger fs-15 border-0 bg-transparent"
+                                id="deleteButton-{{ $product->id }}">
+                                <i class="ri-delete-bin-line"></i>
                             </button>
                         </form>
                     </td>
@@ -157,7 +149,8 @@
     <div class="row my-3">
         <div class="col-sm">
             <button type="button" class="btn btn-danger" id="delete-button" name="product-delete-checkbox"
-                style="display: none;" onclick="deleteSelected()">Xóa</button>
+                style="display: none;"
+                onclick="deleteSelected('.product-checkbox:checked', '{{ route('admin.products.bulkDelete') }}')">Xóa</button>
         </div>
 
         <div class="col-sm">
@@ -169,51 +162,29 @@
 
 @endsection
 
-<script>
-    let debounceTimeout;
+@include('admins.layouts.components.toast')
 
-    function debounceSearch() {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => {
-            document.getElementById("search-form").submit();
-        }, 600);
-    }
+{{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+@include('admins.layouts.components.search-time')
 
-    function toggleSelectAll(source) {
-        const checkboxes = document.querySelectorAll('.product-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-        toggleDeleteButton();
-    }
+{{-- Thực thi xóa nhiều --}}
+@include('admins.layouts.components.toggleDelete')
 
-    function toggleDeleteButton() {
-        const checkboxes = document.querySelectorAll('.product-checkbox');
-        const deleteButton = document.getElementById('delete-button');
-        deleteButton.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline-block' :
-            'none';
-    }
+{{-- Thực thi xóa từng phần tử và thay alert --}}
+@include('admins.layouts.components.deleteSelected')
 
+{{-- Hiển thị toast khi hoàn thành --}}
+@include('admins.layouts.components.toast')
 
-    function deleteSelected() {
-        if ($('#delete-button').submit()) {
-            if (confirm('Xóa sản phẩm này cũng sẽ xóa các biến thể của sản phẩm , vẫn muốn xóa ?')) {
-                let ids = $('.product-checkbox:checked').map((_, checkbox) => checkbox.value).get();
+<!-- Bao gồm file alert2.blade.php từ thư mục components -->
+@include('admins.layouts.components.alert2')
 
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('admin.products.index') }}",
-                    data: {
-                        ids: ids
-                    },
-
-                    success: function(response) {
-                        alert('Xóa sản phẩm thành công');
-                        window.location.reload();
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-        }
-    }
-</script>
+<!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+@push('scripts')
+    <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+    <script>
+        @foreach ($products as $item)
+            alert2({{ $item->id }});
+        @endforeach
+    </script>
+@endpush
