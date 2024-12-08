@@ -13,8 +13,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('information/edit/{id}', [Information::class, 'edit'])->name('information.edit');
 
     Route::put('information/update/{id}', [Information::class, 'update'])->name('information.update');
+// Kiểm tra trạng thái đơn hàng
+Route::post('orders/check-status/{id}', [Information::class, 'checkStatus'])->name('client.orders.checkStatus');
 
-    Route::delete('information/{id}', [Information::class, 'cancel'])->name('orders.cancel');
+    Route::put('information/{id}', [Information::class, 'cancel'])->name('orders.cancel');
     Route::get('information/detail/{id}', [Information::class, 'show'])->name('orders.details');
     Route::post('/rate-order', [Information::class, 'store'])->name('rate.order');
 });
