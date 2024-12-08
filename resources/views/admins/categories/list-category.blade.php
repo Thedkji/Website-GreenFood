@@ -7,17 +7,35 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="toast-container">
+        @if (session('success'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('success') }}
+                </div>
+                <div class="toast-progress bg-success"></div>
+            </div>
+        @endif
 
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body bg-white text-dark">
+                    {{ session('error') }}
+                </div>
+                <div class="toast-progress bg-danger"></div>
+            </div>
+        @endif
+    </div>
     <div class="row g-4 mb-3">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
@@ -142,38 +160,79 @@
             }
         }
 
-
         function deleteSelected() {
             const selectedIds = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+
                 .map(checkbox => checkbox.value);
 
             if (selectedIds.length === 0) {
-                alert("Vui lòng chọn ít nhất một danh mục để xóa.");
+                // Thay thế alert bằng SweetAlert2
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Chưa chọn mục',
+                    text: 'Vui lòng chọn ít nhất một mục để xóa.',
+                    confirmButtonText: 'OK',
+                });
                 return;
             }
 
-            if (confirm("Bạn có chắc chắn muốn xóa các danh mục đã chọn?")) {
-                fetch('{{ route('admin.categories.bulkDelete') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-Token': '{{ csrf_token() }}' // Đảm bảo điều này được sử dụng trong Blade template
+            // Sử dụng SweetAlert2 thay vì confirm
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa các mục đã chọn?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu người dùng chọn "Xóa", thực hiện AJAX để xóa
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('admin.categories.bulkDelete') }}",
+                        data: {
+                            'ids': selectedIds,
+                            _token: "{{ csrf_token() }}"
                         },
-                        
-                        body: JSON.stringify({
-                            ids: selectedIds
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Đã xóa thành công các danh mục.");
-                            location.reload(); // Tải lại trang để cập nhật danh sách
-                        } else {
-                            alert("Có lỗi xảy ra khi xóa các danh mục.");
+                        success: function(response) {
+                            if (response.success) {
+                                // Thông báo thành công bằng SweetAlert2
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Xóa thành công!',
+                                    text: 'Các mục đã được xóa thành công.',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location
+                                        .reload(); // Reload trang sau khi xóa thành công
+                                });
+                            } else {
+                                // Thông báo lỗi bằng SweetAlert2
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Đã xảy ra lỗi. Vui lòng thử lại.',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Lỗi: ", error);
+                            // Thông báo lỗi bằng SweetAlert2
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Đã xảy ra lỗi trong quá trình xóa. Vui lòng thử lại.',
+                                confirmButtonText: 'OK'
+                            });
                         }
-                    })
-                    .catch(error => console.error("Error:", error));
-            }
+                    });
+                }
+            });
         }
     </script>
+
+    @include('admins.layouts.components.toast')
 @endsection
