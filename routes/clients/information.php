@@ -19,4 +19,5 @@ Route::post('orders/check-status/{id}', [Information::class, 'checkStatus'])->na
     Route::put('information/{id}', [Information::class, 'cancel'])->name('orders.cancel');
     Route::get('information/detail/{id}', [Information::class, 'show'])->name('orders.details');
     Route::post('/rate-order', [Information::class, 'store'])->name('rate.order');
+    Route::post('information/logout', [Information::class, 'logout'])->name('information.logout');
 });
