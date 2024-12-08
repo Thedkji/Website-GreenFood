@@ -18,7 +18,7 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{ $order->user->name }}</td>
-                    <td>{{ $order->address }}</td>
+                    <td class="truncate-text truncate" data-fulltext='{{ $order->address }}'>{{ $order->address }}</td>
                     <td>{{ $order->phone }}</td>
                     <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND
                     </td>
@@ -26,11 +26,11 @@
                     <td>
                         @switch($order->status)
                             @case(0)
-                                <span class="badge bg-warning" style="padding: 10px; font-size:15px">Chờ xác nhận</span>
+                                <span class="badge bg-warning" style="padding: 10px;">Chờ xác nhận</span>
                             @break
 
                             @case(1)
-                                <span class="badge bg-info" style="padding: 10px;">Đã xác nhận và đang xử lý</span>
+                                <span class="badge bg-info " style="padding: 10px;">Đã xác nhận và đang xử lý</span>
                             @break
 
                             @case(2)
@@ -102,9 +102,10 @@
                         </script>
                     </td>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+                @endforeach
+            </tbody>
+        </table>
+        {{ $orders->links() }}
 </div>
 @foreach ($orders as $order)
     <div class="modal fade" id="cancelOrderModal{{ $order->id }}" tabindex="-1"
@@ -148,3 +149,50 @@
 @endforeach
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a,
+    .pagination li span {
+        position: relative;
+        display: block;
+        padding: 8px 13px;
+        /* Tăng padding để làm nút lớn hơn */
+        color: #81C408;
+        /* Đổi màu chữ */
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        font-size: 16px;
+        /* Tăng kích thước chữ hoặc icon */
+    }
+
+    .pagination li a:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .pagination .active span {
+        color: #fff;
+        background-color: #81C408;
+        /* Đổi màu nền nút active */
+        border-color: #81C408;
+    }
+
+    .pagination .disabled span {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+</style>

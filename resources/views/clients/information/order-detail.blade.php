@@ -108,38 +108,6 @@
                                 <td style="color: #4CAF50; font-weight:bolder">{{ number_format($productTotal) }} VNĐ</td>
                                 @if ($order->status === 6)
                                 <td>
-                                    {{-- @php
-                                                $orderDetail_id = $order->orderDetails
-                                                    ->map(function ($orderDetail) {
-                                                        return $orderDetail->id;
-                                                    })
-                                                    ->toArray();
-
-                                                $user_id = $order->user_id;
-
-
-                                                $sku = $detail->product_sku; // Mã SKU bạn muốn kiểm tra
-
-                                                if (Str::startsWith($sku, 'SPBT')) {
-                                                    $variantGroup = App\Models\VariantGroup::with('product')
-                                                        ->where('sku', $sku)
-                                                        ->pluck('id');
-
-                                                    $product_id = $variantGroup->product_id;
-                                                } elseif (Str::startsWith($sku, 'SP')) {
-                                                    $product_id = App\Models\Product::with('variantGroups')
-                                                        ->where('sku', $sku)
-                                                        ->pluck('id')
-                                                        ;
-                                                } else {
-                                                    echo 'Mã SKU không hợp lệ';
-                                                }
-
-
-                                            @endphp
-                                            @dd($product_id) --}}
-
-                                            {{-- @if ($orderDetail_id && $user_id && !) --}}
                                         <button class="btn btn-primary btn-sm p-2 text-white" id="review-button"
                                                 data-bs-toggle="modal" data-bs-target="#rateModal-{{ $order->id }}"
                                                 style="font-size: 12px;">
@@ -216,7 +184,6 @@
                     </tbody>
                 </table>
 
-                <!-- Thêm Tổng tiền trong khung -->
                 <div class="card mt-3 shadow-sm" style="border: 1px solid #ddd; border-radius: 8px;">
                     <div class="card-body text-right" style="font-size: 16px; ">
                         <p>

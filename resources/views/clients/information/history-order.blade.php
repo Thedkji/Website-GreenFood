@@ -50,4 +50,53 @@
             @endforeach
         </tbody>
     </table>
+    {{ $oders->links() }}
+
 </div>
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a,
+    .pagination li span {
+        position: relative;
+        display: block;
+        padding: 8px 13px;
+        /* Tăng padding để làm nút lớn hơn */
+        color: #81C408;
+        /* Đổi màu chữ */
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        font-size: 16px;
+        /* Tăng kích thước chữ hoặc icon */
+    }
+
+    .pagination li a:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .pagination .active span {
+        color: #fff;
+        background-color: #81C408;
+        /* Đổi màu nền nút active */
+        border-color: #81C408;
+    }
+
+    .pagination .disabled span {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+</style>
