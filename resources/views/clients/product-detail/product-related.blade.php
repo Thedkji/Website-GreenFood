@@ -54,7 +54,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="mb-3">
+                                    <!-- Thêm phần hiển thị sao đánh giá dưới giá -->
+                                    <div class="product-rating mb-3">
                                         @php
                                             // Tính trung bình số sao
                                             $ratings = $product->comments->flatMap(function ($comment) {
@@ -63,11 +64,11 @@
 
                                             $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
                                         @endphp
-                                        <div class="product-rating">
+                                        <div>
                                             @for ($i = 1; $i <= 5; $i++)
                                                 @if ($averageRating >= $i)
                                                     <i class="fas fa-star filled-star"></i>
-                                                @elseif ($averageRating > $i - 1)
+                                                @elseif ($averageRating >= $i - 0.5)
                                                     <i class="fas fa-star-half-alt filled-star"></i>
                                                 @else
                                                     <i class="fas fa-star empty-star"></i>
@@ -76,6 +77,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         @else
                             <!-- Biến thể -->
@@ -123,27 +125,28 @@
                                             <p class="text-dark fs-5 fw-bold mb-0">Liên hệ</p>
                                         @endif
                                     </div>
-                                </div>
 
-                                <div>
-                                    @php
-                                        // Tính trung bình số sao
-                                        $ratings = $product->comments->flatMap(function ($comment) {
-                                            return $comment->rates;
-                                        });
+                                    <!-- Thêm phần hiển thị sao đánh giá dưới giá -->
+                                    <div class="product-rating mb-3">
+                                        @php
+                                            // Tính trung bình số sao
+                                            $ratings = $product->comments->flatMap(function ($comment) {
+                                                return $comment->rates;
+                                            });
 
-                                        $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
-                                    @endphp
-                                    <div class="product-rating">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            @if ($averageRating >= $i)
-                                                <i class="fas fa-star filled-star"></i>
-                                            @elseif ($averageRating > $i - 1)
-                                                <i class="fas fa-star-half-alt filled-star"></i>
-                                            @else
-                                                <i class="fas fa-star empty-star"></i>
-                                            @endif
-                                        @endfor
+                                            $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
+                                        @endphp
+                                        <div>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($averageRating >= $i)
+                                                    <i class="fas fa-star filled-star"></i>
+                                                @elseif ($averageRating >= $i - 0.5)
+                                                    <i class="fas fa-star-half-alt filled-star"></i>
+                                                @else
+                                                    <i class="fas fa-star empty-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -198,6 +201,29 @@
                                             <p class="text-dark fs-5 fw-bold">Liên hệ</p>
                                         @endif
                                     </div>
+
+                                    <!-- Thêm phần hiển thị sao đánh giá dưới giá -->
+                                    <div class="product-rating mb-3">
+                                        @php
+                                            // Tính trung bình số sao
+                                            $ratings = $product->comments->flatMap(function ($comment) {
+                                                return $comment->rates;
+                                            });
+
+                                            $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
+                                        @endphp
+                                        <div>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($averageRating >= $i)
+                                                    <i class="fas fa-star filled-star"></i>
+                                                @elseif ($averageRating >= $i - 0.5)
+                                                    <i class="fas fa-star-half-alt filled-star"></i>
+                                                @else
+                                                    <i class="fas fa-star empty-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @else
@@ -240,6 +266,29 @@
                                         @else
                                             <p class="text-dark fs-5 fw-bold">Liên hệ</p>
                                         @endif
+                                    </div>
+
+                                    <!-- Thêm phần hiển thị sao đánh giá dưới giá -->
+                                    <div class="product-rating mb-3">
+                                        @php
+                                            // Tính trung bình số sao
+                                            $ratings = $product->comments->flatMap(function ($comment) {
+                                                return $comment->rates;
+                                            });
+
+                                            $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
+                                        @endphp
+                                        <div>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($averageRating >= $i)
+                                                    <i class="fas fa-star filled-star"></i>
+                                                @elseif ($averageRating >= $i - 0.5)
+                                                    <i class="fas fa-star-half-alt filled-star"></i>
+                                                @else
+                                                    <i class="fas fa-star empty-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
                                     </div>
                                 </div>
                             </div>

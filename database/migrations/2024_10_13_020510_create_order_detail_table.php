@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('review')->default(0)->comment(
                 '0: Chưa đánh giá',
                 '1: Sửa đánh giá',
-                '2: Đã đánh giá'
+                '2: Đã đánh giá',
             );
             $table->timestamps();
             $table->softDeletes();

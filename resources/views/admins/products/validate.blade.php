@@ -31,8 +31,6 @@
         // Validate tên sản phẩm
         if ($('#name').val().trim() == "") {
             errTrue('#err_name', '#name', 'Tên sản phẩm không được để trống');
-        } else if (existingProductsName.includes($('#name').val().trim())) {
-            errTrue('#err_name', '#name', 'Tên sản phẩm đã tồn tại hoặc chưa xóa vĩnh viễn');
         } else {
             errFalse('#err_name');
         }
