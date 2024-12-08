@@ -189,6 +189,10 @@
             // Lấy giá trị từ các input
             let startDate = $('#startDate').val();
             let endDate = $('#endDate').val();
+            if (!startDate && !endDate) {
+                document.getElementById("search-form").submit();
+                return; // Thoát để tránh logic tiếp theo
+            }
             if (startDate) {
                 $('#endDate').attr('min', startDate);
             }

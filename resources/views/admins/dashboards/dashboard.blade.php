@@ -35,11 +35,11 @@
                                             </div>
                                         </div>
                                         <!--end col-->
-                                        <div class="col-auto">
+                                        {{-- <div class="col-auto">
                                             <button type="button" class="btn btn-soft-success"><i
                                                     class="ri-add-circle-line align-middle me-1"></i>
                                                 Add Product</button>
-                                        </div>
+                                        </div> --}}
                                         <!--end col-->
                                         <div class="col-auto">
                                             <button type="button"
@@ -86,6 +86,7 @@
                                                 {{ number_format($totalEarnings, 0, ',', '.') }}
                                             </span> VNĐ
                                         </h4>
+                                        
                                         <a href="{{ route('admin.salesReport') }}" class="text-decoration-underline">Xem
                                             tổng doanh thu</a>
                                     </div>

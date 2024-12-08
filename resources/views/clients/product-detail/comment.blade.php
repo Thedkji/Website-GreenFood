@@ -1,4 +1,21 @@
-@foreach ($product->comments()->where('parent_user_id', null)->paginate(3) as $comment)
+@php
+    // Tính trung bình số sao
+    $ratings = $product->comments->flatMap(function ($comment) {
+        return $comment->rates;
+    });
+
+    $averageRating = $ratings->isEmpty() ? 0 : number_format($ratings->avg('star'), 1);
+
+    $countComment = $product->comments()->where('parent_user_id', null)->count();
+@endphp
+<p>
+    <span class="fw-bold" style="font-size: 16px "> Đánh giá : </span>({{ $averageRating }}<i
+        class="fas fa-star filled-star"></i>/ 5<i class="fas fa-star filled-star"></i>)
+</p>
+<p><span class="fw-bold" style="font-size: 16px ">Bình luận : </span>{{ $countComment }} lượt</p>
+
+
+@foreach ($product->comments()->where('parent_user_id', null)->get() as $comment)
     <div class="card mb-4 shadow-sm p-3 border-0">
         <div class="d-flex">
             {{-- Avatar người bình luận --}}
@@ -25,23 +42,35 @@
                     <strong class="text-secondary">Nội dung:</strong>
                     <p class="mb-1">{{ $comment->content }}</p>
                 </div>
-                
+
                 {{-- Hiển thị sao đánh giá --}}
                 @if ($comment->rates->count() > 0)
                     <div class="mt-2">
-                        <strong class="text-dark">Đánh giá:
+                        <strong class="text-dark">Đánh giá:</strong>
+                        <div>
+                            @php
+                                // Tính tổng số sao từ tất cả các đánh giá
+                                $totalStars = $comment->rates->sum('star');
+                                $averageStars = $totalStars / $comment->rates->count();
+                            @endphp
 
-                            @foreach ($comment->rates as $rate)
-                                {{-- Hiển thị sao cho mỗi đánh giá --}}
-                                @for ($i = 1; $i <= $rate->star; $i++)
-                                    {{-- Sử dụng trường 'star' --}}
-                                    <i class="fas fa-star text-warning"></i>
-                                @endfor
-                            @endforeach
-
-                        </strong>
+                            {{-- Hiển thị 5 sao --}}
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($averageStars >= $i)
+                                    {{-- Sao đầy --}}
+                                    <i class="fas fa-star filled-star"></i>
+                                @elseif ($averageStars > $i - 1)
+                                    {{-- Sao nửa --}}
+                                    <i class="fas fa-star-half-alt filled-star"></i>
+                                @else
+                                    {{-- Sao trống --}}
+                                    <i class="fas fa-star empty-star"></i>
+                                @endif
+                            @endfor
+                        </div>
                     </div>
                 @endif
+
 
                 {{-- Hình ảnh đính kèm (nếu có) --}}
                 @if ($comment->img)
@@ -55,8 +84,9 @@
                 @php
                     $replies = $product
                         ->comments()
-                        ->where('parent_user_id', $comment->id)
+                        ->where('parent_user_id', $comment->user_id)
                         ->get();
+                    // @dd($comment->id);
                 @endphp
 
                 @if ($replies->count() > 0)

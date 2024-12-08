@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('coupon_name')->nullable();
             $table->integer('coupon_price')->nullable()
                 ->comment('Số tiền của mã giảm giá');
+            $table->integer('review')->default(0)->comment(
+                '0: Chưa đánh giá',
+                '1: Sửa đánh giá',
+                '2: Đã đánh giá'
+            );
             $table->timestamps();
             $table->softDeletes();
         });
