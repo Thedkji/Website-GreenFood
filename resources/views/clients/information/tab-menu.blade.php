@@ -11,7 +11,40 @@
     <a href="#history_order" data-toggle="tab"><i class="fa fa-history"></i>
         Lịch sử</a>
 
-    <a href="{{ route('client.logout') }}"
-        onclick="return confirm('Thao tác tiếp theo sẽ đăng xuất tài  khoản ? Vẫn muốn tiếp tục ?')"><i
-            class="fa fa-sign-out"></i> Đăng xuất</a>
+        <a href="{{ route('client.information.logout') }}" id="logoutButton"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        <form id="logoutForm" action="{{ route('client.information.logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+        
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('logoutButton').addEventListener('click', function (e) {
+        e.preventDefault(); 
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn đăng xuất?',
+            text: 'Thao tác này sẽ đăng xuất tài khoản của bạn.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logoutForm').submit();
+
+                Swal.fire({
+                    title: 'Đã đăng xuất!',
+                    text: 'Bạn đã đăng xuất tài khoản thành công.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+
+                    window.location.href = '{{ route('client.home') }}';  
+                });
+            }
+        });
+    });
+</script>
