@@ -112,12 +112,19 @@ class CartController extends Controller
         $quantity = $request->quantity;
         $item_id = $request->item_id;
         $userId = auth()->check() ? auth()->id() : null;
-        if ($quantity === 0) {
-            if ($userId) {
-                Cart::where('user_id', $userId)->where('id', $item_id)->delete();
-            } else {
-                CartSession::remove($item_id);
-            }
+        $item = $userId ? Cart::where('user_id', $userId)->where('id', $item_id)->first() : CartSession::get($item_id);
+        $pro = $userId ? Product::where('sku', $item->sku)->first() : Product::where('sku', $item->attributes->sku)->first();
+        if ($pro) {
+            $stock = $pro->quantity;
+        } else {
+            $variant = VariantGroup::where('sku', $userId ? $item->sku : $item->attributes->sku)->first();
+            $stock = $variant->quantity;
+        }
+        if ($quantity > $stock) {
+            return response()->json([
+                'error' => true,
+                'msg' => 'Số lượng vượt quá sản phẩm tồn kho, còn lại ' . $stock . ' sản phẩm'
+            ]);
         } else {
             $userId ? Cart::where('user_id', $userId)->where('id', $item_id)->update(['quantity' => $quantity]) : CartSession::update($item_id, [
                 'quantity' => [
@@ -126,7 +133,6 @@ class CartController extends Controller
                 ],
             ]);
         }
-        return redirect()->back()->with('success', 'Cập nhật số lượng thành công');
     }
 
 

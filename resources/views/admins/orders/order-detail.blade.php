@@ -92,13 +92,13 @@
         @endif
         @endif
 
-        @if ($orders->status != 7)
+        @if ($orders->status != 7 && $orders->status != 6)
         <!-- Giao hàng không thành công -->
         @if($orders->status >= 4)
         <div class="progress-bar bg-secondary" role="progressbar"
             style="width: 16.66%; margin-right: 10px;"
             aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">
-            <i class="fa fa-x-circle" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao không thành công" -->
+            <i class="fa-regular fa-circle-xmark" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao không thành công" -->
             <div class="status-label">Giao hàng không thành công</div>
         </div>
         <div class="progress-bar bg-transparent">
@@ -132,7 +132,7 @@
 
         @endif
 
-        @if ($orders->status != 7)
+        @if ($orders->status != 7 && $orders->status != 6)
         <!-- Hủy đơn -->
         @if($orders->status >= 5)
         <div class="progress-bar bg-danger" role="progressbar"
