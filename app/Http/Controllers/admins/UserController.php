@@ -141,25 +141,25 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return view('admins.users.detail-users', compact('user', 'provinces', 'districts', 'wards'));
     }
-    // public function destroy($id)
-    // {
-    //     DB::beginTransaction();
-    //     try {
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
 
-    //         $user = User::findOrFail($id);
-    //         // $user->delete();
-    //         // if ($user->avatar) {
-    //         //     Storage::disk('public')->delete($user->avatar);
-    //         // }
-    //         // $user->galleries()->delete();
-    //         $user->delete();
-    //         DB::commit();
-    //         return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
-    //     }
-    // }
+            $user = User::findOrFail($id);
+            // $user->delete();
+            // if ($user->avatar) {
+            //     Storage::disk('public')->delete($user->avatar);
+            // }
+            // $user->galleries()->delete();
+            $user->delete();
+            DB::commit();
+            return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
+        }
+    }
 
     public function bulkDelete(Request $request)
     {

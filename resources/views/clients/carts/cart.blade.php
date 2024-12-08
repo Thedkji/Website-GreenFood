@@ -2,7 +2,7 @@
 
 @section('title', 'Fruitables - Giỏ hàng')
 
-@section('title_page', 'Trang chủ')
+@section('title_page', 'Giỏ hàng')
 @section('title_page_home', 'Trang chủ')
 @section('title_page_active', 'Giỏ hàng')
 

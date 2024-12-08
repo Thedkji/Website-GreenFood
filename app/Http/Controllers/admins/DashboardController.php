@@ -66,11 +66,11 @@ class DashboardController extends Controller
     public function salesReport(Request $request)
     {
         // Tổng doanh thu
-        $totalEarnings = Order::sum('total');
+        $totalEarnings = Order::where('status', '6')->sum('total');
         // Số lượng đơn hàng
         $orderCounts = Order::count();
         // Số lượng đơn hàng hoàn thành
-        $orderCountCompleted = Order::where('status', 'completed')->count();
+        $orderCountCompleted = Order::where('status', '6')->count();
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
             ->where('status', 'completed') // Chỉ lấy đơn hàng đã hoàn thành

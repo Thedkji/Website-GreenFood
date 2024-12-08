@@ -31,6 +31,8 @@ class TrashController extends Controller
         $comments = Comment::onlyTrashed()->get(['id', 'product_id', 'deleted_at']);
         $suppliers = Supplier::onlyTrashed()->get(['id', 'name', 'deleted_at']);
         $coupons = Coupon::onlyTrashed()->get(['id', 'name', 'deleted_at']);
+        $categories = Category::onlyTrashed()->get(['id', 'name', 'deleted_at']);
+        $variants = Variant::onlyTrashed()->get(['id', 'name', 'deleted_at']);
 
         // Gán thêm thông tin loại (type) để phân biệt trong bảng
         $users->map(function ($item) {
@@ -57,6 +59,14 @@ class TrashController extends Controller
             $item->type = 'Coupon';
             return $item;
         });
+        $categories->map(function ($item) {
+            $item->type = 'Category';
+            return $item;
+        });
+        $variants->map(function ($item) {
+            $item->type = 'Variant';
+            return $item;
+        });
 
         // Kết hợp tất cả dữ liệu
         $allItems = $users
@@ -65,6 +75,8 @@ class TrashController extends Controller
             ->merge($comments)
             ->merge($suppliers)
             ->merge($coupons)
+            ->merge($categories)
+            ->merge($variants)
             ->sortByDesc('deleted_at'); // Sắp xếp theo thời gian xóa giảm dần
 
         // Nếu có bộ lọc, chỉ lấy các mục tương ứng với loại được chọn
@@ -128,7 +140,7 @@ class TrashController extends Controller
                             $category->restore();
                         }
                     });
-                    dd($item);
+                    // dd($item);
                     // Nếu cần, xử lý tương tự cho các quan hệ khác như coupons()
 
                     return redirect()->back()->with('success', 'Sản phẩm và các dữ liệu liên quan đã được khôi phục thành công.');
@@ -150,6 +162,14 @@ class TrashController extends Controller
                     $item = Coupon::withTrashed()->findOrFail($id);
                     $item->restore();
                     return redirect()->back()->with('success', 'Mã giảm giá đã được khôi phục thành công.');
+                case 'Category':
+                    $item = Category::withTrashed()->findOrFail($id);
+                    $item->restore();
+                    return redirect()->back()->with('success', 'Danh mục đã được khôi phục thành công.');
+                case 'Variant':
+                    $item = Variant::withTrashed()->findOrFail($id);
+                    $item->restore();
+                    return redirect()->back()->with('success', 'Biến thể đã được khôi phục thành công.');
                 default:
                     return redirect()->back()->with('error', 'Không thể khôi phục mục này.');
             }
@@ -200,4 +220,93 @@ class TrashController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
+
+
+    public function destroyBulk(Request $request, $type)
+{
+    $modelClass = "App\\Models\\$type"; // Tạo tên model đầy đủ
+
+    // Kiểm tra nếu model class không tồn tại
+    if (!class_exists($modelClass)) {
+        return redirect()->back()->with('error', 'Loại dữ liệu không hợp lệ.');
+    }
+
+    try {
+        // Lấy danh sách IDs từ request
+        $ids = explode(',', $request->input('ids'));
+
+        // Kiểm tra nếu không có mục nào được chọn
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'Không có mục nào được chọn để xóa.');
+        }
+
+        // Lấy tất cả các mục theo IDs
+        $items = $modelClass::withTrashed()->whereIn('id', $ids)->get();
+
+        // Duyệt qua các mục để xóa
+        foreach ($items as $item) {
+            // Logic xóa hình ảnh liên quan nếu có
+            if (method_exists($item, 'getImagePath')) {
+                $imagePath = $item->getImagePath();
+                if ($imagePath && Storage::exists($imagePath)) {
+                    Storage::delete($imagePath); // Xóa ảnh khỏi storage
+                }
+            } else {
+                // Logic xóa hình ảnh cho các mô hình cụ thể như User, Product (nếu có)
+                if ($item instanceof User && $item->avatar) {
+                    Storage::disk('public')->delete($item->avatar);
+                } elseif ($item instanceof Product && $item->img) {
+                    Storage::disk('public')->delete($item->img);
+                }
+            }
+
+            // Xóa vĩnh viễn bản ghi
+            $item->forceDelete();
+        }
+
+        return redirect()->back()->with('success', 'Đã xóa vĩnh viễn các mục đã chọn.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+    }
+}
+
+// public function destroy($type, $id)
+//     {
+//         try {
+//             // Lấy tên model đầy đủ (ví dụ: App\Models\User)
+//             $modelClass = "App\\Models\\$type";
+
+//             // Kiểm tra xem class có tồn tại không
+//             if (!class_exists($modelClass)) {
+//                 return redirect()->back()->with('error', 'Loại dữ liệu không hợp lệ.');
+//             }
+
+//             // Tìm bản ghi theo ID
+//             $item = $modelClass::withTrashed()->findOrFail($id);
+
+//             // Xóa hình ảnh liên quan nếu có
+//             // Nếu mô hình có phương thức để lấy đường dẫn ảnh
+//             if (method_exists($item, 'getImagePath')) {
+//                 $imagePath = $item->getImagePath(); // Giả sử mỗi model có phương thức getImagePath để lấy đường dẫn ảnh
+//                 if ($imagePath && Storage::exists($imagePath)) {
+//                     Storage::delete($imagePath); // Xóa ảnh khỏi storage
+//                 }
+//             } else {
+//                 // Xử lý xóa ảnh cho những trường hợp khác nếu cần, ví dụ: User, Product
+//                 if ($item instanceof User && $item->avatar) {
+//                     Storage::disk('public')->delete($item->avatar);
+//                 } elseif ($item instanceof Product && $item->img) {
+//                     Storage::disk('public')->delete($item->img);
+//                 }
+//                 // Thêm các điều kiện khác nếu có các mô hình khác có thuộc tính hình ảnh
+//             }
+
+//             // Xóa vĩnh viễn bản ghi
+//             $item->forceDelete();
+
+//             return redirect()->back()->with('success', 'Đã xóa vĩnh viễn thành công.');
+//         } catch (\Exception $e) {
+//             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+//         }
+//     }
 }
