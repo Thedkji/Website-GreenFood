@@ -87,15 +87,7 @@
         }
     }
 
-    .filled-star {
-        color: gold !important;
-        /* Màu vàng cho sao đầy */
-    }
 
-    .empty-star {
-        color: lightgray !important;
-        /* Màu xám cho sao trống */
-    }
 </style>
 
 <div class="col-lg-9">
