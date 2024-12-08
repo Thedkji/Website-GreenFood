@@ -34,13 +34,13 @@
                     <h4 class="text-light mb-3">Tại sao mọi người thích chúng tôi!</h4>
                     <p class="mb-4">Bởi vì chúng tôi luôn trao đến tay khách hàng những sản phẩm chất lượng nhất. Mang lại cho khách hàng những trảỉ nghiệm tối nhất khi mua hàng tại GreenFood
                     </p>
-                    <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Mua ngay</a>
+                    <a href="{{ route('client.shop') }}" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Mua ngay</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="d-flex flex-column text-start footer-item">
                     <h4 class="text-light mb-3">Thông tin cửa hàng</h4>
-                    <a class="btn-link" href="###">Về chúng tôi</a>
+                    <a class="btn-link" href="{{ route('client.introduce.index') }}"   >Về chúng tôi</a>
                     <a class="btn-link" href="{{ route('client.contact.index') }}">Liên hệ với chúng tôi</a>
                     <a class="btn-link" href="###">Chính sách bảo mật</a>
                     <a class="btn-link" href="###">Điều khoản & Điều kiện</a>
