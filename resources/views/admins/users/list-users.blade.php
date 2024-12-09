@@ -3,20 +3,15 @@
 @section('title', 'User | Danh sách người dùng')
 
 @section('start-page-title', 'Danh sách người dùng')
+
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a></li>
+    <li class="breadcrumb-item active">Danh sách</li>
+@endsection
+
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
-
-    <div class="row g-4 mb-3">
+    @include('admins.layouts.components.toast-container')
+    <div class="row g-4">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
                 <form action="" method="get" id="search-form">
@@ -29,16 +24,17 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-sm-start"><a href="{{ route('admin.users.create') }}" class="btn btn-success">Thêm
+    <div class="d-flex justify-content-sm-start mb-3"><a href="{{ route('admin.users.create') }}"
+            class="btn btn-success">Thêm
             Mới</a></div>
-    <table class="table table-striped text-center align-middle">
+    <table class="table table-striped text-center align-middle fs-6">
         <thead>
             <tr>
 
                 <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.user-checkbox')">
                 </th>
-                <th scope="col">Id</th>
+                <th scope="col">ID</th>
                 <th scope="col">Họ và tên</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Tên đăng nhập</th>
@@ -46,47 +42,49 @@
                 <th scope="col">Số điện thoại</th>
                 <th scope="col">Địa chỉ</th>
                 <th scope="col">Vai trò</th>
-                <th scope="col">Thao Tác</th>
+                <th scope="col" colspan="2">Thao Tác</th>
             </tr>
         </thead>
         <tbody>
             @if (isset($users))
-                @foreach ($users as $value)
+                @foreach ($users as $user)
                     <tr>
-                        <td scope="row">
-                            <input type="checkbox" class="user-checkbox" name="user-checkbox" onclick="toggleDeleteButton()"
-                                value="{{ $value->id }}">
+                        <td>
+                            <input type="checkbox" class="user-checkbox" name="user_id[]"
+                                onclick="toggleDeleteButton('.user-checkbox')" value="{{ $user->id }}">
                         </td>
-                        <td scope="row">{{ $value->id }}</td>
-                        <td scope="row">{{ $value->name }}</td>
-                        <td scope="row"><img src="{{ Storage::url($value->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:70px;height:100%;object-fit: cover"></td>
-                        <td scope="row">{{ $value->user_name }}</td>
-                        {{-- <td scope="row">{{ $value->password }}</td> --}}
-                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $value->email }}">
-                            {{ $value->email }}</td>
-                        <td scope="row">{{ $value->phone }}</td>
-                        {{-- <td scope="row">{{ $value->province }}</td>
-                        <td scope="row">{{ $value->district }}</td>
-                        <td scope="row">{{ $value->ward }}</td> --}}
-                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $value->address }}">
-                            {{ $value->address }}</td>
-                        <td scope="row">{{ $value->role === 0 ? 'Admin' : 'User' }}</td>
+                        <td scope="row">{{ $user->id }}</td>
+                        <td scope="row">{{ $user->name }}</td>
+                        <td scope="row"><img src="{{ Storage::url($user->avatar) }}" alt="Ảnh khách hàng"
+                                style="width:100px;height:100px;object-fit: cover"></td>
+                        <td scope="row">{{ $user->user_name }}</td>
+                        {{-- <td scope="row">{{ $user->password }}</td> --}}
+                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $user->email }}">
+                            {{ $user->email }}</td>
+                        <td scope="row">{{ $user->phone }}</td>
+                        {{-- <td scope="row">{{ $user->province }}</td>
+                        <td scope="row">{{ $user->district }}</td>
+                        <td scope="row">{{ $user->ward }}</td> --}}
+                        <td scope="row" class="truncate-text truncate " data-fulltext="{{ $user->address }}">
+                            {{ $user->address }}</td>
+                        <td scope="row">{{ $user->role === 0 ? 'Admin' : 'User' }}</td>
 
-                        <td >
-                            <div class="hstack gap-3 flex-wrap">
-                                <a href="{{ route('admin.users.show', $value->id) }}"
-                                    style="background-color: transparent;" class="link-success fs-15">
-                                    <i class="ri-edit-2-line"></i>
-                                </a>
+                        <td>
+                            <a href="{{ route('admin.users.show', $user->id) }}" class="link-success fs-15 truncate"
+                                data-fulltext="Chỉnh sửa">
+                                <i class="ri-edit-2-line"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <div>
 
-                                <form action="{{ route('admin.users.destroy', $value->id) }}" method="post"
-                                    style="display:inline;">
+                                <!-- Nút xóa -->
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                                    style="display:inline;" id="delete-form-{{ $user->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        style="background-color: transparent; border: none; color: inherit;"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa?');" class="link-danger fs-15">
+                                    <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                        id="deleteButton-{{ $user->id }}" data-fulltext="Xóa">
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
@@ -94,79 +92,47 @@
                         </td>
 
                     </tr>
-
                 @endforeach
             @elseif(!isset($users) && $users == null)
                 <p>Chưa có tài khoản nào</p>
             @endif
         </tbody>
     </table>
-    <div class="mb-3">
-        <button id="delete-selected" class="btn btn-danger d-none" onclick="deleteSelected()">Xóa đã chọn</button>
+    <div class="row my-3">
+        <div class="col-sm">
+            <button type="button" class="btn btn-danger" id="delete-button" name="user-delete-checkbox"
+                style="display: none;"
+                onclick="deleteSelected('.user-checkbox:checked', '{{ route('admin.users.bulkDelete') }}')">Xóa</button>
+        </div>
     </div>
 
 
     <div class="d-flex justify-content-end mt-3">
-        {{ $users->links('pagination::bootstrap-4') }}
+        {{ $users->links() }}
     </div>
 @endsection
 
-<script>
-    let debounceTimeout;
+{{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+@include('admins.layouts.components.search-time')
 
-    function debounceSearch() {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => {
-            document.getElementById("search-form").submit();
-        }, 600);
-    }
+{{-- Thực thi xóa nhiều --}}
+@include('admins.layouts.components.toggleDelete')
 
-    function toggleSelectAll(source) {
-        const checkboxes = document.querySelectorAll('.user-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-        toggleDeleteButton();
-    }
+{{-- Thực thi xóa từng phần tử và thay alert --}}
+@include('admins.layouts.components.deleteSelected')
 
-    function toggleDeleteButton() {
-        const checkboxes = document.querySelectorAll('.user-checkbox:checked');
-        const deleteButton = document.getElementById('delete-selected');
+{{-- Hiển thị toast khi hoàn thành --}}
+@include('admins.layouts.components.toast')
 
-        // Hiển thị nút nếu có checkbox được chọn, ẩn nếu không
-        if (checkboxes.length > 0) {
-            deleteButton.classList.remove('d-none'); // Hiển thị nút
-        } else {
-            deleteButton.classList.add('d-none'); // Ẩn nút
-        }
-    }
+<!-- Bao gồm file alert2.blade.php từ thư mục components -->
+@include('admins.layouts.components.alert2')
 
-    function deleteSelected() {
-        if (!confirm('Bạn có chắc chắn muốn xóa những tài khoản đã chọn?')) return;
-
-        const selectedIds = Array.from(document.querySelectorAll('.user-checkbox:checked'))
-            .map(checkbox => checkbox.value);
-
-        if (selectedIds.length > 0) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = "{{ route('admin.users.bulkDelete') }}"; // Đường dẫn xử lý xóa nhiều
-
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = "{{ csrf_token() }}";
-
-            const idsInput = document.createElement('input');
-            idsInput.type = 'hidden';
-            idsInput.name = 'ids';
-            idsInput.value = JSON.stringify(selectedIds);
-
-            form.appendChild(csrfToken);
-            form.appendChild(idsInput);
-            document.body.appendChild(form);
-
-            form.submit();
-        }
-
-
-    }
-</script>
+<!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+@push('scripts')
+    <!-- Lặp qua tất cả các coupons và gọi hàm alert2 cho mỗi item -->
+    <script>
+        @foreach ($users as $item)
+            alert2({{ $item->id }});
+        @endforeach
+    </script>
+@endpush

@@ -4,22 +4,18 @@
 
 @section('start-page-title', 'Chỉnh sửa thông tin người dùng')
 
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a></li>
+    <li class="breadcrumb-item active">Sửa người dùng</li>
+@endsection
+
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
     <form novalidate action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mt-3">
-            <label for="name">Tên người dùng</label>
+            <label for="name">Tên người dùng <span class="text-danger">*</span></label>
             <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required>
             <x-feedback name="name" />
         </div>
@@ -34,11 +30,11 @@
             <img id="image_user"
                 src="{{ old('avatar') ?? (isset($user) && $user->avatar ? Storage::url($user->avatar) : '#') }}"
                 alt="Ảnh khách hàng"
-                style="max-width: 250px; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
+                style="width: 150px; height: 150px;object-fit:cover ; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
         </div>
 
         <div class="mt-3">
-            <label for="user_name">Tên đăng nhập</label>
+            <label for="user_name">Tên đăng nhập <span class="text-danger">*</span></label>
             <input type="text" name="user_name" id="user_name" class="form-control" value="{{ $user->user_name }}"
                 required disabled>
             <x-feedback name="user_name" />
@@ -53,13 +49,13 @@
             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
         </div> --}}
         <div class="mt-3">
-            <label for="email">Email</label>
+            <label for="email">Email <span class="text-danger">*</span></label>
             <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
             <x-feedback name="email" />
 
         </div>
         <div class="mt-3">
-            <label for="phone">Số điện thoại</label>
+            <label for="phone">Số điện thoại <span class="text-danger">*</span></label>
             <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}"
                 max="10" required>
             <x-feedback name="phone" />
@@ -67,7 +63,7 @@
         </div>
         <div class="form-group d-flex justify-content-between mt-3">
             <div style="flex: 1; margin-right: 10px;">
-                <label for="province">Thành phố/Tỉnh</label>
+                <label for="province">Thành phố/Tỉnh <span class="text-danger">*</span></label>
                 <select name="province" id="province" class="form-control" required>
                     <option value="">-- Chọn tỉnh/thành phố --</option>
                     @foreach ($provinces as $province)
@@ -81,7 +77,7 @@
             </div>
 
             <div style="flex: 1; margin-right: 10px;">
-                <label for="district">Quận/Huyện</label>
+                <label for="district">Quận/Huyện <span class="text-danger">*</span></label>
                 <select name="district" id="district" class="form-control" required>
                     <option value="">-- Chọn quận/huyện --</option>
                     @foreach ($districts as $district)
@@ -95,7 +91,7 @@
             </div>
 
             <div style="flex: 1;">
-                <label for="ward">Phường/Xã</label>
+                <label for="ward">Phường/Xã <span class="text-danger">*</span></label>
                 <select name="ward" id="ward" class="form-control" required>
                     <option value="">-- Chọn phường/xã --</option>
                     @foreach ($wards as $ward)
@@ -111,13 +107,13 @@
         </div>
 
         <div class="mt-3">
-            <label for="address">Địa chỉ</label>
+            <label for="address">Địa chỉ <span class="text-danger">*</span></label>
             <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" required>
             <x-feedback name="address" />
 
         </div>
         <div class="mt-3">
-            <label for="role">Vai trò</label>
+            <label for="role">Vai trò <span class="text-danger">*</span></label>
             <select name="role" id="role" class="form-control" required>
                 <option selected disabled>Vui lòng chọn vai trò</option>
                 <option value="0" {{ $user->role == 0 ? 'selected' : '' }}>Admin</option>
@@ -128,13 +124,16 @@
 
         </div>
 
-        <div class="d-flex justify-content-center">
-            <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary me-1 mt-3" type="button">Quay
+        <div class="my-3">
+            <a href="{{ route('admin.users.index') }}"><button class="btn btn-primary" type="button">Quay
                     lại</button></a>
-            <button class="btn btn-success mt-3" type="submit">Chỉnh sửa</button>
+            <button class="btn btn-success" type="submit">Sửa</button>
         </div>
     </form>
 @endsection
+
+@include('admins.layouts.components.toast')
+
 @push('scripts')
     <script>
         const provincesData = @json($provinces);

@@ -5,7 +5,7 @@
 @section('start-page-title', 'Danh sách sản phẩm')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Sản phẩm</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
     <li class="breadcrumb-item active">Danh sách sản phẩm</li>
 @endsection
 
@@ -123,23 +123,26 @@
                     <td>{{ $product->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $product->updated_at->format('d-m-Y H:i:s') }}</td>
 
-                    <td class="">
-
-                        <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15"><i
-                                class="ri-edit-2-line fs-4"></i></a>
-
-                    </td>
-
                     <td>
-                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                            style="display:inline;" id="delete-form-{{ $product->id }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="link-danger fs-15 border-0 bg-transparent"
-                                id="deleteButton-{{ $product->id }}">
-                                <i class="ri-delete-bin-line"></i>
-                            </button>
-                        </form>
+                        <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15 truncate"
+                            data-fulltext="Chỉnh sửa">
+                            <i class="ri-edit-2-line"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <div>
+
+                            <!-- Nút xóa -->
+                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                style="display:inline;" id="delete-form-{{ $product->id }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                    id="deleteButton-{{ $product->id }}" data-fulltext="Xóa">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @endforeach

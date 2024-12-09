@@ -7,12 +7,7 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
     <form action="{{ route('admin.coupons.update', $coupon->id) }}" method="POST">
         @csrf
@@ -29,40 +24,59 @@
                 </div>
                 <div class="mb-3">
                     <label for="discount_type" class="form-label">Loại mã giảm giá</label>
-                    <select class="form-select @error('discount_type') is-invalid @enderror" id="discount_type" name="discount_type">
-                        <option value="0" {{ old('discount_type', $coupon->discount_type) == '0' ? 'selected' : '' }}>Giảm theo phần trăm</option>
-                        <option value="1" {{ old('discount_type', $coupon->discount_type) == '1' ? 'selected' : '' }}>Giảm theo giá tiền</option>
-                            
+                    <select class="form-select @error('discount_type') is-invalid @enderror" id="discount_type"
+                        name="discount_type">
+                        <option value="0" {{ old('discount_type', $coupon->discount_type) == '0' ? 'selected' : '' }}>
+                            Giảm theo phần trăm</option>
+                        <option value="1" {{ old('discount_type', $coupon->discount_type) == '1' ? 'selected' : '' }}>
+                            Giảm theo giá tiền</option>
+
                     </select>
                     @error('discount_type')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="coupon_amount" class="form-label">Giá trị muốn giảm giá </label>
-                    <input class="form-control @error('coupon_amount') is-invalid @enderror" id="coupon_amount"
-                        type="text" name="coupon_amount" value="{{ old('coupon_amount', $coupon->coupon_amount) }}"
-                        placeholder="Nhập giá trị giảm giá">
+                    <label for="coupon_amount" class="form-label">Số tiền muốn giảm giá
+                        <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="coupon_amount" type="text" name="coupon_amount"
+                        value="{{ old('coupon_amount', $coupon->coupon_amount) }}" placeholder="Nhập giá trị giảm giá">
                     @error('coupon_amount')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="minimum_spend" class="form-label">Gía trị của giỏ hàng thấp nhất</label>
-                    <input class="form-control @error('minimum_spend') is-invalid @enderror" id="minimum_spend"
-                        type="text" name="minimum_spend" value="{{ old('minimum_spend', $coupon->minimum_spend) }}"
+                    <label for="minimum_spend" class="form-label">Giá trị đơn hàng tối thiểu
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối thiểu của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="minimum_spend" type="text" name="minimum_spend"
+                        value="{{ old('minimum_spend', $coupon->minimum_spend) }}"
                         placeholder="Nhập giá trị giảm thấp nhất">
                     @error('minimum_spend')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="maximum_spend" class="form-label">Gía trị của giỏ hàng cao nhất</label>
-                    <input class="form-control @error('maximum_spend') is-invalid @enderror" id="maximum_spend"
-                        type="text" name="maximum_spend" value="{{ old('maximum_spend', $coupon->maximum_spend) }}"
+                    <label for="maximum_spend" class="form-label">Giá trị đơn hàng tối đa
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối đa của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="maximum_spend" type="text" name="maximum_spend"
+                        value="{{ old('maximum_spend', $coupon->maximum_spend) }}"
                         placeholder="Nhập giá trị giảm cao nhất">
                     @error('maximum_spend')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -109,9 +123,11 @@
                     <select class="form-select @error('status') is-invalid @enderror" id="coupon_status" name="status">
                         <option value="0" {{ old('status', $coupon->status) == '0' ? 'selected' : '' }}>Phát hành
                         </option>
-                        <option value="1" {{ old('status', $coupon->status) == '1' ? 'selected' : '' }}>Chưa phát hành
+                        <option value="1" {{ old('status', $coupon->status) == '1' ? 'selected' : '' }}>Chưa phát
+                            hành
                         </option>
-                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Chờ phát hành
+                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Cho một số
+                            người dùng
                         </option>
                         <option value="3" {{ old('status', $coupon->status) == '3' ? 'selected' : '' }}>Hết hạn
                         </option>
@@ -127,7 +143,7 @@
                             giỏ hàng</option>
                         <option value="1" {{ old('type', $coupon->type) == '1' ? 'selected' : '' }}>Áp dụng theo chỉ
                             định</option>
-                            
+
                     </select>
                     @error('type')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -154,14 +170,13 @@
                     <select name="child_category[]" id="childCategory" multiple="multiple">
                         @foreach ($categories as $parentCategory)
                             {{-- Kiểm tra nếu danh mục cha đã được chọn --}}
-                            @if($coupon->categories->contains('id', $parentCategory->id))
-                                
-                                    @foreach ($parentCategory->children as $childCategory)
-                                        <option value="{{ $childCategory->id }}"
-                                            @if(in_array($childCategory->id, $coupon->categories->pluck('id')->toArray())) selected @endif>
-                                            {{ $childCategory->name }}
-                                        </option>
-                                    @endforeach
+                            @if ($coupon->categories->contains('id', $parentCategory->id))
+                                @foreach ($parentCategory->children as $childCategory)
+                                    <option value="{{ $childCategory->id }}"
+                                        @if (in_array($childCategory->id, $coupon->categories->pluck('id')->toArray())) selected @endif>
+                                        {{ $childCategory->name }}
+                                    </option>
+                                @endforeach
                             @endif
                         @endforeach
                     </select>
@@ -169,9 +184,9 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                
-                
-                
+
+
+
 
                 <div class="mb-3">
                     <label for="coupon_product" class="form-label">Sản phẩm áp dụng <span
@@ -191,8 +206,14 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <button type="submit" class="btn btn-primary my-3">
+            <a href="{{ route('admin.coupons.showCoupon') }}" class="text-white">Quay lại</a>
+        </button>
+        <button type="submit" class="btn btn-success my-3">Cập nhật</button>
     </form>
+
+    @include('admins.layouts.components.toast')
+
     <script>
         $(document).ready(function() {
             // Khởi tạo Select2 cho các dropdown

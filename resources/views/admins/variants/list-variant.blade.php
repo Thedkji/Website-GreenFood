@@ -44,7 +44,7 @@
                 <th scope="col">Giá trị</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Ngày cập nhật</th>
-                <th scope="col">Thao tác</th>
+                <th scope="col" colspan="2">Thao tác</th>
             </tr>
         </thead>
         <tbody>
@@ -72,18 +72,21 @@
                     <td>{{ $variant->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $variant->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>
+                        <a href="{{ route('admin.variants.edit', $variant->id) }}" class="link-success fs-15 truncate"
+                            data-fulltext="Chỉnh sửa">
+                            <i class="ri-edit-2-line"></i>
+                        </a>
+                    </td>
+                    <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.variants.edit', ['variant' => $variant->id]) }}"
-                                style="background-color: transparent;" class="link-success fs-15">
-                                <i class="ri-edit-2-line"></i>
-                            </a>
 
+                            <!-- Nút xóa -->
                             <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="POST"
                                 style="display:inline;" id="delete-form-{{ $variant->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="link-danger fs-15 border-0 bg-transparent"
-                                    id="deleteButton-{{ $variant->id }}">
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                    id="deleteButton-{{ $variant->id }}" data-fulltext="Xóa">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
