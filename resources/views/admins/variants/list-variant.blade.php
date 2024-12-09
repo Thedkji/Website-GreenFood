@@ -10,17 +10,7 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
     <div class="row g-4 mb-3">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
@@ -41,13 +31,13 @@
         </button>
     </div>
 
-    
+
 
     <table class="table table-striped align-middle mb-0">
         <thead>
             <tr>
                 <th scope="col">
-                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.variant-checkbox')">
                 </th>
                 <th scope="col">Id</th>
                 <th scope="col">Tên biến thể</th>
@@ -61,8 +51,8 @@
             @foreach ($variants as $variant)
                 <tr>
                     <td>
-                        <input type="checkbox" class="variant-checkbox" name="variant_id[]" onclick="toggleDeleteButton()"
-                            value="{{ $variant->id }}">
+                        <input type="checkbox" class="variant-checkbox" name="variant_id[]"
+                            onclick="toggleDeleteButton('.variant-checkbox')" value="{{ $variant->id }}">
                     </td>
                     <td>{{ $variant->id }}</td>
                     <td>
@@ -73,14 +63,14 @@
                     <td>
                         @if ($variant->children->isNotEmpty())
                             @foreach ($variant->children as $child)
-                                <a href="">{{ $child->name }}</a><br>
+                                - {{ $child->name }}<br>
                             @endforeach
                         @else
                             <span colspan="2" class="text-danger">Không có giá trị nào</span>
                         @endif
                     </td>
-                    <td>{{ $variant->created_at }}</td>
-                    <td>{{ $variant->updated_at }}</td>
+                    <td>{{ $variant->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ $variant->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
                             <a href="{{ route('admin.variants.edit', ['variant' => $variant->id]) }}"
@@ -88,13 +78,12 @@
                                 <i class="ri-edit-2-line"></i>
                             </a>
 
-                            <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="post"
-                                style="display:inline;">
+                            <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="POST"
+                                style="display:inline;" id="delete-form-{{ $variant->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" style="background-color: transparent; border: none; color: inherit;"
-                                    onclick="return confirm('Việc này có thể xóa biến thể cùng với toàn bộ giá trị của biến thể, vẫn chấp nhận xóa?');"
-                                    class="link-danger fs-15">
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent"
+                                    id="deleteButton-{{ $variant->id }}">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
@@ -107,7 +96,8 @@
     <div class="row my-3">
         <div class="col-sm">
             <button type="button" class="btn btn-danger" id="delete-button" name="variant-delete-checkbox"
-                style="display: none;" onclick="deleteSelected()">Xóa</button>
+                style="display: none;"
+                onclick="deleteSelected('.variant-checkbox:checked', '{{ route('admin.variants.bulkDelete') }}')">Xóa</button>
         </div>
 
         <div class="col-sm">
@@ -116,67 +106,31 @@
             </div>
         </div>
     </div>
-    <script>
-        let debounceTimeout;
 
-        function debounceSearch() {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                document.getElementById("search-form").submit();
-            }, 600);
-        }
+    @include('admins.layouts.components.toast')
 
-        function toggleSelectAll(source) {
-            const checkboxes = document.querySelectorAll('.variant-checkbox');
-            checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-            toggleDeleteButton();
-        }
+    {{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+    @include('admins.layouts.components.search-time')
 
-        function toggleDeleteButton() {
-            const checkboxes = document.querySelectorAll('.variant-checkbox');
-            const deleteButton = document.getElementById('delete-button');
-            deleteButton.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline-block' :
-                'none';
-        }
+    {{-- Thực thi xóa nhiều --}}
+    @include('admins.layouts.components.toggleDelete')
 
-        function confirmDelete(id) {
-            if (confirm("Bạn có chắc chắn muốn xóa biến thể này?")) {
-                deleteVariant(id);
-            }
-        }
+    {{-- Thực thi xóa từng phần tử và thay alert --}}
+    @include('admins.layouts.components.deleteSelected')
 
+    {{-- Hiển thị toast khi hoàn thành --}}
+    @include('admins.layouts.components.toast')
 
-        function deleteSelected() {
-            const selectedIds = Array.from(document.querySelectorAll('.variant-checkbox:checked'))
-                .map(checkbox => checkbox.value);
+    <!-- Bao gồm file alert2.blade.php từ thư mục components -->
+    @include('admins.layouts.components.alert2')
 
-            if (selectedIds.length === 0) {
-                alert("Vui lòng chọn ít nhất một biến thể để xóa.");
-                return;
-            }
-
-            if (confirm("Bạn có chắc chắn muốn xóa các biến thể đã chọn?")) {
-                fetch('{{ route('admin.variants.bulkDelete') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-Token': '{{ csrf_token() }}' // Đảm bảo điều này được sử dụng trong Blade template
-                        },
-
-                        body: JSON.stringify({
-                            ids: selectedIds
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Đã xóa thành công các biến thể.");
-                            location.reload(); // Tải lại trang để cập nhật danh sách
-                        } else {
-                            alert("Có lỗi xảy ra khi xóa các biến thể.");
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
-            }
-        }
-    </script>
+    <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+    @push('scripts')
+        <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+        <script>
+            @foreach ($variants as $item)
+                alert2({{ $item->id }});
+            @endforeach
+        </script>
+    @endpush
 @endsection

@@ -10,6 +10,11 @@
     /* Điều chỉnh độ rộng tối đa */
 }
 
+.a-underline {
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+
 .truncate:hover::after {
     content: attr(data-fulltext);
     position: absolute;
@@ -17,8 +22,11 @@
     color: #fff;
     padding: 5px;
     border-radius: 5px;
-    white-space: nowrap;
+    white-space: normal; /* Cho phép nội dung xuống dòng */
+    word-wrap: break-word; /* Tự động xuống dòng nếu nội dung quá dài */
+    max-width: 350px; /* Đặt chiều rộng tối đa, điều chỉnh theo nhu cầu */
     z-index: 1000;
+    text-align: start;
     margin-top: 5px;
     display: block; /* Ẩn tooltip mặc định */
 }
@@ -63,7 +71,15 @@
     pointer-events: none;
     opacity: 0.6; /* Giảm độ sáng khi không thể click */
 }
+.filled-star {
+    color: gold !important;
+    /* Màu vàng cho sao đầy */
+}
 
+.empty-star {
+    color: lightgray !important;
+    /* Màu xám cho sao trống */
+}
 .toast-container {
     position: fixed;
     top: 20px;

@@ -41,13 +41,11 @@ class Information extends Controller
 
         $orders = Order::where('user_id', $user->id)
             ->whereIn('status', [0, 1, 2])
-            ->with('user')
-            ->get();
+            ->with('user')->paginate(5);
 
         $oders = Order::where('user_id', $user->id)
-            ->whereIn('status', [3, 4, 5, 6,7])
-            ->with('user')
-            ->get();
+            ->whereIn('status', [3, 4, 5, 6, 7])
+            ->with('user')->paginate(5);
 
         // Trả dữ liệu về view
         return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces'));
@@ -117,32 +115,50 @@ class Information extends Controller
 
         $user->update($data);
 
-        // Chuyển hướng với thông báo thành công
         return redirect()->route('client.information.index')->with('success', 'Thông tin đã được cập nhật!')
             ->header('Cache-Control', 'no-store');
     }
 
-    public function cancel($id)
+    public function checkStatus($id)
     {
         $order = Order::findOrFail($id);
 
         if ($order->status == 0) {
-            $order->status = 5;
-            $orderDetails = $order->orderDetails()->get();
-            foreach ($orderDetails as $detail) {
-                $product = Product::where('sku', $detail->product_sku)->first();
-                if ($product) {
-                    $product->increment('quantity', $detail->product_quantity);
-                } else {
-                    $variant = VariantGroup::where('sku', $detail->product_sku)->first();
+
+            return response()->json(['status' => 'allowed', 'message' => 'Đơn hàng đã được xác nhận!']);
+        }
+
+        return response()->json(['status' => 'not_allowed']);
+    }
+
+    public function cancel(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        // Kiểm tra trạng thái đơn hàng
+        if ($order->status != 0) {
+            return redirect()->back()->with('error', 'Đơn hàng này không thể hủy vì đã được xác nhận hoặc đang giao.');
+        }
+
+        $order->status = 5;
+
+        $order->update(['status' => 5, 'cancel_reson' => $request->input('cancel_reason')]);
+        $orderDetails = $order->orderDetails()->get();
+        foreach ($orderDetails as $detail) {
+            $product = Product::where('sku', $detail->product_sku)->first();
+            if ($product) {
+                $product->increment('quantity', $detail->product_quantity);
+            } else {
+                $variant = VariantGroup::where('sku', $detail->product_sku)->first();
+                if ($variant) {
                     $variant->increment('quantity', $detail->product_quantity);
                 }
             }
-            $order->save();
-            return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
         }
 
-        return redirect()->back()->with('error', 'Không thể hủy đơn hàng này!');
+        $order->save();
+
+        return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
     }
 
 
@@ -161,35 +177,40 @@ class Information extends Controller
     public function store(Request $request)
     {
         $product = Product::find($request->product_id);
-    
+
         if (!$product) {
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại!');
         }
-    
-    
+
+
         // Thêm đánh giá mới
         $commentsData = [
             'product_id' => $request->product_id,
             'user_id' => Auth::id(),
             'content' => $request->comment,
         ];
-    
+
         if ($request->hasFile('image')) {
             $img = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
             $commentsData['img'] = $img->storeAs('comments', $filename);
         }
 
-    
+
         $comment = Comment::create($commentsData);
-    
+
         Rate::create([
             'comment_id' => $comment->id,
             'star' => $request->star,
         ]);
 
-       
+
         return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi!');
     }
-    
+    public function logout()
+{
+    auth()->logout(); 
+    return redirect()->route('client.home'); 
+}
+
 }

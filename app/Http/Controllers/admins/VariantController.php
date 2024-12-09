@@ -99,7 +99,7 @@ class VariantController extends Controller
                 // Nếu ID không phải là số, tức là thêm mới
                 if (!is_numeric($id)) {
                     if (empty($name)) {
-                        return redirect()->route('admin.variants.edit', $variant->id)->with('error', 'Bạn cần nhập giá trị biến thể');
+                        return redirect()->route('admin.variants.edit', $variant->id)->with('error', 'Giá trị biến thể không được để trống');
                     } else {
                         // Thêm mới biến thể con
                         Variant::create([

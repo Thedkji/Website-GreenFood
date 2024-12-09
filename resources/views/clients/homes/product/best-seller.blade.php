@@ -48,12 +48,30 @@
                                     <div class="price-sale">{{ number_format($variant->price_sale, 0) }} VNĐ</div>
                                     @endif
                                 @endif
-                            </div>
+                            </div><div style="font-size:13px">
+                            Lượt xem: {{ $product->view }}
+                        </div>
+                            <div>
+                            @php
+                                // Tính trung bình số sao
+                                $ratings = $product->comments->flatMap(function ($comment) {
+                                    return $comment->rates;
+                                });
+
+                                $averageRating = $ratings->isEmpty() ? 0 : $ratings->avg('star');
+                            @endphp
                             <div class="product-rating">
                                 @for ($i = 1; $i <= 5; $i++)
-                                <i class="fa fa-star {{ $i <= $product->max_star ? 'text-warning' : 'text-secondary' }}"></i>
+                                    @if ($averageRating >= $i)
+                                        <i class="fas fa-star filled-star"></i>
+                                    @elseif ($averageRating > $i - 1)
+                                        <i class="fas fa-star-half-alt filled-star"></i>
+                                    @else
+                                        <i class="fas fa-star empty-star"></i>
+                                    @endif
                                 @endfor
                             </div>
+                        </div>
                         </div>
                     </div>
                 </a>

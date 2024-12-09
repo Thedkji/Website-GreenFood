@@ -47,8 +47,10 @@
                             <th>Đơn giá</th>
                             <th>Số lượng</th>
                             <th>Thành tiền</th>
-                            <th>Trạng Thái</th>
-                        </tr>
+                            @if ($order->status === 6)
+                                <th>Đánh giá</th>
+                            @endif
+                    </tr>
                     </thead>
                     <tbody>
                         @php
@@ -104,185 +106,103 @@
                                 <td>{{ number_format($detail->product_price) }} VNĐ</td>
                                 <td>{{ $detail->product_quantity }}</td>
                                 <td style="color: #4CAF50; font-weight:bolder">{{ number_format($productTotal) }} VNĐ</td>
-                                <td> @switch($order->status)
-                                        @case(0)
-                                            <span class="badge bg-warning" style="padding: 10px;">Chờ xác nhận</span>
-                                        @break
-
-                                        @case(1)
-                                            <span class="badge bg-info" style="padding: 10px;">Đã xác nhận và đang xử lý</span>
-                                        @break
-
-                                        @case(2)
-                                            <span class="badge bg-primary" style="padding: 10px;">Đang giao hàng</span>
-                                        @break
-
-                                        @case(3)
-                                            <span class="badge bg-success" style="padding: 10px;">Giao hàng thành công</span>
-                                        @break
-
-                                        @case(4)
-                                            <span class="badge bg-info" style="padding: 10px;">Giao hàng không thành công</span>
-                                        @break
-
-                                        @case(5)
-                                            <span class="badge bg-danger" style="padding: 10px;">Hủy đơn</span>
-                                        @break
-
-                                        @case(6)
-                                            {{-- @php
-                                                $orderDetail_id = $order->orderDetails
-                                                    ->map(function ($orderDetail) {
-                                                        return $orderDetail->id;
-                                                    })
-                                                    ->toArray();
-
-                                                $user_id = $order->user_id;
-
-
-                                                $sku = $detail->product_sku; // Mã SKU bạn muốn kiểm tra
-
-                                                if (Str::startsWith($sku, 'SPBT')) {
-                                                    $variantGroup = App\Models\VariantGroup::with('product')
-                                                        ->where('sku', $sku)
-                                                        ->pluck('id');
-
-                                                    $product_id = $variantGroup->product_id;
-                                                } elseif (Str::startsWith($sku, 'SP')) {
-                                                    $product_id = App\Models\Product::with('variantGroups')
-                                                        ->where('sku', $sku)
-                                                        ->pluck('id')
-                                                        ;
-                                                } else {
-                                                    echo 'Mã SKU không hợp lệ';
-                                                }
-
-
-                                            @endphp
-                                            @dd($product_id) --}}
-
-                                            {{-- @if ($orderDetail_id && $user_id && !) --}}
-                                            <button class="btn btn-primary btn-sm p-2 text-white" id="review-button"
-                                            data-bs-toggle="modal" data-bs-target="#rateModal-{{ $order->id }}"
-                                            style="font-size: 12px;">
+                                @if ($order->status === 6)
+                                <td>
+                                        <button class="btn btn-primary btn-sm p-2 text-white" id="review-button"
+                                                data-bs-toggle="modal" data-bs-target="#rateModal-{{ $order->id }}"
+                                                style="font-size: 12px;">
                                             Đánh giá
                                         </button>
-                                            {{-- @endif --}}
-
-
-
-
-
-                                            <div class="modal fade" id="rateModal-{{ $order->id }}" tabindex="-1"
-                                                aria-labelledby="rateModalLabel-{{ $order->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="rateModalLabel-{{ $order->id }}">Đánh
-                                                                giá sản phẩm</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{{ route('client.rate.order') }}" method="POST"
-                                                                enctype="multipart/form-data">
-                                                                @csrf
-                                                                <div class="form-group">
-                                                                    <label for="rating-stars-{{ $order->id }}">Đánh giá:</label>
-                                                                    <div class="rating-container"
-                                                                        id="rating-stars-{{ $order->id }}">
-                                                                        <span data-value="1" class="star">&#9733;</span>
-                                                                        <span data-value="2" class="star">&#9733;</span>
-                                                                        <span data-value="3" class="star">&#9733;</span>
-                                                                        <span data-value="4" class="star">&#9733;</span>
-                                                                        <span data-value="5" class="star">&#9733;</span>
-                                                                    </div>
-                                                                    <input type="hidden" name="star"
-                                                                        id="star-value-{{ $order->id }}">
+                                
+                                        <div class="modal fade" id="rateModal-{{ $order->id }}" tabindex="-1"
+                                            aria-labelledby="rateModalLabel-{{ $order->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="rateModalLabel-{{ $order->id }}">Đánh giá sản phẩm</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('client.rate.order') }}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <label for="rating-stars-{{ $order->id }}">Đánh giá:</label>
+                                                                <div class="rating-container" id="rating-stars-{{ $order->id }}">
+                                                                    <span data-value="1" class="star">&#9733;</span>
+                                                                    <span data-value="2" class="star">&#9733;</span>
+                                                                    <span data-value="3" class="star">&#9733;</span>
+                                                                    <span data-value="4" class="star">&#9733;</span>
+                                                                    <span data-value="5" class="star">&#9733;</span>
                                                                 </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="comment">Bình luận:</label>
-                                                                    <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="image">Hình ảnh (tuỳ chọn):</label>
-                                                                    <input type="file" name="image" id="image"
-                                                                        class="form-control">
-                                                                </div>
-
-                                                                <input type="hidden" name="order_id"
-                                                                    value="{{ $order->id }}">
-                                                                @php
-                                                                    $sku = $detail->product_sku; // Mã SKU bạn muốn kiểm tra
-
-                                                                    if (Str::startsWith($sku, 'SPBT')) {
-                                                                        $variantGroup = App\Models\VariantGroup::with(
-                                                                            'product',
-                                                                        )
-                                                                            ->where('sku', $sku)
-                                                                            ->first();
-
-                                                                        $product_id = $variantGroup->product_id;
-                                                                    } elseif (Str::startsWith($sku, 'SP')) {
-                                                                        $product_id = App\Models\Product::with(
-                                                                            'variantGroups',
-                                                                        )
-                                                                            ->where('sku', $sku)
-                                                                            ->value('id');
-                                                                    } else {
-                                                                        echo 'Mã SKU không hợp lệ';
-                                                                    }
-                                                                @endphp
-                                                                <input type="hidden" name="product_id"
-                                                                    value="{{ $product_id }}">
-
-                                                                <div class="modal-footer mt-3">
-                                                                    <button type="button" class="btn btn-secondary text-white"
-                                                                        data-bs-dismiss="modal">Hủy</button>
-                                                                    <button type="submit" class="btn btn-success">Gửi đánh
-                                                                        giá</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                                <input type="hidden" name="star" id="star-value-{{ $order->id }}">
+                                                            </div>
+                                
+                                                            <div class="form-group">
+                                                                <label for="comment">Bình luận:</label>
+                                                                <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
+                                                            </div>
+                                
+                                                            <div class="form-group">
+                                                                <label for="image">Hình ảnh (tuỳ chọn):</label>
+                                                                <input type="file" name="image" id="image" class="form-control">
+                                                            </div>
+                                
+                                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                                            @php
+                                                                $sku = $detail->product_sku;
+                                
+                                                                if (Str::startsWith($sku, 'SPBT')) {
+                                                                    $variantGroup = App\Models\VariantGroup::with('product')
+                                                                        ->where('sku', $sku)
+                                                                        ->first();
+                                                                    $product_id = $variantGroup->product_id;
+                                                                } elseif (Str::startsWith($sku, 'SP')) {
+                                                                    $product_id = App\Models\Product::with('variantGroups')
+                                                                        ->where('sku', $sku)
+                                                                        ->value('id');
+                                                                } else {
+                                                                    $product_id = null;
+                                                                }
+                                                            @endphp
+                                                            <input type="hidden" name="product_id" value="{{ $product_id }}">
+                                
+                                                            <div class="modal-footer mt-3">
+                                                                <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Hủy</button>
+                                                                <button type="submit" class="btn btn-success">Gửi đánh giá</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @break
-
-                                        @case(7)
-                                            <span class="badge bg-danger" style="padding: 10px;">Hủy đơn</span>
-                                        @break
-                                    @endswitch
+                                        </div>
+                                    @endif
                                 </td>
-
+                                
                                 @include('clients.information.orderjs')
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
 
-                <!-- Thêm Tổng tiền trong khung -->
                 <div class="card mt-3 shadow-sm" style="border: 1px solid #ddd; border-radius: 8px;">
                     <div class="card-body text-right" style="font-size: 16px; ">
                         <p>
                             <strong>Tổng tiền sản phẩm:</strong>
-                            <span style="color: #4CAF50;">{{ number_format($totalProductPrice) }} VNĐ</span>
+                            <span style="color: #4CAF50;font-weight:bolder;">{{ number_format($totalProductPrice) }} VNĐ</span>
                         </p>
                         <p>
                             <strong>Phí giao hàng:</strong>
-                            <span style="color: #FF9800;">{{ number_format($order->deliveryFee) }} VNĐ</span>
+                            <span style="color: #ff0000; font-weight:bolder;">{{ number_format($order->deliveryFee) }} VNĐ</span>
                         </p>
                         <p>
                             <strong>Voucher ưu đãi:</strong>
-                            <span style="color: #00eaff;">{{ number_format($detail->coupon_price) }} VNĐ</span>
+                            <span style="color: #00eaff;font-weight:bolder;">{{ number_format($detail->coupon_price) }} VNĐ</span>
                         </p>
                         <hr style="border: 1px dashed #ddd; margin: 10px 0;">
                         <p>
                             <strong style="font-size: 18px; color: #575757;">Tổng tiền:</strong>
                             <span
-                                style="color: #4CAF50; font-size: 18px; font-weight:bold">{{ number_format($order->total) }}
+                                style="color: #4CAF50; font-size: 18px; font-weight:bolder">{{ number_format($order->total) }}
                                 VNĐ</span>
                         </p>
                     </div>

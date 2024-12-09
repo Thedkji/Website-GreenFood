@@ -16,15 +16,15 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Supplier::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('sku', 30)->comment('Mã đơn hàng')->unique()->nullable();
-            $table->string('name')->unique();
-            $table->string('slug')->unique();
+            $table->string('name');
+            $table->string('slug');
             $table->string('img')->nullable();
             $table->integer('price_regular')->nullable();
             $table->integer('price_sale')->nullable();
             $table->text('description')->nullable();
             $table->text('description_short')->nullable();
             $table->integer('quantity')->default(0)->nullable();
-            $table->integer('view')->default(0)->nullable();
+            $table->unsignedBigInteger('view')->default(0)->nullable();
             $table->date('manufacture_date')->nullable();
             $table->date('expiry_date')->nullable();
             $table->integer('status')

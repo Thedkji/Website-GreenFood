@@ -61,7 +61,7 @@
                                     @break
 
                                     @case(2)
-                                        Chờ phát hành
+                                        Cho một số người dùng
                                     @break
 
                                     @default

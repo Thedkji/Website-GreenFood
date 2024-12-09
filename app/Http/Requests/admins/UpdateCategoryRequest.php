@@ -26,7 +26,7 @@ class UpdateCategoryRequest extends FormRequest
         $parentCategories = Category::where("parent_id", $id)->get(); // Lấy các danh mục con của Category hiện tại
 
         $validate = [
-            'name' => 'required|unique:categories,name,' . $id,
+            'name' => 'required',
             'parent_id' => 'nullable', // Trường hợp `parent_id` chính có thể bỏ trống
         ];
 
@@ -47,7 +47,6 @@ class UpdateCategoryRequest extends FormRequest
     {
         $messages = [
             'name.required' => 'Tên danh mục không được để trống',
-            'name.unique' => 'Tên danh mục đã tồn tại',
         ];
 
         $id = $this->route("category")->id;

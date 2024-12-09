@@ -129,7 +129,7 @@
                             </th>
                             <td>
                                 <a href="{{ route('client.product-detail', $item->product->id) }}">
-                                    <p class="mb-0 mt-4 truncate-text">
+                                    <p class="mb-0 mt-4 truncate-text truncate" data-fulltext="{{ $item->product->name  }}">
                                         {{ $item->product->name }}
                                         @if (!empty($variantGroups[$item->sku]))
                                         @foreach ($variantGroups[$item->sku] as $variant)
@@ -254,7 +254,7 @@
                             </th>
                             <td>
                                 <a href="{{ route('client.product-detail', $item->attributes->product_id) }}">
-                                    <p class="mb-0 mt-4 truncate-text">
+                                    <p class="mb-0 mt-4 truncate-text truncate" data-fulltext="{{ $item->name }}">
                                         {{ $item->name }}
                                     </p>
                                 </a>

@@ -27,10 +27,17 @@ File: Main Css File
     color: #fff;
     padding: 5px;
     border-radius: 5px;
-    white-space: nowrap;
+    white-space: normal; /* Cho phép nội dung xuống dòng */
+    word-wrap: break-word; /* Tự động xuống dòng nếu nội dung quá dài */
+    max-width: 350px; /* Đặt chiều rộng tối đa, điều chỉnh theo nhu cầu */
     z-index: 1000;
+    text-align: start;
     margin-top: 5px;
     display: block; /* Ẩn tooltip mặc định */
+}
+.a-underline{
+    text-decoration: underline !important;
+    cursor: pointer;
 }
 
 .toast-container {
