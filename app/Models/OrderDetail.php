@@ -28,5 +28,10 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function product()
+{
+    return $this->belongsTo(Product::class); // Chi tiết đơn hàng liên kết với sản phẩm
+}
 /******  26a680e3-2ccc-4e35-ac88-e5fc30deec9b  *******/
 }

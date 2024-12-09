@@ -48,9 +48,9 @@
     <table class="mb-3 table table-striped align-middle mb-0">
         <thead>
             <tr>
-                <th scope="col">
+                {{-- <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
-                </th>
+                </th> --}}
                 <th scope="col">Stt</th>
                 <th scope="col">Loại</th>
                 <th scope="col">Tên</th>
@@ -64,10 +64,10 @@
             @endphp
             @foreach ($trashedItems as $item)
                 <tr>
-                    <td scope="row">
+                    {{-- <td scope="row">
                         <input type="checkbox" class="trash-checkbox" name="trash-checkbox" onclick="toggleDeleteButton()"
                             value="{{ $item->id }}">
-                    </td>
+                    </td> --}}
                     <td>{{ $startIndex + $loop->iteration }}</td>
                     <td>{{ $item->type }}</td>
                     <td>{{ $item->name ?? 'Không có tên' }}</td>
@@ -96,7 +96,7 @@
             @endforeach
         </tbody>
     </table>
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <form id="bulk-delete-form"
             action="{{ route('admin.trashs.destroyBulk', ['type' => class_basename($trashedItems->first())]) }}"
             method="POST">
@@ -110,7 +110,7 @@
         </form>
 
 
-    </div>
+    </div> --}}
 
 
     <!-- Hiển thị phân trang -->
@@ -131,28 +131,28 @@
             }, 600);
         }
 
-        function toggleSelectAll(source) {
-            const checkboxes = document.querySelectorAll('.trash-checkbox');
-            checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-            toggleDeleteButton();
-        }
+        // function toggleSelectAll(source) {
+        //     const checkboxes = document.querySelectorAll('.trash-checkbox');
+        //     checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+        //     toggleDeleteButton();
+        // }
 
-        function toggleDeleteButton() {
-            const checkboxes = document.querySelectorAll('.trash-checkbox:checked');
-            const deleteButton = document.getElementById('delete-selected');
-            deleteButton.classList.toggle('d-none', checkboxes.length === 0); // Hiển thị/ẩn nút Xóa
-        }
+        // function toggleDeleteButton() {
+        //     const checkboxes = document.querySelectorAll('.trash-checkbox:checked');
+        //     const deleteButton = document.getElementById('delete-selected');
+        //     deleteButton.classList.toggle('d-none', checkboxes.length === 0); // Hiển thị/ẩn nút Xóa
+        // }
 
-        function deleteSelected() {
-            const selectedIds = Array.from(document.querySelectorAll('.trash-checkbox:checked'))
-                .map(checkbox => checkbox.value);
+        // function deleteSelected() {
+        //     const selectedIds = Array.from(document.querySelectorAll('.trash-checkbox:checked'))
+        //         .map(checkbox => checkbox.value);
 
-            if (selectedIds.length > 0) {
-                document.getElementById('bulk-delete-ids').value = selectedIds.join(',');
-                document.getElementById('bulk-delete-form').submit();
-            } else {
-                alert('Chưa có mục nào được chọn để xóa.');
-            }
-        }
+        //     if (selectedIds.length > 0) {
+        //         document.getElementById('bulk-delete-ids').value = selectedIds.join(',');
+        //         document.getElementById('bulk-delete-form').submit();
+        //     } else {
+        //         alert('Chưa có mục nào được chọn để xóa.');
+        //     }
+        // }
     </script>
 @endpush
