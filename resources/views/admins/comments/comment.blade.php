@@ -10,16 +10,7 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
 
     <form action="{{ route('admin.comments.comment') }}" id="search-form" method="GET"
         class="row mb-3 d-flex flex-row-reverse">
@@ -39,7 +30,7 @@
             <thead>
                 <tr>
                     <th scope="col">
-                        <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+                        <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.comment-checkbox')">
                     </th>
                     <th scope="col">Id</th>
                     <th scope="col">Tên sản phẩm</th>
@@ -48,56 +39,65 @@
                     <th scope="col">Ảnh</th>
                     <th scope="col">Sao</th>
                     <th scope="col">Thời gian</th>
-                    <th scope="col">Thao tác</th>
+                    <th scope="col" colspan="2">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($comments as $comment)
                     <tr>
                         <td>
-                            <input type="checkbox" class="comment-checkbox" name="comment-checkbox"
-                                onclick="toggleDeleteButton()" value="{{ $comment->id }}">
+                            <input type="checkbox" class="comment-checkbox" name="comment_id[]"
+                                onclick="toggleDeleteButton('.comment-checkbox')" value="{{ $comment->id }}">
                         </td>
                         <th scope="row">{{ $comment->id }}</th>
-                        <td>
-                            <a
-                                href="{{ route('client.product-detail', $comment->product->id) }}">{{ $comment->product->name ?? 'No Product' }}</a>
+                        <td class="truncate-text">
+                            <a href="{{ route('client.product-detail', $comment->product->id) }}" class="truncate"
+                                data-fulltext="{{ $comment->product->name ?? 'Không xác định' }}">{{ $comment->product->name ?? 'Không xác định' }}</a>
                         </td>
-                        <td>{{ $comment->user->name ?? 'Anonymous' }}</td>
-                        <td>{{ $comment->content }}</td>
+                        <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
+                        <td class="truncate-text">
+                            <span class="truncate" data-fulltext="{{ $comment->content ?? 'Không có nội dung' }}">
+                                {{ $comment->content ?? 'Không có nội dung' }}
+                            </span>
+                        </td>
                         <td>
                             @if ($comment->img)
-                                <img src="{{ env('VIEW_IMG') }}/{{ $comment->img }}" alt="Image" width="100px"
-                                    height="100px" style="object-fit: cover">
+                                <a href="{{ route('client.product-detail', $comment->product->id) }}">
+                                    <img src="{{ env('VIEW_IMG') }}/{{ $comment->img }}" alt="Image" width="100px"
+                                        height="100px" style="object-fit: cover">
+                                </a>
                             @else
-                                No Image
+                                <span class="text-danger">
+                                    Không có ảnh
+                                </span>
                             @endif
                         </td>
                         <td>
-                            <div class="stars" id="stars-{{ $comment->id }}">
+                            <div class="stars fs-5" id="stars-{{ $comment->id }}">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <span class="star"
                                         style="color: {{ $i <= ($comment->rates()->avg('star') ?? 0) ? 'gold' : 'gray' }}">★</span>
                                 @endfor
                             </div>
                         </td>
-                        <td>{{ $comment->created_at }}</td>
+                        <td>{{ $comment->created_at->format('d-m-Y H:i:s') }}</td>
 
                         <td>
                             <div class="hstack gap-2">
-                                <a href="{{ route('admin.comments.detail', $comment->id) }}"><i
-                                        class="fa-regular fa-eye"></i></a>
-                                <a href="#" class="link-danger fs-15"
-                                    onclick="event.preventDefault(); document.getElementById('delete-form-{{ $comment->id }}').submit();">
-                                    <i class="ri-delete-bin-line"></i>
-                                </a>
-                                <form id="delete-form-{{ $comment->id }}"
-                                    action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
+                                <a href="{{ route('admin.comments.detail', $comment->id) }}" class="truncate"
+                                    data-fulltext="Xem chi tiết"><i class="fa-regular fa-eye"></i></a>
                             </div>
+                        </td>
+                        <td>
+                            <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST"
+                                style="display:inline;" id="delete-form-{{ $comment->id }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                    id="deleteButton-{{ $comment->id }}" data-fulltext="Xóa">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -110,68 +110,33 @@
     </div>
     <div class="row my-3">
         <div class="col-sm">
-            <button type="button" class="btn btn-danger" id="delete-button" style="display: none;"
-                onclick="deleteSelected()">Xóa</button>
+            <button type="button" class="btn btn-danger" id="delete-button" name="comment-delete-checkbox"
+                style="display: none;"
+                onclick="deleteSelected('.comment-checkbox:checked', '{{ route('admin.comments.bulkDelete') }}')">Xóa</button>
         </div>
     </div>
+    {{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+    @include('admins.layouts.components.search-time')
 
-    <script>
-        let debounceTimeout;
+    {{-- Thực thi xóa nhiều --}}
+    @include('admins.layouts.components.toggleDelete')
 
-        function debounceSearch() {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                document.getElementById("search-form").submit(); // Submit the form after typing
-            }, 600); // Delay of 600ms
-        }
+    {{-- Thực thi xóa từng phần tử và thay alert --}}
+    @include('admins.layouts.components.deleteSelected')
 
-        function toggleSelectAll(source) {
-            const checkboxes = document.querySelectorAll('.comment-checkbox');
-            checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-            toggleDeleteButton();
-        }
+    {{-- Hiển thị toast khi hoàn thành --}}
+    @include('admins.layouts.components.toast')
 
-        function toggleDeleteButton() {
-            const checkboxes = document.querySelectorAll('.comment-checkbox');
-            const deleteButton = document.getElementById('delete-button');
-            deleteButton.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline-block' :
-                'none';
-        }
+    <!-- Bao gồm file alert2.blade.php từ thư mục components -->
+    @include('admins.layouts.components.alert2')
 
-        function deleteSelected() {
-            const selectedIds = Array.from(document.querySelectorAll('.comment-checkbox:checked'))
-                .map(checkbox => checkbox.value);
-
-            if (selectedIds.length === 0) {
-                alert("Vui lòng chọn ít nhất một mục để xóa.");
-                return;
-            }
-
-            if (confirm("Bạn có chắc chắn muốn xóa các mục đã chọn?")) {
-                fetch("{{ route('admin.comments.bulkDelete') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            ids: selectedIds
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert(data.message);
-                            window.location.reload();
-                        } else {
-                            alert(data.message || "Đã xảy ra lỗi trong khi xóa.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Đã xảy ra lỗi.");
-                    });
-            }
-        }
-    </script>
+    <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
+    @push('scripts')
+        <!-- Lặp qua tất cả các comments và gọi hàm alert2 cho mỗi item -->
+        <script>
+            @foreach ($comments as $item)
+                alert2({{ $item->id }});
+            @endforeach
+        </script>
+    @endpush
 @endsection

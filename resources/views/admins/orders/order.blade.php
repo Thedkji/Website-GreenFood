@@ -65,7 +65,7 @@
             <table class="table table-striped align-middle mb-0 text-center">
                 <thead>
                     <tr>
-
+                        <th scope="col">ID</th>
                         <th scope="col">@sortablelink('user_id', 'Tên người dùng')</th>
                         <th scope="col">Địa chỉ</th>
                         <th scope="col">Email</th>
@@ -80,6 +80,7 @@
                     @if (isset($orders) && $orders->isNotEmpty())
                         @foreach ($orders as $order)
                             <tr>
+                                <td>{{ $order->id }}</td>
                                 <td scope="col" class="truncate-text">
                                     <span class="truncate"
                                         data-fulltext="{{ $order->user->name ?? $order->name . '(Khách)' }}">{{ $order->user->name ?? $order->name . '(Khách)' }}</span>
@@ -131,7 +132,7 @@
                                             <span class="badge bg-secondary p-2">Không xác định</span>
                                     @endswitch
                                 </td>
-                                <td scope="col">{{ $order->created_at }}</td>
+                                <td scope="col">{{ $order->created_at->format('d-m-Y H:i:s') }}</td>
                                 <td>
                                     <div class=" gap-3 flex-wrap">
                                         <a href="{{ route('admin.orders.showOrderDetail', $order->id) }}"><i

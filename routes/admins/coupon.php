@@ -10,12 +10,14 @@ Route::prefix('coupons')
     ->group(function () {
         Route::get('/', [CouponController::class, 'index'])->name('showCoupon');
         Route::get('/add', [CouponController::class, 'addCoupon'])->name('addCoupon');
-        Route::post('/store', [CouponController::class, 'store'])->name('store'); 
-        
+        Route::post('/store', [CouponController::class, 'store'])->name('store');
+
         Route::get('/edit/{id}', [CouponController::class, 'editCoupon'])->name('editCoupon');
         Route::put('/update/{id}', [CouponController::class, 'update'])->name('update');
-        
+
         Route::delete('/delete/{id}', [CouponController::class, 'destroy'])->name('destroy');
-        
+
         Route::get('/{id}', [CouponController::class, 'show'])->name('show');
+
+        Route::post('bulk-delete', [CouponController::class, 'bulkDelete'])->name('bulkDelete');
     });

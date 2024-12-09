@@ -1,12 +1,19 @@
 @extends('admins.layouts.master')
 @section('title', 'Chi tiết mã giảm giá')
+
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Mã giảm giá</a></li>
+    <li class="breadcrumb-item active">Chi tiết mã giảm giá</li>
+@endsection
 @section('content')
     <div class="container">
+        <a href="{{ route('admin.coupons.showCoupon') }}" class="btn btn-primary my-3">Quay lại</a>
+
         <h2 class="mt-4">Chi tiết mã giảm giá: {{ $coupon->name }}</h2>
 
         <div class="card mt-4">
             <div class="card-body">
-                <h5 class="card-title">Thông tin mã giảm giá</h5>
+                <h5 class="card-title text-success">Thông tin mã giảm giá</h5>
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
@@ -19,7 +26,8 @@
                                 @else
                                     Không xác định
                                 @endif
-                            </td>                        </tr>
+                            </td>
+                        </tr>
                         <tr>
                             <th>Loại giảm giá</th>
                             <td>{{ $coupon->discount_type == 0 ? 'Giảm theo phần trăm' : 'Giảm theo giá tiền' }}</td>
@@ -101,7 +109,7 @@
                             <td>
                                 @php
                                     $childCategories = $coupon->categories->filter(function ($category) {
-                                        return $category->parent_id !== null; 
+                                        return $category->parent_id !== null;
                                     });
                                 @endphp
 
@@ -122,6 +130,5 @@
             </div>
         </div>
 
-        <a href="{{ route('admin.coupons.showCoupon') }}" class="btn btn-secondary mt-3">Quay lại</a>
     </div>
 @endsection
