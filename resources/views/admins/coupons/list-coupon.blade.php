@@ -27,7 +27,7 @@
             <a href="{{ route('admin.coupons.addCoupon') }}" class="text-white">Thêm</a>
         </button>
     </div>
-    <table class="table text-center aligin-middle">
+    <table class="table align-middle">
         <thead>
             <tr>
                 <th>
@@ -35,7 +35,7 @@
                 </th>
                 <th>ID</th>
                 <th>Tên mã giảm giá</th>
-                <th style="text-align: center">Loại mã giảm giá</th>
+                <th>Loại mã giảm giá</th>
                 <th>
                     Giá trị tối thiểu
                     <span class="truncate"
@@ -55,10 +55,12 @@
                     </span>
                 </th>
                 <th>Số lượng</th>
-                <th colspan="3">Thao tác</th>
+                <th class="text-center">Kiểu mã áp dụng</th>
+                <th class="text-center">Trạng thái</th>
+                <th colspan="3" class="text-center">Thao tác</th>
             </tr>
         </thead>
-        <tbody style="text-align: center">
+        <tbody>
             @forelse ($coupons as $coupon)
                 <tr>
                     <td>
@@ -74,11 +76,15 @@
                     <td>
                         @switch($coupon->discount_type)
                             @case(0)
-                                <span class="badge bg-info p-2">Giảm theo phần trăm</span>
+                                <span class="badge bg-info p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Giảm theo phần
+                                    trăm</span>
                             @break
 
                             @case(1)
-                                <span class="badge bg-success p-2">Giảm theo giá tiền</span>
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Giảm theo giá
+                                    tiền</span>
                             @break
 
                             @default
@@ -87,7 +93,7 @@
                     </td>
                     <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} VNĐ </td>
                     <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} VNĐ </td>
-                    <td class="text-success">
+                    <td class="text-success text-center fw-bold">
                         @if ($coupon->discount_type == 0)
                             {{ $coupon->coupon_amount }} %
                         @elseif ($coupon->discount_type == 1)
@@ -96,7 +102,53 @@
                             Không xác định
                         @endif
                     </td>
-                    <td>{{ $coupon->quantity }}</td>
+                    <td class="text-center">{{ $coupon->quantity }}</td>
+                    <td>
+                        @switch($coupon->type)
+                            @case(0)
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Áp dụng toàn bộ
+                                    giỏ hàng</span>
+                            @break
+
+                            @case(1)
+                                <span class="badge bg-info p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Áp dụng theo chỉ
+                                    định</span>
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
+                    </td>
+                    <td>
+                        @switch($coupon->status)
+                            @case(0)
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Phát hành</span>
+                            @break
+
+                            @case(1)
+                                <span class="badge bg-warning p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Chưa phát
+                                    hành</span>
+                            @break
+
+                            @case(2)
+                                <span class="badge bg-primary p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Phát hành cho 1
+                                    số người dùng</span>
+                            @break
+
+                            @case(3)
+                                <span class="badge bg-danger p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Hết hạn</span>
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
+                    </td>
                     <td>
                         <a href="{{ route('admin.coupons.show', $coupon->id) }}" class="truncate"
                             data-fulltext="Xem chi tiết"><i class="fa-regular fa-eye"></i></a>

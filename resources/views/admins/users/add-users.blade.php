@@ -4,6 +4,11 @@
 
 @section('start-page-title', 'Thêm mới người dùng')
 
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a></li>
+    <li class="breadcrumb-item active">Thêm người dùng</li>
+@endsection
+
 @section('content')
     @include('admins.layouts.components.toast-container')
 
@@ -29,7 +34,7 @@
         <div class="mt-3">
             <img id="image_user" src="{{ old('avatar') ?? (isset($user) && $user->avatar ? asset($user->avatar) : '#') }}"
                 alt="Preview ảnh đại diện"
-                style="max-width: 150px; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
+                style="width: 150px; height: 150px;object-fit:cover ;{{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
         </div>
 
         <div class="my-3">

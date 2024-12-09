@@ -2,7 +2,7 @@
 @section('title', 'Dashboard | Velzon - Admin - Danh sách mã giảm giá')
 @section('start-page-title', 'Thêm mã giảm giá')
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.coupons.addCoupon') }}">Mã giảm giá</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.coupons.showCoupon') }}">Mã giảm giá</a></li>
     <li class="breadcrumb-item active">Thêm mã giảm giá</li>
 @endsection
 
@@ -36,8 +36,12 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="coupon_amount" class="form-label">Giá trị muốn giảm giá <span
-                            class="text-danger">*</span></label>
+                    <label for="coupon_amount" class="form-label">Số tiền muốn giảm giá
+                        <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
                     <input class="form-control " id="coupon_amount" type="text" name="coupon_amount"
                         value="{{ old('coupon_amount') }}" placeholder="Nhập giá trị giảm giá">
                     @error('coupon_amount')
@@ -45,8 +49,13 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="minimum_spend" class="form-label">Gía trị của giỏ hàng thấp nhất <span
-                            class="text-danger">*</span></label>
+                    <label for="minimum_spend" class="form-label">Giá trị đơn hàng tối thiểu
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối thiểu của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
                     <input class="form-control " id="minimum_spend" type="text" name="minimum_spend"
                         value="{{ old('minimum_spend') }}" placeholder="Nhập giá trị giảm thấp nhất">
                     @error('minimum_spend')
@@ -54,8 +63,13 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="maximum_spend" class="form-label">Gía trị của giỏ hàng cao nhất <span
-                            class="text-danger">*</span></label>
+                    <label for="maximum_spend" class="form-label">Giá trị đơn hàng tối đa
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối đa của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
                     <input class="form-control " id="maximum_spend" type="text" name="maximum_spend"
                         value="{{ old('maximum_spend') }}" placeholder="Nhập giá trị giảm cao nhất">
                     @error('maximum_spend')
@@ -89,7 +103,8 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="expiration_date" class="form-label">Ngày hết hạn <span class="text-danger">*</span></label>
+                    <label for="expiration_date" class="form-label">Ngày hết hạn <span
+                            class="text-danger">*</span></label>
                     <input class="form-control " id="expiration_date" type="date" name="expiration_date"
                         value="{{ old('expiration_date') }}" placeholder="Chọn ngày hết hạn">
                     @error('expiration_date')

@@ -41,7 +41,7 @@
                 <th scope="col">Danh mục con</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Ngày cập nhật</th>
-                <th scope="col">Thao tác</th>
+                <th scope="col" colspan="2">Thao tác</th>
             </tr>
         </thead>
         <tbody>
@@ -72,19 +72,21 @@
                     <td>{{ $category->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $category->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>
+                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="link-success fs-15 truncate"
+                            data-fulltext="Chỉnh sửa">
+                            <i class="ri-edit-2-line"></i>
+                        </a>
+                    </td>
+                    <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}"
-                                style="background-color: transparent;" class="link-success fs-15">
-                                <i class="ri-edit-2-line"></i>
-                            </a>
 
                             <!-- Nút xóa -->
                             <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
                                 style="display:inline;" id="delete-form-{{ $category->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="link-danger fs-15 border-0 bg-transparent"
-                                    id="deleteButton-{{ $category->id }}">
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                    id="deleteButton-{{ $category->id }}" data-fulltext="Xóa">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
@@ -126,7 +128,7 @@
 
     <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
     @push('scripts')
-        <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+        <!-- Lặp qua tất cả các category và gọi hàm alert2 cho mỗi item -->
         <script>
             @foreach ($categories as $item)
                 alert2({{ $item->id }});

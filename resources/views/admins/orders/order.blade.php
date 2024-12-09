@@ -62,7 +62,7 @@
         <form action="" method="POST" id="delete-form">
             @csrf
             @method('DELETE')
-            <table class="table table-striped align-middle mb-0 text-center">
+            <table class="table table-striped align-middle mb-0 text-center fs-6">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -135,8 +135,8 @@
                                 <td scope="col">{{ $order->created_at->format('d-m-Y H:i:s') }}</td>
                                 <td>
                                     <div class=" gap-3 flex-wrap">
-                                        <a href="{{ route('admin.orders.showOrderDetail', $order->id) }}"><i
-                                                class="fa-regular fa-eye"></i></a>
+                                        <a href="{{ route('admin.orders.showOrderDetail', $order->id) }}" class="truncate"
+                                            data-fulltext="Xem chi tiết"><i class="fa-regular fa-eye"></i></a>
                                     </div>
                                 </td>
                             </tr>

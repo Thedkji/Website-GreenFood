@@ -37,30 +37,46 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="coupon_amount" class="form-label">Giá trị muốn giảm giá </label>
-                    <input class="form-control @error('coupon_amount') is-invalid @enderror" id="coupon_amount"
-                        type="text" name="coupon_amount" value="{{ old('coupon_amount', $coupon->coupon_amount) }}"
-                        placeholder="Nhập giá trị giảm giá">
+                    <label for="coupon_amount" class="form-label">Số tiền muốn giảm giá
+                        <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="coupon_amount" type="text" name="coupon_amount"
+                        value="{{ old('coupon_amount', $coupon->coupon_amount) }}" placeholder="Nhập giá trị giảm giá">
                     @error('coupon_amount')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="minimum_spend" class="form-label">Gía trị của giỏ hàng thấp nhất</label>
-                    <input class="form-control @error('minimum_spend') is-invalid @enderror" id="minimum_spend"
-                        type="text" name="minimum_spend" value="{{ old('minimum_spend', $coupon->minimum_spend) }}"
+                    <label for="minimum_spend" class="form-label">Giá trị đơn hàng tối thiểu
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối thiểu của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="minimum_spend" type="text" name="minimum_spend"
+                        value="{{ old('minimum_spend', $coupon->minimum_spend) }}"
                         placeholder="Nhập giá trị giảm thấp nhất">
                     @error('minimum_spend')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="maximum_spend" class="form-label">Gía trị của giỏ hàng cao nhất</label>
-                    <input class="form-control @error('maximum_spend') is-invalid @enderror" id="maximum_spend"
-                        type="text" name="maximum_spend" value="{{ old('maximum_spend', $coupon->maximum_spend) }}"
+                    <label for="maximum_spend" class="form-label">Giá trị đơn hàng tối đa
+                        <span class="truncate"
+                            data-fulltext="Là giá trị tối đa của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control " id="maximum_spend" type="text" name="maximum_spend"
+                        value="{{ old('maximum_spend', $coupon->maximum_spend) }}"
                         placeholder="Nhập giá trị giảm cao nhất">
                     @error('maximum_spend')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger my-3">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -110,7 +126,8 @@
                         <option value="1" {{ old('status', $coupon->status) == '1' ? 'selected' : '' }}>Chưa phát
                             hành
                         </option>
-                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Chờ phát hành
+                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Cho một số
+                            người dùng
                         </option>
                         <option value="3" {{ old('status', $coupon->status) == '3' ? 'selected' : '' }}>Hết hạn
                         </option>

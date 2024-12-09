@@ -33,11 +33,11 @@
                             <td>{{ $coupon->discount_type == 0 ? 'Giảm theo phần trăm' : 'Giảm theo giá tiền' }}</td>
                         </tr>
                         <tr>
-                            <th>Giá trị của giỏ hàng thấp nhất</th>
+                            <th>Giá trị đơn hàng tối thiểu</th>
                             <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} VNĐ</td>
                         </tr>
                         <tr>
-                            <th>Giá trị của giỏ hàng cao nhất</th>
+                            <th>Giá trị đơn hàng tối đa</th>
                             <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} VNĐ</td>
                         </tr>
                         <tr>

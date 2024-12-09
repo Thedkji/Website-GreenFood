@@ -4,9 +4,19 @@
 
 @section('start-page-title', 'Thêm mới sản phẩm')
 
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+    <li class="breadcrumb-item active">Thêm sản phẩm</li>
+@endsection
+
 @section('content')
 
     @include('admins.layouts.components.toast-container')
+    <div class="col-12 my-3">
+        <button class="btn btn-primary " type="button">
+            <a class="text-white" href="{{ route('admin.products.index') }}">Quay lại</a>
+        </button>
+    </div>
 
     <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data" id="form-add-product">
         @csrf
@@ -129,6 +139,7 @@
                 <div class="row price_no_variant">
                     <div class="col-lg-6 mb-3">
                         <label for="price_regular" class="form-label">Giá gốc - VNĐ</label>
+                        
                         <input type="number" class="form-control" name="price_regular" id="price_regular"
                             value="{{ old('price_regular') }}" placeholder="nhập giá gốc">
                         <div id="err_price_regular" class="my-3 text-danger">

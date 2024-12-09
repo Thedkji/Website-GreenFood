@@ -4,6 +4,11 @@
 
 @section('start-page-title', 'Chỉnh sửa thông tin người dùng')
 
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a></li>
+    <li class="breadcrumb-item active">Sửa người dùng</li>
+@endsection
+
 @section('content')
     @include('admins.layouts.components.toast-container')
     <form novalidate action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
@@ -25,7 +30,7 @@
             <img id="image_user"
                 src="{{ old('avatar') ?? (isset($user) && $user->avatar ? Storage::url($user->avatar) : '#') }}"
                 alt="Ảnh khách hàng"
-                style="max-width: 250px; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
+                style="width: 150px; height: 150px;object-fit:cover ; {{ old('avatar') || (isset($user) && $user->avatar) ? '' : 'display: none;' }}">
         </div>
 
         <div class="mt-3">
