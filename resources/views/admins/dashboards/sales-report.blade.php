@@ -124,13 +124,13 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                    <img src="{{ Storage::url($product->img) }}"
-                                                         alt="{{ $product->name }}" class="img-fluid d-block" />
+                                                    <img src="{{ Storage::url($product->img) }}" alt="{{ $product->name }}"
+                                                        class="img-fluid d-block" />
                                                 </div>
                                                 <div>
                                                     <h5 class="truncate-text fs-14 my-1">
-                                                        <a href="{{ route('client.product-detail',$product->id) }}"
-                                                           class="truncate" data-fulltext="{{ $product->name }}">
+                                                        <a href="{{ route('client.product-detail', $product->id) }}"
+                                                            class="truncate" data-fulltext="{{ $product->name }}">
                                                             {{ $product->name }}
                                                         </a>
                                                     </h5>
@@ -172,11 +172,11 @@
         <div class="col-xl-4">
             <div class="card card-height-100">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Danh mục sản phẩm</h4>
                     <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                        {{-- <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
                                 <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -185,15 +185,15 @@
                                 <a class="dropdown-item" href="#">Export</a>
                                 <a class="dropdown-item" href="#">Import</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div><!-- end card header -->
 
-                <div class="card-body">
-                    <div id="category-products-chart"
-                        data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                        class="apex-charts" dir="ltr"></div>
+                <div id="category-products-chart"
+                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info", "--vz-pink", "--vz-purple", "--vz-blue", "--vz-orange", "--vz-teal", "--vz-yellow", "--vz-gray", "--vz-light-blue", "--vz-dark-blue", "--vz-red", "--vz-light-green", "--vz-dark-green", "--vz-brown", "--vz-light-gray", "--vz-dark-gray", "--vz-light-orange", "--vz-light-pink", "--vz-dark-yellow", "--vz-dark-purple", "--vz-dark-teal", "--vz-light-brown", "--vz-light-dark", "--vz-light-violet", "--vz-dark-violet", "--vz-light-blue-gray"]'
+                    class="apex-charts" dir="ltr">
                 </div>
+
             </div> <!-- .card-->
         </div> <!-- .col-->
     </div> <!-- end row-->
@@ -504,6 +504,45 @@
         );
         chart.render();
     });
+
+
+    // danh mục sản phẩm
+    document.addEventListener("DOMContentLoaded", function () {
+    const chartColors = getChartColorsArray("category-products-chart");
+
+    // Dữ liệu từ PHP
+    const categoryData = @json($categoryData);  // Số lượng sản phẩm theo danh mục
+    const categoryNames = @json($categoryNames);  // Tên danh mục
+
+    const options = {
+        series: categoryData, // Dữ liệu cho biểu đồ
+        chart: {
+            height: 350,
+            type: "donut"
+        },
+        labels: categoryNames, // Nhãn cho từng phần trong biểu đồ
+        colors: chartColors, // Màu sắc cho biểu đồ
+        legend: {
+            position: "bottom"
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return val.toFixed(0); // Hiển thị số lượng (không có phần trăm)
+            }
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " sản phẩm"; // Hiển thị số lượng sản phẩm trong tooltip
+                }
+            }
+        }
+    };
+
+    const chart = new ApexCharts(document.querySelector("#category-products-chart"), options);
+    chart.render();
+});
 </script>
 {{-- @push('scripts')
 @endpush --}}

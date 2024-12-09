@@ -45,3 +45,72 @@ function getChartColorsArray(id) {
     return JSON.parse(colors).map((color) => getComputedStyle(document.documentElement).getPropertyValue(color
         .trim()));
 }
+
+
+ // Helper function to get colors from data-colors
+ function getChartColorsArray(e) {
+    if (document.getElementById(e)) {
+        let colors = document.getElementById(e).getAttribute("data-colors");
+        if (colors) {
+            return JSON.parse(colors).map(color => {
+                let cssColor = getComputedStyle(document.documentElement).getPropertyValue(color.trim());
+                return cssColor || color.trim();
+            });
+        }
+    }
+    console.warn("Data colors not found on element:", e);
+    return [];
+}
+
+function getChartColorsArray(e) {
+    if (document.getElementById(e)) {
+        let colors = document.getElementById(e).getAttribute("data-colors");
+        if (colors) {
+            return JSON.parse(colors).map(color => {
+                let cssColor = getComputedStyle(document.documentElement).getPropertyValue(color.trim());
+                return cssColor || color.trim();
+            });
+        }
+    }
+    console.warn("Data colors not found on element:", e);
+    return [];
+}
+
+
+// Render the donut chart
+// document.addEventListener("DOMContentLoaded", function () {
+//     const chartColors = getChartColorsArray("category-products-chart");
+
+//     const options = {
+//         series: [44, 55, 41, 17, 15], // Data for the donut chart
+//         chart: {
+//             height: 350,
+//             type: "donut"
+//         },
+//         labels: ["Direct", "Social", "Email", "Other", "Referrals"], // Labels for each slice
+//         colors: chartColors, // Colors for the chart
+//         legend: {
+//             position: "bottom"
+//         },
+//         dataLabels: {
+//             enabled: true,
+//             formatter: function (val) {
+//                 return val.toFixed(1) + "%"; // Show percentages
+//             }
+//         },
+//         tooltip: {
+//             y: {
+//                 formatter: function (val) {
+//                     return val + " visits"; // Show visits in tooltip
+//                 }
+//             }
+//         }
+//     };
+
+//     const chart = new ApexCharts(document.querySelector("#category-products-chart"), options);
+//     chart.render();
+//     // console.log($categories);
+// });
+
+
+

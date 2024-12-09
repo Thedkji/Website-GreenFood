@@ -25,13 +25,13 @@
         <!-- Contact Start -->
         <div class="container-fluid contact py-5">
             <div class="container py-3">
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="text-center mx-auto mb-5" style="max-width: 700px;">
                         <h1 class="text-primary fw-bold">Liên hệ</h1>
-                        {{-- <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p> --}}
+                        <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
                     </div>
 
-                </div>
+                </div> --}}
 
                 <div class="p-5 bg-light rounded">
                     <div class="row g-4">

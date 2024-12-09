@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admins;
 
+use Log;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
@@ -66,11 +67,11 @@ class DashboardController extends Controller
     public function salesReport(Request $request)
     {
         // Tổng doanh thu
-        $totalEarnings = Order::sum('total');
+        $totalEarnings = Order::where('status', '6')->sum('total');
         // Số lượng đơn hàng
         $orderCounts = Order::count();
         // Số lượng đơn hàng hoàn thành
-        $orderCountCompleted = Order::where('status', 'completed')->count();
+        $orderCountCompleted = Order::where('status', '6')->count();
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
             ->where('status', 'completed') // Chỉ lấy đơn hàng đã hoàn thành
@@ -113,6 +114,16 @@ class DashboardController extends Controller
             ->take(5); // Lấy 5 sản phẩm bán chạy nhất
 
 
+        // danh mục sản phẩm
+        $categories = Category::withCount('products')->get();
+
+        // Lấy số lượng sản phẩm theo từng danh mục
+        $categoryData = $categories->map(function ($category) {
+            return $category->products_count;
+        });
+
+        // Lấy tên danh mục
+        $categoryNames = $categories->pluck('name');
         // dd($bestSellerProducts);
 
         return view("admins.dashboards.sales-report", compact(
@@ -122,7 +133,8 @@ class DashboardController extends Controller
             'orderCountsByMonthJson',
             'earningsByMonthJson',
             'orderCountsForChart',
-            // 'userCounts',
+            'categoryData',
+            'categoryNames',
             'bestSellerProducts' // Dữ liệu cho biểu đồ
         ));
     }
@@ -138,4 +150,8 @@ class DashboardController extends Controller
 
         return response()->json($data);
     }
+
+
+
+
 }
