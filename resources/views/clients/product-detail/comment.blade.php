@@ -7,6 +7,8 @@
     $averageRating = $ratings->isEmpty() ? 0 : number_format($ratings->avg('star'), 1);
 
     $countComment = $product->comments()->where('parent_user_id', null)->count();
+
+    $comments = $product->comments()->where('parent_user_id', null)->paginate(3);
 @endphp
 <p>
     <span class="fw-bold" style="font-size: 16px "> Đánh giá : </span>({{ $averageRating }}<i
@@ -15,7 +17,7 @@
 <p><span class="fw-bold" style="font-size: 16px ">Bình luận : </span>{{ $countComment }} lượt</p>
 
 
-@foreach ($product->comments()->where('parent_user_id', null)->get() as $comment)
+@foreach ($comments as $comment)
     <div class="card mb-4 shadow-sm p-3 border-0">
         <div class="d-flex">
             {{-- Avatar người bình luận --}}
@@ -144,7 +146,7 @@
 @endforeach
 
 <div>
-    {{ $product->comments()->where('parent_user_id', null)->paginate(2)->appends(request()->query())->links() }}
+    {{ $comments->links() }}
 </div>
 
 <style>
