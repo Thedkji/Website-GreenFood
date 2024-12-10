@@ -22,6 +22,7 @@ class OrderDetail extends Model
         "coupon_name",
         "coupon_quantity",
         "coupon_price",
+        "review"
     ];
 
     public function order()

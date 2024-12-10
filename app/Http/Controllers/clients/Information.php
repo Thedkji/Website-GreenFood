@@ -177,11 +177,12 @@ class Information extends Controller
     public function store(Request $request)
     {
         $product = Product::find($request->product_id);
+        $orderDetail = OrderDetail::find($request->order_detail_id);
+        // dd($request->all());
 
         if (!$product) {
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại!');
         }
-
 
         // Thêm đánh giá mới
         $commentsData = [
@@ -197,20 +198,32 @@ class Information extends Controller
         }
 
 
-        $comment = Comment::create($commentsData);
 
-        Rate::create([
-            'comment_id' => $comment->id,
-            'star' => $request->star,
+        if ($orderDetail->review == 0) {
+            $comment = Comment::create($commentsData);
+
+            Rate::create([
+                'comment_id' => $comment->id,
+                'star' => $request->star,
+            ]);
+        }else if($orderDetail->review == 1){
+            $comment = Comment::where('product_id', $request->product_id)->where('user_id', Auth::id())->first();
+            $comment->update($commentsData);
+
+            Rate::where('comment_id', $comment->id)->update([
+                'star' => $request->star,
+            ]);
+        }
+
+        $orderDetail->update([
+            'review' => $request->review
         ]);
-
 
         return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi!');
     }
     public function logout()
-{
-    auth()->logout(); 
-    return redirect()->route('client.home'); 
-}
-
+    {
+        auth()->logout();
+        return redirect()->route('client.home');
+    }
 }
