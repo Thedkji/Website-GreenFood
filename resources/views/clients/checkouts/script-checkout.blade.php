@@ -308,12 +308,16 @@
                         `;
                         let couponDetailHtml = ''; // Khởi tạo nội dung hàng trống
                         let final = totalPrice; // Khởi tạo final bằng tổng giá trị ban đầu
-
+                        if (coupon.discount_type == 1) {
+                            couponDe = 'Giảm theo giá tiền cố định'
+                        } else {
+                            couponDe = 'Giảm theo phần trăm'
+                        }
                         // Nếu là mã giảm giá áp dụng toàn bộ sản phẩm
                         if (coupon.type == 0) {
                             couponDetail += `
                                 <div class="mb-3">
-                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng
+                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng -  ${couponDe}
                                 </div>
                             `;
                             if (coupon.discount_type == 1) { // Giảm giá theo số tiền cố định
@@ -464,18 +468,24 @@
                         couponInput.value = ''; // Reset ô nhập
                         // Cập nhật giá trị vào trường input type="hidden"
                         hiddenInput.value = couponJson;
+                        $('#applyCouponBtn').prop('disabled', true);
                         let couponDetail = `
                             <div class="border rounded p-3 bg-light" id="coupon-detail">
                                 <h5 class="text-primary">Chi tiết mã giảm giá</h5>
                         `;
                         let couponDetailHtml = ''; // Khởi tạo nội dung hàng trống
                         let final = totalPrice; // Khởi tạo final bằng tổng giá trị ban đầu
-
+                        let couponDe = '';
                         // Nếu là mã giảm giá áp dụng toàn bộ sản phẩm
+                        if (coupon.discount_type == 1) {
+                            couponDe = 'Giảm theo giá tiền cố định'
+                        } else {
+                            couponDe = 'Giảm theo phần trăm'
+                        }
                         if (coupon.type == 0) {
                             couponDetail += `
                                 <div class="mb-3">
-                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng
+                                    <strong>Loại giảm giá:</strong> Tổng đơn hàng -  ${couponDe}
                                 </div>
                             `;
                             if (coupon.discount_type == 1) { // Giảm giá theo số tiền cố định
@@ -605,6 +615,7 @@
         couponInput.addEventListener('input', function() {
             if (couponInput.value.trim() !== '') {
                 couponSelect.value = ''; // Reset ô chọn
+                $('#applyCouponBtn').prop('disabled', false);
                 document.getElementById('coupon-detail123').innerHTML = ''; // Xóa thông tin chi tiết mã giảm giá
                 document.getElementById('coupon-detail-table').innerHTML = ''; // Xóa bảng chi tiết mã giảm giá
                 document.getElementById('totalPrice').textContent = `${new Intl.NumberFormat('vi-VN').format(totalPrice + shippingFee)} VNĐ`;

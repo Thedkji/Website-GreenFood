@@ -86,7 +86,7 @@ class CartComposer
         if (!empty($lowStockVariants)) {
             session()->put('check', 'value');
         }
-        $cartQuantity = $cartItems->sum('quantity');
+        $cartQuantity = $cartItems->count();
         $view->with(compact('cartItems', 'cartTotal', 'cartQuantity', 'variantGroups', 'userId', 'lowStockVariants'));
     }
 }
