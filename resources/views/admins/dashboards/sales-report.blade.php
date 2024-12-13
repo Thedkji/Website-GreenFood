@@ -140,9 +140,9 @@
                                         <td>
                                             <h5 class="fs-14 my-1 fw-normal">
                                                 @if ($product->status == 0)
-                                                    {{ app('formatPrice')($product->price_regular) }} VNĐ
+                                                    {{ app('formatPrice')($product->price_sale) }} VNĐ
                                                 @else
-                                                    {{ app('formatPrice')($minPriceVariantGroup->price_regular) }} VNĐ
+                                                    {{ app('formatPrice')($minPriceVariantGroup->price_sale) }} VNĐ
                                                 @endif
                                             </h5>
                                         </td>
