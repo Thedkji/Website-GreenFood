@@ -253,7 +253,7 @@
         <div id="form-coupon" class="row text-center align-items-center justify-content-center">
             <input type="hidden" name="total" value="{{ session('coupon') ? $totalPriceCoupon : $totalPrice }}">
             <input type="hidden" name="data[]" value="{{ json_encode($decodedItems) }}">
-            <div class="d-flex flex-row mb-3 gap-3">
+            <div class="d-flex flex-row mb-3 gap-3 mt-3">
                 <input
                     type="text"
                     name="coupon_name"

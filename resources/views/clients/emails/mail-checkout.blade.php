@@ -15,10 +15,6 @@
         <h3 style="color: #333; font-size: 20px; margin-bottom: 15px;">Danh sách sản phẩm:</h3>
         @forelse($order->orderDetails as $item)
         <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
-            <!-- Ảnh sản phẩm -->
-            <div style="flex: 0 0 80px; margin-right: 15px;">
-                <img src="{{ env('VIEW_IMG') }}/{{ $item->product_img }}" alt="Product Image" style="max-width: 100px;">
-            </div>
             <!-- Thông tin sản phẩm -->
             <div style="flex: 1;">
                 <p style="font-size: 16px; color: #333; margin: 0;"><strong>{{ e($item->product_name) }}</strong></p>

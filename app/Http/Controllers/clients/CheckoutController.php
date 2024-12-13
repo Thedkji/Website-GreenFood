@@ -390,7 +390,7 @@ class CheckoutController extends Controller
             DB::commit();
             // Kiểm tra phương thức thanh toán, nếu là Paypal thì chuyển sang VNPay Checkout
             if ($paymentMethod === "VNPay") {
-                session(['cart_items' => $request->data[0]]);
+                session(['cart_items' => $request->data[0], 'order' => $order]);
                 return $this->VnPayCheckOut($request, $order);
             }
             if (!empty($request->couponFee)) {
