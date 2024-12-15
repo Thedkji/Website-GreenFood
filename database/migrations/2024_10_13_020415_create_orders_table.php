@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('order_code');
             $table->string('name');
             $table->string('province', 50);
             $table->string('district', 50);
@@ -39,6 +40,14 @@ return new class extends Migration
                                 5: Hủy đơn ,
                                 6: Đánh giá,
                                 7: Hoàn thành
+                            '
+                )
+                ->default(0);
+            $table->integer('payment_method')
+                ->comment(
+                    '
+                                0: Tiền mặt ,
+                                1: Thanh toán VNPay,
                             '
                 )
                 ->default(0);

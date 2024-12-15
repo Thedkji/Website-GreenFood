@@ -373,9 +373,9 @@ class CheckoutController extends Controller
                 return redirect()->back()->with('error', 'Vui lòng chọn phương thức thanh toán');
             }
             $coupon = $request->coupon;
-
             $order = Order::create([
                 'user_id' => auth()->check() ? auth()->id() : null,
+                'order_code' => 'ORD-' . strtoupper(uniqid()),
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'name' => $request->fullName,
@@ -388,15 +388,20 @@ class CheckoutController extends Controller
                 'total' => $request->total,
             ]);
             DB::commit();
-            // Kiểm tra phương thức thanh toán, nếu là Paypal thì chuyển sang VNPay Checkout
-            if ($paymentMethod === "VNPay") {
-                session(['cart_items' => $request->data[0], 'order' => $order]);
-                return $this->VnPayCheckOut($request, $order);
-            }
             if (!empty($request->couponFee)) {
                 $coupon['couponFee'] = $request->couponFee;
             }
-
+            // Kiểm tra phương thức thanh toán, nếu là Paypal thì chuyển sang VNPay Checkout
+            if ($paymentMethod === "VNPay") {
+                session(['cart_items' => $request->data[0], 'order' => $order]);
+                if (!empty($request->couponFee)) {
+                    $coupon['couponFee'] = $request->couponFee;
+                    session(['couponAply' => $coupon]);
+                }
+                $order->payment_method = 1;
+                $order->save();
+                return $this->VnPayCheckOut($request, $order);
+            }
             $this->finalizeOrder($order, $request->data[0], $coupon);
             session()->forget('checkoutStatus');
             return redirect()->route('client.showSuccessCheckOut')
@@ -474,7 +479,6 @@ class CheckoutController extends Controller
     public function handleVnPayResponse(Request $request, $orderId)
     {
         Log::info('VNPAY Callback received', ['orderId' => $orderId, 'request' => $request->all()]);
-
         $vnp_ResponseCode = $request->get('vnp_ResponseCode');
         $vnp_SecureHash = $request->get('vnp_SecureHash');
         $vnp_HashSecret = env('VNPAY_HASHSECRET');
@@ -498,7 +502,7 @@ class CheckoutController extends Controller
                     return redirect()->route('client.showFailureCheckOut')->with('error', 'Không tìm thấy đơn hàng!');
                 }
                 // Xóa giỏ hàng và gửi email xác nhận
-                $this->finalizeOrder($order, session('cart_items'));
+                $this->finalizeOrder($order, session('cart_items'), session('couponAply') ?? null);
                 DB::commit();
                 return redirect()->route('client.showSuccessCheckOut')->with('success', 'Thanh toán thành công!');
             } catch (\Exception $e) {
@@ -595,6 +599,7 @@ class CheckoutController extends Controller
         $this->removeCartItems($cartItems);
         Mail::to($order->email)->queue(new MailCheckOut($order));
         session(['check' => true]);
+        session()->forget('couponAply');
     }
 
 
