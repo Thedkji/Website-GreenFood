@@ -197,8 +197,6 @@ class Information extends Controller
             $commentsData['img'] = $img->storeAs('comments', $filename);
         }
 
-
-
         if ($orderDetail->review == 0) {
             $comment = Comment::create($commentsData);
 
@@ -206,13 +204,19 @@ class Information extends Controller
                 'comment_id' => $comment->id,
                 'star' => $request->star,
             ]);
-        }else if($orderDetail->review == 1){
-            $comment = Comment::where('product_id', $request->product_id)->where('user_id', Auth::id())->first();
+
+            session(['comment_id' => $comment->id]);
+        } else if ($orderDetail->review == 1) {
+            $comment_id = session('comment_id');
+            $comment = Comment::where('product_id', $request->product_id)
+                ->where('id', $comment_id)
+                ->where('user_id', Auth::id())->first();
             $comment->update($commentsData);
 
             Rate::where('comment_id', $comment->id)->update([
                 'star' => $request->star,
             ]);
+            session()->remove('comment_id');
         }
 
         $orderDetail->update([

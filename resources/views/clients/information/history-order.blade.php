@@ -9,6 +9,7 @@
                 <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Chi tiết</th>
+                <th>Ngày đặt hàng</th>
                 <th>Trạng thái</th>
             </tr>
         </thead>
@@ -22,27 +23,39 @@
                     <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND
                     </td>
                     <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}">Xem</a></td>
+                    <td>{{ $order->created_at->format('d-m-Y H:i:s') }}</td>
+
                     <td>
                         @switch($order->status)
                             @case(3)
-                                <span class="badge bg-success" style="padding: 10px;">Giao hàng thành công</span>
+                                <span class="badge bg-success"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Giao hàng
+                                    thành công</span>
                             @break
 
                             @case(4)
-                                <span class="badge bg-info" style="padding: 10px;">Giao hàng không thành công</span>
+                                <span class="badge bg-danger"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Giao hàng
+                                    không thành công</span>
                             @break
 
                             @case(5)
-                                <span class="badge bg-danger" style="padding: 10px;">Hủy đơn</span>
+                                <span class="badge bg-danger"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Hủy
+                                    đơn</span>
                             @break
 
                             @case(6)
-                                <span class="badge bg-primary" style="padding: 10px;">Đánh giá</span>
+                                <span class="badge bg-success"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Giao hàng
+                                    thành công</span>
                             @break
 
-                            @case(7)
-                                <span class="badge bg-primary" style="padding: 10px;">Đã đánh giá</span>
-                            @break
+                            {{-- @case(7)
+                                <span class="badge bg-primary"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Đã đánh
+                                    giá</span>
+                            @break --}}
                         @endswitch
                     </td>
 

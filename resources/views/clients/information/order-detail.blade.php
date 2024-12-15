@@ -132,7 +132,7 @@
                                             @break
 
                                             @case(1)
-                                                <button class="btn btn-warning btn-sm p-2 text-white" id="review-button"
+                                                <button class="btn btn-info btn-sm p-2 text-white" id="review-button"
                                                     data-bs-toggle="modal" data-bs-target="#rateModal-{{ $detail->id }}"
                                                     style="font-size: 12px; width: 100px;">
                                                     Sửa đánh giá

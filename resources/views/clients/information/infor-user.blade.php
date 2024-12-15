@@ -45,6 +45,9 @@
                         <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện"
                             style="object-fit: cover; display: none;" width="130" height="130"
                             class="rounded-circle">
+                        <img id="imagePreviewAvatar2" src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                            alt="Preview ảnh đại diện" style="object-fit: cover; display: block;" width="130"
+                            height="130" class="rounded-circle">
                     </div>
                 </div>
 
@@ -149,6 +152,7 @@
         if (event.target.files && event.target.files[0]) {
             preview.src = URL.createObjectURL(event.target.files[0]);
             preview.style.display = 'block';
+            $('#imagePreviewAvatar2').removeClass('d-block').addClass('d-none');
 
             // Giải phóng bộ nhớ sau khi ảnh đã được tải
             preview.onload = function() {

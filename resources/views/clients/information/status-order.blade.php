@@ -9,6 +9,7 @@
                 <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Chi tiết</th>
+                <th>Ngày đặt hàng</th>
                 <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
@@ -24,17 +25,26 @@
                     </td>
                     <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}">Xem</a></td>
                     <td>
+                        {{ $order->created_at->format('d-m-Y H:i:s') }}
+                    </td>
+                    <td>
                         @switch($order->status)
                             @case(0)
-                                <span class="badge bg-warning" style="padding: 10px;">Chờ xác nhận</span>
+                                <span class="badge bg-warning"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Chờ xác
+                                    nhận</span>
                             @break
 
                             @case(1)
-                                <span class="badge bg-info " style="padding: 10px;">Đã xác nhận và đang xử lý</span>
+                                <span class="badge bg-info "
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Đã xác nhận
+                                    và đang xử lý</span>
                             @break
 
                             @case(2)
-                                <span class="badge bg-primary" style="padding: 10px;">Đang giao hàng</span>
+                                <span class="badge bg-primary"
+                                    style="padding: 10px; width: 100px;word-wrap: break-word;white-space: normal;">Đang giao
+                                    hàng</span>
                             @break
                         @endswitch
                     </td>
@@ -52,7 +62,7 @@
                                     Hủy
                                 </button>
                             @else
-                                <button type="button" class="btn btn-dark" style="padding: 8px 15px;"
+                                <button type="button" class="btn" style="padding: 8px 15px; background-color:gray "
                                     disabled>Hủy</button>
                             @endif
                         </form>
@@ -102,10 +112,10 @@
                         </script>
                     </td>
                 </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{ $orders->links() }}
+            @endforeach
+        </tbody>
+    </table>
+    {{ $orders->links() }}
 </div>
 @foreach ($orders as $order)
     <div class="modal fade" id="cancelOrderModal{{ $order->id }}" tabindex="-1"
