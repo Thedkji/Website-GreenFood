@@ -90,7 +90,9 @@ class CommentController extends Controller
         }
 
 
-        $replies = Comment::where('parent_user_id', $comment->user_id)->get();
+        $replies = Comment::where('parent_user_id', $comment->user_id)
+            ->where('product_id', $comment->product_id)
+            ->get();
 
         return view('admins.comments.detail-comment', compact('comment', 'replies'));
     }

@@ -86,8 +86,6 @@
             height: 150px;
         }
     }
-
-
 </style>
 
 <div class="col-lg-9">
@@ -101,9 +99,10 @@
                         <!-- Image -->
                         <div class="fruite-img">
                             <a href="{{ route('client.product-detail', $product->id) }}">
-                                <img src="{{ $product->img && $product->img !== 'https://via.placeholder.com/300x200' ? env('VIEW_IMG') . '/' . $product->img : 'https://via.placeholder.com/300x200' }}"
+                                <img src="{{ $product->img && Storage::exists($product->img) ? env('VIEW_IMG') . '/' . $product->img : env('APP_URL') . '/clients/img/avatar-default.jpg' }}"
                                     class="card-img-top" alt="{{ $product->name }}">
                             </a>
+
                         </div>
 
                         <!-- Product Info -->
