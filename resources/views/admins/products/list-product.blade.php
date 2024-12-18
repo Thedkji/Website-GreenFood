@@ -46,7 +46,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.product-checkbox')">
                 </th>
-                <th scope="col">ID</th>
+                <th scope="col">Stt</th>
                 <th scope="col">Mã sản phẩm</th>
                 <th scope="col">Tên</th>
                 <th scope="col">Slug</th>
@@ -68,7 +68,7 @@
                         <input type="checkbox" class="product-checkbox" name="product-checkbox"
                             onclick="toggleDeleteButton('.product-checkbox')" value="{{ $product->id }}">
                     </td>
-                    <td>{{ $product->id }}</td>
+                    <td>{{  $loop->iteration }}</td>
 
                     @php
                         $minPriceVariantGroup = $product->variantGroups->sortBy('price_sale')->first();

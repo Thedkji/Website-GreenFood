@@ -33,7 +33,7 @@
                 <th>
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.coupon-checkbox')">
                 </th>
-                <th>ID</th>
+                <th>Stt</th>
                 <th>Tên mã giảm giá</th>
                 <th>Loại mã giảm giá</th>
                 <th>
@@ -67,7 +67,7 @@
                         <input type="checkbox" class="coupon-checkbox" name="coupon_id[]"
                             onclick="toggleDeleteButton('.coupon-checkbox')" value="{{ $coupon->id }}">
                     </td>
-                    <td>{{ $coupon->id }}</td>
+                    <td>{{  $loop->iteration }}</td>
                     <td class="truncate-text">
                         <span class="truncate" data-fulltext="{{ $coupon->name }}">
                             {{ $coupon->name }}

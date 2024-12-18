@@ -5,7 +5,9 @@
 @section('start-page-title', 'Danh sách người dùng')
 
 @section('link')
-    <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a></li>
+    <li class="breadcrumb-item">
+        <a href="{{ route('admin.categories.index') }}">Quản lý người dùng</a>
+    </li>
     <li class="breadcrumb-item active">Danh sách</li>
 @endsection
 
@@ -53,10 +55,19 @@
                             <input type="checkbox" class="user-checkbox" name="user_id[]"
                                 onclick="toggleDeleteButton('.user-checkbox')" value="{{ $user->id }}">
                         </td>
-                        <td scope="row">{{  $loop->iteration }}</td>
+                        <td scope="row">{{ $loop->iteration }}</td>
                         <td scope="row">{{ $user->name }}</td>
-                        <td scope="row"><img src="{{ Storage::url($user->avatar) }}" alt="Ảnh khách hàng"
-                                style="width:100px;height:100px;object-fit: cover"></td>
+                        <td scope="row">
+                            @if ($user->avatar)
+                                <img id="imagePreviewAvatar2" src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}"
+                                    alt="Preview ảnh đại diện" style="object-fit: cover;" width="100" height="100"
+                                    class=" d-block">
+                            @else
+                                <img id="imagePreviewAvatar2" src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                                    alt="Preview ảnh đại diện" style="object-fit: cover; display: block;" width="100"
+                                    height="100" class="">
+                            @endif
+                        </td>
                         <td scope="row">{{ $user->user_name }}</td>
                         {{-- <td scope="row">{{ $user->password }}</td> --}}
                         <td scope="row" class="truncate-text truncate " data-fulltext="{{ $user->email }}">

@@ -39,7 +39,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.variant-checkbox')">
                 </th>
-                <th scope="col">Id</th>
+                <th scope="col">Stt</th>
                 <th scope="col">Tên biến thể</th>
                 <th scope="col">Giá trị</th>
                 <th scope="col">Ngày tạo</th>
@@ -54,7 +54,7 @@
                         <input type="checkbox" class="variant-checkbox" name="variant_id[]"
                             onclick="toggleDeleteButton('.variant-checkbox')" value="{{ $variant->id }}">
                     </td>
-                    <td>{{ $variant->id }}</td>
+                    <td>{{  $loop->iteration }}</td>
                     <td>
                         @if ($variant->parent_id == null)
                             {{ $variant->name }}
