@@ -86,7 +86,7 @@
                                                 {{ number_format($totalEarnings, 0, ',', '.') }}
                                             </span> VNĐ
                                         </h4>
-                                        
+
                                         <a href="{{ route('admin.salesReport') }}" class="text-decoration-underline">Xem
                                             tổng doanh thu</a>
                                     </div>
@@ -96,7 +96,10 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
+                            </div>
+
+
+                            <!-- end card body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
 
@@ -173,7 +176,7 @@
                     <div class="col-xl-3 col-md-6">
                         <!-- card -->
                         <div class="card card-animate">
-                            <div class="card-body">
+                            {{-- <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
@@ -199,7 +202,9 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
+                            </div> --}}
+ 
+                            <!-- end card body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
                 </div> <!-- end row-->
