@@ -80,7 +80,7 @@ class CommentController extends Controller
 
         $reply->save();
 
-        return redirect()->route('admin.comments.detail', $id)->with('success', 'Phản hồi đã được thêm thành công.');
+        return redirect()->route('admin.comments.detail', $id)->with('success', 'Đã phản hồi.');
     }
     public function detail($id)
     {

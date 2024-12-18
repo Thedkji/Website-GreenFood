@@ -29,14 +29,14 @@
     <div class="d-flex justify-content-sm-start mb-3"><a href="{{ route('admin.users.create') }}"
             class="btn btn-success">Thêm
             Mới</a></div>
-    <table class="table table-striped text-center align-middle fs-6">
+    <table class="table table-striped align-middle fs-6">
         <thead>
-            <tr>
+            <tr class="">
 
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.user-checkbox')">
                 </th>
-                <th scope="col">Stt</th>
+                <th scope="col">STT</th>
                 <th scope="col">Họ và tên</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Tên đăng nhập</th>
@@ -57,7 +57,7 @@
                         </td>
                         <td scope="row">{{ $loop->iteration }}</td>
                         <td scope="row">{{ $user->name }}</td>
-                        <td scope="row">
+                        <td scope="row" class="text-center">
                             @if ($user->avatar)
                                 <img id="imagePreviewAvatar2" src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}"
                                     alt="Preview ảnh đại diện" style="object-fit: cover;" width="100" height="100"
@@ -77,8 +77,14 @@
                         <td scope="row">{{ $user->district }}</td>
                         <td scope="row">{{ $user->ward }}</td> --}}
                         <td scope="row" class="truncate-text truncate " data-fulltext="{{ $user->address }}">
-                            {{ $user->address }}</td>
-                        <td scope="row">{{ $user->role === 0 ? 'Admin' : 'User' }}</td>
+                            {{ $user->address }}
+                        </td>
+
+                        <td>
+                            <span class="badge {{ $user->role === 0 ? 'bg-success' : 'bg-primary' }} p-2">
+                                {{ $user->role === 0 ? 'Admin' : 'User' }}
+                            </span>
+                        </td>
 
                         <td>
                             <a href="{{ route('admin.users.show', $user->id) }}" class="link-success fs-15 truncate"

@@ -3,16 +3,8 @@
 @section('title', 'Chi tiết Bình Luận')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('admins.layouts.components.toast-container')
+
     <div class="mb-3 border p-2 border-success rounded bg-white">
         <h3 class="text-success mb-3">Chi tiết Bình luận</h3>
         <!-- Comment Details -->
@@ -81,4 +73,5 @@
         <button type="submit" class="btn btn-success">Trả lời</button>
     </form>
 
+    @include('admins.layouts.components.toast')
 @endsection

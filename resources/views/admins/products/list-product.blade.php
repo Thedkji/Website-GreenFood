@@ -56,8 +56,6 @@
                 <th scope="col">Số lượng</th>
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Lượt xem</th>
-                <th scope="col">Ngày tạo</th>
-                <th scope="col">Ngày cập nhật</th>
                 <th scope="col" colspan="3">Thao tác</th>
             </tr>
         </thead>
@@ -68,7 +66,7 @@
                         <input type="checkbox" class="product-checkbox" name="product-checkbox"
                             onclick="toggleDeleteButton('.product-checkbox')" value="{{ $product->id }}">
                     </td>
-                    <td>{{  $loop->iteration }}</td>
+                    <td>{{ $loop->iteration }}</td>
 
                     @php
                         $minPriceVariantGroup = $product->variantGroups->sortBy('price_sale')->first();
@@ -96,8 +94,13 @@
 
                     <td>
                         <a href="{{ route('client.product-detail', $product->id) }}">
-                            <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
-                                style="width: 100px; height: 100px; object-fit: cover;">
+                            @if ($product->img && Storage::exists($product->img))
+                                <img src="{{ env('VIEW_IMG') }}/{{ $product->img }}" alt=""
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                            @else
+                                <img src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg" alt="{{ $product->name }}"
+                                    class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                            @endif
                         </a>
                     </td>
 
@@ -112,16 +115,13 @@
                         <td>{{ $minPriceVariantGroup->quantity }}</td>
                     @endif
                     <td>
-                        <span class="badge p-2 {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}">
+                        <span class="badge p-2 truncate {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}" data-fulltext="Ngày tạo: {{ $product->created_at->format('d-m-Y H:i:s') }}">
                             {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
                         </span>
 
                     </td>
 
                     <td>{{ app('formatPrice')($product->view) }}</td>
-
-                    <td>{{ $product->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $product->updated_at->format('d-m-Y H:i:s') }}</td>
 
                     <td>
                         <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15 truncate"
