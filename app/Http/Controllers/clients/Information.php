@@ -22,7 +22,7 @@ class Information extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
+        $user = auth()->user(); 
         $provinces = DB::table('provinces')->get();
 
         if (request()->ajax() && request('province_code')) {
@@ -41,13 +41,18 @@ class Information extends Controller
 
         $orders = Order::where('user_id', $user->id)
             ->whereIn('status', [0, 1, 2])
-            ->with('user')->paginate(5);
+            ->with('user')
+            ->orderBy('created_at', 'desc') 
+            ->paginate(5);
 
         $oders = Order::where('user_id', $user->id)
             ->whereIn('status', [3, 4, 5, 6, 7])
-            ->with('user')->paginate(5);
+            ->with('user')
+            ->orderBy('created_at', 'desc') 
+            ->paginate(5);
 
-        // Trả dữ liệu về view
+
+        
         return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces'));
     }
 

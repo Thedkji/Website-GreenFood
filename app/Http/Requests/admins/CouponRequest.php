@@ -21,8 +21,9 @@ class CouponRequest extends FormRequest
      */
     public function rules(): array
     {
+        $couponId = $this->route('id');
         return [
-            'name' => 'required|string|max:255', 
+            'name' => 'required|string|unique:coupons,name,' . $couponId,
             'discount_type' => 'required|in:0,1', 
             'coupon_amount' => ['required', 'numeric', function($attribute, $value, $fail) {
                 if ($this->discount_type == 0) { 
@@ -54,8 +55,9 @@ class CouponRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Tên mã giảm giá là bắt buộc.',
-            'name.string' => 'Tên mã giảm giá phải là một chuỗi.',
+            'name.required' => 'Vui lòng nhập tên mã giảm giá.',
+            'name.string' => 'Tên mã giảm giá phải là một chuỗi ký tự hợp lệ.',
+            'name.unique' => 'Tên mã giảm giá đã tồn tại trong hệ thống.',
             'name.max' => 'Tên mã giảm giá không được vượt quá 255 ký tự.',
             
             'discount_type.required' => 'Loại mã giảm giá là bắt buộc.',
