@@ -5,6 +5,7 @@ namespace App\Http\Controllers\clients;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\clients\PassRequest;
 use App\Models\Comment;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class Information extends Controller
 {
@@ -51,9 +53,18 @@ class Information extends Controller
             ->orderBy('created_at', 'desc') 
             ->paginate(5);
 
-
+            $isNewUser = $user->created_at->diffInDays(now()) <= 7; 
+            $hasNoOrders = $user->orders()->count() == 0; 
         
-        return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces'));
+            if ($isNewUser || $hasNoOrders) {
+                $coupons = Coupon::where('status', 2)
+                    ->where('expiration_date', '>=', now()) 
+                    ->get();
+            } else {
+                $coupons = collect(); 
+            }
+        
+        return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces','coupons'));
     }
 
 
@@ -235,4 +246,5 @@ class Information extends Controller
         auth()->logout();
         return redirect()->route('client.home');
     }
+    
 }

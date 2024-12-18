@@ -54,6 +54,11 @@
                                     @include('clients.information.pass')
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="coupon" role="tabpanel">
+                                <div class="myaccount-content">
+                                    @include('clients.information.coupon_user')
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- My Account Tab Content End -->
