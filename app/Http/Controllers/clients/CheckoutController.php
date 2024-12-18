@@ -154,6 +154,10 @@ class CheckoutController extends Controller
             if ($coupon->quantity == 0) {
                 return false;
             }
+            // Kiểm tra ngày hết hạn của coupon
+            if ($coupon->expiration_date && now()->greaterThan($coupon->expiration_date)) {
+                return false;
+            }
 
             // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
             if ($coupon->type == 0) {
@@ -283,7 +287,10 @@ class CheckoutController extends Controller
                     if ($coupon->quantity == 0) {
                         return false;
                     }
-
+                    // Kiểm tra ngày hết hạn của coupon
+                    if ($coupon->expiration_date && now()->greaterThan($coupon->expiration_date)) {
+                        return false;
+                    }
                     // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
                     if ($coupon->type == 0) {
                         return true;

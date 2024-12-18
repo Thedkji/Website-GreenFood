@@ -63,7 +63,7 @@
             <th scope="col">
                 <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
             </th>
-            <th scope="col">Id</th>
+            <th scope="col">Stt</th>
             <th scope="col">Tên nhà cung cấp</th>
             <th scope="col">Email</th>
             <th scope="col">Số điện thoại</th>
@@ -82,7 +82,7 @@
                             <input type="checkbox" class="supplier-checkbox" name="supplier-checkbox"
                                 onclick="toggleDeleteButton()" value="{{ $supplier->id }}">
                         </td>
-                        <th scope="row">{{ $supplier->id }}</th>
+                        <th scope="row">{{ $loop->iteration }}</th>
                         <td class="truncate truncate-text" data-fulltext="{{ $supplier->name }}">{{ $supplier->name }}</td>
                         <td>{{ $supplier->email }}</td>
                         <td>{{ $supplier->phone }}</td>
@@ -103,15 +103,16 @@
                         <td>
                             <div class="hstack gap-3 flex-wrap">
                                 <a href="{{ route('admin.suppliers.edit', $supplier) }}"
-                                    style="background-color: transparent;" class="link-success fs-15"><i
-                                        class="ri-edit-2-line"></i></a>
+                                    style="background-color: transparent;" class="link-success fs-15 truncate"
+                                    data-fulltext="Chỉnh sửa"><i class="ri-edit-2-line"></i></a>
                                 <form action="{{ route('admin.suppliers.destroy', $supplier) }}" method="post"
                                     id="delete-form-{{ $supplier->id }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" id="deleteButton-{{ $supplier->id }}"
                                         style="background-color: transparent; border: none; color: inherit;"
-                                        class="link-danger fs-15">
+                                        class="link-danger fs-15 border-0 bg-transparent truncate"
+                                        id="deleteButton-{{ $supplier->id }}" data-fulltext="Xóa">
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
