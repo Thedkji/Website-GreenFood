@@ -142,42 +142,73 @@ class UserController extends Controller
         return view('admins.users.detail-users', compact('user', 'provinces', 'districts', 'wards'));
     }
     public function destroy($id)
-    {
-        DB::beginTransaction();
-        try {
+{
+    $currentUserId = auth()->id();
 
-            $user = User::findOrFail($id);
-            // $user->delete();
-            // if ($user->avatar) {
-            //     Storage::disk('public')->delete($user->avatar);
-            // }
-            // $user->galleries()->delete();
-            $user->delete();
-            DB::commit();
-            return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.');
-        }
+    if ($id == $currentUserId) {
+        return redirect()->back()->with('error', 'Bạn không thể xóa tài khoản của chính mình.');
     }
 
-    public function bulkDelete(Request $request)
-    {
-        $ids = $request->input('ids'); // Lấy danh sách ID từ request
+    DB::beginTransaction();
+    try {
+        $user = User::findOrFail($id);
+        $user->delete();
 
-        if (!is_array($ids) || empty($ids)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Không có lựa chọn nào được chọn.'
-            ], 400);
+        DB::commit();
+        if ($id == $currentUserId) {
+            return redirect()->back()->with('error', 'Bạn không thể xóa tài khoản của chính mình.');
+        }else{
+            return redirect()->back()->with('success', 'Tài khoản đã được xóa thành công.');
         }
+    } catch (\Exception $e) {
+        DB::rollBack();
 
-        // Xóa các bình luận dựa trên danh sách ID
+        // Truyền thông báo lỗi từ exception
+        return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+    }
+}
+
+
+
+public function bulkDelete(Request $request)
+{
+    $ids = $request->input('ids');
+    $currentUserId = auth()->id();
+
+    if (!is_array($ids) || empty($ids)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Không có lựa chọn nào được chọn.'
+        ], 400);
+    }
+
+    $ids = array_diff($ids, [$currentUserId]);
+
+    if (empty($ids)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Bạn không thể xóa tài khoản của chính mình.'
+        ], 400);
+    }
+
+    DB::beginTransaction();
+    try {
         User::whereIn('id', $ids)->delete();
+        DB::commit();
 
         return response()->json([
             'success' => true,
             'message' => 'Đã xóa các user được chọn thành công.'
         ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        // Truyền thông báo lỗi từ exception
+        return response()->json([
+            'success' => false,
+            'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+        ], 500);
     }
+}
+
 }

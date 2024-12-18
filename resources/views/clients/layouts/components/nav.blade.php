@@ -78,12 +78,23 @@
                             <a href="{{ route('client.register') }}" class="dropdown-item">Đăng Ký</a>
                         </div>
                         @else
+                        {{-- <a href="{{ route('client.login') }}" class="nav-link">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a> --}}
                         <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
                         <a href="" class="nav-link">
-                            <i class="fas fa-user fa-2x"></i>
+                            @if (auth()->user()->avatar)
+                            <img id="imagePreviewAvatar2" src="{{ Storage::url(auth()->user()->avatar) }}"
+                                alt="Preview ảnh đại diện" style="object-fit: cover;" width="40" height="40"
+                                class="rounded-circle d-block">
+                        @else
+                            <img id="imagePreviewAvatar2" src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                                alt="Preview ảnh đại diện" style="object-fit: cover; display: block;" width="40"
+                                height="40" class="rounded-circle">
+                        @endif
                         </a>
                         <div class="dropdown-menu mr-5-3 bg-secondary rounded-0">
-                            <span class="nav-item nav-link dropdown-item">Xin chào, {{ Auth::user()->name }}</span>
+                            <span class="nav-item nav-link dropdown-item">{{ Auth::user()->name }}</span>
 
 
                             <a href="{{ route('client.information.index') }}" class="dropdown-item nav-item nav-link">
