@@ -7,6 +7,8 @@
     $averageRating = $ratings->isEmpty() ? 0 : number_format($ratings->avg('star'), 1);
 
     $countComment = $product->comments()->where('parent_user_id', null)->count();
+
+    $comments = $product->comments()->where('parent_user_id', null)->paginate(3);
 @endphp
 <p>
     <span class="fw-bold" style="font-size: 16px "> Đánh giá : </span>({{ $averageRating }}<i
@@ -15,13 +17,16 @@
 <p><span class="fw-bold" style="font-size: 16px ">Bình luận : </span>{{ $countComment }} lượt</p>
 
 
-@foreach ($product->comments()->where('parent_user_id', null)->get() as $comment)
+@foreach ($comments as $comment)
     <div class="card mb-4 shadow-sm p-3 border-0">
         <div class="d-flex">
             {{-- Avatar người bình luận --}}
-            @if ($comment->user)
+            @if ($comment->user && $comment->user->avatar)
                 <img src="{{ env('VIEW_IMG') }}/{{ $comment->user->avatar }}" class="rounded-circle me-3 border"
                     style="width: 60px; height: 60px; object-fit: cover;" alt="Avatar">
+            @else
+                <img src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg" class="rounded-circle me-2 border"
+                    style="width: 50px; height: 50px; object-fit: cover;" alt="Avatar">
             @endif
 
 
@@ -95,8 +100,12 @@
                         @foreach ($replies as $rep)
                             <div class="d-flex mt-3 bg-light p-2 rounded-3 shadow-sm">
                                 {{-- Avatar người trả lời --}}
-                                @if ($rep->user)
+                                @if ($rep->user && $rep->user->avatar)
                                     <img src="{{ env('VIEW_IMG') }}/{{ $rep->user->avatar }}"
+                                        class="rounded-circle me-2 border"
+                                        style="width: 50px; height: 50px; object-fit: cover;" alt="Avatar">
+                                @else
+                                    <img src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
                                         class="rounded-circle me-2 border"
                                         style="width: 50px; height: 50px; object-fit: cover;" alt="Avatar">
                                 @endif
@@ -105,10 +114,8 @@
                                     {{-- Tên người trả lời --}}
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="mb-1 text-dark">
-                                            {{ $rep->user->name ?? 'Unknown' }}
-                                            @if ($rep->user->is_admin)
-                                                <span class="badge bg-success">Admin</span>
-                                            @endif
+                                            {{ $rep->user->name ?? 'No name' }}
+                                            <span class="badge bg-success">Admin</span>
                                         </h6>
                                         <small class="text-muted">
                                             {{ $rep->updated_at->format('d-m-Y') }} lúc
@@ -144,7 +151,7 @@
 @endforeach
 
 <div>
-    {{ $product->comments()->where('parent_user_id', null)->paginate(2)->appends(request()->query())->links() }}
+    {{ $comments->links() }}
 </div>
 
 <style>

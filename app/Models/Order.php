@@ -16,6 +16,7 @@ class Order extends Model
     public $sortable = ["user_id", 'total', "status", 'created-at', 'updated_at'];
 
     protected $fillable = [
+        "order_code",
         "user_id",
         "address",
         "province",

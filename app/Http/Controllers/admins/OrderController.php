@@ -23,6 +23,7 @@ class OrderController extends Controller
             $search = $request->input('search');
             $query->where('email', 'LIKE', "%{$search}%")
                 ->orWhere('phone', 'LIKE', "%{$search}%")
+                ->orWhere('order_code', 'LIKE', "%{$search}%")
                 ->orWhere('total', 'LIKE', "%{$search}%")
                 ->orWhereHas('orderDetails', function ($q) use ($search) {
                     $q->where('product_name', 'like', '%' . $search . '%');
@@ -36,6 +37,9 @@ class OrderController extends Controller
 
         if ($request->has('endDate') && $request->input('endDate') !== null) {
             $query->whereDate('created_at', '<=', $request->input('endDate'));
+        }
+        if ($request->has('payment_method') && $request->input('payment_method') !== null) {
+            $query->where('payment_method', '=', $request->input('payment_method'));
         }
         $orders = $query->with('orderDetails') // Lấy kèm orderDetails
             ->sortable() // Sắp xếp theo cột
@@ -60,16 +64,17 @@ class OrderController extends Controller
         return view("admins.orders.order-detail", compact('orders',  'orderDetails', 'user'));
     }
 
-
     public function updateOrder(Request $request, $id)
     {
         $order = Order::find($id);
         if ($order) {
             $status = $request->input('status');
+            if ($order->status == 5 && $status == 1) {
+                return redirect()->back()->with('error', 'Đơn hàng đã bị hủy không thể chuyển đổi trạng thái');
+            }
             $order->update(['status' => $status]);
             Mail::to($order->email)->queue(new MailCheckOut($order));
         }
-
         return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
     }
 

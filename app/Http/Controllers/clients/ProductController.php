@@ -20,32 +20,34 @@ class ProductController extends Controller
     public function home(Request $request)
     {
         $categories = Category::with('children')->where('parent_id', null)->get();
-        
+
         // Get products and calculate sale percentage
         $products = Product::with(['categories', 'galleries', 'variantGroups'])
             ->get()
             ->map(function ($product) {
-                // Calculate sale percentage
+                // Initialize sale percentage
                 $salePercent = 0;
+
                 if ($product->status == 0) {
                     // No variant
-                    if ($product->price_sale) {
+                    if ($product->price_sale && $product->price_regular > 0) {
                         $salePercent = round((($product->price_regular - $product->price_sale) / $product->price_regular) * 100);
                     }
                 } elseif ($product->status == 1) {
                     // Has variant
                     $variantGroup = $product->variantGroups->sortBy('price_sale')->first();
-                    if ($variantGroup && $variantGroup->price_sale) {
+                    if ($variantGroup && $variantGroup->price_sale && $variantGroup->price_regular > 0) {
                         $salePercent = round((($variantGroup->price_regular - $variantGroup->price_sale) / $variantGroup->price_regular) * 100);
                     }
                 }
+
                 $product->setAttribute('sale_percent', $salePercent);
                 return $product;
             })
             ->sortByDesc('sale_percent') // Sort by sale percentage from highest to lowest
             ->take(10); // Show only the top 10 products
-        
-            $productHot = Product::with(['comments.rates'])
+
+        $productHot = Product::with(['comments.rates'])
             ->get()
             ->map(function ($product) {
                 $avgRating = $product->comments->flatMap(function ($comment) {
@@ -66,21 +68,21 @@ class ProductController extends Controller
             ->sortByDesc('score')
             ->take(6);
 
-    
+
         $bestSellingProducts = Product::with(['categories', 'galleries'])
             ->withSum('orderDetails as total_sold', 'product_quantity')
             ->orderByDesc('total_sold')
             ->take(8)
             ->get();
-        
+
         $topRatedComments = Comment::with(['rates', 'product', 'user'])
-            ->whereHas('rates')  
+            ->whereHas('rates')
             ->get()
             ->sortByDesc(function ($comment) {
-                return $comment->rates->avg('star');  
+                return $comment->rates->avg('star');
             })
             ->take(5);
-    
+
         if ($request->ajax() && $request->has('keySearch')) {
             $productSearch = Product::with('categories', 'variantGroups')
                 ->where('name', 'like', '%' . $request->keySearch . '%')
@@ -89,11 +91,13 @@ class ProductController extends Controller
                 ->get();
             return response()->json($productSearch);
         }
-        
+
         return view('clients.homes.home', compact(
-            'products', 'categories', 'productHot', 'bestSellingProducts', 'topRatedComments'
+            'products',
+            'categories',
+            'productHot',
+            'bestSellingProducts',
+            'topRatedComments'
         ));
     }
-    
-
 }

@@ -4,10 +4,19 @@
 
 @section('start-page-title', "Sản phẩm $product->name | ID: $product->id")
 
+@section('link')
+    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+    <li class="breadcrumb-item active">Sửa sản phẩm</li>
+@endsection
+
 @section('content')
 
     @include('admins.layouts.components.toast-container')
-
+    <div class="col-12 my-3">
+        <button class="btn btn-primary " type="button">
+            <a class="text-white" href="{{ route('admin.products.index') }}">Quay lại</a>
+        </button>
+    </div>
     <form action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data"
         id="form-add-product">
         @csrf

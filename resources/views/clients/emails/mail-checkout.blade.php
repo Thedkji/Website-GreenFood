@@ -1,9 +1,10 @@
 <div style="border: 1px solid rgba(226, 175, 24, 0.5); padding: 20px; background-color: #f9f9f9; max-width: 800px; margin: auto; font-family: Arial, sans-serif;">
-    <h2 style="color: #333; font-size: 24px; margin-bottom: 20px; text-align: center;">Cảm ơn vì đã sử dụng dịch vụ, {{ e($order->user->name ?? 'Guest') }}!</h2>
+    <h2 style="color: #333; font-size: 24px; margin-bottom: 20px; text-align: center;">Cảm ơn vì đã sử dụng dịch vụ, {{ e($order->name) }}!</h2>
 
     <!-- Thông tin khách hàng -->
     <div style="margin-bottom: 20px;">
-        <p style="font-size: 16px; color: #555;"><strong>Tên khách hàng:</strong> {{ e($order->user->name ?? 'Khách vãng lai') }}</p>
+        <p style="font-size: 16px; color: #555;"><strong>Mã đơn hàng:</strong> {{ e($order->order_code) }}</p>
+        <p style="font-size: 16px; color: #555;"><strong>Tên khách hàng:</strong> {{ e($order->name) }}</p>
         <p style="font-size: 16px; color: #555;"><strong>Email:</strong> {{ e($order->email) }}</p>
         <p style="font-size: 16px; color: #555;"><strong>Địa chỉ giao hàng:</strong> {{ e($order->address) }}</p>
         <p style="font-size: 16px; color: #555;"><strong>Số điện thoại:</strong> {{ e($order->phone) }}</p>
@@ -15,10 +16,6 @@
         <h3 style="color: #333; font-size: 20px; margin-bottom: 15px;">Danh sách sản phẩm:</h3>
         @forelse($order->orderDetails as $item)
         <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
-            <!-- Ảnh sản phẩm -->
-            <div style="flex: 0 0 80px; margin-right: 15px;">
-                <img src="{{ env('VIEW_IMG') }}/{{ $item->product_img }}" alt="Product Image" style="max-width: 100px;">
-            </div>
             <!-- Thông tin sản phẩm -->
             <div style="flex: 1;">
                 <p style="font-size: 16px; color: #333; margin: 0;"><strong>{{ e($item->product_name) }}</strong></p>
@@ -65,7 +62,9 @@
             <span style="background-color: #6c757d; color: #fff; padding: 5px 10px; border-radius: 4px;">Không xác định</span>
             @endswitch
         </p>
-
+        @if($order->status == 5 && $order->payment_method == 1)
+        <span>Chúng tôi sẽ kiểm tra và hoàn tiền cho bạn. Vui lòng kiểm tra Email hoặc số điện thoại thường xuyên</span>
+        @endif
     </div>
 
     <!-- Nút tiếp tục -->

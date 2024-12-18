@@ -49,7 +49,7 @@ class CommentSeeder extends Seeder
                 "parent_user_id" => null,
                 "user_id" => Arr::random($user_id),
                 "content" => Arr::random($healthy_food_comments),
-                "img" => "https://via.placeholder.com/300x200",
+                "img" => "",
             ]);
         }
     }

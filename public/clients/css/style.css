@@ -18,17 +18,21 @@
 .truncate:hover::after {
     content: attr(data-fulltext);
     position: absolute;
-    background-color: #000;
-    color: #fff;
-    padding: 5px;
-    border-radius: 5px;
+    background-color: black; /* Nền sáng hơn, dễ chịu hơn */
+    color: white; /* Màu chữ tối hơn, dễ đọc hơn */
+    padding: 8px 12px; /* Cải thiện khoảng cách padding */
+    border-radius: 8px; /* Góc bo tròn mềm mại hơn */
     white-space: normal; /* Cho phép nội dung xuống dòng */
     word-wrap: break-word; /* Tự động xuống dòng nếu nội dung quá dài */
-    max-width: 350px; /* Đặt chiều rộng tối đa, điều chỉnh theo nhu cầu */
+    max-width: 350px; /* Chiều rộng tối đa */
     z-index: 1000;
     text-align: start;
-    margin-top: 5px;
-    display: block; /* Ẩn tooltip mặc định */
+    margin-top: 8px;
+    display: block;
+    font-family: "Arial", sans-serif !important; /* Phông chữ mềm mại, dễ đọc */
+    font-size: 13px; /* Kích thước chữ dễ đọc hơn */
+    line-height: 1.5; /* Khoảng cách giữa các dòng, giúp dễ đọc hơn */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ nhẹ để làm nổi bật tooltip */
 }
 
 .truncate-text-300 {

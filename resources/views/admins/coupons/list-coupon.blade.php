@@ -7,35 +7,8 @@
 @endsection
 
 @section('content')
-    <div class="toast-container">
-        @if (session('success'))
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastSuccess">
-                <div class="toast-header bg-success text-white">
-                    <strong class="me-auto">Thông báo</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-                <div class="toast-body bg-white text-dark">
-                    {{ session('success') }}
-                </div>
-                <div class="toast-progress bg-success"></div>
-            </div>
-        @endif
+    @include('admins.layouts.components.toast-container')
 
-        @if (session('error'))
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastError">
-                <div class="toast-header bg-danger text-white">
-                    <strong class="me-auto">Lỗi</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-                <div class="toast-body bg-white text-dark">
-                    {{ session('error') }}
-                </div>
-                <div class="toast-progress bg-danger"></div>
-            </div>
-        @endif
-    </div>
     <div class="row g-4 mb-3">
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end">
@@ -54,32 +27,94 @@
             <a href="{{ route('admin.coupons.addCoupon') }}" class="text-white">Thêm</a>
         </button>
     </div>
-    <table class="table">
+    <table class="table align-middle">
         <thead>
             <tr>
+                <th>
+                    <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.coupon-checkbox')">
+                </th>
                 <th>ID</th>
                 <th>Tên mã giảm giá</th>
-                <th style="text-align: center">Loại mã giảm giá</th>
-                <th>Giá trị muốn giảm giá</th>
-                <th>Gía trị của giỏ hàng thấp nhất</th>
-                <th>Gía trị của giỏ hàng cao nhất</th>
+                <th>Loại mã giảm giá</th>
+                <th>
+                    Giá trị tối thiểu
+                    <span class="truncate"
+                        data-fulltext="Là giá trị tối thiểu của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </span>
+                </th>
+                <th>Giá trị tối đa
+                    <span class="truncate"
+                        data-fulltext="Là giá trị tối đa của tổng đơn hàng để có thể áp dụng được mã giảm giá">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </span>
+                </th>
+                <th>Số tiền được giảm
+                    <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </span>
+                </th>
                 <th>Số lượng</th>
-                <th>Thao tác</th>
+                <th class="text-center">Kiểu mã áp dụng</th>
+                <th class="text-center">Trạng thái</th>
+                <th colspan="3" class="text-center">Thao tác</th>
             </tr>
         </thead>
-        <tbody style="text-align: center">
-            @forelse ($coupons as $item)
+        <tbody>
+            @forelse ($coupons as $coupon)
                 <tr>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->name }}</td>
                     <td>
-                        @switch($item->discount_type)
+                        <input type="checkbox" class="coupon-checkbox" name="coupon_id[]"
+                            onclick="toggleDeleteButton('.coupon-checkbox')" value="{{ $coupon->id }}">
+                    </td>
+                    <td>{{ $coupon->id }}</td>
+                    <td class="truncate-text">
+                        <span class="truncate" data-fulltext="{{ $coupon->name }}">
+                            {{ $coupon->name }}
+                        </span>
+                    </td>
+                    <td>
+                        @switch($coupon->discount_type)
                             @case(0)
-                                <span class="btn btn-info" style="padding:5px 8px">Giảm theo phần trăm</span>
+                                <span class="badge bg-info p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Giảm theo phần
+                                    trăm</span>
                             @break
 
                             @case(1)
-                                <span class="btn btn-success"style="padding:5px 17px">Giảm theo giá tiền</span>
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Giảm theo giá
+                                    tiền</span>
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
+                    </td>
+                    <td>{{ number_format($coupon->minimum_spend, 0, ',', '.') }} VNĐ </td>
+                    <td>{{ number_format($coupon->maximum_spend, 0, ',', '.') }} VNĐ </td>
+                    <td class="text-success text-center fw-bold">
+                        @if ($coupon->discount_type == 0)
+                            {{ $coupon->coupon_amount }} %
+                        @elseif ($coupon->discount_type == 1)
+                            {{ number_format($coupon->coupon_amount, 0, ',', '.') }} VNĐ
+                        @else
+                            Không xác định
+                        @endif
+                    </td>
+                    <td class="text-center">{{ $coupon->quantity }}</td>
+                    <td>
+                        @switch($coupon->type)
+                            @case(0)
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Áp dụng toàn bộ
+                                    giỏ hàng</span>
+                            @break
+
+                            @case(1)
+                                <span class="badge bg-info p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Áp dụng theo chỉ
+                                    định</span>
                             @break
 
                             @default
@@ -87,32 +122,53 @@
                         @endswitch
                     </td>
                     <td>
-                        @if ($item->discount_type == 0)
-                            {{ $item->coupon_amount }} %
-                        @elseif ($item->discount_type == 1)
-                            {{ number_format($item->coupon_amount, 0, ',', '.') }} VNĐ
-                        @else
-                            Không xác định
-                        @endif
+                        @switch($coupon->status)
+                            @case(0)
+                                <span class="badge bg-success p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Phát hành</span>
+                            @break
+
+                            @case(1)
+                                <span class="badge bg-warning p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Chưa phát
+                                    hành</span>
+                            @break
+
+                            @case(2)
+                                <span class="badge bg-primary p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Phát hành cho 1
+                                    số người dùng</span>
+                            @break
+
+                            @case(3)
+                                <span class="badge bg-danger p-2"
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Hết hạn</span>
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
                     </td>
-                    <td>{{ number_format($item->minimum_spend, 0, ',', '.') }} VNĐ </td>
-                    <td>{{ number_format($item->maximum_spend, 0, ',', '.') }} VNĐ </td>
-                    <td>{{ $item->quantity }}</td>
+                    <td>
+                        <a href="{{ route('admin.coupons.show', $coupon->id) }}" class="truncate"
+                            data-fulltext="Xem chi tiết"><i class="fa-regular fa-eye"></i></a>
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.coupons.editCoupon', $coupon->id) }}" class="link-success fs-15 truncate"
+                            data-fulltext="Chỉnh sửa">
+                            <i class="ri-edit-2-line"></i>
+                        </a>
+                    </td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
-                            <a href="{{ route('admin.coupons.show', $item->id) }}"><i class="fa-regular fa-eye"></i></a>
-
-                            <a href="{{ route('admin.coupons.editCoupon', $item->id) }}" class="link-success fs-15">
-                                <i class="ri-edit-2-line"></i>
-                            </a>
 
                             <!-- Nút xóa -->
-                            <form action="{{ route('admin.coupons.destroy', $item->id) }}" method="POST"
-                                style="display:inline;" id="delete-form-{{ $item->id }}">
+                            <form action="{{ route('admin.coupons.destroy', $coupon->id) }}" method="POST"
+                                style="display:inline;" id="delete-form-{{ $coupon->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="link-danger fs-15 border-0 bg-transparent"
-                                    id="deleteButton-{{ $item->id }}">
+                                <button type="button" class="link-danger fs-15 border-0 bg-transparent truncate"
+                                    id="deleteButton-{{ $coupon->id }}" data-fulltext="Xóa">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
@@ -127,30 +183,38 @@
             </tbody>
         </table>
 
+        <div class="row my-3">
+            <div class="col-sm">
+                <button type="button" class="btn btn-danger" id="delete-button" name="coupon-delete-checkbox"
+                    style="display: none;"
+                    onclick="deleteSelected('.coupon-checkbox:checked', '{{ route('admin.coupons.bulkDelete') }}')">Xóa</button>
+            </div>
+        </div>
         {{ $coupons->links() }}
+
+        {{-- Thực thi tìm kiếm sau 1 khoảng thời gian --}}
+        @include('admins.layouts.components.search-time')
+
+        {{-- Thực thi xóa nhiều --}}
+        @include('admins.layouts.components.toggleDelete')
+
+        {{-- Thực thi xóa từng phần tử và thay alert --}}
+        @include('admins.layouts.components.deleteSelected')
+
+        {{-- Hiển thị toast khi hoàn thành --}}
         @include('admins.layouts.components.toast')
+
         <!-- Bao gồm file alert2.blade.php từ thư mục components -->
         @include('admins.layouts.components.alert2')
 
         <!-- Đẩy mã JavaScript vào phần scripts của layout chính -->
         @push('scripts')
-            <!-- Lặp qua tất cả các coupon và gọi hàm alert2 cho mỗi item -->
+            <!-- Lặp qua tất cả các coupons và gọi hàm alert2 cho mỗi item -->
             <script>
                 @foreach ($coupons as $item)
                     alert2({{ $item->id }});
                 @endforeach
             </script>
         @endpush
-
-        <script>
-            let debounceTimeout;
-
-            function debounceSearch() {
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(() => {
-                    document.getElementById("search-form").submit();
-                }, 600);
-            }
-        </script>
 
     @endsection
