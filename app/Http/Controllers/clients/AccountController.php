@@ -145,13 +145,8 @@ class AccountController extends Controller
             Mail::to($req->email)->send(new ForgotPassword($user, $token));
             return redirect()->back()->with(['success' => 'Chúng tôi đã gửi link reset mật khẩu đến email của bạn!']);
         }
-        return redirect()->back()->with(['error' => 'Email khóng tồn tại vui lòng chọn email khác!']);
-        // Mail::to($req->email)->send(new ForgotPassword($user));
-        // if($user){
-        //     $user->update(['password' => bcrypt($req->password)]);
-        //     return redirect()->route('clients.login');
-        // }
-        // dd($tokenData);
+        return redirect()->back()->with(['error' => 'Email không tồn tại vui lòng chọn email khác!']);
+
     }
 
 
