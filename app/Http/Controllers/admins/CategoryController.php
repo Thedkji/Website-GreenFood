@@ -21,7 +21,7 @@ class CategoryController extends Controller
     {
         // Lấy từ khóa tìm kiếm từ request
 
-        $search = $request->input('search');
+        $search = $request->input('search'); //lưu trữ
         $categories = Category::where('parent_id', '=', Null)->with('children')->paginate(8);
 
         // Kiểm tra nếu có từ khóa tìm kiếm thì thực hiện truy vấn tìm kiếm
@@ -29,7 +29,7 @@ class CategoryController extends Controller
             $categories = Category::where('parent_id', '=', Null)
                 ->with('children')
                 ->where('name', 'like', '%' . $search . '%')
-                ->orWhere('id', 'like', '%' . $search . '%')
+                // ->orWhere('id', 'like', '%' . $search . '%')
                 ->paginate(8);
         }
         // dd($categories);
