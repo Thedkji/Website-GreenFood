@@ -43,13 +43,9 @@
 
                     <div class="col-md-6 row justify-content-between align-items-center w-100">
                         <div class="col-md-3">
-                            <label for="" class="form-lable fw-bold" onclick="TotalBMI()">Kết quả</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 row justify-content-between align-items-center w-100">
-                        <div class="col-md-3">
-                            {{-- <label for="" class="form-lable">Chiều cao</label> --}}
+                            <div class="col-md-3">
+                                <label for="" class="form-lable fw-bold" onclick="TotalBMI()">Kết quả</label>
+                            </div>
                         </div>
                         <div class="col-md-9 ">
                             <input type="text" placeholder="Kết quả" class="form-control p-2 w-25 bg-white"
