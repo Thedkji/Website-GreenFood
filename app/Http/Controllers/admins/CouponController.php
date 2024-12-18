@@ -36,7 +36,12 @@ class CouponController extends Controller
 
     public function store(CouponRequest $request)
     {
-        $coupon = $request->validated();
+        // Kiểm tra nếu mã giảm giá đã tồn tại
+        $existingCoupon = Coupon::where('name', $request->name)->first();
+        if ($existingCoupon) {
+            return back()->withErrors(['name' => 'Mã giảm giá đã tồn tại trên hệ thống.'])->withInput();
+        }
+    
         $coupon = Coupon::create([
             'name' => $request->name,
             'discount_type' => $request->discount_type,
@@ -50,17 +55,14 @@ class CouponController extends Controller
             'status' => $request->status,
             'description' => $request->description,
         ]);
-
+    
         $categories_id = array_merge($request->category ?? [], $request->child_category ?? []);
         $coupon->categories()->attach($categories_id);
         $coupon->products()->attach($request->coupon_product);
-
-        // if (!empty($request->childCategory)) {
-        //     $coupon->categories()->attach($request->childCategory);
-        // }
-
+    
         return back()->with('success', 'Thêm mới mã giảm giá thành công.');
     }
+    
 
 
 
