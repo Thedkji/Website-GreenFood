@@ -36,7 +36,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.category-checkbox')">
                 </th>
-                <th scope="col">Id</th>
+                <th scope="col">Stt</th>
                 <th scope="col">Tên danh mục</th>
                 <th scope="col">Danh mục con</th>
                 <th scope="col">Ngày tạo</th>
@@ -51,7 +51,7 @@
                         <input type="checkbox" class="category-checkbox" name="category_id[]"
                             onclick="toggleDeleteButton('.category-checkbox')" value="{{ $category->id }}">
                     </td>
-                    <td>{{ $category->id }}</td>
+                    <td>{{  $loop->iteration }}</td>
                     <td class="">
                         <a href="{{ route('client.shop', ['category_id' => $category->id]) }}">
                             {{ $category->name }}

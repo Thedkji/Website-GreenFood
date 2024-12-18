@@ -32,7 +32,7 @@
                     <th scope="col">
                         <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.comment-checkbox')">
                     </th>
-                    <th scope="col">Id</th>
+                    <th scope="col">Stt</th>
                     <th scope="col">Tên sản phẩm</th>
                     <th scope="col">Khách hàng </th>
                     <th scope="col">Bình luận</th>
@@ -49,7 +49,7 @@
                             <input type="checkbox" class="comment-checkbox" name="comment_id[]"
                                 onclick="toggleDeleteButton('.comment-checkbox')" value="{{ $comment->id }}">
                         </td>
-                        <th scope="row">{{ $comment->id }}</th>
+                        <th scope="row">{{  $loop->iteration }}</th>
                         <td class="truncate-text">
                             <a href="{{ route('client.product-detail', $comment->product->id) }}" class="truncate"
                                 data-fulltext="{{ $comment->product->name ?? 'Không xác định' }}">{{ $comment->product->name ?? 'Không xác định' }}</a>

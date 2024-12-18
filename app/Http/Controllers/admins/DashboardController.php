@@ -119,18 +119,19 @@ class DashboardController extends Controller
         // Tổng doanh thu
         $totalEarnings = Order::where('status', '6')->sum('total');
         // Số lượng đơn hàng
-        $orderCounts = Order::count();
+        $orderCounts = Order::where('status', '6')->count();
         // Số lượng đơn hàng hoàn thành
         $orderCountCompleted = Order::where('status', '6')->count();
 
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
-            ->where('status', 'completed') // Chỉ lấy đơn hàng đã hoàn thành
+            ->where('status', '6') // Chỉ lấy đơn hàng đã hoàn thành
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
 
         $earningsByMonth = Order::selectRaw('MONTH(created_at) as month, SUM(total) as total_earnings')
+            ->where('status', '6')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
