@@ -22,19 +22,15 @@ class ForGotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required', 'exists:users',
+            'email' => 'required|exists:users,email', // Sửa lại rules phù hợp
         ];
     }
 
-
-    public function messages()
+    public function messages(): array
     {
         return [
-
-            'email.required' => 'Vui lòng nhập Email',
-
-            'email.exists' => 'Email đã tồn tại.',
-
+            'email.required' => 'Vui lòng nhập Email.',
+            'email.exists' => 'Email không tồn tại trong hệ thống.', // Thông báo hợp lý hơn
         ];
     }
 }
