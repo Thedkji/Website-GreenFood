@@ -34,7 +34,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.user-checkbox')">
                 </th>
-                <th scope="col">ID</th>
+                <th scope="col">Stt</th>
                 <th scope="col">Họ và tên</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Tên đăng nhập</th>
@@ -53,7 +53,7 @@
                             <input type="checkbox" class="user-checkbox" name="user_id[]"
                                 onclick="toggleDeleteButton('.user-checkbox')" value="{{ $user->id }}">
                         </td>
-                        <td scope="row">{{ $user->id }}</td>
+                        <td scope="row">{{  $loop->iteration }}</td>
                         <td scope="row">{{ $user->name }}</td>
                         <td scope="row"><img src="{{ Storage::url($user->avatar) }}" alt="Ảnh khách hàng"
                                 style="width:100px;height:100px;object-fit: cover"></td>
