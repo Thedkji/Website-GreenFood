@@ -14,18 +14,21 @@ class CouponController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
+    
         if ($search) {
             $coupons = Coupon::with(['categories', 'products'])
                 ->where('name', 'like', '%' . $search . '%')
                 ->orWhere('id', 'like', '%' . $search . '%')
                 ->paginate(7);
         } else {
-            $coupons = Coupon::with(['categories', 'products'])->paginate(7);
+            $coupons = Coupon::with(['categories', 'products'])
+                ->orderBy('id', 'desc') 
+                ->paginate(7);
         }
-
+    
         return view('admins.coupons.list-coupon', compact('coupons'));
     }
+    
 
     public function addCoupon()
     {
