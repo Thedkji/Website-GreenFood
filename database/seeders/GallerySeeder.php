@@ -14,24 +14,18 @@ class GallerySeeder extends Seeder
     public function run(): void
     {
         $galleries = array(
-            array('id' => '1','product_id' => '1','path' => 'galleries/1732249682_67400852e6ed7.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-11-22 04:44:28','deleted_at' => '2024-11-22 04:44:28'),
-            array('id' => '2','product_id' => '1','path' => 'galleries/1732249682_67400852e7c05.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-11-22 04:44:28','deleted_at' => '2024-11-22 04:44:28'),
-            array('id' => '3','product_id' => '1','path' => 'galleries/1732249682_67400852e8534.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-11-22 04:44:28','deleted_at' => '2024-11-22 04:44:28'),
-            array('id' => '4','product_id' => '1','path' => 'galleries/1732249682_67400852e8e75.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-11-22 04:44:28','deleted_at' => '2024-11-22 04:44:28'),
-            array('id' => '5','product_id' => '1','path' => 'galleries/1732250668_67400c2c46551.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-11-22 10:20:03','deleted_at' => '2024-11-22 10:20:03'),
-            array('id' => '6','product_id' => '1','path' => 'galleries/1732250668_67400c2c473db.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-11-22 10:20:03','deleted_at' => '2024-11-22 10:20:03'),
-            array('id' => '7','product_id' => '1','path' => 'galleries/1732250668_67400c2c48086.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-11-22 10:20:03','deleted_at' => '2024-11-22 10:20:03'),
-            array('id' => '8','product_id' => '1','path' => 'galleries/1732250668_67400c2c498ec.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-11-22 10:20:03','deleted_at' => '2024-11-22 10:20:03'),
-            array('id' => '9','product_id' => '2','path' => 'galleries/1732251134_67400dfe079fb.jpg','created_at' => '2024-11-22 04:52:14','updated_at' => '2024-11-22 10:17:55','deleted_at' => '2024-11-22 10:17:55'),
-            array('id' => '10','product_id' => '2','path' => 'galleries/1732251134_67400dfe08e93.jpg','created_at' => '2024-11-22 04:52:14','updated_at' => '2024-11-22 10:17:55','deleted_at' => '2024-11-22 10:17:55'),
-            array('id' => '11','product_id' => '2','path' => 'galleries/1732251134_67400dfe0990d.jpg','created_at' => '2024-11-22 04:52:14','updated_at' => '2024-11-22 10:17:55','deleted_at' => '2024-11-22 10:17:55'),
-            array('id' => '17','product_id' => '2','path' => 'galleries/1732270675_67405a5325cdc.jpg','created_at' => '2024-11-22 10:17:55','updated_at' => '2024-11-22 10:17:55','deleted_at' => NULL),
-            array('id' => '18','product_id' => '2','path' => 'galleries/1732270675_67405a5326b00.jpg','created_at' => '2024-11-22 10:17:55','updated_at' => '2024-11-22 10:17:55','deleted_at' => NULL),
-            array('id' => '19','product_id' => '2','path' => 'galleries/1732270675_67405a5327d06.jpg','created_at' => '2024-11-22 10:17:55','updated_at' => '2024-11-22 10:17:55','deleted_at' => NULL),
-            array('id' => '20','product_id' => '1','path' => 'galleries/1732270803_67405ad39e4e2.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
-            array('id' => '21','product_id' => '1','path' => 'galleries/1732270803_67405ad39ef99.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
-            array('id' => '22','product_id' => '1','path' => 'galleries/1732270803_67405ad39fa3f.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
-            array('id' => '23','product_id' => '1','path' => 'galleries/1732270803_67405ad3a026c.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
+            array('id' => '1','product_id' => '1','path' => 'galleries/1732249682_67400852e6ed7.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '2','product_id' => '1','path' => 'galleries/1732249682_67400852e7c05.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '3','product_id' => '1','path' => 'galleries/1732249682_67400852e8534.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '4','product_id' => '1','path' => 'galleries/1732249682_67400852e8e75.jpg','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '5','product_id' => '1','path' => 'galleries/1732250668_67400c2c46551.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '6','product_id' => '1','path' => 'galleries/1732250668_67400c2c473db.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '7','product_id' => '1','path' => 'galleries/1732250668_67400c2c48086.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '8','product_id' => '1','path' => 'galleries/1732250668_67400c2c498ec.jpg','created_at' => '2024-11-22 04:44:28','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '20','product_id' => '1','path' => 'galleries/1732270803_67405ad39e4e2.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '21','product_id' => '1','path' => 'galleries/1732270803_67405ad39ef99.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '22','product_id' => '1','path' => 'galleries/1732270803_67405ad39fa3f.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
+            array('id' => '23','product_id' => '1','path' => 'galleries/1732270803_67405ad3a026c.jpg','created_at' => '2024-11-22 10:20:03','updated_at' => '2024-12-19 17:12:53','deleted_at' => NULL),
             array('id' => '29','product_id' => '4','path' => 'galleries/1732271480_67405d785dff3.jpg','created_at' => '2024-11-22 10:31:20','updated_at' => '2024-11-22 10:31:20','deleted_at' => NULL),
             array('id' => '30','product_id' => '4','path' => 'galleries/1732271480_67405d7860fc1.jpg','created_at' => '2024-11-22 10:31:20','updated_at' => '2024-11-22 10:31:20','deleted_at' => NULL),
             array('id' => '31','product_id' => '4','path' => 'galleries/1732271480_67405d7862217.jpg','created_at' => '2024-11-22 10:31:20','updated_at' => '2024-11-22 10:31:20','deleted_at' => NULL),
@@ -90,7 +84,9 @@ class GallerySeeder extends Seeder
             array('id' => '84','product_id' => '24','path' => 'galleries/1734596460_6763d76c7fa62.png','created_at' => '2024-12-19 15:21:00','updated_at' => '2024-12-19 15:21:00','deleted_at' => NULL),
             array('id' => '85','product_id' => '25','path' => 'galleries/1734596748_6763d88c811ac.png','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 15:25:48','deleted_at' => NULL),
             array('id' => '86','product_id' => '25','path' => 'galleries/1734596748_6763d88c81a22.png','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 15:25:48','deleted_at' => NULL),
-            array('id' => '87','product_id' => '25','path' => 'galleries/1734596748_6763d88c82195.png','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 15:25:48','deleted_at' => NULL)
+            array('id' => '87','product_id' => '25','path' => 'galleries/1734596748_6763d88c82195.png','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 15:25:48','deleted_at' => NULL),
+            array('id' => '90','product_id' => '27','path' => 'galleries/1734603953_6763f4b12e7e9.jpg','created_at' => '2024-12-19 17:25:53','updated_at' => '2024-12-19 17:25:53','deleted_at' => NULL),
+            array('id' => '91','product_id' => '27','path' => 'galleries/1734603953_6763f4b12f9b1.jpeg','created_at' => '2024-12-19 17:25:53','updated_at' => '2024-12-19 17:25:53','deleted_at' => NULL)
           );
 
         foreach ($galleries as $gallery) {

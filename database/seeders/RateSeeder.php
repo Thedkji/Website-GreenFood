@@ -27,7 +27,6 @@ class RateSeeder extends Seeder
             array('id' => '11','comment_id' => '8','star' => '3','created_at' => '2024-12-19 13:19:51','updated_at' => '2024-12-19 13:19:51','deleted_at' => NULL),
             array('id' => '12','comment_id' => '13','star' => '3','created_at' => '2024-12-19 13:19:51','updated_at' => '2024-12-19 13:19:51','deleted_at' => NULL),
             array('id' => '13','comment_id' => '4','star' => '3','created_at' => '2024-12-19 13:19:51','updated_at' => '2024-12-19 13:19:51','deleted_at' => NULL),
-            array('id' => '14','comment_id' => '6','star' => '2','created_at' => '2024-12-19 13:19:52','updated_at' => '2024-12-19 13:19:52','deleted_at' => NULL),
             array('id' => '15','comment_id' => '12','star' => '3','created_at' => '2024-12-19 13:19:52','updated_at' => '2024-12-19 13:19:52','deleted_at' => NULL),
             array('id' => '16','comment_id' => '16','star' => '2','created_at' => '2024-12-19 13:19:52','updated_at' => '2024-12-19 13:19:52','deleted_at' => NULL),
             array('id' => '17','comment_id' => '14','star' => '2','created_at' => '2024-12-19 13:19:52','updated_at' => '2024-12-19 13:19:52','deleted_at' => NULL),
@@ -43,7 +42,15 @@ class RateSeeder extends Seeder
             array('id' => '27','comment_id' => '27','star' => '5','created_at' => '2024-12-19 16:07:51','updated_at' => '2024-12-19 16:07:51','deleted_at' => NULL),
             array('id' => '28','comment_id' => '28','star' => '5','created_at' => '2024-12-19 16:15:07','updated_at' => '2024-12-19 16:15:07','deleted_at' => NULL),
             array('id' => '29','comment_id' => '29','star' => '4','created_at' => '2024-12-19 16:15:43','updated_at' => '2024-12-19 16:15:43','deleted_at' => NULL),
-            array('id' => '30','comment_id' => '30','star' => '5','created_at' => '2024-12-19 16:16:20','updated_at' => '2024-12-19 16:16:20','deleted_at' => NULL)
+            array('id' => '30','comment_id' => '30','star' => '5','created_at' => '2024-12-19 16:16:20','updated_at' => '2024-12-19 16:16:20','deleted_at' => NULL),
+            array('id' => '31','comment_id' => '31','star' => '5','created_at' => '2024-12-19 17:37:35','updated_at' => '2024-12-19 17:37:35','deleted_at' => NULL),
+            array('id' => '32','comment_id' => '32','star' => '4','created_at' => '2024-12-19 17:38:13','updated_at' => '2024-12-19 17:38:13','deleted_at' => NULL),
+            array('id' => '33','comment_id' => '33','star' => '4','created_at' => '2024-12-19 17:38:52','updated_at' => '2024-12-19 17:38:52','deleted_at' => NULL),
+            array('id' => '34','comment_id' => '34','star' => '4','created_at' => '2024-12-19 17:46:57','updated_at' => '2024-12-19 17:46:57','deleted_at' => NULL),
+            array('id' => '35','comment_id' => '35','star' => '5','created_at' => '2024-12-19 17:47:18','updated_at' => '2024-12-19 17:47:18','deleted_at' => NULL),
+            array('id' => '36','comment_id' => '36','star' => '5','created_at' => '2024-12-19 17:47:31','updated_at' => '2024-12-19 17:47:31','deleted_at' => NULL),
+            array('id' => '37','comment_id' => '37','star' => '4','created_at' => '2024-12-19 17:47:52','updated_at' => '2024-12-19 17:47:52','deleted_at' => NULL),
+            array('id' => '38','comment_id' => '38','star' => '5','created_at' => '2024-12-19 17:48:07','updated_at' => '2024-12-19 17:48:07','deleted_at' => NULL)
           );
 
           foreach ($rates as $rate) {
