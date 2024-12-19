@@ -19,7 +19,7 @@
                                 <p class="text-muted mb-0">Sau đây là những gì đang diễn ra tại cửa hàng của bạn ngày hôm
                                     nay.</p>
                             </div>
-                            
+
                         </div><!-- end card header -->
                     </div>
                     <!--end col-->
@@ -328,7 +328,7 @@
                                             <h5 class="fs-14 my-1 fw-normal">{{ $product->total_sold }}</h5>
                                         </td>
                                         <td>
-                                            <h5 class="fs-14 my-1 fw-normal">{{ $product->stock_left }}</h5>
+                                            <h5 class="fs-14 my-1 fw-normal">{{ $product->quantity }}</h5>
                                         </td>
                                         <td>
                                             <h5 class="fs-14 my-1 fw-normal">
@@ -403,6 +403,7 @@
         }, 600);
     }
 
+
     // Hàm lấy màu từ CSS
     document.addEventListener("DOMContentLoaded", function() {
         const orderData = @json($orderCountsForChart);
@@ -422,11 +423,6 @@
                     type: "bar", // Dạng cột
                     data: revenueData,
                 },
-                // {
-                //     name: "Hoàn tiền",
-                //     type: "line",
-                //     data: refundData
-                // },
             ],
             chart: {
                 height: 350,
@@ -462,11 +458,18 @@
                     title: {
                         text: "Đơn hàng",
                     },
+                    labels: {
+                        formatter: (val) => val ? `${val}` : val,
+                    },
                 },
                 {
                     opposite: true,
                     title: {
                         text: "Doanh thu",
+                    },
+                    labels: {
+                        formatter: (val) => val ? `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` :
+                            val,
                     },
                 },
             ],
@@ -513,10 +516,13 @@
             },
             plotOptions: {
                 bar: {
-                    columnWidth: "40%", // Giảm kích thước cột xuống còn 15% (hoặc tùy chỉnh để giảm xuống một nửa)
-                    barHeight: "70%",
+                    columnWidth: "40%", // Kích thước cột
                 },
             },
+            // dataLabels: {
+            //     enabled: true,
+            //     formatter: (val) => val ? `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` : val,
+            // },
         };
 
         const chart = new ApexCharts(
@@ -525,6 +531,7 @@
         );
         chart.render();
     });
+
 
 
     // danh mục sản phẩm
