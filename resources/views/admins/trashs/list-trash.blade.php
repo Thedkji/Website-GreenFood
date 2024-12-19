@@ -79,7 +79,7 @@
                                 method="POST">
                                 @csrf
                                 @method('POST')
-                                <button type="submit" class="btn btn-success btn-sm">Khôi phục</button>
+                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Bạn có chắc chắn muốn khôi phục mục đã chọn?')">Khôi phục</button>
                             </form>
                             <form
                                 action="{{ route('admin.trashs.destroy', ['type' => class_basename($item), $item->id]) }}"
@@ -87,7 +87,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa các mục đã chọn?')">Xóa vĩnh
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa mục đã chọn?')">Xóa vĩnh
                                     viễn</button>
                             </form>
                         </div>

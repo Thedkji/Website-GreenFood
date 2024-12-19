@@ -9,7 +9,7 @@ use Carbon\Carbon;
 class DeleteInactiveAccounts extends Command
 {
     protected $signature = 'delete:inactive-accounts';
-    protected $description = 'Delete user accounts that have not been activated for more than 3 days';
+    protected $description = 'Delete user accounts that have not been activated for more than 1 days';
 
     public function __construct()
     {
