@@ -8,7 +8,7 @@
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-light text-center p-4 rounded">
                                 <h5 class="text-primary">Công cụ </h5>
-                                <a href="{{ route('client.shop') }}" class=" border-Black border-success rounded-pill text-Black ">
+                                <a href="#" class=" border-Black border-success rounded-pill text-Black ">
                                     <h3 class=" border-Black border-success rounded-pill text-Black  ">Tính BMI</h3>
                                 </a>
                             </div>
@@ -23,7 +23,7 @@
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-light text-center p-4 rounded">
                                 <h5 class="text-primary">Sản phẩm </h5>
-                                <a href="{{ route('client.shop') }}" class=" border-Black border-success rounded-pill text-Black ">
+                                <a href="#" class=" border-Black border-success rounded-pill text-Black ">
                                     <h3 class=" border-Black border-success rounded-pill text-Black ">Tốt cho sức khỏe </h3>
                                 </a>
                             </div>
@@ -38,7 +38,7 @@
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-light text-center p-4 rounded">
                                 <h5 class="text-primary">Được kiểm tra</h5>
-                                <a href="{{ route('client.contact.index') }}" class=" border-Black border-success rounded-pill text-Black">
+                                <a href="#" class=" border-Black border-success rounded-pill text-Black">
                                     <h3 class=" border-Black border-success rounded-pill text-Black  ">Hàng trước khi nhận </h3>
                                 </a>
                             </div>
