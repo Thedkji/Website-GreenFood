@@ -15,17 +15,29 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $req)
     {
+        // Lấy tháng từ request, nếu không có thì mặc định là tháng hiện tại
+        $month = $req->input('month', now()->month);
 
-
+        // Tổng doanh thu của tất cả các tháng
         $totalEarnings = Order::where('status', '6')->sum('total');
-        $orderCounts = Order::where('status', '6')->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
-        $orderCountCompleted = Order::where('status', '6')->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)->count();
+
+        // Lấy số lượng đơn hàng trong tháng được chọn
+        $orderCounts = Order::where('status', '6')
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // Số đơn hàng hoàn thành trong tháng được chọn
+        $orderCountCompleted = Order::where('status', '6')
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
         // Bình luận theo tháng
         $commentsByMonth = Comment::selectRaw('MONTH(created_at) as month, COUNT(*) as total_comments')
-            ->whereYear('created_at', now()->year) // Chỉ lấy bình luận trong năm hiện tại
+            ->whereYear('created_at', now()->year)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -34,75 +46,73 @@ class DashboardController extends Controller
         $commentsByMonthArray = $commentsByMonth->pluck('total_comments', 'month')->toArray();
 
         // Lấy số lượng bình luận trong tháng hiện tại
-        $currentMonthComments = $commentsByMonthArray[now()->month] ?? 0;
+        $currentMonthComments = $commentsByMonthArray[$month] ?? 0;
 
+        // Doanh thu theo tháng
+        $earningsByMonth = Order::where('status', '6')->selectRaw('MONTH(created_at) as month, SUM(total) as total_earnings')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $earningsByMonthArray = $earningsByMonth->pluck('total_earnings', 'month')->toArray();
+
+        // Lấy dữ liệu về các đơn hàng theo tháng
         $orderCountsByMonth = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
             ->where('status', '6')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        $earningsByMonth = Order::where('status', '6')->selectRaw('MONTH(created_at) as month, SUM(total) as total_earnings')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $orderCountsByMonthJson = $orderCountsByMonth->pluck('order_count')->toJson();
-        $earningsByMonthArray = $earningsByMonth->pluck('total_earnings', 'month')->toArray();
-
-        $userCounts = User::where('role', '1')->count();
-
-        // Dữ liệu JSON để sử dụng trong biểu đồ
+        // Các giá trị cho biểu đồ
         $months = range(1, 12);
         $orderCountsByMonthArray = $orderCountsByMonth->pluck('order_count', 'month')->toArray();
-        $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
         $earningsByMonthJson = array_map(fn($month) => $earningsByMonthArray[$month] ?? 0, $months);
+        $orderCountsForChart = array_map(fn($month) => $orderCountsByMonthArray[$month] ?? 0, $months);
 
-        // Lấy danh sách sản phẩm bán chạy, sắp xếp theo số lượng bán
-
+        // Lấy danh sách sản phẩm bán chạy
         $bestSellerProducts = Product::with(['variantGroups', 'orderDetails'])
-
             ->get()
             ->filter(function ($product) {
                 return $product->total_sold > 0; // Chỉ lấy sản phẩm đã bán
             })
-            ->sortByDesc(function ($product) {
-                return $product->total_sold; // Sắp xếp theo số lượng bán
-            })
+            ->sortByDesc('total_sold') // Sắp xếp theo số lượng bán
             ->take(5); // Lấy 5 sản phẩm bán chạy nhất
 
+        // Lấy danh mục cha và số lượng sản phẩm trực thuộc
+        $categories = Category::whereNull('parent_id') // Chỉ lấy danh mục cha
+->withCount(['products as direct_products_count' => function ($query) {
+                $query->whereNull('parent_id'); // Chỉ tính sản phẩm trực thuộc danh mục cha
+            }])
+            ->get();
 
-        // danh mục sản phẩm
-        $categories = Category::withCount('products')->get();
+        // Lấy số lượng sản phẩm trực tiếp thuộc danh mục cha
+        $categoryData = $categories->pluck('direct_products_count');
 
-        // Lấy số lượng sản phẩm theo từng danh mục
-        $categoryData = $categories->map(function ($category) {
-            return $category->products_count;
-        });
-
-        // Lấy tên danh mục
+        // Lấy tên danh mục cha
         $categoryNames = $categories->pluck('name');
 
-        // Doanh thu theo tháng
-        $currentMonthEarnings = Order::where('status', '6')->whereMonth('created_at', now()->month)
+        // Lấy số người dùng (hoặc bạn có thể lọc thêm nếu cần)
+        $userCounts = User::where('role', '1')->count();
+
+        // Lấy tổng doanh thu trong tháng hiện tại
+        $currentMonthEarnings = Order::where('status', '6')
+            ->whereMonth('created_at', $month)
             ->whereYear('created_at', now()->year)
             ->sum('total');
 
-        // Doanh thu hôm qua
-        // $yesterdayEarnings = Order::whereDate('created_at', now()->subDay()->toDateString())->sum('total');
-
-        // // Tính phần trăm thay đổi doanh thu
-        // if ($yesterdayEarnings > 0) {
-        //     $percentChange = (($todayEarnings - $yesterdayEarnings) / $yesterdayEarnings) * 100;
-        // } else {
-        //     $percentChange = $todayEarnings > 0 ? 100 : 0; // Nếu hôm qua không có doanh thu
-        // }
+        if ($req->ajax()) {
+            return response()->json([
+                'currentMonthEarnings' => number_format($currentMonthEarnings, 0, ',', '.'),
+                'orderCounts' => $orderCounts,
+                'userCounts' => $userCounts,
+                'currentMonthComments' => $currentMonthComments
+            ]);
+        }
 
         return view("admins.dashboards.dashboard", compact(
             'totalEarnings',
             'orderCounts',
             'orderCountCompleted',
-            'orderCountsByMonthJson',
             'userCounts',
             'earningsByMonthJson',
             'orderCountsForChart',
@@ -110,11 +120,9 @@ class DashboardController extends Controller
             'categoryNames',
             'bestSellerProducts',
             'currentMonthEarnings',
-            'currentMonthComments',
-            // 'percentChange'
+            'currentMonthComments'
         ));
     }
-
     public function salesReport(Request $request)
     {
         // Tổng doanh thu
