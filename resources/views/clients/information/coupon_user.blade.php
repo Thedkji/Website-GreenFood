@@ -2,7 +2,7 @@
     <h4 class="mb-4 text-start">Khuyến mãi khách hàng mới</h4>
     
     @if($coupons->isEmpty())
-        <p class="text-center">Hiện tại bạn đã là người dùng cũ.</p>
+        <p class="text-center">Không có khuyến mãi nào.</p>
     @else
         <div class="row">
             @foreach ($coupons as $coupon)
@@ -31,15 +31,12 @@
     @endif
 </div>
 
-<!-- Thêm SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.all.min.js"></script>
 
 <script>
     function copyCouponCode(couponId) {
-        // Lấy mã giảm giá bằng id của coupon
         var couponCode = document.getElementById('coupon-code-' + couponId).innerText;
 
-        // Tạo một phần tử input tạm thời để sao chép
         var tempInput = document.createElement("input");
         document.body.appendChild(tempInput);
         tempInput.value = couponCode;
@@ -47,7 +44,6 @@
         document.execCommand("copy");
         document.body.removeChild(tempInput);
 
-        // Hiển thị thông báo bằng SweetAlert2
         Swal.fire({
             icon: 'success',
             title: 'Sao chép thành công!',

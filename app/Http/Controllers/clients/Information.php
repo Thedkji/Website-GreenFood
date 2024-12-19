@@ -24,7 +24,7 @@ class Information extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user = auth()->user(); 
+        $orders = $user->load('orders');
         $provinces = DB::table('provinces')->get();
 
         if (request()->ajax() && request('province_code')) {
@@ -54,9 +54,9 @@ class Information extends Controller
             ->paginate(5);
 
             $isNewUser = $user->created_at->diffInDays(now()) <= 7; 
-            $hasNoOrders = $user->orders()->count() == 0; 
-        
-            if ($isNewUser || $hasNoOrders) {
+            $hasNoOrders = $orders->count() == 0; 
+            // dd($user);
+            if ($isNewUser && $hasNoOrders) {
                 $coupons = Coupon::where('status', 2)
                     ->where('expiration_date', '>=', now()) 
                     ->get();

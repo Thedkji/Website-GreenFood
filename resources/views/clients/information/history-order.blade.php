@@ -4,9 +4,9 @@
     <table class="table table-bordered">
         <thead class="thead-light">
             <tr>
+                <th>Mã đơn</th>
                 <th>Tên</th>
                 <th>Địa chỉ</th>
-                <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Chi tiết</th>
                 <th>Ngày đặt hàng</th>
@@ -17,9 +17,9 @@
         <tbody>
             @foreach ($oders as $order)
                 <tr>
+                    <td>{{$order->order_code}}</td>
                     <td>{{ $order->user->name }}</td>
-                    <td>{{ $order->address }}</td>
-                    <td>{{ $order->phone }}</td>
+                    <td class="truncate-text truncate" data-fulltext='{{ $order->address }}'>{{ $order->address }}</td>
                     <td style="color: #81C408; font-weight:bold;">{{ number_format($order->total, 0, ',', '.') }} VND
                     </td>
                     <td><a href="{{ route('client.orders.details', ['id' => $order->id]) }}">Xem</a></td>
