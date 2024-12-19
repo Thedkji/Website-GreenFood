@@ -261,18 +261,18 @@
                     </p>
                     <p>
                         <strong>Phí giao hàng:</strong>
-                        <span style="color: #ff0000; font-weight:bolder;">{{ number_format($order->deliveryFee) }}
+                        <span style="color: #040404; font-weight:bolder;">{{ number_format($order->deliveryFee) }}
                             VNĐ</span>
                     </p>
                     <p>
                         <strong>Voucher ưu đãi:</strong>
-                        <span style="color: #00eaff;font-weight:bolder;">{{ number_format($detail->coupon_price) }}
+                        <span style="color: #ff0000;font-weight:bolder;">{{ number_format($detail->coupon_price) }}
                             VNĐ</span>
                     </p>
                     <hr style="border: 1px dashed #ddd; margin: 10px 0;">
                     <p>
                         <strong style="font-size: 18px; color: #575757;">Tổng tiền:</strong>
-                        <span style="color: #4CAF50; font-size: 25px; font-weight:bolder">
+                        <span style="color: #4CAF50; font-size: 20px; font-weight:bolder">
                             {{ number_format($order->total) }}
                             VNĐ</span>
                     </p>

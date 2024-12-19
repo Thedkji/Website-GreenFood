@@ -126,8 +126,7 @@
                         <option value="1" {{ old('status', $coupon->status) == '1' ? 'selected' : '' }}>Chưa phát
                             hành
                         </option>
-                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Cho một số
-                            người dùng
+                        <option value="2" {{ old('status', $coupon->status) == '2' ? 'selected' : '' }}>Cho khách hàng mới 
                         </option>
                         <option value="3" {{ old('status', $coupon->status) == '3' ? 'selected' : '' }}>Hết hạn
                         </option>

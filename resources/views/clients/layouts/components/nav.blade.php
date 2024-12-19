@@ -3,7 +3,8 @@
         <div class="d-flex justify-content-between">
             <div class="top-info ps-2">
                 <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
-                        class="text-white">123, Mỹ Đình, Hà Nội</a></small>
+                        class="text-white">Nguyễn Cơ Thạch, Mỹ Đình 2, Bắc Từ Liêm, Hà Nội
+                    </a></small>
                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
                         class="text-white">greenfood8386@gmail.com</a></small>
             </div>

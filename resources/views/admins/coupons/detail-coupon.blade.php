@@ -69,7 +69,7 @@
                                     @break
 
                                     @case(2)
-                                        Cho một số người dùng
+                                        Cho khách hàng mới 
                                     @break
 
                                     @default

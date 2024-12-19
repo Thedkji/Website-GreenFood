@@ -46,7 +46,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.product-checkbox')">
                 </th>
-                <th scope="col">Stt</th>
+                <th scope="col">STT</th>
                 <th scope="col">Mã sản phẩm</th>
                 <th scope="col">Tên</th>
                 <th scope="col">Slug</th>

@@ -39,7 +39,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.variant-checkbox')">
                 </th>
-                <th scope="col">Stt</th>
+                <th scope="col">STT</th>
                 <th scope="col">Tên biến thể</th>
                 <th scope="col">Giá trị</th>
                 <th scope="col">Ngày tạo</th>
