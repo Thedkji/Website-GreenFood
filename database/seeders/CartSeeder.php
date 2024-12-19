@@ -15,13 +15,13 @@ class CartSeeder extends Seeder
     public function run(): void
     {
         $carts = array(
-            array('id' => '28', 'product_id' => '15', 'user_id' => '2', 'sku' => 'SPBT660996', 'quantity' => '1', 'created_at' => '2024-12-04 13:54:54', 'updated_at' => '2024-12-04 13:54:54'),
-            array('id' => '29', 'product_id' => '15', 'user_id' => '2', 'sku' => 'SPBT814589', 'quantity' => '1', 'created_at' => '2024-12-04 13:54:58', 'updated_at' => '2024-12-04 13:54:58'),
-            array('id' => '42', 'product_id' => '5', 'user_id' => '1', 'sku' => 'SPBT276579', 'quantity' => '1', 'created_at' => '2024-12-07 13:51:02', 'updated_at' => '2024-12-07 13:51:02'),
-            array('id' => '43', 'product_id' => '5', 'user_id' => '1', 'sku' => 'SPBT491526', 'quantity' => '3', 'created_at' => '2024-12-07 13:51:07', 'updated_at' => '2024-12-07 13:51:07'),
-            array('id' => '44', 'product_id' => '2', 'user_id' => '1', 'sku' => 'SPBT490156', 'quantity' => '2', 'created_at' => '2024-12-07 13:51:11', 'updated_at' => '2024-12-07 13:51:11'),
-            array('id' => '45', 'product_id' => '6', 'user_id' => '1', 'sku' => 'SPBT235883', 'quantity' => '3', 'created_at' => '2024-12-07 13:51:17', 'updated_at' => '2024-12-07 13:51:17')
-        );
+            array('id' => '28','product_id' => '15','user_id' => '2','sku' => 'SPBT660996','quantity' => '1','created_at' => '2024-12-04 13:54:54','updated_at' => '2024-12-04 13:54:54'),
+            array('id' => '29','product_id' => '15','user_id' => '2','sku' => 'SPBT814589','quantity' => '1','created_at' => '2024-12-04 13:54:58','updated_at' => '2024-12-04 13:54:58'),
+            array('id' => '42','product_id' => '5','user_id' => '1','sku' => 'SPBT276579','quantity' => '1','created_at' => '2024-12-07 13:51:02','updated_at' => '2024-12-07 13:51:02'),
+            array('id' => '43','product_id' => '5','user_id' => '1','sku' => 'SPBT491526','quantity' => '3','created_at' => '2024-12-07 13:51:07','updated_at' => '2024-12-07 13:51:07'),
+            array('id' => '44','product_id' => '2','user_id' => '1','sku' => 'SPBT490156','quantity' => '2','created_at' => '2024-12-07 13:51:11','updated_at' => '2024-12-07 13:51:11'),
+            array('id' => '45','product_id' => '6','user_id' => '1','sku' => 'SPBT235883','quantity' => '3','created_at' => '2024-12-07 13:51:17','updated_at' => '2024-12-07 13:51:17')
+          );
 
         foreach ($carts as $cart) {
             Cart::create($cart);
