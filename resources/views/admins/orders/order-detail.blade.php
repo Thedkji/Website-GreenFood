@@ -78,9 +78,6 @@
             <i class="fa-regular fa-circle-xmark" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "giao không thành công" -->
             <div class="status-label">Giao hàng không thành công</div>
         </div>
-        <div class="progress-bar bg-transparent">
-            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i> <!-- Mũi tên đến trạng thái kế tiếp -->
-        </div>
         @endif
         @endif
 
@@ -91,24 +88,13 @@
             <i class="fa fa-star" style="font-size: 1.5rem;"></i> <!-- Biểu tượng "đánh giá" -->
             <div class="status-label">Đánh giá</div>
         </div>
-        <div class="progress-bar bg-transparent">
-            <i class="las la-angle-right text-primary" style="font-size: 1.5rem;"></i>
-            <!-- Mũi tên đến trạng thái kế tiếp -->
-        </div>
-        @endif
-
-        @if ($orders->status >= 7)
-        <div class="progress-bar bg-info" role="progressbar" style="width: 16.66%; margin-right: 10px;"
-            aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">
-
-            <span class="checkmark" style="font-size: 1.5rem; color: rgb(255, 255, 255);">&#10003;</span>
-            <div class="status-label">Hoàn Thành</div>
-        </div>
-        @endif
 
         @endif
 
-        @if ($orders->status != 7 && $orders->status != 6)
+
+        @endif
+
+        @if ($orders->status != 6)
         <!-- Hủy đơn -->
         @if($orders->status >= 5)
         <div class="progress-bar bg-danger" role="progressbar"
@@ -207,7 +193,14 @@
             @case(4)
             <span class="badge bg-danger p-2">Hoàn trả hàng</span>
             @break
-
+            @case(5)
+            <span class="badge bg-danger p-2">Hủy đơn</span>
+            @break
+            @case(6)
+            <span class="badge bg-secondary p-2">
+                Giao thành công
+            </span>
+            @break
             @default
             <span class="badge bg-secondary p-2">
                 Không thể thay đổi trạng thái :
