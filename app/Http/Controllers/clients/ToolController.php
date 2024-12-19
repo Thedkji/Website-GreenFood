@@ -29,7 +29,7 @@ class ToolController extends Controller
             return $product;
         })
         ->sortByDesc('score')
-        ->take(5);
+        ->take(10);
         return view('clients.tools.bmi',compact('productHot'));
     }
 

@@ -68,16 +68,9 @@
 
                 <div class="my-3 bg-white shadow-md">
                     <div class="result-bmi"></div>
-                    <div class="recommen-sp">
-                        <h5 class="text-primary fw-bold">Dưới đây là 1 số sản phẩm bạn có thể tham khảo</h5>
-                        <div class="row">
-                            <div class="col-md-3">
-
-                        </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
-                        </div>
+                    <div class="recommen-sp d-none">
+                        <h5 class="text-primary fw-bold my-3">Dưới đây là 1 số sản phẩm bạn có thể tham khảo</h5>
+                        @include('clients.tools.product-recoment')
                     </div>
                 </div>
 
@@ -171,7 +164,8 @@
                                     cân hợp lý</strong></a>.</span></p>
                     <p>&nbsp;</p>
                     <p><span style="font-size: 14pt;">Bạn cũng có thể tham khảo ý kiến của chuyên gia dinh dưỡng hoặc huấn
-                            luyện viên để có <a href="https://healthyeating.shop/category_package/goi-an-giam-can/">kế hoạch
+                            luyện viên để có <a href="https://healthyeating.shop/category_package/goi-an-giam-can/">kế
+                                hoạch
                                 giảm cân hiệu quả.</a></span></p>
                     <p>&nbsp;</p>
                     <p><span style="font-size: 14pt;">Hãy cùng nhà <a
@@ -324,8 +318,7 @@
         let weightUser = document.querySelector('#weight_user');
         let result = document.querySelector("#result_bmi");
         let resultBmi = document.querySelector(".result-bmi");
-        console.log(resultBmi);
-
+        let recommenSp = document.querySelector(".recommen-sp");
         function totalBMI() {
             let heightInMeters = heightUser.value / 100;
             let bmi = weightUser.value / (heightInMeters ** 2);
@@ -375,11 +368,11 @@
         <p>Giải pháp: Tiếp tục duy trì lối sống lành mạnh và chế độ ăn uống cân đối.</p>`;
             } else if (bmi >= 16) {
                 // Thiếu cân
-                result.style.color = "blue";
-                result.style.border = "1px solid blue";
+                result.style.color = "orange";
+                result.style.border = "1px solid orange";
                 result.style.fontWeight = "bold";
                 resultBmi.innerHTML =
-                    `<h3 class="fw-bold">Kết luận: <span class="text-primary">Bạn đang trong tình trạng thiếu cân.</span></h3>
+                    `<h3 class="fw-bold">Kết luận: <span class="text-warning">Bạn đang trong tình trạng thiếu cân.</span></h3>
         <p>Giải pháp: Bổ sung thực phẩm giàu dinh dưỡng và tăng lượng calo trong các bữa ăn.</p>`;
             } else {
                 // Thiếu cân nghiêm trọng
@@ -390,6 +383,8 @@
                     `<h3 class="fw-bold">Kết luận: <span class="text-danger">Bạn đang thiếu cân nghiêm trọng.</span></h3>
         <p>Giải pháp: Hãy gặp chuyên gia dinh dưỡng để được tư vấn cụ thể. Ăn đủ chất và nghỉ ngơi hợp lý.</p>`;
             }
+
+            recommenSp.classList.remove('d-none');
 
         }
     </script>

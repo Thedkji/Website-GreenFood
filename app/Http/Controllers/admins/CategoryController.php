@@ -159,7 +159,7 @@ class CategoryController extends Controller
 
     public function bulkDelete(Request $request)
     {
-        $ids = $request->input('ids');
+        $ids = $request->input( 'ids');
 
         if (is_array($ids) && count($ids) > 0) {
             try {
