@@ -42,17 +42,21 @@
                     <input type="file" class="form-control img bg-white" name="img" id="inputFileAvatar"
                         onchange="previewImage(event, 'imagePreviewAvatar')">
                     <div class="form-group mt-2">
+                        <!-- Ảnh xem trước khi người dùng chọn ảnh mới -->
+                        <!-- Ảnh xem trước khi người dùng chọn ảnh mới -->
                         <img id="imagePreviewAvatar" src="#" alt="Preview ảnh đại diện"
-                            style="object-fit: cover; display: none;" width="130" height="130"
-                            class="rounded-circle">
+                            style="object-fit: cover;" width="130" height="130" class="rounded-circle d-none">
+
+                        <!-- Ảnh từ cơ sở dữ liệu nếu có -->
                         @if ($user->avatar && Storage::exists($user->avatar))
-                            <img id="imagePreviewAvatar2" src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}"
-                                alt="Preview ảnh đại diện" style="object-fit: cover;" width="130" height="130"
+                            <img src="{{ env('VIEW_IMG') }}/{{ $user->avatar }}" alt="Preview ảnh đại diện"
+                                style="object-fit: cover;" id="imagePreviewAvatar22" width="130" height="130"
                                 class="rounded-circle d-block">
                         @else
-                            <img id="imagePreviewAvatar3" src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
-                                alt="Preview ảnh đại diện" style="object-fit: cover; display: block;" width="130"
-                                height="130" class="rounded-circle">
+                            <!-- Ảnh mặc định nếu không có ảnh trong cơ sở dữ liệu -->
+                            <img id="imagePreviewAvatar33" src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                                alt="Preview ảnh đại diện" style="object-fit: cover;" width="130" height="130"
+                                class="rounded-circle d-block">
                         @endif
                     </div>
                 </div>
@@ -139,31 +143,55 @@
 @include('admins.layouts.components.toast')
 
 <script>
+    // Hàm JavaScript
     function previewImage(event, previewId) {
-        // Ẩn ảnh cũ lấy từ cơ sở dữ liệu nếu có
-        const oldImage = document.getElementById('img');
-        if (oldImage) {
-            oldImage.style.display = 'none';
-        }
-
-        // Hiển thị ảnh mới
         const preview = document.getElementById(previewId);
+        const previewAvatar2 = document.getElementById('imagePreviewAvatar22');
+        const previewAvatar3 = document.getElementById('imagePreviewAvatar33');
+
         if (event.target.files && event.target.files[0]) {
+            // Hiển thị ảnh mới và ẩn các ảnh cũ
+
+            // Hiển thị ảnh mới
             preview.src = URL.createObjectURL(event.target.files[0]);
-            preview.style.display = 'block';
-            $('#imagePreviewAvatar2').removeClass('d-block').addClass('d-none');
-            $('#imagePreviewAvatar3').removeClass('d-block').addClass('d-none');
+            preview.classList.remove('d-none');
+            preview.classList.add('d-block');
+
+            // Ẩn ảnh cũ từ cơ sở dữ liệu (nếu có)
+            if (previewAvatar2) {
+                previewAvatar2.classList.remove('d-block');
+                previewAvatar2.classList.add('d-none');
+            }
+
+            // Ẩn ảnh mặc định (nếu có)
+            if (previewAvatar3) {
+                previewAvatar3.classList.remove('d-block');
+                previewAvatar3.classList.add('d-none');
+            }
+
             // Giải phóng bộ nhớ sau khi ảnh đã được tải
             preview.onload = function() {
                 URL.revokeObjectURL(preview.src);
-            }
+            };
         } else {
-            // Ẩn phần preview nếu không có ảnh được chọn
-            preview.style.display = 'none';
-            preview.src = ''; // Đảm bảo đường dẫn ảnh không còn được giữ
+            // Ẩn ảnh mới và hiển thị ảnh cũ
+            preview.classList.remove('d-block');
+            preview.classList.add('d-none');
+            preview.src = '';
+
+            // Hiển thị lại ảnh cũ từ cơ sở dữ liệu (nếu có)
+            if (previewAvatar2) {
+                previewAvatar2.classList.remove('d-none');
+                previewAvatar2.classList.add('d-block');
+            } else if (previewAvatar3) {
+                // Hoặc hiển thị ảnh mặc định
+                previewAvatar3.classList.remove('d-none');
+                previewAvatar3.classList.add('d-block');
+            }
         }
     }
     $(document).ready(function() {
+
         // Hàm để xem trước ảnh được chọn
         // Hàm load districts khi trang được tải
         function loadDistricts(provinceCode, selectedDistrict = null) {
