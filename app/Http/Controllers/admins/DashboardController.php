@@ -173,17 +173,17 @@ class DashboardController extends Controller
             })
             ->take(5); // Lấy 5 sản phẩm bán chạy nhất
 
-
-        // danh mục sản phẩm
-        $categories = Category::withCount('products')->get();
+        // Lấy danh mục chỉ là danh mục cha
+        $categories = Category::withCount('products')
+            ->whereNull('parent_id') // Chỉ lấy danh mục cha (không có danh mục cha nào khác)
+            ->get();
 
         // Lấy số lượng sản phẩm theo từng danh mục
-        $categoryData = $categories->map(function ($category) {
-            return $category->products_count;
-        });
+        $categoryData = $categories->pluck('products_count');
 
         // Lấy tên danh mục
         $categoryNames = $categories->pluck('name');
+
         // dd($bestSellerProducts);
 
         return view("admins.dashboards.sales-report", compact(
@@ -191,7 +191,7 @@ class DashboardController extends Controller
             'orderCounts',
             'orderCountCompleted',
             'orderCountsByMonthJson',
-            'earningsByMonthJson',
+'earningsByMonthJson',
             'orderCountsForChart',
             'categoryData',
             'categoryNames',
@@ -242,5 +242,4 @@ class DashboardController extends Controller
             'products',
             // Các dữ liệu khác...
         ));
-    }
-}
+    }}

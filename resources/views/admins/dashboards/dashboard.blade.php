@@ -533,6 +533,7 @@
     });
 
 
+
     // danh mục sản phẩm
     document.addEventListener("DOMContentLoaded", function() {
         const chartColors = getChartColorsArray("category-products-chart");
