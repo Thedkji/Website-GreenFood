@@ -20,8 +20,9 @@ class DashboardController extends Controller
 
 
         $totalEarnings = Order::where('status', '6')->sum('total');
-        $orderCounts = Order::where('status', '6')->whereYear('created_at', now()->year)->count();
-        $orderCountCompleted = Order::where('status', '6')->whereYear('created_at', now()->year)->count();
+        $orderCounts = Order::where('status', '6')->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+        $orderCountCompleted = Order::where('status', '6')->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)->count();
         // Bình luận theo tháng
         $commentsByMonth = Comment::selectRaw('MONTH(created_at) as month, COUNT(*) as total_comments')
             ->whereYear('created_at', now()->year) // Chỉ lấy bình luận trong năm hiện tại
