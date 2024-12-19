@@ -21,7 +21,7 @@
         <div class="input-group w-75 mx-auto d-flex fruite">
             @if (isset($productHot2))
                 <div class="owl-carousel vegetable-carousel justify-content-center" id="product-list">
-                    @foreach ($productHot as $product)
+                    @foreach ($productHot2 as $product)
                         <div class="card fruite-item w-100">
                             <!-- Image -->
                             <div class="fruite-img">
@@ -39,7 +39,7 @@
                             </div>
 
                             <!-- Product Info -->
-                            <div class="product-info card-body d-flex flex-column">
+                            <div class="product-info card-body d-flex flex-column" style="height: 400px">
                                 <!-- Product Title -->
                                 <h5 class="card-title truncate-text-300">
                                     <a href="{{ route('client.product-detail', $product->id) }}"
@@ -48,8 +48,8 @@
                                     </a>
                                 </h5>
                                 <!-- Short Description -->
-                                <p class="card-text">
-                                    {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
+                                <p class="card-text" style="height: 80px;">
+                                    {!! Str::limit(strip_tags($product->description_short), 100, '...') !!}
                                 </p>
 
                                 <!-- Pricing -->
@@ -129,7 +129,7 @@
                     .vesitable-item {
                         display: flex;
                         flex-direction: column;
-                        height: 450px;
+                        height: 400px;
                         /* Cố định chiều cao */
                         margin-bottom: 20px;
                         /* Giảm khoảng cách dưới mỗi sản phẩm */
