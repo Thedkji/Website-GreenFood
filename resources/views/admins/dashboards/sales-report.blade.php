@@ -150,7 +150,7 @@
                                             <h5 class="fs-14 my-1 fw-normal">{{ $product->total_sold }}</h5>
                                         </td>
                                         <td>
-                                            <h5 class="fs-14 my-1 fw-normal">{{ $product->stock_left }}</h5>
+                                            <h5 class="fs-14 my-1 fw-normal">{{ $product->quantity }}</h5>
                                         </td>
                                         <td>
                                             <h5 class="fs-14 my-1 fw-normal">
@@ -198,178 +198,7 @@
         </div> <!-- .col-->
     </div> <!-- end row-->
 
-    {{-- <div class="row">
 
-
-        <div class="col-xl-8">
-            <div class="card">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
-                    <div class="flex-shrink-0">
-                        <button type="button" class="btn btn-soft-info btn-sm">
-                            <i class="ri-file-list-3-line align-middle"></i> Generate
-                            Report
-                        </button>
-                    </div>
-                </div><!-- end card header -->
-
-                <div class="card-body">
-                    <div class="table-responsive table-card">
-                        <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                            <thead class="text-muted table-light">
-                                <tr>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Vendor</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <a href="apps-ecommerce-order-details.html"
-                                            class="fw-medium link-primary">#VZ2112</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-2">
-                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-1.jpg"
-                                                    alt="" class="avatar-xs rounded-circle" />
-                                            </div>
-                                            <div class="flex-grow-1">Alex Smith</div>
-                                        </div>
-                                    </td>
-                                    <td>Clothes</td>
-                                    <td>
-                                        <span class="text-success">$109.00</span>
-                                    </td>
-                                    <td>Zoetic Fashion</td>
-                                    <td>
-                                        <span class="badge bg-success-subtle text-success">Paid</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 fw-medium mb-0">5.0<span class="text-muted fs-11 ms-1">(61
-                                                votes)</span></h5>
-                                    </td>
-                                </tr><!-- end tr -->
-                                <tr>
-                                    <td>
-                                        <a href="apps-ecommerce-order-details.html"
-                                            class="fw-medium link-primary">#VZ2111</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-2">
-                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-2.jpg"
-                                                    alt="" class="avatar-xs rounded-circle" />
-                                            </div>
-                                            <div class="flex-grow-1">Jansh Brown</div>
-                                        </div>
-                                    </td>
-                                    <td>Kitchen Storage</td>
-                                    <td>
-                                        <span class="text-success">$149.00</span>
-                                    </td>
-                                    <td>Micro Design</td>
-                                    <td>
-                                        <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 fw-medium mb-0">4.5<span class="text-muted fs-11 ms-1">(61
-                                                votes)</span></h5>
-                                    </td>
-                                </tr><!-- end tr -->
-                                <tr>
-                                    <td>
-                                        <a href="apps-ecommerce-order-details.html"
-                                            class="fw-medium link-primary">#VZ2109</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-2">
-                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-3.jpg"
-                                                    alt="" class="avatar-xs rounded-circle" />
-                                            </div>
-                                            <div class="flex-grow-1">Ayaan Bowen</div>
-                                        </div>
-                                    </td>
-                                    <td>Bike Accessories</td>
-                                    <td>
-                                        <span class="text-success">$215.00</span>
-                                    </td>
-                                    <td>Nesta Technologies</td>
-                                    <td>
-                                        <span class="badge bg-success-subtle text-success">Paid</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 fw-medium mb-0">4.9<span class="text-muted fs-11 ms-1">(89
-                                                votes)</span></h5>
-                                    </td>
-                                </tr><!-- end tr -->
-                                <tr>
-                                    <td>
-                                        <a href="apps-ecommerce-order-details.html"
-                                            class="fw-medium link-primary">#VZ2108</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-2">
-                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-4.jpg"
-                                                    alt="" class="avatar-xs rounded-circle" />
-                                            </div>
-                                            <div class="flex-grow-1">Prezy Mark</div>
-                                        </div>
-                                    </td>
-                                    <td>Furniture</td>
-                                    <td>
-                                        <span class="text-success">$199.00</span>
-                                    </td>
-                                    <td>Syntyce Solutions</td>
-                                    <td>
-                                        <span class="badge bg-danger-subtle text-danger">Unpaid</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 fw-medium mb-0">4.3<span class="text-muted fs-11 ms-1">(47
-                                                votes)</span></h5>
-                                    </td>
-                                </tr><!-- end tr -->
-                                <tr>
-                                    <td>
-                                        <a href="apps-ecommerce-order-details.html"
-                                            class="fw-medium link-primary">#VZ2107</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-2">
-                                                <img src="{{ env('VIEW_ADMIN') }}/images/users/avatar-6.jpg"
-                                                    alt="" class="avatar-xs rounded-circle" />
-                                            </div>
-                                            <div class="flex-grow-1">Vihan Hudda</div>
-                                        </div>
-                                    </td>
-                                    <td>Bags and Wallets</td>
-                                    <td>
-                                        <span class="text-success">$330.00</span>
-                                    </td>
-                                    <td>iTest Factory</td>
-                                    <td>
-                                        <span class="badge bg-success-subtle text-success">Paid</span>
-                                    </td>
-                                    <td>
-                                        <h5 class="fs-14 fw-medium mb-0">4.7<span class="text-muted fs-11 ms-1">(161
-                                                votes)</span></h5>
-                                    </td>
-                                </tr><!-- end tr -->
-                            </tbody><!-- end tbody -->
-                        </table><!-- end table -->
-                    </div>
-                </div>
-            </div> <!-- .card-->
-        </div> <!-- .col-->
-    </div> <!-- end row--> --}}
 @endsection
 
 <script>
@@ -384,126 +213,130 @@
 
     // Hàm lấy màu từ CSS
     document.addEventListener("DOMContentLoaded", function() {
-        const orderData = @json($orderCountsForChart);
-        const revenueData = @json($earningsByMonthJson);
-        const refundData = Array(12).fill(0); // Dữ liệu hoàn tiền mặc định là 0
+    const orderData = @json($orderCountsForChart);
+    const revenueData = @json($earningsByMonthJson);
+    const refundData = Array(12).fill(0); // Dữ liệu hoàn tiền mặc định là 0
 
-        const colorsArray = getChartColorsArray("customer_impression_charts");
+    const colorsArray = getChartColorsArray("customer_impression_charts");
 
-        const options = {
-            series: [{
-                    name: "Đơn hàng", // Để Đơn hàng lên trên
-                    type: "area", // Dạng đường vùng
-                    data: orderData,
-                },
-                {
-                    name: "Doanh thu", // Để Doanh thu nằm dưới Đơn hàng
-                    type: "bar", // Dạng cột
-                    data: revenueData,
-                },
-                {
-                    name: "Hoàn tiền",
-                    type: "line",
-                    data: refundData
-                },
+    const options = {
+        series: [{
+                name: "Đơn hàng", // Để Đơn hàng lên trên
+                type: "area", // Dạng đường vùng
+                data: orderData,
+            },
+            {
+                name: "Doanh thu", // Để Doanh thu nằm dưới Đơn hàng
+                type: "bar", // Dạng cột
+                data: revenueData,
+            },
+        ],
+        chart: {
+            height: 350,
+            type: "line", // Biểu đồ chính
+            toolbar: {
+                show: false,
+            },
+        },
+        stroke: {
+            curve: "smooth", // Đường mượt mà
+            width: [3, 0], // Đơn hàng: 3px, Doanh thu: không có nét
+        },
+        fill: {
+            opacity: [0.2, 0.8], // Đơn hàng: trong suốt hơn, Doanh thu: rõ ràng
+        },
+        markers: {
+            size: [4, 0], // Đơn hàng: có điểm, Doanh thu: không có
+            strokeWidth: 2,
+        },
+        xaxis: {
+            categories: [
+                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
             ],
-            chart: {
-                height: 350,
-                type: "line", // Biểu đồ chính
-                toolbar: {
+            axisTicks: {
+                show: false
+            },
+            axisBorder: {
+                show: false
+            },
+        },
+        yaxis: [{
+                title: {
+                    text: "Đơn hàng",
+                },
+                labels: {
+                    formatter: (val) => val ? `${val}` : val,
+                },
+            },
+            {
+                opposite: true,
+                title: {
+                    text: "Doanh thu",
+                },
+                labels: {
+                    formatter: (val) => val ? `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` : val,
+                },
+            },
+        ],
+        grid: {
+            show: true,
+            xaxis: {
+                lines: {
+                    show: true,
+                },
+            },
+            yaxis: {
+                lines: {
                     show: false,
                 },
             },
-            stroke: {
-                curve: "smooth", // Đường mượt mà
-                width: [3, 0], // Đơn hàng: 3px, Doanh thu: không có nét
-            },
-            fill: {
-                opacity: [0.2, 0.8], // Đơn hàng: trong suốt hơn, Doanh thu: rõ ràng
-            },
+        },
+        legend: {
+            show: true,
+            horizontalAlign: "center",
+            offsetX: 0,
+            offsetY: -5,
             markers: {
-                size: [4, 0], // Đơn hàng: có điểm, Doanh thu: không có
-                strokeWidth: 2,
+                width: 9,
+                height: 9,
+                radius: 6,
             },
-            xaxis: {
-                categories: [
-                    "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-                    "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
-                ],
-                axisTicks: {
-                    show: false
-                },
-                axisBorder: {
-                    show: false
-                },
+            itemMargin: {
+                horizontal: 10,
+                vertical: 0,
             },
-            yaxis: [{
-                    title: {
-                        text: "Đơn hàng",
-                    },
+        },
+        colors: colorsArray,
+        tooltip: {
+            shared: true,
+            y: [{
+                    formatter: (val) => (val ? `${val} Đơn hàng` : val),
                 },
-                {
-                    opposite: true,
-                    title: {
-                        text: "Doanh thu",
-                    },
-                },
+                // {
+                //     formatter: (val) =>
+                //         val ?
+                //         `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` : val,
+                // },
             ],
-            grid: {
-                show: true,
-                xaxis: {
-                    lines: {
-                        show: true,
-                    },
-                },
-                yaxis: {
-                    lines: {
-                        show: false,
-                    },
-                },
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: "40%", // Kích thước cột
             },
-            legend: {
-                show: true,
-                horizontalAlign: "center",
-                offsetX: 0,
-                offsetY: -5,
-                markers: {
-                    width: 9,
-                    height: 9,
-                    radius: 6,
-                },
-                itemMargin: {
-                    horizontal: 10,
-                    vertical: 0,
-                },
-            },
-            colors: colorsArray,
-            tooltip: {
-                shared: true,
-                y: [{
-                        formatter: (val) => (val ? `${val} Đơn hàng` : val),
-                    },
-                    {
-                        formatter: (val) =>
-                            val ?
-                            `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` : val,
-                    },
-                ],
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: "40%", // Giảm kích thước cột xuống còn 15% (hoặc tùy chỉnh để giảm xuống một nửa)
-                    barHeight: "70%",
-                },
-            },
-        };
+        },
+        // dataLabels: {
+        //     enabled: true,
+        //     formatter: (val) => val ? `${new Intl.NumberFormat("vi-VN").format(val)} VNĐ` : val,
+        // },
+    };
 
-        const chart = new ApexCharts(
-            document.querySelector("#customer_impression_charts"),
-            options
-        );
-        chart.render();
-    });
+    const chart = new ApexCharts(
+        document.querySelector("#customer_impression_charts"),
+        options
+    );
+    chart.render();
+});
 
 
     // danh mục sản phẩm
