@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
@@ -19,8 +19,9 @@
             {{ session('error') }}
         </div>
     @endif
+ --}}
 
-
+    @include('admins.layouts.components.toast-container')
     <div class="container-fluid py-5">
         <!-- Contact Start -->
         <div class="container-fluid contact py-5">
@@ -46,45 +47,69 @@
                             </div>
                         </div>
                         <div class="col-lg-7">
-                            <form action="{{route('client.contact.sendContact')}}" class="" method="POST">
+                            <form action="{{ route('client.contact.sendContact') }}" class="" method="POST">
                                 @csrf
-                                <input type="text" class="w-100 form-control border-0 py-3 mb-4" name="name" placeholder="Nhập tên">
-                                <input type="email" class="w-100 form-control border-0 py-3 mb-4" name="email"
-                                    placeholder="Nhập Email">
-                                <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" name="message" placeholder="Nhập nội dung"></textarea>
-                                <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
-                                    type="submit">Gửi</button>
-                            </form>
+                                <input type="text" class="w-100 form-control border-0 py-3 mb-4" name="name"
+                                    placeholder="Nhập tên">
+
+                                <div class="my-2">
+                                    @error('name')
+                                        <span class="text-danger">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                                <input type="email" class="w-100 form-control border-0 py-3 mb-4" name="email" placeholder="Nhập Email">
+
+                                <div class="my-2">
+                                @error('email')
+                                    <span class="text-danger">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                         </div>
-                        <div class="col-lg-5">
-                            <div class="d-flex p-4 rounded mb-4 bg-white">
-                                <i class="fas fa-map-marker-alt fa-2x text-primary me-4"></i>
-                                <div>
-                                    <h4>Địa chỉ</h4>
-                                    <p class="mb-2">123, Mỹ Đình, Hà Nội</p>
+                        <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" name="message"
+                            placeholder="Nhập nội dung"></textarea>
+                            <div class="my-2">
+                                @error('message')
+                                    <span class="text-danger">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                                 </div>
+                        <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
+                            type="submit">Gửi</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="d-flex p-4 rounded mb-4 bg-white">
+                            <i class="fas fa-map-marker-alt fa-2x text-primary me-4"></i>
+                            <div>
+                                <h4>Địa chỉ</h4>
+                                <p class="mb-2">123, Mỹ Đình, Hà Nội</p>
                             </div>
-                            <div class="d-flex p-4 rounded mb-4 bg-white">
-                                <i class="fas fa-envelope fa-2x text-primary me-4"></i>
-                                <div>
-                                    <h4>Email</h4>
-                                    <p class="mb-2">greenfood8386@gmail.com</p>
-                                </div>
+                        </div>
+                        <div class="d-flex p-4 rounded mb-4 bg-white">
+                            <i class="fas fa-envelope fa-2x text-primary me-4"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p class="mb-2">greenfood8386@gmail.com</p>
                             </div>
-                            <div class="d-flex p-4 rounded bg-white">
-                                <i class="fa fa-phone-alt fa-2x text-primary me-4"></i>
-                                <div>
-                                    <h4>Số điện thoại</h4>
-                                    <p class="mb-2">0369 868 999</p>
-                                </div>
+                        </div>
+                        <div class="d-flex p-4 rounded bg-white">
+                            <i class="fa fa-phone-alt fa-2x text-primary me-4"></i>
+                            <div>
+                                <h4>Số điện thoại</h4>
+                                <p class="mb-2">0369 868 999</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Contact End -->
-
+    </div>
+    <!-- Contact End -->
+    @include('admins.layouts.components.toast')
     </div>
 
 
