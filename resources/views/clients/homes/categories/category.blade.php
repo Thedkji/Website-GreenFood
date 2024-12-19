@@ -294,7 +294,7 @@
     pointer-events: none; /* Cho phép bấm thông qua vùng không phải nút */
 }
 
-.owl-nav .owl-prev, 
+.owl-nav .owl-prev,
 .owl-nav .owl-next {
     pointer-events: auto; /* Kích hoạt click cho các nút */
     background-color: #cae29e; /* Nền nút mờ */
@@ -310,7 +310,7 @@
     transition: background-color 0.3s ease; /* Hiệu ứng hover */
 }
 
-.owl-nav .owl-prev:hover, 
+.owl-nav .owl-prev:hover,
 .owl-nav .owl-next:hover {
     background-color: #81c408/* Đậm hơn khi hover */
 }
@@ -324,7 +324,7 @@
 }
 
 /* Biểu tượng bên trong nút */
-.owl-nav .owl-prev i, 
+.owl-nav .owl-prev i,
 .owl-nav .owl-next i {
     font-size: 1.2rem;
 }

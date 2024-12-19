@@ -12,7 +12,7 @@ class VariantSeeder extends Seeder
      */
     public function run(): void
     {
-        $variants = array(
+          $variants = array(
             array('id' => '1','name' => 'Khối lượng','parent_id' => NULL,'created_at' => '2024-11-22 04:18:16','updated_at' => '2024-11-22 10:50:14','deleted_at' => NULL),
             array('id' => '2','name' => '200gram','parent_id' => '1','created_at' => '2024-11-22 04:18:16','updated_at' => '2024-11-22 04:18:16','deleted_at' => NULL),
             array('id' => '3','name' => '350gram','parent_id' => '1','created_at' => '2024-11-22 04:18:16','updated_at' => '2024-11-22 04:18:16','deleted_at' => NULL),

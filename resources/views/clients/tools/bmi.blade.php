@@ -14,7 +14,7 @@
         <div class="container-fluid contact py-5">
             <div class="container py-3  w-75">
                 <div class="col-12">
-                    <div class="text-center mx-auto mb-5" style="max-width: 700px;">
+                    <div class="text-center mx-auto mb-5" style="max-height: 700px;">
                         <h1 class="text-primary fw-bold">Công cụ tính chỉ số BMI</h1>
                         {{-- <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p> --}}
                     </div>
@@ -43,15 +43,12 @@
 
                     <div class="col-md-6 row justify-content-between align-items-center w-100">
                         <div class="col-md-3">
-                            <label for="" class="form-lable fw-bold" onclick="TotalBMI()">Kết quả</label>
-                        </div>
-                    </div>
+                            <div class="col-md-3">
+                                <label for="" class="form-lable fw-bold" onclick="TotalBMI()">Kết quả</label>
 
-                    <div class="col-md-6 row justify-content-between align-items-center w-100">
-                        <div class="col-md-3">
-                            {{-- <label for="" class="form-lable">Chiều cao</label> --}}
+                            </div>
                         </div>
-                        <div class="col-md-9 ">
+                        <div class="col-md-9">
                             <input type="text" placeholder="Kết quả" class="form-control p-2 w-25 bg-white"
                                 id="result_bmi" readonly>
                         </div>
@@ -68,6 +65,14 @@
                         </div>
                     </div>
                 </form>
+
+                <div class="my-3 bg-white shadow-md">
+                    <div class="result-bmi"></div>
+                    <div class="recommen-sp d-none">
+                        <h5 class="text-primary fw-bold my-3">Dưới đây là 1 số sản phẩm bạn có thể tham khảo</h5>
+                        @include('clients.tools.product-recoment')
+                    </div>
+                </div>
 
                 <div class="container text-center py-2 mb-3">
                     <img src="{{ env('VIEW_CLIENT') }}/img/che-do-an-giam-can-1 (1).png" width="800" class=""
@@ -159,7 +164,8 @@
                                     cân hợp lý</strong></a>.</span></p>
                     <p>&nbsp;</p>
                     <p><span style="font-size: 14pt;">Bạn cũng có thể tham khảo ý kiến của chuyên gia dinh dưỡng hoặc huấn
-                            luyện viên để có <a href="https://healthyeating.shop/category_package/goi-an-giam-can/">kế hoạch
+                            luyện viên để có <a href="https://healthyeating.shop/category_package/goi-an-giam-can/">kế
+                                hoạch
                                 giảm cân hiệu quả.</a></span></p>
                     <p>&nbsp;</p>
                     <p><span style="font-size: 14pt;">Hãy cùng nhà <a
@@ -186,7 +192,8 @@
                     <p>&nbsp;</p>
                     <h3><span style="color: #008000;"><strong><span style="font-size: 14pt;">4. Điều chỉnh khẩu phần
                                     ăn</span></strong></span></h3>
-                    <p><span style="font-size: 14pt;">Điều chỉnh khẩu phần ăn của bạn là một phần quan trọng trong việc giảm
+                    <p><span style="font-size: 14pt;">Điều chỉnh khẩu phần ăn của bạn là một phần quan trọng trong việc
+                            giảm
                             cân. Bạn nên tập trung vào ăn các loại thực phẩm tươi, giàu dinh dưỡng như rau xanh, trái cây,
                             thịt trắng, đậu hạt, hạt giống và các sản phẩm từ sữa không béo.</span></p>
                     <p>&nbsp;</p>
@@ -307,15 +314,78 @@
     </div>
 
     <script>
-        let widthUser = document.querySelector('#height_user');
+        let heightUser = document.querySelector('#height_user');
         let weightUser = document.querySelector('#weight_user');
         let result = document.querySelector("#result_bmi");
-
+        let resultBmi = document.querySelector(".result-bmi");
+        let recommenSp = document.querySelector(".recommen-sp");
         function totalBMI() {
-            let heightInMeters = widthUser.value / 100;
+            let heightInMeters = heightUser.value / 100;
             let bmi = weightUser.value / (heightInMeters ** 2);
 
             result.value = bmi.toFixed(2);
+
+
+            if (bmi > 40) {
+                // Béo phì cấp độ 3
+                result.style.color = "red";
+                result.style.border = "1px solid red";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-danger">Bạn đang ở tình trạng béo phì cấp độ 3.</span></h3>
+        <p>Giải pháp: Hãy tham khảo bác sĩ và lên kế hoạch giảm cân chi tiết. Tăng cường tập thể dục và duy trì chế độ ăn lành mạnh.</p>`;
+            } else if (bmi > 35) {
+                // Béo phì cấp độ 2
+                result.style.color = "orangered";
+                result.style.border = "1px solid orangered";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-warning">Bạn đang ở tình trạng béo phì cấp độ 2.</span></h3>
+        <p>Giải pháp: Cắt giảm calo trong bữa ăn và tập luyện nhẹ nhàng hàng ngày. Kiểm tra sức khỏe định kỳ.</p>`;
+            } else if (bmi > 30) {
+                // Béo phì cấp độ 1
+                result.style.color = "orange";
+                result.style.border = "1px solid orange";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-warning">Bạn đang ở tình trạng béo phì cấp độ 1.</span></h3>
+        <p>Giải pháp: Bắt đầu với các bài tập cardio như đi bộ, chạy bộ, và điều chỉnh khẩu phần ăn hợp lý.</p>`;
+            } else if (bmi > 25) {
+                // Thừa cân
+                result.style.color = "yellow";
+                result.style.border = "1px solid yellow";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-warning">Bạn đang trong tình trạng thừa cân.</span></h3>
+        <p>Giải pháp: Tăng cường vận động, giảm ăn thực phẩm nhiều đường và dầu mỡ.</p>`;
+            } else if (bmi >= 18.5) {
+                // Bình thường
+                result.style.color = "green";
+                result.style.border = "1px solid green";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-success">Bạn đang có cân nặng bình thường.</span></h3>
+        <p>Giải pháp: Tiếp tục duy trì lối sống lành mạnh và chế độ ăn uống cân đối.</p>`;
+            } else if (bmi >= 16) {
+                // Thiếu cân
+                result.style.color = "orange";
+                result.style.border = "1px solid orange";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-warning">Bạn đang trong tình trạng thiếu cân.</span></h3>
+        <p>Giải pháp: Bổ sung thực phẩm giàu dinh dưỡng và tăng lượng calo trong các bữa ăn.</p>`;
+            } else {
+                // Thiếu cân nghiêm trọng
+                result.style.color = "red";
+                result.style.border = "1px solid red";
+                result.style.fontWeight = "bold";
+                resultBmi.innerHTML =
+                    `<h3 class="fw-bold">Kết luận: <span class="text-danger">Bạn đang thiếu cân nghiêm trọng.</span></h3>
+        <p>Giải pháp: Hãy gặp chuyên gia dinh dưỡng để được tư vấn cụ thể. Ăn đủ chất và nghỉ ngơi hợp lý.</p>`;
+            }
+
+            recommenSp.classList.remove('d-none');
+
         }
     </script>
 @endsection

@@ -10,6 +10,17 @@
     /* Điều chỉnh độ rộng tối đa */
 }
 
+.truncate-text-200 {
+    overflow: hidden;
+    /* Ẩn phần nội dung tràn */
+    text-overflow: ellipsis;
+    /* Thêm dấu "..." */
+    white-space: nowrap;
+    /* Giữ nội dung trên 1 dòng, không xuống dòng */
+    max-width: 200px;
+    /* Điều chỉnh độ rộng tối đa */
+}
+
 .a-underline {
     text-decoration: underline !important;
     cursor: pointer;

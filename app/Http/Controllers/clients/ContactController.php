@@ -17,11 +17,17 @@ class ContactController extends Controller
     public function sendContact(Request $request)
     {
         // Validate form
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|email',
-        //     'message' => 'required|string',
-        // ]);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'message' => 'required|string',
+        ],
+    [
+        'name' => 'Tên không được để trống',
+        'email' => 'Email không được để trống',
+        'email.email' => 'Email không đúng định dạng',
+        'message' => 'Nội dung không được để trống'
+    ]);
 
         try {
             // Lấy dữ liệu từ form
@@ -34,8 +40,6 @@ class ContactController extends Controller
             Mail::to('greenfood8386@gmail.com')->queue(new ContactMessage($data));
             // Đảm bảo gửi qua queue
             // Mail::to($contact->email)->queue(new MailCheckOut($contact));
-
-
 
             return back()->with('success', 'Gửi thành công!');
         } catch (\Exception $e) {

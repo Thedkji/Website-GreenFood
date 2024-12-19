@@ -16,8 +16,6 @@ class CategoryProductSeeder extends Seeder
         $category_product = array(
             array('category_id' => '2','product_id' => '1'),
             array('category_id' => '4','product_id' => '1'),
-            array('category_id' => '5','product_id' => '2'),
-            array('category_id' => '6','product_id' => '2'),
             array('category_id' => '2','product_id' => '4'),
             array('category_id' => '4','product_id' => '4'),
             array('category_id' => '2','product_id' => '5'),
@@ -59,7 +57,9 @@ class CategoryProductSeeder extends Seeder
             array('category_id' => '8','product_id' => '24'),
             array('category_id' => '10','product_id' => '24'),
             array('category_id' => '2','product_id' => '25'),
-            array('category_id' => '4','product_id' => '25')
+            array('category_id' => '4','product_id' => '25'),
+            array('category_id' => '2','product_id' => '27'),
+            array('category_id' => '4','product_id' => '27')
           );
 
         foreach ($category_product as $item) {

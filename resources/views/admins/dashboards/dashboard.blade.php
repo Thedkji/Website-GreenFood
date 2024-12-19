@@ -19,38 +19,7 @@
                                 <p class="text-muted mb-0">Sau đây là những gì đang diễn ra tại cửa hàng của bạn ngày hôm
                                     nay.</p>
                             </div>
-                            <div class="mt-3 mt-lg-0">
-                                <form action="javascript:void(0);">
-                                    <div class="row g-3 mb-0 align-items-center">
-                                        <div class="col-sm-auto">
-                                            <div class="input-group">
-                                                <input type="text"
-                                                    class="form-control border-0 dash-filter-picker shadow"
-                                                    data-provider="flatpickr" data-range-date="true"
-                                                    data-date-format="d M, Y"
-                                                    data-deafult-date="01 Jan 2022 to 31 Jan 2022">
-                                                <div class="input-group-text bg-primary border-primary text-white">
-                                                    <i class="ri-calendar-2-line"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        {{-- <div class="col-auto">
-                                            <button type="button" class="btn btn-soft-success"><i
-                                                    class="ri-add-circle-line align-middle me-1"></i>
-                                                Add Product</button>
-                                        </div> --}}
-                                        <!--end col-->
-                                        <div class="col-auto">
-                                            <button type="button"
-                                                class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn"><i
-                                                    class="ri-pulse-line"></i></button>
-                                        </div>
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
+                            
                         </div><!-- end card header -->
                     </div>
                     <!--end col-->
@@ -96,7 +65,10 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
+                            </div>
+
+
+                            <!-- end card body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
 
@@ -188,7 +160,8 @@
                                                 {{ $currentMonthComments }}
                                             </span>
                                         </h4>
-                                        <a href="{{ route('admin.commentsDashboard') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                        <a href="{{ route('admin.commentsDashboard') }}"
+                                            class="text-decoration-underline">Xem chi tiết</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -196,7 +169,9 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
+                            </div>
+
+                            <!-- end card body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
                 </div> <!-- end row-->
@@ -251,13 +226,13 @@
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-6 col-sm-3">
+                        {{-- <div class="col-6 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
                                 <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
                                 </h5>
                                 <p class="text-muted mb-0">Hoàn tiền</p>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end col-->
                         {{-- <div class="col-6 col-sm-3">
                         <div class="p-3 border border-dashed border-start-0 border-end-0">
@@ -327,8 +302,8 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                    <img src="{{ Storage::url($product->img) }}" alt="{{ $product->name }}"
-                                                        class="img-fluid d-block" />
+                                                    <img src="{{ Storage::url($product->img) }}"
+                                                        alt="{{ $product->name }}" class="img-fluid d-block" />
                                                 </div>
                                                 <div>
                                                     <h5 class="truncate-text fs-14 my-1">
@@ -393,7 +368,23 @@
                 </div><!-- end card header -->
 
                 <div id="category-products-chart"
-                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info", "--vz-pink", "--vz-purple", "--vz-blue", "--vz-orange", "--vz-teal", "--vz-yellow", "--vz-gray", "--vz-light-blue", "--vz-dark-blue", "--vz-red", "--vz-light-green", "--vz-dark-green", "--vz-brown", "--vz-light-gray", "--vz-dark-gray", "--vz-light-orange", "--vz-light-pink", "--vz-dark-yellow", "--vz-dark-purple", "--vz-dark-teal", "--vz-light-brown", "--vz-light-dark", "--vz-light-violet", "--vz-dark-violet", "--vz-light-blue-gray"]'
+                    data-colors='[
+                    "--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info",
+                    "--vz-pink", "--vz-purple", "--vz-blue", "--vz-orange", "--vz-teal", "--vz-yellow",
+                    "--vz-gray", "--vz-light-blue", "--vz-dark-blue", "--vz-red", "--vz-light-green",
+                    "--vz-dark-green", "--vz-brown", "--vz-light-gray", "--vz-dark-gray",
+                    "--vz-light-orange", "--vz-light-pink", "--vz-dark-yellow", "--vz-dark-purple",
+                    "--vz-dark-teal", "--vz-light-brown", "--vz-light-dark", "--vz-light-violet",
+                    "--vz-dark-violet", "--vz-light-blue-gray",
+                    "--vz-cyan", "--vz-magenta", "--vz-bright-yellow", "--vz-dark-red",
+                    "--vz-light-cyan", "--vz-dark-cyan", "--vz-light-magenta", "--vz-dark-magenta",
+                    "--vz-sky-blue", "--vz-deep-orange", "--vz-lime-green", "--vz-olive",
+                    "--vz-maroon", "--vz-navy", "--vz-gold", "--vz-silver", "--vz-charcoal",
+                    "--vz-bright-purple", "--vz-bright-pink", "--vz-bright-green", "--vz-aqua",
+                    "--vz-light-turquoise", "--vz-dark-turquoise", "--vz-mint-green",
+                    "--vz-peach", "--vz-plum", "--vz-rose", "--vz-tan", "--vz-sapphire",
+                    "--vz-amber", "--vz-beige", "--vz-coral", "--vz-emerald", "--vz-ivory"
+                ]'
                     class="apex-charts" dir="ltr">
                 </div>
 
@@ -431,11 +422,11 @@
                     type: "bar", // Dạng cột
                     data: revenueData,
                 },
-                {
-                    name: "Hoàn tiền",
-                    type: "line",
-                    data: refundData
-                },
+                // {
+                //     name: "Hoàn tiền",
+                //     type: "line",
+                //     data: refundData
+                // },
             ],
             chart: {
                 height: 350,
@@ -537,42 +528,40 @@
 
 
     // danh mục sản phẩm
-    document.addEventListener("DOMContentLoaded", function () {
-    const chartColors = getChartColorsArray("category-products-chart");
+    document.addEventListener("DOMContentLoaded", function() {
+        const chartColors = getChartColorsArray("category-products-chart");
 
-    // Dữ liệu từ PHP
-    const categoryData = @json($categoryData);  // Số lượng sản phẩm theo danh mục
-    const categoryNames = @json($categoryNames);  // Tên danh mục
+        // Dữ liệu từ PHP
+        const categoryData = @json($categoryData); // Số lượng sản phẩm theo danh mục
+        const categoryNames = @json($categoryNames); // Tên danh mục
 
-    const options = {
-        series: categoryData, // Dữ liệu cho biểu đồ
-        chart: {
-            height: 350,
-            type: "donut"
-        },
-        labels: categoryNames, // Nhãn cho từng phần trong biểu đồ
-        colors: chartColors, // Màu sắc cho biểu đồ
-        legend: {
-            position: "bottom"
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                return val.toFixed(0); // Hiển thị số lượng (không có phần trăm)
-            }
-        },
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return val + " sản phẩm"; // Hiển thị số lượng sản phẩm trong tooltip
+        const options = {
+            series: categoryData, // Dữ liệu cho biểu đồ
+            chart: {
+                height: 350,
+                type: "donut"
+            },
+            labels: categoryNames, // Nhãn cho từng phần trong biểu đồ
+            colors: chartColors, // Màu sắc cho biểu đồ
+            legend: {
+                position: "bottom"
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val.toFixed(0); // Hiển thị số lượng (không có phần trăm)
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " sản phẩm"; // Hiển thị số lượng sản phẩm trong tooltip
+                    }
                 }
             }
-        }
-    };
+        };
 
-    const chart = new ApexCharts(document.querySelector("#category-products-chart"), options);
-    chart.render();
-});
-
-
+        const chart = new ApexCharts(document.querySelector("#category-products-chart"), options);
+        chart.render();
+    });
 </script>

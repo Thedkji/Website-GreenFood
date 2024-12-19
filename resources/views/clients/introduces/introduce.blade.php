@@ -37,7 +37,7 @@
                 <div class="col-lg-6">
                     <h3 class="fw-bold mb-4">Giới thiệu về chúng tôi</h3>
                     <p class="mb-4">Green Food là một thương hiệu được xây dựng với niềm tin mạnh mẽ rằng "Một chế độ ăn uống lành mạnh chính là nền tảng của sức khỏe bền vững". Với sứ mệnh mang đến những sản phẩm thực phẩm tự nhiên, an toàn và dinh dưỡng, chúng tôi cam kết đồng hành cùng bạn trên hành trình chăm sóc sức khỏe.</p>
-                    <a href="/contact.html" class="btn btn-primary py-3 px-4">Liên hệ với chúng tôi</a>
+                    <a href="{{route('client.contact.index')}}" class="btn btn-primary py-3 px-4 text-white">Liên hệ với chúng tôi</a>
                 </div>
             </div>
         </div>

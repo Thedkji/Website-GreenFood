@@ -83,13 +83,12 @@ class ProductController extends Controller
             })
             ->take(5);
 
-        if ($request->ajax() && $request->has('keySearch')) {
+        if ($request->has('keySearch')) {
             $productSearch = Product::with('categories', 'variantGroups')
                 ->where('name', 'like', '%' . $request->keySearch . '%')
                 ->limit(5)
                 ->orderByDesc('id')
                 ->get();
-            return response()->json($productSearch);
         }
 
         return view('clients.homes.home', compact(
