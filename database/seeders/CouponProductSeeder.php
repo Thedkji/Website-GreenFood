@@ -14,7 +14,6 @@ class CouponProductSeeder extends Seeder
     public function run(): void
     {
         $coupon_product = array(
-            array('coupon_id' => '6','product_id' => '2'),
             array('coupon_id' => '4','product_id' => '5'),
             array('coupon_id' => '4','product_id' => '6'),
             array('coupon_id' => '4','product_id' => '9')

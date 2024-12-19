@@ -14,10 +14,8 @@ class VariantGroupSeed extends Seeder
     public function run(): void
     {
         $variant_group = array(
-            array('id' => '1','product_id' => '1','sku' => 'SPBT487887','img' => NULL,'price_regular' => '110000','price_sale' => '75000','quantity' => '1','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
-            array('id' => '2','product_id' => '1','sku' => 'SPBT250693','img' => NULL,'price_regular' => '150000','price_sale' => '99000','quantity' => '53','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-07 13:02:42','deleted_at' => '2024-12-07 13:02:42'),
-            array('id' => '3','product_id' => '2','sku' => 'SPBT800530','img' => 'product_variants/1732270675_67405a532b8a6.jpg','price_regular' => '180000','price_sale' => '149000','quantity' => '32','created_at' => '2024-11-22 05:34:37','updated_at' => '2024-12-03 11:40:42','deleted_at' => NULL),
-            array('id' => '4','product_id' => '2','sku' => 'SPBT490156','img' => 'product_variants/1732270675_67405a532c841.jpg','price_regular' => '150000','price_sale' => '110000','quantity' => '15','created_at' => '2024-11-22 05:34:37','updated_at' => '2024-12-07 13:50:52','deleted_at' => NULL),
+            array('id' => '1','product_id' => '1','sku' => 'SPBT487887','img' => NULL,'price_regular' => '110000','price_sale' => '75000','quantity' => '1','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:19:36','deleted_at' => '2024-12-19 17:19:36'),
+            array('id' => '2','product_id' => '1','sku' => 'SPBT250693','img' => NULL,'price_regular' => '150000','price_sale' => '99000','quantity' => '53','created_at' => '2024-11-22 04:28:02','updated_at' => '2024-12-19 17:19:36','deleted_at' => '2024-12-19 17:19:36'),
             array('id' => '10','product_id' => '5','sku' => 'SPBT491526','img' => NULL,'price_regular' => '160000','price_sale' => '139000','quantity' => '30','created_at' => '2024-11-22 10:42:23','updated_at' => '2024-11-22 10:42:23','deleted_at' => NULL),
             array('id' => '11','product_id' => '5','sku' => 'SPBT276579','img' => NULL,'price_regular' => '90000','price_sale' => '75000','quantity' => '40','created_at' => '2024-11-22 10:42:23','updated_at' => '2024-11-22 10:42:23','deleted_at' => NULL),
             array('id' => '12','product_id' => '6','sku' => 'SPBT168707','img' => NULL,'price_regular' => '120000','price_sale' => '105000','quantity' => '60','created_at' => '2024-11-22 10:54:46','updated_at' => '2024-11-22 10:54:46','deleted_at' => NULL),
@@ -34,8 +32,10 @@ class VariantGroupSeed extends Seeder
             array('id' => '23','product_id' => '18','sku' => 'SPBT724619','img' => NULL,'price_regular' => '120000','price_sale' => '90000','quantity' => '50','created_at' => '2024-12-19 14:20:16','updated_at' => '2024-12-19 15:49:44','deleted_at' => NULL),
             array('id' => '24','product_id' => '18','sku' => 'SPBT336638','img' => NULL,'price_regular' => '150000','price_sale' => '115000','quantity' => '78','created_at' => '2024-12-19 14:20:16','updated_at' => '2024-12-19 14:20:16','deleted_at' => NULL),
             array('id' => '25','product_id' => '18','sku' => 'SPBT740746','img' => NULL,'price_regular' => '180000','price_sale' => '150000','quantity' => '65','created_at' => '2024-12-19 14:20:16','updated_at' => '2024-12-19 14:20:16','deleted_at' => NULL),
-            array('id' => '26','product_id' => '25','sku' => 'SPBT921079','img' => NULL,'price_regular' => '200000','price_sale' => '85000','quantity' => '56','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 16:10:56','deleted_at' => NULL),
-            array('id' => '27','product_id' => '25','sku' => 'SPBT975693','img' => NULL,'price_regular' => '200000','price_sale' => '160000','quantity' => '59','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 15:25:48','deleted_at' => NULL)
+            array('id' => '26','product_id' => '25','sku' => 'SPBT921079','img' => NULL,'price_regular' => '200000','price_sale' => '85000','quantity' => '55','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 17:42:54','deleted_at' => NULL),
+            array('id' => '27','product_id' => '25','sku' => 'SPBT975693','img' => NULL,'price_regular' => '200000','price_sale' => '160000','quantity' => '59','created_at' => '2024-12-19 15:25:48','updated_at' => '2024-12-19 17:34:55','deleted_at' => NULL),
+            array('id' => '30','product_id' => '1','sku' => 'SPBT979457','img' => NULL,'price_regular' => '120000','price_sale' => '100000','quantity' => '43','created_at' => '2024-12-19 17:19:36','updated_at' => '2024-12-19 17:19:36','deleted_at' => NULL),
+            array('id' => '31','product_id' => '1','sku' => 'SPBT357373','img' => NULL,'price_regular' => '220000','price_sale' => '200000','quantity' => '34','created_at' => '2024-12-19 17:19:36','updated_at' => '2024-12-19 17:19:36','deleted_at' => NULL)
           );
 
 
