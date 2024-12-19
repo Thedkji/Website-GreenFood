@@ -36,7 +36,7 @@
                 <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.category-checkbox')">
                 </th>
-                <th scope="col">Stt</th>
+                <th scope="col">STT</th>
                 <th scope="col">Tên danh mục</th>
                 <th scope="col">Danh mục con</th>
                 <th scope="col">Ngày tạo</th>

@@ -51,7 +51,7 @@
                 {{-- <th scope="col">
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
                 </th> --}}
-                <th scope="col">Stt</th>
+                <th scope="col">STT</th>
                 <th scope="col">Loại</th>
                 <th scope="col">Tên</th>
                 <th scope="col">Ngày xóa</th>

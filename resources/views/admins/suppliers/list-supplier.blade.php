@@ -63,7 +63,7 @@
             <th scope="col">
                 <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
             </th>
-            <th scope="col">Stt</th>
+            <th scope="col">STT</th>
             <th scope="col">Tên nhà cung cấp</th>
             <th scope="col">Email</th>
             <th scope="col">Số điện thoại</th>

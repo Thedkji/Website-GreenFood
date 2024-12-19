@@ -37,9 +37,9 @@
                         <img src="{{ env('VIEW_CLIENT') }}/img/123.jpg" class=" img-fluid rounded-top w-100" alt="" style='height: 300px;  object-fit: cover;  width: 100%;   border-radius: 8px 8px 0 0;'>
                         <div class="px-4 rounded-bottom">
                             <div class="service-content bg-light text-center p-4 rounded">
-                                <h5 class="text-primary">Mọi thắc mắc</h5>
+                                <h5 class="text-primary">Được kiểm tra</h5>
                                 <a href="{{ route('client.contact.index') }}" class=" border-Black border-success rounded-pill text-Black">
-                                    <h3 class=" border-Black border-success rounded-pill text-Black  ">Trả lời 24/7</h3>
+                                    <h3 class=" border-Black border-success rounded-pill text-Black  ">Hàng trước khi nhận </h3>
                                 </a>
                             </div>
                         </div>

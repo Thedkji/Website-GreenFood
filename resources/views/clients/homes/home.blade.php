@@ -33,25 +33,14 @@
 
     <!-- Featurs Section Start -->
 
-    <div class="container-fluid featurs py-5">
+    <div class="container-fluid featurs py-5 text-center ">
         <div class="container py-5">
             <div class="text-center mx-auto mb-5" style="max-width: 700px;">
                 <h1 class="display-4">Chính Sách</h1>
                 <p>Chính sách của chúng tôi luôn luôn đảm bảo quyền lợi của khách hàng lên hàng đầu</p>
             </div>
             <div class="row g-4">
-                <div class="col-md-6 col-lg-3">
-                    <div class="featurs-item text-center rounded bg-light p-4">
-                        <div class="featurs-icon btn-square rounded-circle bg-success mb-5 mx-auto">
-                            <i class="fas fa-car-side fa-3x text-white"></i>
-                        </div>
-                        <div class="featurs-content text-center">
-                            <h5>Free Shipping</h5>
-                            <p class="mb-0">Miễn phí trong nội thành </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-4">
                     <div class="featurs-item text-center rounded bg-light p-4">
                         <div class="featurs-icon btn-square rounded-circle bg-success mb-5 mx-auto">
                             <i class="fas fa-user-shield fa-3x text-white"></i>
@@ -62,18 +51,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-4">
                     <div class="featurs-item text-center rounded bg-light p-4">
                         <div class="featurs-icon btn-square rounded-circle bg-success mb-5 mx-auto">
-                            <i class="fas fa-exchange-alt fa-3x text-white"></i>
+                            <i class="fas fa-box-open fa-3x text-white"></i>
                         </div>
                         <div class="featurs-content text-center">
-                            <h5>Return of food</h5>
-                            <p class="mb-0">Đổi trả miển phí khi sản phẩm lỗi</p>
+                            <h5>Checked the goods</h5>
+                            <p class="mb-0">Được kiểm tra hàng trước khi nhận hàng </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-4">
                     <div class="featurs-item text-center rounded bg-light p-4">
                         <div class="featurs-icon btn-square rounded-circle bg-success mb-5 mx-auto">
                             <i class="fa fa-phone-alt fa-3x text-white"></i>

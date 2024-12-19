@@ -37,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="coupon_amount" class="form-label">Số tiền muốn giảm giá
-                        <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá">
+                        <span class="truncate" data-fulltext="Là số tiền được giảm sau khi thêm mã giảm giá. | Giảm giá theo % từ 1%-30%. | Giảm giá theo giá tiền tối đa là 200.000 đ">
                             <i class="fa-solid fa-circle-question"></i>
                         </span>
                         <span class="text-danger">*</span>
@@ -118,7 +118,7 @@
                         <option value="#" hidden>--Chọn--</option>
                         <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Phát hành</option>
                         <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Chưa phát hành</option>
-                        <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Cho một số người dùng</option>
+                        <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Cho khách hàng mới</option>
                         <option value="3" {{ old('status') == '3' ? 'selected' : '' }}>Hết hạn</option>
                     </select>
                     @error('status')

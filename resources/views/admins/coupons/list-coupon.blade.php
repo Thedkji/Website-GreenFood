@@ -33,7 +33,7 @@
                 <th>
                     <input type="checkbox" id="select-all" onclick="toggleSelectAll(this,'.coupon-checkbox')">
                 </th>
-                <th>Stt</th>
+                <th>STT</th>
                 <th>Tên mã giảm giá</th>
                 <th>Loại mã giảm giá</th>
                 <th>
@@ -136,8 +136,7 @@
 
                             @case(2)
                                 <span class="badge bg-primary p-2"
-                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Phát hành cho 1
-                                    số người dùng</span>
+                                    style="width: 100px;word-wrap: break-word;white-space: normal;line-height: 1.2">Cho khách hàng mới </span>
                             @break
 
                             @case(3)

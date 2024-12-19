@@ -18,7 +18,7 @@
                     <div class="d-flex justify-content-end pt-3">
                         <a class="btn  btn-outline-secondary me-2 btn-md-square rounded-circle" href="https://x.com/"><i
                                 class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="https://www.facebook.com/profile.php?id=100040092727733"><i
+                        <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i
                                 class="fab fa-facebook-f"></i></a>
                         <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href="https://www.youtube.com/watch?v=AYXfaVD5o40"><i
                                 class="fab fa-youtube"></i></a>
@@ -32,7 +32,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="footer-item">
                     <h4 class="text-light mb-3">Tại sao mọi người thích chúng tôi!</h4>
-                    <p class="mb-4">Bởi vì chúng tôi luôn trao đến tay khách hàng những sản phẩm chất lượng nhất. Mang lại cho khách hàng những trảỉ nghiệm tối nhất khi mua hàng tại GreenFood
+                    <p class="mb-4">Bởi vì chúng tôi luôn trao đến tay khách hàng những sản phẩm chất lượng nhất. Mang lại cho khách hàng những trải nghiệm tối nhất khi mua hàng tại GreenFood
                     </p>
                     <a href="{{ route('client.shop') }}" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Mua ngay</a>
                 </div>
@@ -60,7 +60,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="footer-item">
                     <h4 class="text-light mb-3">Thông tin về chúng tôi</h4>
-                    <p>123, Mỹ Đình, Hà Nội</p>
+                    <p>Address: Nguyễn Cơ Thạch, Mỹ Đình 2, Bắc Từ Liêm, Hà Nội</p>
                     <p>Email: greenfood8386@gmail.com</p>
                     <p>Hotline: 0369 868 999</p>
                 </div>
@@ -70,24 +70,6 @@
 </div>
 <!-- Footer End -->
 
-<!-- Copyright Start -->
-<div class="container-fluid copyright bg-dark py-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i></a>Công ty TNHH GreenFood</span>
-            </div>
-            <div class="col-md-6 my-auto text-center text-md-end text-white">
-                <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                Designed By <a class="border-bottom" href=>HTML Codex</a> Distributed By
-                <a class="border-bottom" href="https://vfa.gov.vn/">ThemeWagon</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Copyright End -->
 
 
 
