@@ -1,6 +1,6 @@
 <div class="container mt-3">
     <h4 class="mb-4 text-start">Khuyến mãi khách hàng mới</h4>
-    
+<p class="d-block text-start text-muted">(Chỉ được chọn 1 mã giảm giá duy nhất cho khách hàng mới!)</p>
     @if($coupons->isEmpty())
         <p class="text-center">Không có khuyến mãi nào.</p>
     @else
