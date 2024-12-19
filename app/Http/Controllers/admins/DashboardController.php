@@ -80,7 +80,7 @@ class DashboardController extends Controller
 
         // Lấy danh mục cha và số lượng sản phẩm trực thuộc
         $categories = Category::whereNull('parent_id') // Chỉ lấy danh mục cha
-->withCount(['products as direct_products_count' => function ($query) {
+            ->withCount(['products as direct_products_count' => function ($query) {
                 $query->whereNull('parent_id'); // Chỉ tính sản phẩm trực thuộc danh mục cha
             }])
             ->get();
@@ -123,6 +123,8 @@ class DashboardController extends Controller
             'currentMonthComments'
         ));
     }
+
+
     public function salesReport(Request $request)
     {
         // Tổng doanh thu
@@ -191,7 +193,7 @@ class DashboardController extends Controller
             'orderCounts',
             'orderCountCompleted',
             'orderCountsByMonthJson',
-'earningsByMonthJson',
+            'earningsByMonthJson',
             'orderCountsForChart',
             'categoryData',
             'categoryNames',
@@ -242,4 +244,5 @@ class DashboardController extends Controller
             'products',
             // Các dữ liệu khác...
         ));
-    }}
+    }
+}
