@@ -238,7 +238,7 @@
 
     @include('admins.layouts.components.toast')
     @include('admins.products.script-edit')
-    @include('admins.products.validate')
+    @include('admins.products.validate-edit')
 
     <script>
         // Hàm để xem trước ảnh được chọn
