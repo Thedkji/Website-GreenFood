@@ -53,19 +53,29 @@ class Information extends Controller
             ->orderBy('created_at', 'desc') 
             ->paginate(5);
 
-            $isNewUser = $user->created_at->diffInDays(now()) <= 7; 
-            $hasNoOrders = $orders->count() == 0; 
-            // dd($user);
-            if ($isNewUser && $hasNoOrders) {
+            $isNewUser = $user->created_at->diffInDays(now()) <= 7;
+            $hasNoOrders = $orders->count() == 0;
+        
+            $isEligibleForCoupon = $isNewUser && $hasNoOrders;
+        if($isNewUser && $hasNoOrders){
+            if ($isEligibleForCoupon) {
                 $coupons = Coupon::where('status', 2)
-                    ->where('expiration_date', '>=', now()) 
+                    ->where('expiration_date', '>=', now())
                     ->get();
             } else {
-                $coupons = collect(); 
+                $coupons = collect();
+            }
+        }else {
+            $coupons = collect();
+        }
+            $viewType = request('view_type', 'information'); 
+        
+            if ($viewType === 'tab-menu') {
+                return view('clients.information.tab-menu', compact('isEligibleForCoupon'));
             }
         
-        return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces','coupons'));
-    }
+            return view('clients.information.information', compact('user', 'orders', 'oders', 'provinces', 'coupons', 'isEligibleForCoupon'));
+        }
 
 
     public function editPass($id)
@@ -169,6 +179,10 @@ class Information extends Controller
                 if ($variant) {
                     $variant->increment('quantity', $detail->product_quantity);
                 }
+            }
+            if (!empty($detail->coupon_name)) {
+                $coupon = Coupon::where('name', "{$detail->coupon_name}")->first();
+                $coupon->quantity += 1;
             }
         }
 

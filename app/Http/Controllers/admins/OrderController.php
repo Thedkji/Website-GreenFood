@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admins;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admins\OrderRequest;
 use App\Mail\MailCheckOut;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -87,6 +88,10 @@ class OrderController extends Controller
                 } else {
                     $variant = VariantGroup::where('sku', $detail->product_sku)->first();
                     $variant->increment('quantity', $detail->product_quantity);
+                }
+                if (!empty($detail->coupon_name)) {
+                    $coupon = Coupon::where('name', "{$detail->coupon_name}")->first();
+                    $coupon->quantity += 1;
                 }
             }
             Mail::to($order->email)->queue(new MailCheckOut($order));

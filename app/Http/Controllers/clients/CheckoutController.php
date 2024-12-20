@@ -109,6 +109,7 @@ class CheckoutController extends Controller
                 ->whereHas('orderDetails', function ($query) {
                     $query->whereNotNull('coupon_name'); // Kiểm tra nếu có mã giảm giá
                 })
+                ->where('status', '!= ', 5)
                 ->with('orderDetails') // Lấy chi tiết đơn hàng
                 ->get()
                 ->pluck('orderDetails.*.coupon_name') // Lấy mã giảm giá từ orderDetails
@@ -154,55 +155,67 @@ class CheckoutController extends Controller
         // Lọc các mã giảm giá khả dụng dựa trên sản phẩm hoặc danh mục
         $availableCoupons = $couponsAll->filter(function ($coupon) use ($productIds, $categoryIds, $totalPrice, $usedCouponNames) {
             // Kiểm tra trạng thái phát hành
-            if ($coupon->status != 0) {
+            if (!in_array($coupon->status, [0, 2])) {
                 return false;
             }
-            if (in_array($coupon->name, $usedCouponNames)) {
+        
+            // Kiểm tra người dùng có đăng nhập không
+            if (!auth()->check()) {
+                // Nếu là guest, không cho phép sử dụng bất kỳ mã giảm giá nào
                 return false;
+            } else {
+                // Người dùng đã đăng nhập, kiểm tra mã giảm giá đã sử dụng
+                if (in_array($coupon->name, $usedCouponNames)) {
+                    return false; 
+                }
             }
+        
             // Không hiển thị mã nếu giá trị tối thiểu lớn hơn tổng giá trị đơn hàng
             if ($coupon->minimum_spend > $totalPrice || $totalPrice > $coupon->maximum_spend) {
                 return false;
             }
+        
             // Kiểm tra số lượng còn đủ không
             if ($coupon->quantity == 0) {
                 return false;
             }
+        
             // Kiểm tra ngày hết hạn của coupon
             if ($coupon->expiration_date && now()->greaterThan($coupon->expiration_date)) {
                 return false;
             }
-
+        
             // Kiểm tra xem có mã nào có tác dụng cho toàn bộ sản phẩm không
             if ($coupon->type == 0) {
                 return true;
             }
-
-            // Nếu không có thì xét điều kiện
+        
             $isProductMatch = false;
             $isCategoryMatch = false;
-            // Kiểm tra sản phẩm liên kết với coupon
+        
             foreach ($coupon->products as $product) {
                 if (in_array($product->id, $productIds)) {
                     $isProductMatch = true;
                     break;
                 }
             }
-            // Kiểm tra danh mục liên kết với coupon
+        
             foreach ($coupon->categories as $category) {
                 if (in_array($category->id, $categoryIds->toArray())) {
                     $isCategoryMatch = true;
                     break;
                 }
             }
-            // Mã giảm giá được coi là hợp lệ khi có cả sự khớp sản phẩm và danh mục
+        
             return $isProductMatch || $isCategoryMatch;
         });
-
+        
         $userInfo = auth()->user() ?? null;
+        
         $provinces = app(GHNService::class)->getProvinces();
         $districtId = auth()->check() ? $userInfo->district : null;
         $wardId = auth()->check() ? $userInfo->ward : null;
+        
         return view("clients.checkouts.checkout", compact('districtId', 'wardId', 'Products', 'provinces', 'decodedItems', 'totalPrice', 'userInfo', 'datas', 'variantDetails', 'availableCoupons'));
     }
     public function removeCheck(Request $request)
@@ -293,6 +306,7 @@ class CheckoutController extends Controller
                         ->whereHas('orderDetails', function ($query) {
                             $query->whereNotNull('coupon_name'); // Kiểm tra nếu có mã giảm giá
                         })
+                        ->where('status', '!= ', 5)
                         ->with('orderDetails') // Lấy chi tiết đơn hàng
                         ->get()
                         ->pluck('orderDetails.*.coupon_name') // Lấy mã giảm giá từ orderDetails
