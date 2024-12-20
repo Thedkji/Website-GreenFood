@@ -20,13 +20,13 @@
                                     </a>
                                     <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                         style="top: 10px; right: 10px;">
-                                        @php
+                                        {{-- @php
                                             $category = $product
                                                 ->categories()
                                                 ->whereNotNull('parent_id')
                                                 ->get()
                                                 ->random();
-                                        @endphp
+                                        @endphp --}}
                                         {{ $category->name ?? 'No category' }}
                                     </div>
                                 </div>

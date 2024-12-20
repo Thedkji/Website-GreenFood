@@ -78,7 +78,13 @@
                         </td>
                     @else
                         <td>
-                            <span class="text-success fw-bold">{{ $minPriceVariantGroup->sku }}</span>
+                            <span class="text-success fw-bold">
+                                @foreach ($product->variantGroups as $variantGroup)
+                                    <div class="d-flex justify-content-between">
+                                        <span>- {{ $variantGroup->sku }}</span>
+                                    </div>
+                                @endforeach
+                            </span>
                         </td>
                     @endif
 
@@ -109,13 +115,33 @@
                         <td class="text-success fw-bold">{{ app('formatPrice')($product->price_sale) }} VNĐ</td>
                         <td>{{ $product->quantity }}</td>
                     @else
-                        <td>{{ app('formatPrice')($minPriceVariantGroup->price_regular) }} VNĐ</td>
-                        <td class="text-success fw-bold">{{ app('formatPrice')($minPriceVariantGroup->price_sale) }} VNĐ
+                        <td>
+                            @foreach ($product->variantGroups as $variantGroup)
+                                <div class="d-flex justify-content-between">
+                                    <span>- {{ app('formatPrice')($variantGroup->price_regular) }}</span>
+                                    <div> VNĐ <br></div>
+                                </div>
+                            @endforeach
                         </td>
-                        <td>{{ $minPriceVariantGroup->quantity }}</td>
+                        <td class="text-success fw-bold">
+                            @foreach ($product->variantGroups as $variantGroup)
+                                <div class="d-flex justify-content-between">
+                                    <span>- {{ app('formatPrice')($variantGroup->price_sale) }}</span>
+                                    <div> VNĐ <br></div>
+                                </div>
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($product->variantGroups as $variantGroup)
+                                <div class="">
+                                    <span>- {{ $variantGroup->quantity }}</span>
+                                </div>
+                            @endforeach
+                        </td>
                     @endif
                     <td>
-                        <span class="badge p-2 truncate {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}" data-fulltext="Ngày tạo: {{ $product->created_at->format('d-m-Y H:i:s') }}">
+                        <span class="badge p-2 truncate {{ $product->status == 0 ? 'bg-primary' : 'bg-success' }}"
+                            data-fulltext="Ngày tạo: {{ $product->created_at->format('d-m-Y H:i:s') }}">
                             {{ $product->status == 0 ? 'Không biến thể' : 'Có biến thể' }}
                         </span>
 
