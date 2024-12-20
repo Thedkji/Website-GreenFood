@@ -8,7 +8,7 @@
         <p style="font-size: 16px; color: #555;"><strong>Email:</strong> {{ e($order->email) }}</p>
         <p style="font-size: 16px; color: #555;"><strong>Địa chỉ giao hàng:</strong> {{ e($order->address) }}</p>
         <p style="font-size: 16px; color: #555;"><strong>Số điện thoại:</strong> {{ e($order->phone) }}</p>
-        <p style="font-size: 16px; color: #555;"><strong>Mã đơn hàng:</strong> {{ e($order->id) }}</p>
+        
     </div>
 
     <!-- Danh sách sản phẩm -->
