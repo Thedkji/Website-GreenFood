@@ -51,6 +51,7 @@
         <div class="mt-3">
             <label for="email">Email <span class="text-danger">*</span></label>
             <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" disabled>
+
             <x-feedback name="email" />
 
         </div>
