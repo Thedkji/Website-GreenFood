@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
             'name' => 'required|max:255',
             'avatar' => 'image|max:2048',
             'user_name' => "max:100|unique:users,user_name,$id",
-            'email' => "required|email|max:255",
+            // 'email' => "required|email|max:255",
             'phone' => "required|max:10",
             'province' => 'required|max:100',
             'district' => 'required|max:100',
@@ -50,10 +50,10 @@ class UserUpdateRequest extends FormRequest
             'user_name.required' => 'Tên đăng nhập là bắt buộc.',
 
             'user_name.unique' => 'Tên đăng nhập đã tồn tại.',
-            'email.required' => 'Email là bắt buộc.',
-            'email.email' => 'Email phải đúng định dạng.',
-            'email.unique' => 'Email đã tồn tại.',
-            'email_edit.required' => 'Email là bắt buộc.',
+            // 'email.required' => 'Email là bắt buộc.',
+            // 'email.email' => 'Email phải đúng định dạng.',
+            // 'email.unique' => 'Email đã tồn tại.',
+            // 'email_edit.required' => 'Email là bắt buộc.',
 
             'phone.required' => 'Số điện thoại là bắt buộc.',
             'phone.max' => 'Số điện thoại nhập tối đa là 10 số.',

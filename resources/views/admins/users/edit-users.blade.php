@@ -16,7 +16,7 @@
         @method('PUT')
         <div class="mt-3">
             <label for="name">Tên người dùng <span class="text-danger">*</span></label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required>
+            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" >
             <x-feedback name="name" />
         </div>
 
@@ -36,35 +36,35 @@
         <div class="mt-3">
             <label for="user_name">Tên đăng nhập <span class="text-danger">*</span></label>
             <input type="text" name="user_name" id="user_name" class="form-control" value="{{ $user->user_name }}"
-                required disabled>
+                 disabled>
             <x-feedback name="user_name" />
 
         </div>
         {{-- <div class="mt-3">
             <label for="password">Mật khẩu</label>
-            <input type="password" name="password" id="password" class="form-control" required>
+            <input type="password" name="password" id="password" class="form-control" >
         </div>
         <div class="mt-3">
             <label for="password_confirmation">Nhập lại mật khẩu</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
+            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" >
         </div> --}}
         <div class="mt-3">
             <label for="email">Email <span class="text-danger">*</span></label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
+            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" disabled>
             <x-feedback name="email" />
 
         </div>
         <div class="mt-3">
             <label for="phone">Số điện thoại <span class="text-danger">*</span></label>
             <input type="number" name="phone" id="phone" class="form-control" value="{{ $user->phone }}"
-                max="10" required>
+                max="10" >
             <x-feedback name="phone" />
 
         </div>
         <div class="form-group d-flex justify-content-between mt-3">
             <div style="flex: 1; margin-right: 10px;">
                 <label for="province">Thành phố/Tỉnh <span class="text-danger">*</span></label>
-                <select name="province" id="province" class="form-control" required>
+                <select name="province" id="province" class="form-control" >
                     <option value="">-- Chọn tỉnh/thành phố --</option>
                     @foreach ($provinces as $province)
                         <option value="{{ $province->code }}"
@@ -78,7 +78,7 @@
 
             <div style="flex: 1; margin-right: 10px;">
                 <label for="district">Quận/Huyện <span class="text-danger">*</span></label>
-                <select name="district" id="district" class="form-control" required>
+                <select name="district" id="district" class="form-control" >
                     <option value="">-- Chọn quận/huyện --</option>
                     @foreach ($districts as $district)
                         <option value="{{ $district->code }}"
@@ -92,7 +92,7 @@
 
             <div style="flex: 1;">
                 <label for="ward">Phường/Xã <span class="text-danger">*</span></label>
-                <select name="ward" id="ward" class="form-control" required>
+                <select name="ward" id="ward" class="form-control" >
                     <option value="">-- Chọn phường/xã --</option>
                     @foreach ($wards as $ward)
                         <option value="{{ $ward->code }}"
@@ -108,13 +108,13 @@
 
         <div class="mt-3">
             <label for="address">Địa chỉ <span class="text-danger">*</span></label>
-            <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" required>
+            <input type="text" name="address" id="address" class="form-control" value="{{ $user->address }}" >
             <x-feedback name="address" />
 
         </div>
         <div class="mt-3">
             <label for="role">Vai trò <span class="text-danger">*</span></label>
-            <select name="role" id="role" class="form-control" required>
+            <select name="role" id="role" class="form-control" >
                 <option selected disabled>Vui lòng chọn vai trò</option>
                 <option value="0" {{ $user->role == 0 ? 'selected' : '' }}>Admin</option>
                 <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>User</option>
