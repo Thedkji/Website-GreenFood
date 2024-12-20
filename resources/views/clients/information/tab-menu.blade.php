@@ -10,9 +10,11 @@
 
     <a href="#history_order" data-toggle="tab"><i class="fa fa-history"></i>
         Lịch sử đơn hàng</a>
-    <a href="#coupon" data-toggle="tab"><i class="fas fa-gift"></i>
-            Khuyến mãi khách hàng mới</a>
-
+        @if($isEligibleForCoupon)
+        <a href="#coupon" data-toggle="tab">
+            <i class="fas fa-gift"></i> Khuyến mãi khách hàng mới
+        </a>
+    @endif    
         <a href="{{ route('client.information.logout') }}" id="logoutButton"><i class="fa fa-sign-out"></i> Đăng xuất</a>
         <form id="logoutForm" action="{{ route('client.information.logout') }}" method="POST" style="display: none;">
             @csrf
