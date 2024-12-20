@@ -794,6 +794,7 @@
                 <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <span class="d-flex align-items-center">
+
                         @if (auth()->user()->avatar && Storage::exists(auth()->user()->avatar))
                             <img class="rounded-circle header-profile-user"
                                 src="{{ Storage::url(auth()->user()->avatar) }}">
@@ -801,6 +802,7 @@
                             <img class="rounded-circle header-profile-user"
                                 src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg" alt="Header Avatar">
                         @endif
+
                         <span class="text-start ms-xl-2">
                             <span
                                 class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ auth()->user()->name }}</span>
