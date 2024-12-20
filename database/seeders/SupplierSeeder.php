@@ -24,5 +24,9 @@ class SupplierSeeder extends Seeder
       array('id' => '16', 'name' => 'Happi Foody', 'email' => 'happifoody@gmail.com', 'phone' => '0254534675', 'address' => 'Tòa nhà FPT Polytechnic., Cổng số 2, 13 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội, Việt Nam', 'created_at' => '2024-12-19 14:47:06', 'updated_at' => '2024-12-19 14:47:06', 'deleted_at' => NULL),
       array('id' => '17', 'name' => 'COZY', 'email' => 'cozy543@gmail.com', 'phone' => '0256546759', 'address' => 'Tòa nhà FPT Polytechnic., Cổng số 2, 13 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội, Việt Nam', 'created_at' => '2024-12-19 14:59:27', 'updated_at' => '2024-12-19 14:59:27', 'deleted_at' => NULL)
     );
+
+    foreach ($suppliers as $supplier) {
+      Supplier::create($supplier);
+    }
   }
 }
