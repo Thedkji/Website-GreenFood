@@ -8,7 +8,9 @@
 
     $countComment = $product->comments()->where('parent_user_id', null)->count();
 
-    $comments = $product->comments()->where('parent_user_id', null)->paginate(3);
+    $comments = $product->comments()->where('parent_user_id', null)
+    ->orderBy('id', 'desc')
+    ->paginate(3);
 @endphp
 <p>
     <span class="fw-bold" style="font-size: 16px "> Đánh giá : </span>({{ $averageRating }}<i

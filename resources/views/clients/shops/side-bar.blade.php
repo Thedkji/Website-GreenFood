@@ -182,11 +182,14 @@
                                     </label>
                                 </div>
                                 @foreach ($categories2 as $index => $category)
+                                @php
+                                    $products2 = $category->products;
+                                @endphp
                                     <div class="col-6">
                                         <label for="Categories-{{ $category->id }}" class="mb-1">
                                             <a href="{{ route('client.shop', ['category_id' => $category->id]) }}"
                                                 class="filter-shop-cate" name="filter-shop-cate">
-                                                {{ $category->name }}
+                                                {{ $category->name }} ({{ $category->products->count() }})
                                             </a>
                                         </label>
                                     </div>

@@ -471,7 +471,7 @@
                 </button>
             </div> --}}
 
-            
+
             {{-- <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                 <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -794,11 +794,18 @@
                 <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <span class="d-flex align-items-center">
-                        <img class="rounded-circle header-profile-user"
-                            src="{{ Storage::url(auth()->user()->avatar) }}" alt="Header Avatar">
+                        @if (auth()->user()->avatar && Storage::exists(auth()->user()->avatar))
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ Storage::url(auth()->user()->avatar) }}">
+                        @else
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg" alt="Header Avatar">
+                        @endif
                         <span class="text-start ms-xl-2">
-                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ auth()->user()->name }}</span>
-                            <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ auth()->user()->role===0 ? 'Quản trị viên' : 'User' }}</span>
+                            <span
+                                class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ auth()->user()->name }}</span>
+                            <span
+                                class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ auth()->user()->role === 0 ? 'Quản trị viên' : 'User' }}</span>
                         </span>
                     </span>
                 </button>
