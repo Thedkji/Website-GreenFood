@@ -16,6 +16,10 @@
     @section('title_page_active', 'Sản phẩm')
 @endif
 
+@push('styles')
+    <link rel="stylesheet" href="{{ env('VIEW_CLIENT') }}/css/shop.css?v={{ time() }}">
+@endpush
+
 @section('content')
 
     <!-- Fruits Shop Start-->

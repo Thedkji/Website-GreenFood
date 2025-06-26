@@ -1,9 +1,4 @@
 <style>
-    /* Container styling */
-    .container {
-        padding: 20px;
-    }
-
     .truncate-text-120 {
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -84,8 +79,7 @@
     /* Adjustments for responsiveness */
     @media (max-width: 576px) {
         .product-card {
-            flex-direction: column;
-            align-items: flex-start;
+            gap: 20px
         }
 
         .product-img-container {
@@ -96,7 +90,7 @@
 </style>
 
 <h1 class="mb-4">Sản phẩm healthy</h1>
-<div class="row g-4">
+<div class="row g-4 ">
     <div class="col-lg-12">
         <div class="row g-4">
             <div class="col-xl-3">
@@ -136,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div class="row g-4">
+        <div class="row g-4 justify-content-between">
             <div class="col-lg-3">
                 <div class="row g-4">
                     <div class="col-lg-12">

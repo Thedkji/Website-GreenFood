@@ -53,34 +53,6 @@
                     <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}">
                         <i class="ri-dashboard-line"></i> <span data-key="t-dashboards">Bảng điều khiển</span>
                     </a>
-                    {{-- <div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="dashboard" class="nav-link" data-key="t-analytics">
-                                    Analytics </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects.html" class="nav-link" data-key="t-projects">
-                                    Projects </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
-                            </li>
-                        </ul>
-                    </div> --}}
                 </li> <!-- end Dashboard Menu -->
 
                 <!-- end Dashboard Menu -->
@@ -176,7 +148,7 @@
                     </div>
                 </li>
 
-                
+
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarOrders" data-bs-toggle="collapse" role="button"

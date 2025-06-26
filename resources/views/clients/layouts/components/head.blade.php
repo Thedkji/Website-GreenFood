@@ -28,3 +28,5 @@
 <link href="{{ env('VIEW_CLIENT') }}/css/style.css?v={{ time() }}" rel="stylesheet">
 
 <script src="{{ env('VIEW_ADMIN') }}/ajax/jquery-3.7.1.min.js?v={{ time() }}"></script>
+
+@stack('styles')

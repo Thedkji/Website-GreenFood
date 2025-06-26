@@ -1,5 +1,5 @@
 <div class="row g-4 fruite">
-    <div class="col-lg-12">
+    <div class="col-lg-12 client-product-hot">
         <h4 class="mb-4">Sản phẩm nổi bật</h4>
         @foreach ($productHot as $product)
             <a href="{{ route('client.product-detail', $product->id) }}" class="text-decoration-none text-dark">

@@ -20,7 +20,7 @@ class CartSeeder extends Seeder
             array('id' => '42', 'product_id' => '5', 'user_id' => '1', 'sku' => 'SPBT276579', 'quantity' => '1', 'created_at' => '2024-12-07 13:51:02', 'updated_at' => '2024-12-07 13:51:02'),
             array('id' => '43', 'product_id' => '5', 'user_id' => '1', 'sku' => 'SPBT491526', 'quantity' => '3', 'created_at' => '2024-12-07 13:51:07', 'updated_at' => '2024-12-07 13:51:07'),
             array('id' => '45', 'product_id' => '6', 'user_id' => '1', 'sku' => 'SPBT235883', 'quantity' => '3', 'created_at' => '2024-12-07 13:51:17', 'updated_at' => '2024-12-07 13:51:17'),
-            array('id' => '50', 'product_id' => '23', 'user_id' => '13', 'sku' => 'SP688241', 'quantity' => '1', 'created_at' => '2024-12-19 17:27:49', 'updated_at' => '2024-12-19 17:27:49')
+            array('id' => '50', 'product_id' => '23', 'user_id' => '13', 'sku' => 'SP688241', 'quantity' => '1', 'created_at' => '2024-12-19 17:27:49', 'updated_at' => '2024-12-19 17:27:49'),            
         );
 
 
