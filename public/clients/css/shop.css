@@ -1,0 +1,94 @@
+
+/* Đảm bảo rằng các thẻ sản phẩm chiếm toàn bộ chiều cao của cột */
+.fruite-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Đặt chiều cao cố định cho hình ảnh sản phẩm và đảm bảo ảnh lấp đầy vùng chứa */
+.fruite-img img {
+    width: 100%;
+    height: 200px;
+    /* Bạn có thể điều chỉnh chiều cao theo nhu cầu */
+    object-fit: cover;
+    border-top-left-radius: 0.25rem;
+    /* Đảm bảo góc bo tròn khớp với thẻ */
+    border-top-right-radius: 0.25rem;
+}
+
+/* Định dạng nội dung thẻ sản phẩm */
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Định dạng phần tiêu đề sản phẩm */
+.card-title a {
+    color: #000;
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    text-decoration: underline;
+}
+
+/* Định dạng giá cả */
+.text-muted.text-decoration-line-through {
+    margin-right: 10px;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Định dạng đánh giá sao */
+.product-rating i {
+    color: #ffc107;
+    /* Màu vàng cho sao */
+}
+
+/* Định dạng phân trang */
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    color: #000;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* .pagination a:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    } */
+
+.pagination a.active {
+    background-color: #81C408;
+    color: #fff;
+    pointer-events: none;
+}
+
+.pagination a.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Responsive điều chỉnh */
+@media (max-width: 576px) {
+    .fruite-img img {
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 993px) {
+    .client-product-hot>a>div {
+        width: 100% !important;
+    }
+}
