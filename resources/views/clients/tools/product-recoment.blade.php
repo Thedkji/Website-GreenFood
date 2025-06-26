@@ -165,6 +165,7 @@
 
     /* Mô tả ngắn gọn sản phẩm */
     .card-text {
+        height: 90px;
         font-size: 0.9rem;
         color: #555;
         margin-bottom: 15px;

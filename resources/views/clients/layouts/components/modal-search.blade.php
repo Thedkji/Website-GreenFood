@@ -170,7 +170,7 @@
                         justify-content: space-between;
                         padding: 15px;
                         /* Padding để tạo khoảng cách giữa các thành phần */
-                        height: 100%;
+                        /* height: 260px !important; */
                         /* Làm cho phần thông tin chiếm hết chiều cao còn lại */
                     }
 

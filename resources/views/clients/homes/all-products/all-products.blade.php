@@ -216,7 +216,7 @@
                             </a>
                         </h5>
                         <!-- Short Description -->
-                        <p class="card-text">
+                        <p class="card-text" style="height: 70px">
                             {!! Str::limit(strip_tags($product->description_short), 150, '...') !!}
                         </p>
 
