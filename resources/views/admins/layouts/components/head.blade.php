@@ -40,3 +40,4 @@
     rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+<link rel="stylesheet" href="/admins/icons/RemixIcon_Fonts_v4.6.0/remixicon.css">

@@ -84,23 +84,6 @@
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Sản phẩm bán chạy nhất
                     </h4>
-                    {{-- <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <span class="fw-semibold text-uppercase fs-12">Xắp sếp theo:
-                                </span><span class="text-muted">Hôm nay<i class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Hôm nay</a>
-                                <a class="dropdown-item" href="#">Hôm qua</a>
-                                <a class="dropdown-item" href="#">7 ngày qua</a>
-                                <a class="dropdown-item" href="#">30 ngày qua</a>
-                                <a class="dropdown-item" href="#">Tháng này </a>
-                                <a class="dropdown-item" href="#">tháng trước</a>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div><!-- end card header -->
 
                 <div class="card-body">

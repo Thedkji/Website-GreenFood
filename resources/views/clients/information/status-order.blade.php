@@ -139,9 +139,9 @@
                             <textarea class="form-control" name="cancel_reason" rows="4" placeholder="Nhập lý do hủy..."></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                                 onclick="reloadPage()">Đóng</button>
-                            <button type="submit" class="btn btn-danger">Gửi</button>
+                            <button type="submit" class="btn btn-primary">Gửi</button>
                         </div>
                     </form>
                 @else
