@@ -30,13 +30,12 @@
 <!-- Custom Css-->
 <link href="{{ env('VIEW_ADMIN') }}/css/custom.min.css?v={{ time() }}" rel="stylesheet" type="text/css" />
 
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <script src="{{ env('APP_URL') }}/jquery.js?v={{ time() }}"></script>
 
 <!-- Select2 CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
-    rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+<link rel="stylesheet" href="{{ env('VIEW_ADMIN') }}/icons/RemixIcon_Fonts_v4.6.0/fonts/remixicon.css">

@@ -78,7 +78,7 @@
     </div>
     <!-- Featurs Section End -->
 
-  <!-- Testimonial Section -->
-    
-<!-- Testimonial End -->
+    <!-- Testimonial Section -->
+
+    <!-- Testimonial End -->
 @endsection

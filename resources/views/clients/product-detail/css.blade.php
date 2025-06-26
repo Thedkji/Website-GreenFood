@@ -43,11 +43,6 @@
         margin-right: 8px;
     }
 
-    /* Container styling */
-    .container {
-        padding: 20px;
-    }
-
     /* Product Card */
     .product-card {
         display: flex;
