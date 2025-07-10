@@ -39,7 +39,7 @@
                             </div>
 
                             <!-- Product Info -->
-                            <div class="product-info card-body d-flex flex-column" style="height: 400px">
+                            <div class="product-info card-body d-flex flex-column">
                                 <!-- Product Title -->
                                 <h5 class="card-title truncate-text-300">
                                     <a href="{{ route('client.product-detail', $product->id) }}"
@@ -169,9 +169,6 @@
                         flex-direction: column;
                         justify-content: space-between;
                         padding: 15px;
-                        /* Padding để tạo khoảng cách giữa các thành phần */
-                        /* height: 260px !important; */
-                        /* Làm cho phần thông tin chiếm hết chiều cao còn lại */
                     }
 
                     /* Tiêu đề sản phẩm */

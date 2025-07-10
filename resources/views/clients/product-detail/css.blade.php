@@ -149,7 +149,7 @@
     }
 
     .vesitable-item p {
-        height: 60px;
+        height: 70px;
         overflow: hidden;
         text-overflow: ellipsis;
         margin: 10px 0;
