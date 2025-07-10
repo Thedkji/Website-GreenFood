@@ -2,6 +2,14 @@
     $currentProduct = $product->id;
 @endphp
 
+@once
+    <style>
+        .vesitable .owl-nav .owl-next {
+            right: 13px;
+        }
+    </style>
+@endonce
+
 <div class="vesitable">
     @if ($relatedProducts->count() <= 5)
         <!-- Nếu có đúng 5 (1 sản phẩm là sản phẩm hiện tại đã bị ẩn) sản phẩm, hiển thị trực tiếp mà không cần carousel -->
